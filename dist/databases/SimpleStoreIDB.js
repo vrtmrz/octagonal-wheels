@@ -2,6 +2,10 @@ import { o as openDB, d as deleteDB } from '../index-BeukPKWu.js';
 import { SimpleStoreBase } from './SimpleStoreBase.js';
 import { fireAndForget } from '../promises.js';
 
+/**
+ * Represents a simple store using IndexedDB.
+ * @template T - The type of the values stored in the store.
+ */
 class SimpleStoreIDB extends SimpleStoreBase {
     constructor(name) {
         super();

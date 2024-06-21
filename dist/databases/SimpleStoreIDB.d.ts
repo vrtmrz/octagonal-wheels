@@ -1,5 +1,9 @@
 import { type IDBPDatabase } from "idb";
 import { SimpleStoreBase } from "./SimpleStoreBase";
+/**
+ * Represents a simple store using IndexedDB.
+ * @template T - The type of the values stored in the store.
+ */
 export declare class SimpleStoreIDB<T> extends SimpleStoreBase<T> {
     name: string;
     constructor(name: string);

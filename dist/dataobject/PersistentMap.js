@@ -5,6 +5,12 @@ import '../promises.js';
  * The Map, which can keep the data.
  */
 const YieldOperationNumbers = 100;
+/**
+ * Represents a persistent map that stores key-value pairs in the browser's local storage.
+ * The map is automatically saved to the local storage whenever a change is made with some delays.
+ *
+ * @template T - The type of values stored in the map.
+ */
 class PersistentMap {
     flush() {
         this._save();

@@ -92,12 +92,27 @@ function shareRunningResult(key, proc) {
     });
     return resultP.promise;
 }
+/**
+ * Skips the execution of a task if it is already duplicated.
+ *
+ * @param key - The key to identify the task.
+ * @param proc - The task to be executed.
+ * @returns A promise that resolves to the result of the task, or `null` if the task is duplicated.
+ */
 function skipIfDuplicated(key, proc) {
     if (queueTails.get(key) !== undefined)
         return Promise.resolve(null);
     return _enqueue(key, proc);
 }
 const waitingProcess = new Map();
+/**
+ * Schedules a process to be executed once if it is not already running.
+ * If the process is already running, it will be added to the waiting queue. An existing waiting process will be replaced.
+ *
+ * @param key - The key used to identify the process.
+ * @param proc - The process to be executed.
+ * @returns A Promise that resolves once the process has been scheduled.
+ */
 async function scheduleOnceIfDuplicated(key, proc) {
     if (isLockAcquired(key)) {
         waitingProcess.set(key, proc);
@@ -110,6 +125,11 @@ async function scheduleOnceIfDuplicated(key, proc) {
         scheduleOnceIfDuplicated(key, nextProc);
     }
 }
+/**
+ * Checks if a lock is acquired for the given key.
+ * @param key - The key to check for lock acquisition.
+ * @returns `true` if the lock is acquired, `false` otherwise.
+ */
 function isLockAcquired(key) {
     return queueTails.get(key) !== undefined;
 }

@@ -26,9 +26,21 @@ const defaultLogger = function defaultLogger(message, level = LEVEL_INFO, key) {
     console.log(newMessage);
 };
 let _logger = defaultLogger;
+/**
+ * Sets the global log function.
+ *
+ * @param logger - The logger function to set as the global log function.
+ */
 function setGlobalLogFunction(logger) {
     _logger = logger;
 }
+/**
+ * Logs a message with an optional log level and key.
+ *
+ * @param message - The message to be logged.
+ * @param level - The log level (optional).
+ * @param key - The key (optional).
+ */
 function Logger(message, level, key) {
     _logger(message, level, key);
 }

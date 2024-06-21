@@ -14,6 +14,18 @@ export declare const defaultLoggerEnv: {
     minLogLevel: number;
 };
 declare const defaultLogger: (message: any, level?: LOG_LEVEL, key?: string) => void;
+/**
+ * Sets the global log function.
+ *
+ * @param logger - The logger function to set as the global log function.
+ */
 export declare function setGlobalLogFunction(logger: LoggerFunction): void;
+/**
+ * Logs a message with an optional log level and key.
+ *
+ * @param message - The message to be logged.
+ * @param level - The log level (optional).
+ * @param key - The key (optional).
+ */
 export declare function Logger(message: any, level?: LOG_LEVEL, key?: string): void;
 export {};

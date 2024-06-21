@@ -28,11 +28,23 @@ async function initHashFunc() {
     return hashFunc;
 }
 initHashFunc();
+/**
+ * Calculates the SHA-1 hash of the given string.
+ *
+ * @param src - The string to calculate the hash for.
+ * @returns A promise that resolves to the SHA-1 hash as a base64-encoded string.
+ */
 async function sha1(src) {
     const bytes = writeString(src);
     const digest = await globalThis.crypto.subtle.digest({ name: "SHA-1" }, bytes);
     return await arrayBufferToBase64Single(digest);
 }
+/**
+ * Calculates the digest hash of an array of strings using xxhash.
+ *
+ * @param src - The array of strings to calculate the hash for.
+ * @returns The digest hash of the input array.
+ */
 function digestHash(src) {
     let hash = "";
     for (const v of src) {

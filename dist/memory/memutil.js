@@ -23,7 +23,15 @@ function createId(prefix, series, idx) {
 const indexes = new Map();
 const inProgress = new Set();
 const failed = new Map();
+/**
+ * Represents a Trench, which is a memory utility class for managing data storage.
+ */
 class Trench {
+    /**
+     * Constructs a new instance of the Trench class.
+     * @param db The SimpleStore instance used for storing data.
+     * @param flushExistItems Determines whether to flush existing items from the database.
+     */
     constructor(db, flushExistItems = true) {
         Object.defineProperty(this, "_db", {
             enumerable: true,
@@ -53,18 +61,32 @@ class Trench {
             })();
         }
     }
+    /**
+     * Deletes all ephemeral keys from the SimpleStore.
+     * @returns {Promise<void>} A promise that resolves when all ephemeral keys are deleted.
+     */
     async eraseAllEphemerals() {
         const keys = await this._db.keys(`${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}`, `${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}.`);
         for (const key of keys) {
             await this._db.delete(key);
         }
     }
+    /**
+     * Deletes all permanences from the SimpleStore.
+     * @returns {Promise<void>} A promise that resolves when all permanences are deleted.
+     */
     async eraseAllPermanences() {
         const keys = await this._db.keys(`${PREFIX_TRENCH}-${PREFIX_PERMANENT}`, `${PREFIX_TRENCH}-${PREFIX_PERMANENT}.`);
         for (const key of keys) {
             await this._db.delete(key);
         }
     }
+    /**
+     * Conceals an object by generating a unique key and storing the object in SimpleStore.
+     * The object can later be retrieved using the generated key.
+     * @param obj - The object to be concealed.
+     * @returns The generated key used to retrieve the concealed object.
+     */
     conceal(obj) {
         // TODO: TEST, This is untested yet
         const key = generateId(PREFIX_EPHEMERAL);
@@ -81,6 +103,10 @@ class Trench {
         });
         return key;
     }
+    /**
+     * Dispose concealed object.
+     * @param key - The key to bury.
+     */
     async bury(key) {
         // TODO: TEST, This is untested yet
         if (this.concealing.has(key)) {
@@ -88,6 +114,12 @@ class Trench {
         }
         await this._db.delete(key);
     }
+    /**
+     * Exposes a concealed object by its key.
+     * The object is removed from the database after being exposed.
+     * @param key - The key of the concealed object.
+     * @returns The exposed object.
+     */
     async expose(key) {
         // TODO: TEST, This is untested yet
         if (this.concealing.has(key)) {
@@ -111,6 +143,11 @@ class Trench {
             return item;
         };
     }
+    /**
+     * Evacuates a promise by storing its resolved value in the database and returning an `Evacuated` object.
+     * @param task The promise to be evacuated.
+     * @returns An `Evacuated` object representing the evacuated promise.
+     */
     evacuatePromise(task) {
         const key = generateId(PREFIX_EPHEMERAL);
         const storeTask = (async () => {
@@ -119,6 +156,12 @@ class Trench {
         })();
         return this._evacuate(storeTask, key);
     }
+    /**
+     * Evacuates an object by storing it in the database and returning an `Evacuated` object.
+     * If the object is a Promise, it is first evacuated using the `evacuatePromise` method.
+     * @param obj - The object to be evacuated.
+     * @returns An `Evacuated` object representing the evacuated object.
+     */
     evacuate(obj) {
         if (obj instanceof Promise)
             return this.evacuatePromise(obj);
@@ -169,21 +212,67 @@ class Trench {
             }
         };
     }
+    /**
+     * Queues an object with the specified key and optional index.
+     *
+     * @template T - The type of the object being queued.
+     * @param {string} key - The key to associate with the object.
+     * @param {T} obj - The object to be queued.
+     * @param {number} [index] - The optional index at which to insert the object in the queue.
+     * @returns {any} - The result of the queue operation.
+     */
     queue(key, obj, index) {
         return this._queue(PREFIX_EPHEMERAL, key, obj, index);
     }
+    /**
+     * Removes and returns the first element from the queue associated with the specified key.
+     *
+     * @template T - The type of elements in the queue.
+     * @param key - The key associated with the queue.
+     * @returns The first element from the queue, or undefined if the queue is empty.
+     */
     dequeue(key) {
         return this._dequeue(PREFIX_EPHEMERAL, key);
     }
+    /**
+     * Dequeues an item. you can commit or cancel the dequeue operation.
+     *
+     * @template T - The type of the item being dequeued.
+     * @param key - The key of the item to dequeue.
+     * @returns The dequeued item.
+     */
     dequeueWithCommit(key) {
         return this._dequeueWithCommit(PREFIX_EPHEMERAL, key);
     }
+    /**
+     * Queues an object permanently in the SimpleStore.
+     *
+     * @template T - The type of the object being queued.
+     * @param key - The key to associate with the object.
+     * @param obj - The object to be queued.
+     * @param index - Optional. The index at which to insert the object in the queue.
+     * @returns The updated queue.
+     */
     queuePermanent(key, obj, index) {
         return this._queue(PREFIX_PERMANENT, key, obj, index);
     }
+    /**
+     * Dequeues an permanent item from the SimpleStore with the specified key.
+     *
+     * @template T - The type of the item to dequeue.
+     * @param key - The key of the item to dequeue.
+     * @returns The dequeued item.
+     */
     dequeuePermanent(key) {
         return this._dequeue(PREFIX_PERMANENT, key);
     }
+    /**
+     * Dequeues an permanent item from the SimpleStore. we can commit or cancel the dequeue operation.
+     *
+     * @template T - The type of the item being dequeued.
+     * @param key - The key of the item to dequeue.
+     * @returns The dequeued item.
+     */
     dequeuePermanentWithCommit(key) {
         return this._dequeueWithCommit(PREFIX_PERMANENT, key);
     }

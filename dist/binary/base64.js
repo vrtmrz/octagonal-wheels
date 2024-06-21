@@ -1,7 +1,10 @@
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 
-// Base64 encode/decode functions
-// Base64 Decoding
+/**
+ * Converts a base64 string or an array of base64 strings to an ArrayBuffer.
+ * @param base64 - The base64 string or an array of base64 strings to convert.
+ * @returns The converted ArrayBuffer.
+ */
 function base64ToArrayBuffer(base64) {
     if (typeof (base64) == "string")
         return base64ToArrayBufferInternalBrowser(base64);
@@ -15,6 +18,12 @@ function base64ToArrayBuffer(base64) {
     });
     return joinedArray.buffer;
 }
+/**
+ * Converts a base64 string to an ArrayBuffer in a browser environment.
+ *
+ * @param base64 - The base64 string to convert.
+ * @returns The converted ArrayBuffer.
+ */
 function base64ToArrayBufferInternalBrowser(base64) {
     try {
         const binary_string = globalThis.atob(base64);
@@ -33,6 +42,11 @@ function base64ToArrayBufferInternalBrowser(base64) {
 }
 // Base64 Encoding
 const encodeChunkSize = 3 * 50000000;
+/**
+ * Converts an ArrayBuffer or Uint8Array to a base64-encoded string in a browser environment.
+ * @param buffer The input buffer to be converted.
+ * @returns A Promise that resolves to the base64-encoded string.
+ */
 function arrayBufferToBase64internalBrowser(buffer) {
     return new Promise((res, rej) => {
         const blob = new Blob([buffer], { type: "application/octet-binary" });
@@ -47,12 +61,24 @@ function arrayBufferToBase64internalBrowser(buffer) {
         reader.readAsDataURL(blob);
     });
 }
+/**
+ * Converts an ArrayBuffer to a base64 string.
+ *
+ * @param buffer - The ArrayBuffer to convert.
+ * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
+ */
 async function arrayBufferToBase64Single(buffer) {
     const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     if (buf.byteLength < QUANTUM)
         return btoa(String.fromCharCode.apply(null, [...buf]));
     return await arrayBufferToBase64internalBrowser(buf);
 }
+/**
+ * Converts an ArrayBuffer to a base64 string.
+ *
+ * @param buffer - The ArrayBuffer to convert.
+ * @returns A Promise that resolves to an array of base64 strings.
+ */
 async function arrayBufferToBase64(buffer) {
     const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     if (buf.byteLength < QUANTUM)
@@ -72,10 +98,16 @@ async function arrayBufferToBase64(buffer) {
 // Safari's JavaScriptCOre hardcoded the argument limit to 65536
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
 const QUANTUM = 32768;
-// Super fast Text Encoder / Decoder alternative.
-// TODO: When Capacitor or Electron is upgraded, check and reappraise this.
-// Referred https://gist.github.com/kawanet/a66a0e2657464c57bcff2249286d3a24
-// https://qiita.com/kawanet/items/52062b0c86597f7dee7d
+/**
+ *  Super fast Text Encoder / Decoder alternative.
+ * @param {string} string - The string to convert.
+ * @returns {Uint8Array} The Uint8Array buffer representing the string.
+ * @see https://gist.github.com/kawanet/a66a0e2657464c57bcff2249286d3a24
+ * @see https://qiita.com/kawanet/items/52062b0c86597f7dee7d
+ *
+ * remark: This is a super fast TextEncoder alternative.
+ * todo: When Capacitor or Electron is upgraded, check and reappraise this.
+ */
 const writeString = (string) => {
     // Prepare enough buffer.
     const buffer = new Uint8Array(string.length * 4);
@@ -110,6 +142,12 @@ const writeString = (string) => {
     }
     return buffer.slice(0, index);
 };
+/**
+ * Converts a Uint8Array buffer to a string.
+ *
+ * @param buffer - The Uint8Array buffer to convert.
+ * @returns The converted string.
+ */
 const readString = (buffer) => {
     const length = buffer.length;
     let index = 0;
@@ -150,6 +188,12 @@ const readString = (buffer) => {
     }
     return string;
 };
+/**
+ * Converts a base64 string or an array of base64 strings to a regular string.
+ * @param base64 - The base64 string or an array of base64 strings to convert.
+ * @returns The converted regular string.
+ * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ */
 function base64ToString(base64) {
     try {
         if (typeof base64 != "string")

@@ -1,6 +1,12 @@
 import { o as openDB, d as deleteDB } from '../index-BeukPKWu.js';
 
 const databaseCache = {};
+/**
+ * Opens a key-value database and returns a promise that resolves to a KeyValueDatabase object.
+ * If the database with the given key already exists in the cache, it will be closed and removed from the cache before opening a new one.
+ * @param dbKey - The key of the database.
+ * @returns A promise that resolves to a KeyValueDatabase object.
+ */
 async function OpenKeyValueDatabase(dbKey) {
     if (dbKey in databaseCache) {
         databaseCache[dbKey].close();
