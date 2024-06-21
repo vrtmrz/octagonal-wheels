@@ -1,0 +1,59 @@
+//@ts-check
+import typescript from "rollup-plugin-typescript2";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import replace from "@rollup/plugin-replace";
+import json from "@rollup/plugin-json";
+import nodePolyfills from "rollup-plugin-polyfill-node";
+import globals from "rollup-plugin-node-globals";
+import fs from "node:fs";
+// import glob from "glob";
+// const globSync = glob.globSync;
+import { globSync } from "glob";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { platform } from "node:os";
+
+const f = fs.readFileSync("./package.json");
+const LIB_VERSION = JSON.parse(f + "").name + "-" + JSON.parse(f + "").version;
+
+//type RollupOptions
+export default {
+    platform: "browser",
+    input: "src/index.test.ts",
+    output: [
+        {
+            // dir: "dist",
+            file: "dist/index.test.js",
+            format: "es",
+            // preserveModules: true,
+            // preserveSymlinks: true,
+        },
+    ],
+    // external: ["xxhash-wash",/node_modules/],
+    plugins: [
+        typescript({
+            tsconfigOverride: {
+                platform: "browser",
+                compilerOptions: {
+                    declaration: true,
+                    outDir: "dist/types",
+                },
+            },
+        }),
+        json(),
+        commonjs(),
+        globals(),
+        nodePolyfills(),
+        nodeResolve({
+            browser: true,
+        }),
+        replace({
+            values: {
+                LIB_VERSION: JSON.stringify(LIB_VERSION),
+                "process.browser": "true",
+            },
+            preventAssignment: true,
+        }),
+    ],
+};

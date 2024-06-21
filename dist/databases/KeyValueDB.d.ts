@@ -1,0 +1,10 @@
+export interface KeyValueDatabase {
+    get<T>(key: IDBValidKey): Promise<T>;
+    set<T>(key: IDBValidKey, value: T): Promise<IDBValidKey>;
+    del(key: IDBValidKey): Promise<void>;
+    clear(): Promise<void>;
+    keys(query?: IDBValidKey | IDBKeyRange, count?: number): Promise<IDBValidKey[]>;
+    close(): void;
+    destroy(): Promise<void>;
+}
+export declare function OpenKeyValueDatabase(dbKey: string): Promise<KeyValueDatabase>;

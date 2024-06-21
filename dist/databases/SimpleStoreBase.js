@@ -1,0 +1,4 @@
+class SimpleStoreBase {
+}
+
+export { SimpleStoreBase };
