@@ -133,7 +133,7 @@ function _reactive<T>({ expression, initialValue }: reactiveParams<T>): Reactive
  * @param expression The reactive expression to compute.
  * @returns A function that returns the computed value.
  */
-export function computed<T>(expression: ReactiveExpression<T>) {
+export function computed<T>(expression: ReactiveExpression<T>): () => T {
     const v = reactive(expression);
     return () => v.value;
 }

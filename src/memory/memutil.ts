@@ -31,6 +31,14 @@ export type Evacuated<T> = () => Promise<T>
 const inProgress = new Set<string>();
 const failed = new Map<string, number>();
 
+type CommittableDequeuedValue<T> = Promise<{
+    key: string;
+    value: T;
+    cancelCount: number;
+    pendingItems: number;
+    commit: () => Promise<void>;
+    cancel: () => void;
+} | undefined>
 /**
  * Represents a Trench, which is a memory utility class for managing data storage.
  */
@@ -76,15 +84,14 @@ export class Trench {
         }
     }
 
-    concealing = new Map<string, any>();
+    concealing: Map<string, any> = new Map<string, any>();
     /**
      * Conceals an object by generating a unique key and storing the object in SimpleStore.
      * The object can later be retrieved using the generated key.
      * @param obj - The object to be concealed.
      * @returns The generated key used to retrieve the concealed object.
      */
-    conceal<T>(obj: T) {
-        // TODO: TEST, This is untested yet
+    conceal<T>(obj: T): string {
         const key = generateId(PREFIX_EPHEMERAL);
         // Race conditions should only be addressed in advance.
         this.concealing.set(key, obj);
@@ -116,8 +123,7 @@ export class Trench {
      * @param key - The key of the concealed object.
      * @returns The exposed object.
      */
-    async expose<T>(key: string) {
-        // TODO: TEST, This is untested yet
+    async expose<T>(key: string): Promise<T | undefined> {
         if (this.concealing.has(key)) {
             const value = this.concealing.get(key);
             this.concealing.delete(key);
@@ -176,13 +182,13 @@ export class Trench {
         const storeKey = createId(type, key, index);
         await this._db.set(storeKey, obj);
     }
-    async _dequeue<T>(type: string, key: string) {
+    async _dequeue<T>(type: string, key: string): Promise<T | undefined> {
         const range = createRange(type, key);
         const keys = (await this._db.keys(range[0], range[1])).filter(e => !inProgress.has(e));
         if (keys.length === 0) return undefined;
         return await this.expose<T>(keys[0]);
     }
-    async _dequeueWithCommit<T>(type: string, key: string) {
+    async _dequeueWithCommit<T>(type: string, key: string): CommittableDequeuedValue<T> {
         const range = createRange(type, key);
         const keysAll = (await this._db.keys(range[0], range[1]))
         const keys = keysAll.filter(e => !inProgress.has(e));
@@ -215,9 +221,9 @@ export class Trench {
      * @param {string} key - The key to associate with the object.
      * @param {T} obj - The object to be queued.
      * @param {number} [index] - The optional index at which to insert the object in the queue.
-     * @returns {any} - The result of the queue operation.
+     * @returns {Promise<void>} A promise that resolves when the object is queued.
      */
-    queue<T>(key: string, obj: T, index?: number) {
+    queue<T>(key: string, obj: T, index?: number): Promise<void> {
         return this._queue<T>(PREFIX_EPHEMERAL, key, obj, index);
     }
     /**
@@ -227,7 +233,7 @@ export class Trench {
      * @param key - The key associated with the queue.
      * @returns The first element from the queue, or undefined if the queue is empty.
      */
-    dequeue<T>(key: string) {
+    dequeue<T>(key: string): Promise<T | undefined> {
         return this._dequeue<T>(PREFIX_EPHEMERAL, key);
     }
     /**
@@ -237,7 +243,7 @@ export class Trench {
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
      */
-    dequeueWithCommit<T>(key: string) {
+    dequeueWithCommit<T>(key: string): CommittableDequeuedValue<T> {
         return this._dequeueWithCommit<T>(PREFIX_EPHEMERAL, key);
     }
 
@@ -250,7 +256,7 @@ export class Trench {
      * @param index - Optional. The index at which to insert the object in the queue.
      * @returns The updated queue.
      */
-    queuePermanent<T>(key: string, obj: T, index?: number) {
+    queuePermanent<T>(key: string, obj: T, index?: number): Promise<void> {
         return this._queue<T>(PREFIX_PERMANENT, key, obj, index);
     }
     /**
@@ -260,7 +266,7 @@ export class Trench {
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
      */
-    dequeuePermanent<T>(key: string) {
+    dequeuePermanent<T>(key: string): Promise<T | undefined> {
         return this._dequeue<T>(PREFIX_PERMANENT, key);
     }
     /**
@@ -270,7 +276,7 @@ export class Trench {
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
      */
-    dequeuePermanentWithCommit<T>(key: string) {
+    dequeuePermanentWithCommit<T>(key: string): CommittableDequeuedValue<T> {
         return this._dequeueWithCommit<T>(PREFIX_PERMANENT, key);
     }
 

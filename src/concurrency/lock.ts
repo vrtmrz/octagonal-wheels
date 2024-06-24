@@ -155,7 +155,7 @@ export async function scheduleOnceIfDuplicated<T>(key: string, proc: () => Promi
  * @param key - The key to check for lock acquisition.
  * @returns `true` if the lock is acquired, `false` otherwise.
  */
-export function isLockAcquired(key: string) {
+export function isLockAcquired(key: string): boolean {
     return queueTails.get(key) !== undefined;
 }
 

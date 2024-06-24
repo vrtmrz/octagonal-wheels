@@ -113,7 +113,7 @@ const QUANTUM = 32768;
  * todo: When Capacitor or Electron is upgraded, check and reappraise this.
  */
 
-export const writeString = (string: string) => {
+export function writeString(string: string): Uint8Array {
     // Prepare enough buffer.
     const buffer = new Uint8Array(string.length * 4);
     const length = string.length;
@@ -143,7 +143,7 @@ export const writeString = (string: string) => {
         }
     }
     return buffer.slice(0, index);
-};
+}
 
 /**
  * Converts a Uint8Array buffer to a string.
@@ -151,7 +151,7 @@ export const writeString = (string: string) => {
  * @param buffer - The Uint8Array buffer to convert.
  * @returns The converted string.
  */
-export const readString = (buffer: Uint8Array) => {
+export function readString(buffer: Uint8Array): string {
     const length = buffer.length;
     let index = 0;
     const end = length;
@@ -186,7 +186,7 @@ export const readString = (buffer: Uint8Array) => {
         string += String.fromCharCode(...chunk);
     }
     return string;
-};
+}
 
 
 /**

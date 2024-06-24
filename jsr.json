@@ -3,39 +3,40 @@
     "version": "0.1.0",
     "exports": {
         ".": "./src/index.ts",
-        "./binary/": "./src/binary/index.ts",
-        "./binary/base64/": "./src/binary/base64/index.ts",
-        "./common/const/": "./src/common/const.ts",
-        "./common/types/": "./src/common/types.ts",
-        "./concurrency/": "./src/concurrency/index.ts",
-        "./concurrency/lock/": "./src/concurrency/async/lock.ts",
-        "./concurrency/processor/": "./src/concurrency/processor.ts",
-        "./concurrency/semaphore/": "./src/concurrency/semaphore.ts",
+        "./binary": "./src/binary/index.ts",
+        "./binary/base64": "./src/binary/base64.ts",
+        "./common/const": "./src/common/const.ts",
+        "./common/types": "./src/common/types.ts",
+        "./concurrency": "./src/concurrency/index.ts",
+        "./concurrency/lock": "./src/concurrency/lock.ts",
+        "./concurrency/processor": "./src/concurrency/processor.ts",
+        "./concurrency/semaphore": "./src/concurrency/semaphore.ts",
         "./concurrency/task": "./src/concurrency/task.ts",
-        "./databases/": "./src/databases/index.ts",
-        "./databases/KeyValueDatabase": "./src/databases/KeyValueDatabase.ts",
-        "./dataobjects/": "./src/dataobjects/index.ts",
-        "./dataobjects/PersistentMap": "./src/dataobjects/PersistentMap.ts",
-        "./dataobjects/reactive": "./src/dataobjects/reactive.ts",
-        "./hash/": "./src/hash/index.ts",
-        "./hash/crc32/": "./src/hash/crc32.ts",
-        "./hash/xxhash/": "./src/hash/xxhash.ts",
-        "./memory/": "./src/memory/index.ts",
-        "./memory/LRUCache/": "./src/memory/LRUCache.ts",
-        "./memory/MemUtil/": "./src/memory/memutil.ts.ts",
-        "./messagepassing/": "./src/messagepassing/index.ts",
-        "./messagepassing/Signal/": "./src/messagepassing/signal.ts",
-        "./collection/": "./src/collection.ts",
-        "./function/": "./src/function.ts",
-        "./object/": "./src/object.ts",
-        "./promises/": "./src/promises.ts",
-        "./string/": "./src/string.ts"
+        "./databases": "./src/databases/index.ts",
+        "./databases/keyvaluedatabase": "./src/databases/KeyValueDB.ts",
+        "./dataobject": "./src/dataobject/index.ts",
+        "./dataobject/persistentmap": "./src/dataobject/PersistentMap.ts",
+        "./dataobject/reactive": "./src/dataobject/reactive.ts",
+        "./hash": "./src/hash/index.ts",
+        "./hash/crc32": "./src/hash/crc32.ts",
+        "./hash/xxhash": "./src/hash/xxhash.ts",
+        "./memory": "./src/memory/index.ts",
+        "./memory/lrucache": "./src/memory/LRUCache.ts",
+        "./memory/memutil": "./src/memory/memutil.ts",
+        "./messagepassing": "./src/messagepassing/index.ts",
+        "./messagepassing/signal": "./src/messagepassing/signal.ts",
+        "./collection": "./src/collection.ts",
+        "./function": "./src/function.ts",
+        "./object": "./src/object.ts",
+        "./promises": "./src/promises.ts",
+        "./string": "./src/string.ts"
     },
     "publish": {
         "include": [
             "LICENSE",
             "README.md",
-            "src/**/*.ts"
+            "src/**/*.ts",
+            "src/patched_xxhash_wasm/**"
         ]
     },
     "compilerOptions": {
@@ -49,6 +50,7 @@
         "sloppy-imports"
     ],
     "exclude": [
-        "src/**/*.test.ts"
+        "src/**/*.test.ts",
+        "!src/patched_xxhash_wasm/**"
     ]
 }

@@ -8,7 +8,7 @@
  * @param {string} replace - The new substring to replace the occurrences of `search`.
  * @returns {string} The modified string with all occurrences of `search` replaced by `replace`.
  */
-export function replaceAll(str: string, search: string, replace: string) {
+export function replaceAll(str: string, search: string, replace: string): string {
     if ("replaceAll" in String.prototype) {
         //@ts-ignore
         return str.replaceAll(search, replace);
@@ -24,7 +24,7 @@ export function replaceAll(str: string, search: string, replace: string) {
  * Each tuple should contain two elements: the substring to be replaced and the replacement substring.
  * @returns The modified string with all occurrences of the specified substrings replaced.
  */
-export function replaceAllPairs(str: string, ...fromTo: [from: string, to: string][]) {
+export function replaceAllPairs(str: string, ...fromTo: [from: string, to: string][]): string {
     let r = `${str}`;
     for (const [from, to] of fromTo) {
         r = replaceAll(r, from, to);

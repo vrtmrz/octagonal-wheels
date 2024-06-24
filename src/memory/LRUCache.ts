@@ -39,7 +39,7 @@ export class LRUCache<K, V> {
      * @param key The key to check.
      * @returns A boolean indicating whether the cache contains the key.
      */
-    has(key: K) {
+    has(key: K): boolean {
         return this.cache.has(key);
     }
 
@@ -49,7 +49,7 @@ export class LRUCache<K, V> {
      * @returns The value associated with the key, or undefined if the key is not found.
      * @remarks After calling this method, the key will be updated to recently used.
      */
-    get(key: K) {
+    get(key: K): V | undefined {
         const v = this.cache.get(key);
 
         if (v) {
@@ -70,7 +70,7 @@ export class LRUCache<K, V> {
      * @returns The key associated with the value, or undefined if the value is not found.
      * @remarks After calling this method, the key will be updated to recently used.
      */
-    revGet(value: V) {
+    revGet(value: V): K | undefined {
         const key = this.revCache.get(value);
         if (key) {
             // update the key to recently used.

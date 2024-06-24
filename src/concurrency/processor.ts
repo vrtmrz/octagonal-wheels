@@ -1,22 +1,23 @@
 import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger";
 import type { ReactiveSource } from "../dataobject/reactive";
 import { RESULT_TIMED_OUT } from "../common/const";
-import { noop, delay, fireAndForget, promiseWithResolver } from "../promises";
+import { noop, delay, fireAndForget, promiseWithResolver, PromiseWithResolvers } from "../promises";
 export class Notifier {
-    p = promiseWithResolver<void>();
+
+    _p: PromiseWithResolvers<void> = promiseWithResolver<void>();
     isUsed = false;
     notify() {
         if (!this.isUsed) {
             return;
         }
         this.isUsed = false;
-        this.p.promise.finally(noop)
-        this.p.resolve()
-        this.p = promiseWithResolver();
+        this._p.promise.finally(noop)
+        this._p.resolve()
+        this._p = promiseWithResolver();
     }
-    get nextNotify() {
+    get nextNotify(): Promise<void> {
         this.isUsed = true;
-        return this.p.promise;
+        return this._p.promise;
     }
 }
 let processNo = 0;
@@ -90,25 +91,25 @@ export class QueueProcessor<T, U> {
     // Parameters
 
     // How many processes running concurrently
-    concurrentLimit = 1;
+    concurrentLimit: number = 1;
 
     // How many entries processed at once
-    batchSize = 1;
+    batchSize: number = 1;
 
     // How many entries kept in before the delay
-    yieldThreshold = 1;
+    yieldThreshold: number = 1;
 
     // If set, wait for set milliseconds after enqueued
     // Note: If reached to the batchSize, run immediately
-    delay = 0;
+    delay: number = 0;
     maintainDelay: boolean;
-    interval = 0;
+    interval: number = 0;
 
     // This means numbers of the entities which are now processing
-    processingEntities = 0;
+    processingEntities: number = 0;
 
     // This means numbers of the entries which dequeued from the queue but not processed yet.
-    waitingEntries = 0;
+    waitingEntries: number = 0;
 
     get nowProcessing(): number {
         return this.processingEntities
@@ -123,30 +124,30 @@ export class QueueProcessor<T, U> {
     get totalRemaining(): number {
         return this.remaining + (this._pipeTo?.totalRemaining || 0);
     }
-    updateStatus(setFunc: () => void) {
+    updateStatus(setFunc: () => void): void {
         setFunc();
         this._updateReactiveSource();
     }
 
-    suspend() {
+    suspend(): QueueProcessor<T, U> {
         this._isSuspended = true;
         this._notifier.notify();
         return this;
     }
 
-    resume() {
+    resume(): this {
         this._isSuspended = false;
         this._notifier.notify();
         this.requestNextFlush();
         this._run();
         return this;
     }
-    resumePipeLine() {
+    resumePipeLine(): this {
         this._pipeTo?.resumePipeLine();
         this.resume();
         return this;
     }
-    startPipeline() {
+    startPipeline(): this {
         this.root.resumePipeLine();
         return this;
     }
@@ -157,7 +158,7 @@ export class QueueProcessor<T, U> {
         return this._root;
     }
 
-    _notifier = new Notifier();
+    _notifier: Notifier = new Notifier();
 
     constructor(processor: Processor<T, U>, params?: ProcessorParams<U>, items?: T[], enqueueProcessor?: (queue: T[], newEntity: T) => T[]) {
         this._root = this;
@@ -187,7 +188,7 @@ export class QueueProcessor<T, U> {
      * @param processor enqueue logic. this should return new queue.
      * @returns 
      */
-    replaceEnqueueProcessor(processor: (queue: T[], newItem: T) => T[]) {
+    replaceEnqueueProcessor(processor: (queue: T[], newItem: T) => T[]): this {
         this._enqueueProcessor = processor;
         return this;
     }
@@ -197,7 +198,7 @@ export class QueueProcessor<T, U> {
      * @param processor 
      * @remarks I know that you have known this is very dangerous.
      */
-    modifyQueue(processor: (queue: T[]) => T[]) {
+    modifyQueue(processor: (queue: T[]) => T[]): void {
         this._queue = processor(this._queue);
         this._notifier.notify();
     }
@@ -206,7 +207,7 @@ export class QueueProcessor<T, U> {
      * Clear the queue
      * @remarks I know that you have known this is very dangerous.
      */
-    clearQueue() {
+    clearQueue(): void {
         this._queue = [];
         this._notifier.notify();
     }
@@ -216,7 +217,7 @@ export class QueueProcessor<T, U> {
      * @param proc 
      * @returns 
      */
-    onUpdateProgress(proc: () => void) {
+    onUpdateProgress(proc: () => void): this {
         this._runOnUpdateBatch = proc;
         return this;
     }
@@ -226,7 +227,7 @@ export class QueueProcessor<T, U> {
      * @param pipeTo 
      * @returns 
      */
-    pipeTo<V>(pipeTo: QueueProcessor<U, V>) {
+    pipeTo<V>(pipeTo: QueueProcessor<U, V>): QueueProcessor<U, V> {
         this._pipeTo = pipeTo;
         this._pipeTo._root = this.root;
         // If something buffered, send to the downstream.
@@ -241,7 +242,7 @@ export class QueueProcessor<T, U> {
     isIdle(): boolean {
         return this._isIdle() && (!this._pipeTo ? true : this._pipeTo.isIdle());
     }
-    _isIdle() {
+    _isIdle(): boolean {
         return this.totalRemaining == 0;
     }
     async _idleDetector(): Promise<void> {
@@ -266,10 +267,10 @@ export class QueueProcessor<T, U> {
     }
 
 
-    _updateReactiveSource() {
+    _updateReactiveSource(): void {
         this.root.updateReactiveSource();
     }
-    updateReactiveSource() {
+    updateReactiveSource(): void {
         if (this._pipeTo) {
             this._pipeTo.updateReactiveSource();
         }
@@ -278,7 +279,7 @@ export class QueueProcessor<T, U> {
         if (this._processingEntitiesReactiveSource) this._processingEntitiesReactiveSource.value = this.nowProcessing;
 
     }
-    _updateBatchProcessStatus() {
+    _updateBatchProcessStatus(): void {
         this._updateReactiveSource();
         this._runOnUpdateBatch();
     }
@@ -291,13 +292,13 @@ export class QueueProcessor<T, U> {
     }
 
 
-    enqueue(entity: T) {
+    enqueue(entity: T): this {
         this._queue = this._enqueueProcessor(this._queue, entity);
         this._updateBatchProcessStatus()
         this._notifier.notify();
         return this;
     }
-    enqueueAll(entities: T[]) {
+    enqueueAll(entities: T[]): this {
         let queue = this._queue;
         for (const v of entities) {
             queue = this._enqueueProcessor(queue, v);
@@ -308,14 +309,14 @@ export class QueueProcessor<T, U> {
         return this;
     }
 
-    requestNextFlush() {
+    requestNextFlush(): void {
         if (this._canCollectBatch()) {
             this._nextProcessNeedsImmediate = true;
             this._notifier.notify();
         }
     }
 
-    flush() {
+    flush(): Promise<boolean> | undefined {
         if (this._isSuspended) return;
         this.requestNextFlush();
         return this.waitForAllDownstream();
@@ -346,7 +347,7 @@ export class QueueProcessor<T, U> {
         this.terminateAll();
         return r;
     }
-    async _runProcessor(items: T[]) {
+    async _runProcessor(items: T[]): Promise<void> {
         // runProcessor does not modify queue. so updateStatus should only update about reactiveSource.
         const ret = await this._processor(items);
         if (!ret) return;
@@ -358,7 +359,7 @@ export class QueueProcessor<T, U> {
             this._keptResult.push(...ret);
         }
     }
-    async * pump() {
+    async * pump(): AsyncGenerator<T[], void, unknown> {
         let items: T[];
         let queueRunOut = true;
         do {
@@ -386,7 +387,7 @@ export class QueueProcessor<T, U> {
             }
         } while (this._canCollectBatch() && !this._isSuspended)
     }
-    _processingBatches = new Set<number>();
+    _processingBatches: Set<number> = new Set<number>();
     addProcessingBatch: (typeof this._processingBatches.add) = (value) => {
         const r = this._processingBatches.add(value);
         this._updateBatchProcessStatus();
@@ -399,7 +400,7 @@ export class QueueProcessor<T, U> {
     }
     _processing: boolean = false;
 
-    async delayUntilRequested(delayMs: number) {
+    async delayUntilRequested(delayMs: number): Promise<void> {
         if (this._nextProcessNeedsImmediate) {
             this._nextProcessNeedsImmediate = false;
             return;
@@ -417,7 +418,7 @@ export class QueueProcessor<T, U> {
         return;
     }
 
-    async _process() {
+    async _process(): Promise<void> {
         if (this._processing && this._isSuspended) return;
         let lastProcessBegin = 0;
         try {
@@ -473,15 +474,15 @@ export class QueueProcessor<T, U> {
         }
     }
 
-    _run() {
+    _run(): void {
         if (this._isSuspended) return;
         if (this._processing) return;
         fireAndForget(() => this._process());
     }
-    terminateAll() {
+    terminateAll(): void {
         this.root.terminate();
     }
-    terminate() {
+    terminate(): void {
         if (this._pipeTo) {
             this._pipeTo.terminate();
             this._pipeTo = undefined;
@@ -498,7 +499,7 @@ export class QueueProcessor<T, U> {
     }
 }
 
-export function stopAllRunningProcessors() {
+export function stopAllRunningProcessors(): void {
     const processors = [...allRunningProcessors];
     for (const processor of processors) {
         processor.terminate();

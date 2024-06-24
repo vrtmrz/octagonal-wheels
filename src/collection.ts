@@ -5,7 +5,7 @@
  * @param chunkLength - The length of each chunk.
  * @returns A generator that yields chunked arrays.
  */
-export function* arrayToChunkedArray<T>(arr: T[], chunkLength: number) {
+export function* arrayToChunkedArray<T>(arr: T[], chunkLength: number): Generator<T[], void, unknown> {
     const source = [...arr];
     while (source.length) {
         const s = source.splice(0, chunkLength);
@@ -20,6 +20,6 @@ export function* arrayToChunkedArray<T>(arr: T[], chunkLength: number) {
  * @param {T[]} arr - The input array.
  * @returns {T[]} - An array with unique elements.
  */
-export function unique<T>(arr: T[]) {
+export function unique<T>(arr: T[]): T[] {
     return [...new Set<T>(arr)]
 }

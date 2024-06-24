@@ -17,13 +17,13 @@ export class PersistentMap<T> {
     _map: Map<string, T>;
     _key: string;
 
-    flush() {
+    flush(): void {
         this._save();
     }
-    _save() {
+    _save(): void {
         localStorage.setItem(this._key, JSON.stringify([...this._map.entries()]))
     }
-    _load(suppliedEntries: readonly (readonly [string, T])[] = []) {
+    _load(suppliedEntries: readonly (readonly [string, T])[] = []): Promise<void> {
         try {
             const savedSource = localStorage.getItem(this._key) ?? "";
             const sourceToParse = (savedSource === "") ? "[]" : savedSource;
@@ -36,7 +36,7 @@ export class PersistentMap<T> {
         }
         return Promise.resolve();
     }
-    _queueSave() {
+    _queueSave(): void {
         this._setCount--;
         // If we had processed too many operation while in the short time, save once.
         if (this._setCount < 0) {
@@ -46,21 +46,21 @@ export class PersistentMap<T> {
         // Or schedule saving.
         scheduleTask(`save-map-${this._key}`, 150, () => this._save());
     }
-    delete(key: string) {
+    delete(key: string): boolean {
         const ret = this._map.delete(key);
         this._queueSave();
         return ret;
     }
-    has(key: string) {
+    has(key: string): boolean {
         return this._map.has(key);
     }
-    set(key: string, value: T) {
+    set(key: string, value: T): this {
         this._map.set(key, value);
         this._queueSave();
         return this;
     }
 
-    clear() {
+    clear(): void {
         this._map = new Map();
         this._save();
     }

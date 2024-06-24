@@ -13,13 +13,18 @@ export const delay = <T>(ms: number, result?: T): Promise<T> => {
     });
 };
 
+export type PromiseWithResolvers<T> = {
+    promise: Promise<T>;
+    resolve: (value: T | PromiseLike<T>) => void;
+    reject: (reason?: any) => void;
+}
 
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
  * @returns An object containing the promise, resolve, and reject functions.
  * @typeparam T The type of the promise value.
  */
-function polyfillPromiseWithResolvers<T>() {
+function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<T> {
     let resolve!: Parameters<ConstructorParameters<typeof Promise<T>>[0]>[0];
     let reject!: Parameters<ConstructorParameters<typeof Promise<T>>[0]>[1];
     const promise = new Promise<T>((res, rej) => {
@@ -45,7 +50,7 @@ export const noop = () => {/* NO OP */ };
  * Executes a promise or a function that returns a promise and ignores any errors or results.
  * @param p - The promise or function that returns a promise to be executed.
  */
-export function fireAndForget(p: Promise<any> | (() => Promise<any>)) {
+export function fireAndForget(p: Promise<any> | (() => Promise<any>)): void {
     if (typeof p == "function") return fireAndForget(p());
     p.then(noop).catch(noop);
 }

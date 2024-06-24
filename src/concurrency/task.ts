@@ -41,7 +41,7 @@ async function wrapEachProcess<T>(key: number, task: TaskProcessing<T>) {
  * @param tasks Tasks to perform all
  * 
  */
-export async function* processAllGeneratorTasksWithConcurrencyLimit<T>(limit: number, tasks: AsyncGenerator<Task<T>, undefined, unknown>) {
+export async function* processAllGeneratorTasksWithConcurrencyLimit<T>(limit: number, tasks: AsyncGenerator<Task<T>, undefined, unknown>): AsyncGenerator<TaskResultWithKey<T, Error>, void, unknown> {
     const nowProcessing = new Map<number, ProcessingTaskResultWithKey<T, Error>>();
     let idx = 0;
 
@@ -90,7 +90,7 @@ export async function* pipeArrayToGenerator<T, U>(array: T[], callback: (obj: T)
  * @param tasks Tasks to perform all
  * 
  */
-export async function* processAllTasksWithConcurrencyLimit<T>(limit: number, tasks: Task<T>[]) {
+export async function* processAllTasksWithConcurrencyLimit<T>(limit: number, tasks: Task<T>[]): AsyncGenerator<TaskResultWithKey<T, Error>, void, unknown> {
     const nowProcessing = new Map<number, ProcessingTaskResultWithKey<T, Error>>();
     let idx = 0;
     const pendingTasks = tasks.reverse();
@@ -119,7 +119,7 @@ export async function* processAllTasksWithConcurrencyLimit<T>(limit: number, tas
  * @param tasks Tasks to perform all
  * @returns 
  */
-export async function mapAllTasksWithConcurrencyLimit<T>(limit: number, tasks: Task<T>[]) {
+export async function mapAllTasksWithConcurrencyLimit<T>(limit: number, tasks: Task<T>[]): Promise<TaskResultWithKey<T, Error>[]> {
     const results = new Map<number, TaskResultWithKey<T, Error>>();
     for await (const v of processAllTasksWithConcurrencyLimit(limit, tasks)) {
         results.set(v.key, v);
@@ -182,7 +182,7 @@ type WaitingItem = {
 }
 const waitingItems = new Map<string, WaitingItem>();
 
-export function waitForTimeout(key: string, timeout: number) {
+export function waitForTimeout(key: string, timeout: number): Promise<boolean> {
     if (waitingItems.has(key)) {
         return waitingItems.get(key)!.timeoutPromise.promise;
     }
@@ -198,7 +198,7 @@ export function waitForTimeout(key: string, timeout: number) {
     });
     return timeoutPromise.promise
 }
-export function finishWaitingForTimeout(key: string, hasTimeout: boolean = false) {
+export function finishWaitingForTimeout(key: string, hasTimeout: boolean = false): boolean {
     const x = waitingItems.get(key);
     if (x) {
         if (x.timer) clearTimeout(x.timer);
@@ -208,7 +208,7 @@ export function finishWaitingForTimeout(key: string, hasTimeout: boolean = false
     }
     return false;
 }
-export function finishAllWaitingForTimeout(prefix: string, hasTimeout: boolean) {
+export function finishAllWaitingForTimeout(prefix: string, hasTimeout: boolean): void {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [key, _] of waitingItems) {
         if (key.startsWith(prefix)) {
@@ -217,6 +217,6 @@ export function finishAllWaitingForTimeout(prefix: string, hasTimeout: boolean) 
     }
 }
 
-export function isWaitingForTimeout(key: string) {
+export function isWaitingForTimeout(key: string): boolean {
     return waitingItems.has(key);
 }

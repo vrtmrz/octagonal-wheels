@@ -35,7 +35,7 @@ initHashFunc();
  * @param src - The string to calculate the hash for.
  * @returns A promise that resolves to the SHA-1 hash as a base64-encoded string.
  */
-export async function sha1(src: string) {
+export async function sha1(src: string): Promise<string> {
     const bytes = writeString(src);
     const digest = await globalThis.crypto.subtle.digest({ name: "SHA-1" }, bytes);
     return await arrayBufferToBase64Single(digest);
@@ -47,7 +47,7 @@ export async function sha1(src: string) {
  * @param src - The array of strings to calculate the hash for.
  * @returns The digest hash of the input array.
  */
-export function digestHash(src: string[]) {
+export function digestHash(src: string[]): string {
     let hash = "";
     for (const v of src) {
         hash = hashFunc(hash + v);
