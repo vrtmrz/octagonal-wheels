@@ -1,1 +1,1 @@
-export * from "./signal";
+export * as signal from "./signal";

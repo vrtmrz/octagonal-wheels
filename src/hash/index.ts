@@ -1,2 +1,2 @@
-export * from "./xxhash";
-export * from "./crc32";
+export * as xxhash from "./xxhash";
+export * as crc32 from "./crc32";

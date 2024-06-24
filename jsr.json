@@ -1,7 +1,36 @@
 {
     "name": "@vrtmrz/octagonal-wheels",
     "version": "0.1.0",
-    "exports": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./binary/": "./src/binary/index.ts",
+        "./binary/base64/": "./src/binary/base64/index.ts",
+        "./common/const/": "./src/common/const.ts",
+        "./common/types/": "./src/common/types.ts",
+        "./concurrency/": "./src/concurrency/index.ts",
+        "./concurrency/lock/": "./src/concurrency/async/lock.ts",
+        "./concurrency/processor/": "./src/concurrency/processor.ts",
+        "./concurrency/semaphore/": "./src/concurrency/semaphore.ts",
+        "./concurrency/task": "./src/concurrency/task.ts",
+        "./databases/": "./src/databases/index.ts",
+        "./databases/KeyValueDatabase": "./src/databases/KeyValueDatabase.ts",
+        "./dataobjects/": "./src/dataobjects/index.ts",
+        "./dataobjects/PersistentMap": "./src/dataobjects/PersistentMap.ts",
+        "./dataobjects/reactive": "./src/dataobjects/reactive.ts",
+        "./hash/": "./src/hash/index.ts",
+        "./hash/crc32/": "./src/hash/crc32.ts",
+        "./hash/xxhash/": "./src/hash/xxhash.ts",
+        "./memory/": "./src/memory/index.ts",
+        "./memory/LRUCache/": "./src/memory/LRUCache.ts",
+        "./memory/MemUtil/": "./src/memory/memutil.ts.ts",
+        "./messagepassing/": "./src/messagepassing/index.ts",
+        "./messagepassing/Signal/": "./src/messagepassing/signal.ts",
+        "./collection/": "./src/collection.ts",
+        "./function/": "./src/function.ts",
+        "./object/": "./src/object.ts",
+        "./promises/": "./src/promises.ts",
+        "./string/": "./src/string.ts"
+    },
     "publish": {
         "include": [
             "LICENSE",
@@ -9,6 +38,16 @@
             "src/**/*.ts"
         ]
     },
+    "compilerOptions": {
+        "browser": true,
+        "lib": [
+            "dom",
+            "dom.iterable"
+        ]
+    },
+    "unstable": [
+        "sloppy-imports"
+    ],
     "exclude": [
         "src/**/*.test.ts"
     ]
