@@ -1,7 +1,7 @@
 {
     "name": "@vrtmrz/octagonal-wheels",
     "version": "0.1.0",
-    "exports": "./mod.ts",
+    "exports": "./src/index.ts",
     "publish": {
         "include": [
             "LICENSE",
