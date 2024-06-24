@@ -8,8 +8,16 @@ import { globSync } from "glob";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const f = fs.readFileSync("./package.json");
-const LIB_VERSION = JSON.parse(f + "").name + "-" + JSON.parse(f + "").version;
+const pkg = JSON.parse(fs.readFileSync("./package.json") + "");
+const LIB_VERSION = pkg?.name + "-" + pkg?.version;
+
+
+const moduleName = pkg?.name ?? "";
+
+const banner = `/*!
+  ${moduleName}.js v${pkg.version}
+  Released under the ${pkg.license} License.
+*/`;
 
 //type RollupOptions
 export default {
@@ -31,6 +39,7 @@ export default {
             dir: "dist",
             format: "es",
             preserveSymlinks: true,
+            preserveModules: true,
             sourcemap: true,
         },
     ],

@@ -1,4 +1,4 @@
-import { L as Logger, a as LOG_LEVEL_VERBOSE } from '../logger-CnLpH2F2.js';
+import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 
 /**
  * Converts a base64 string or an array of base64 strings to an ArrayBuffer.
