@@ -39,5 +39,8 @@
         "idb": "^8.0.0",
         "xxhash-wasm": "0.4.2",
         "xxhash-wasm-102": "npm:xxhash-wasm@^1.0.2"
+    },
+    "np": {
+        "contents": "dist"
     }
 }
