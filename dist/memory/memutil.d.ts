@@ -3,6 +3,14 @@ export declare const PREFIX_TRENCH = "trench";
 export declare const PREFIX_EPHEMERAL = "ephemeral";
 export declare const PREFIX_PERMANENT = "permanent";
 export type Evacuated<T> = () => Promise<T>;
+type CommittableDequeuedValue<T> = Promise<{
+    key: string;
+    value: T;
+    cancelCount: number;
+    pendingItems: number;
+    commit: () => Promise<void>;
+    cancel: () => void;
+} | undefined>;
 /**
  * Represents a Trench, which is a memory utility class for managing data storage.
  */
@@ -44,7 +52,7 @@ export declare class Trench {
      * @param key - The key of the concealed object.
      * @returns The exposed object.
      */
-    expose<T>(key: string): Promise<any>;
+    expose<T>(key: string): Promise<T | undefined>;
     _evacuate<T>(storeTask: Promise<void>, key: string): Evacuated<T>;
     /**
      * Evacuates a promise by storing its resolved value in the database and returning an `Evacuated` object.
@@ -60,15 +68,8 @@ export declare class Trench {
      */
     evacuate<T>(obj: T): Evacuated<T>;
     _queue<T>(type: string, key: string, obj: T, index: number | undefined): Promise<void>;
-    _dequeue<T>(type: string, key: string): Promise<any>;
-    _dequeueWithCommit<T>(type: string, key: string): Promise<{
-        key: string;
-        value: T;
-        cancelCount: number;
-        pendingItems: number;
-        commit: () => Promise<void>;
-        cancel: () => void;
-    } | undefined>;
+    _dequeue<T>(type: string, key: string): Promise<T | undefined>;
+    _dequeueWithCommit<T>(type: string, key: string): CommittableDequeuedValue<T>;
     /**
      * Queues an object with the specified key and optional index.
      *
@@ -76,7 +77,7 @@ export declare class Trench {
      * @param {string} key - The key to associate with the object.
      * @param {T} obj - The object to be queued.
      * @param {number} [index] - The optional index at which to insert the object in the queue.
-     * @returns {any} - The result of the queue operation.
+     * @returns {Promise<void>} A promise that resolves when the object is queued.
      */
     queue<T>(key: string, obj: T, index?: number): Promise<void>;
     /**
@@ -86,7 +87,7 @@ export declare class Trench {
      * @param key - The key associated with the queue.
      * @returns The first element from the queue, or undefined if the queue is empty.
      */
-    dequeue<T>(key: string): Promise<any>;
+    dequeue<T>(key: string): Promise<T | undefined>;
     /**
      * Dequeues an item. you can commit or cancel the dequeue operation.
      *
@@ -94,14 +95,7 @@ export declare class Trench {
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
      */
-    dequeueWithCommit<T>(key: string): Promise<{
-        key: string;
-        value: T;
-        cancelCount: number;
-        pendingItems: number;
-        commit: () => Promise<void>;
-        cancel: () => void;
-    } | undefined>;
+    dequeueWithCommit<T>(key: string): CommittableDequeuedValue<T>;
     /**
      * Queues an object permanently in the SimpleStore.
      *
@@ -119,7 +113,7 @@ export declare class Trench {
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
      */
-    dequeuePermanent<T>(key: string): Promise<any>;
+    dequeuePermanent<T>(key: string): Promise<T | undefined>;
     /**
      * Dequeues an permanent item from the SimpleStore. we can commit or cancel the dequeue operation.
      *
@@ -127,12 +121,6 @@ export declare class Trench {
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
      */
-    dequeuePermanentWithCommit<T>(key: string): Promise<{
-        key: string;
-        value: T;
-        cancelCount: number;
-        pendingItems: number;
-        commit: () => Promise<void>;
-        cancel: () => void;
-    } | undefined>;
+    dequeuePermanentWithCommit<T>(key: string): CommittableDequeuedValue<T>;
 }
+export {};

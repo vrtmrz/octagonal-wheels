@@ -5,16 +5,17 @@
  * @returns A promise that resolves with the specified result value after the delay.
  */
 export declare const delay: <T>(ms: number, result?: T) => Promise<T>;
+export type PromiseWithResolvers<T> = {
+    promise: Promise<T>;
+    resolve: (value: T | PromiseLike<T>) => void;
+    reject: (reason?: any) => void;
+};
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
  * @returns An object containing the promise, resolve, and reject functions.
  * @typeparam T The type of the promise value.
  */
-declare function polyfillPromiseWithResolvers<T>(): {
-    promise: Promise<T>;
-    resolve: (value: T | PromiseLike<T>) => void;
-    reject: (reason?: any) => void;
-};
+declare function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<T>;
 /**
  * Creates a promise with custom resolvers.
  * @param {Function} polyfillPromiseWithResolvers - The function that polyfills the promise with resolvers.

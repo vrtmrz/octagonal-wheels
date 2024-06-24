@@ -1,10 +1,7 @@
 import type { ReactiveSource } from "../dataobject/reactive";
+import { PromiseWithResolvers } from "../promises";
 export declare class Notifier {
-    p: {
-        promise: Promise<void>;
-        resolve: (value: void | PromiseLike<void>) => void;
-        reject: (reason?: any) => void;
-    };
+    _p: PromiseWithResolvers<void>;
     isUsed: boolean;
     notify(): void;
     get nextNotify(): Promise<void>;
@@ -81,7 +78,7 @@ export declare class QueueProcessor<T, U> {
     get remaining(): number;
     get totalRemaining(): number;
     updateStatus(setFunc: () => void): void;
-    suspend(): this;
+    suspend(): QueueProcessor<T, U>;
     resume(): this;
     resumePipeLine(): this;
     startPipeline(): this;

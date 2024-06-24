@@ -35,14 +35,14 @@ export declare function arrayBufferToBase64(buffer: ArrayBuffer): Promise<string
  * remark: This is a super fast TextEncoder alternative.
  * todo: When Capacitor or Electron is upgraded, check and reappraise this.
  */
-export declare const writeString: (string: string) => Uint8Array;
+export declare function writeString(string: string): Uint8Array;
 /**
  * Converts a Uint8Array buffer to a string.
  *
  * @param buffer - The Uint8Array buffer to convert.
  * @returns The converted string.
  */
-export declare const readString: (buffer: Uint8Array) => string;
+export declare function readString(buffer: Uint8Array): string;
 /**
  * Converts a base64 string or an array of base64 strings to a regular string.
  * @param base64 - The base64 string or an array of base64 strings to convert.

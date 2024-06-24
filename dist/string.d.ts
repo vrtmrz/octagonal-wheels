@@ -7,7 +7,7 @@
  * @param {string} replace - The new substring to replace the occurrences of `search`.
  * @returns {string} The modified string with all occurrences of `search` replaced by `replace`.
  */
-export declare function replaceAll(str: string, search: string, replace: string): any;
+export declare function replaceAll(str: string, search: string, replace: string): string;
 /**
  * Replaces all occurrences of multiple pairs of substrings in a string.
  *

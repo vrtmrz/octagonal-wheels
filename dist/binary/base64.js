@@ -1,4 +1,4 @@
-import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
+import { L as Logger, a as LOG_LEVEL_VERBOSE } from '../logger-CnLpH2F2.js';
 
 /**
  * Converts a base64 string or an array of base64 strings to an ArrayBuffer.
@@ -108,7 +108,7 @@ const QUANTUM = 32768;
  * remark: This is a super fast TextEncoder alternative.
  * todo: When Capacitor or Electron is upgraded, check and reappraise this.
  */
-const writeString = (string) => {
+function writeString(string) {
     // Prepare enough buffer.
     const buffer = new Uint8Array(string.length * 4);
     const length = string.length;
@@ -141,14 +141,14 @@ const writeString = (string) => {
         }
     }
     return buffer.slice(0, index);
-};
+}
 /**
  * Converts a Uint8Array buffer to a string.
  *
  * @param buffer - The Uint8Array buffer to convert.
  * @returns The converted string.
  */
-const readString = (buffer) => {
+function readString(buffer) {
     const length = buffer.length;
     let index = 0;
     const end = length;
@@ -187,7 +187,7 @@ const readString = (buffer) => {
         string += String.fromCharCode(...chunk);
     }
     return string;
-};
+}
 /**
  * Converts a base64 string or an array of base64 strings to a regular string.
  * @param base64 - The base64 string or an array of base64 strings to convert.
@@ -216,3 +216,4 @@ function base64ToString(base64) {
 }
 
 export { arrayBufferToBase64, arrayBufferToBase64Single, base64ToArrayBuffer, base64ToArrayBufferInternalBrowser, base64ToString, readString, writeString };
+//# sourceMappingURL=base64.js.map

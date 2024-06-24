@@ -5,3 +5,16 @@
  * @returns The version of the library.
  */
 export declare function libVersion(): string;
+export * as binary from "./binary";
+export * as common from "./common";
+export * as concurrency from "./concurrency";
+export * as dataobject from "./dataobject";
+export * as databases from "./databases";
+export * as hash from "./hash";
+export * as memory from "./memory";
+export * as messagepassing from "./messagepassing";
+export * as collection from "./collection";
+export * as function from "./function";
+export * as object from "./object";
+export * as promises from "./promises";
+export * as string from "./string";

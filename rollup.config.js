@@ -31,6 +31,7 @@ export default {
             dir: "dist",
             format: "es",
             preserveSymlinks: true,
+            sourcemap: true,
         },
     ],
     // external: ["xxhash-wash",/node_modules/],

@@ -1,8 +1,2 @@
-/**
- * Represents a base class for a simple key-value-store.
- * @template T The type of the values stored in the store.
- */
-class SimpleStoreBase {
-}
-
-export { SimpleStoreBase };
+export { a as SimpleStoreBase } from '../SimpleStoreBase-BmfPaz5W.js';
+//# sourceMappingURL=SimpleStoreBase.js.map

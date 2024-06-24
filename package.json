@@ -1,17 +1,21 @@
 {
     "name": "octagonal-wheels-dev",
     "version": "0.1.1",
-    "description": "",
+    "description": "This module is a compilation of wheels that have been reinvented for a specific purpose",
     "type": "module",
     "scripts": {
         "clean": "rimraf dist",
-        "build": "npm run clean && rollup -c && copy package.json dist",
+        "build": "npm run clean && rollup -c",
         "dev": "rollup -c -w",
         "test": "vitest",
         "coverage": "vitest run --coverage"
     },
+    "files": [
+        "dist"
+    ],
+    "repository": "",
     "author": "vorotamoroz",
-    "license": "ISC",
+    "license": "MIT",
     "devDependencies": {
         "@rollup/plugin-commonjs": "^26.0.1",
         "@rollup/plugin-json": "^6.1.0",
