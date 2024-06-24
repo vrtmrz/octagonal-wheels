@@ -1,4 +1,4 @@
-import { openDB, deleteDB } from '../node_modules/idb/build/index.js';
+import { openDB, deleteDB } from 'idb';
 import { SimpleStoreBase } from './SimpleStoreBase.js';
 import { fireAndForget } from '../promises.js';
 

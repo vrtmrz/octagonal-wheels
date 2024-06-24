@@ -1,4 +1,4 @@
-import { openDB, deleteDB } from '../node_modules/idb/build/index.js';
+import { openDB, deleteDB } from 'idb';
 
 const databaseCache = {};
 /**

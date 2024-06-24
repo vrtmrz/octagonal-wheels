@@ -44,7 +44,7 @@ export default {
             sourcemap: true,
         },
     ],
-    // external: ["xxhash-wash",/node_modules/],
+    external: [/node_modules/],
     plugins: [
         typescript({
             tsconfigOverride: {

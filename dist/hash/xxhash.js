@@ -1,4 +1,5 @@
-import xxhashOld from '../node_modules/xxhash-wasm/esm/xxhash-wasm.js';
+import xxhashOld from 'xxhash-wasm';
+export { default as xxhashOld } from 'xxhash-wasm';
 import e from '../patched_xxhash_wasm/xxhash-wasm.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { writeString, arrayBufferToBase64Single } from '../binary/base64.js';
@@ -54,5 +55,5 @@ function digestHash(src) {
     return hash;
 }
 
-export { digestHash, sha1, e as xxhashNew, xxhashOld };
+export { digestHash, sha1, e as xxhashNew };
 //# sourceMappingURL=xxhash.js.map
