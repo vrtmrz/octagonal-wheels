@@ -17,12 +17,12 @@ export default defineConfig({
             // ignoreEmptyLines: true,
         },
         browser: {
-            provider: "webdriverio",
+            provider: "playwright",
             enabled: true,
             slowHijackESM: false,
             headless: true,
             fileParallelism: false,
-            name: 'chrome', // browser name is required
+            name: 'chromium', // browser name is required
             providerOptions: {
                 launch: {
                     devtools: true,
