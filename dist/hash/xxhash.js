@@ -1,5 +1,5 @@
 import xxhashOld from '../node_modules/xxhash-wasm/esm/xxhash-wasm.js';
-import e from '../src/patched_xxhash_wasm/xxhash-wasm.js';
+import e from '../patched_xxhash_wasm/xxhash-wasm.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { writeString, arrayBufferToBase64Single } from '../binary/base64.js';
 

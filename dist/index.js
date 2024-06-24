@@ -32,7 +32,7 @@ export { string };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.6" ;
+    return "octagonal-wheels-0.1.8" ;
 }
 
 export { libVersion };

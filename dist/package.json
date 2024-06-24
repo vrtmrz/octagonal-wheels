@@ -1,6 +1,6 @@
 {
     "name": "octagonal-wheels",
-    "version": "0.1.6",
+    "version": "0.1.8",
     "description": "This module is a compilation of wheels that have been reinvented for a specific purpose",
     "type": "module",
     "scripts": {
@@ -37,8 +37,5 @@
         "idb": "^8.0.0",
         "xxhash-wasm": "0.4.2",
         "xxhash-wasm-102": "npm:xxhash-wasm@^1.0.2"
-    },
-    "np": {
-        "contents": "dist"
     }
 }

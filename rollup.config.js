@@ -40,6 +40,7 @@ export default {
             format: "es",
             preserveSymlinks: true,
             preserveModules: true,
+            preserveModulesRoot: 'src',
             sourcemap: true,
         },
     ],
