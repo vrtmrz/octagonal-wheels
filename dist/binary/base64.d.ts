@@ -50,3 +50,10 @@ export declare function readString(buffer: Uint8Array): string;
  * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
  */
 export declare function base64ToString(base64: string | string[]): string;
+/**
+ * Tries to convert a base64 string to an ArrayBuffer.
+ *
+ * @param base64 - The base64 string to convert.
+ * @returns The converted ArrayBuffer if successful, otherwise false.
+ */
+export declare function tryConvertBase64ToArrayBuffer(base64: string): ArrayBuffer | false;

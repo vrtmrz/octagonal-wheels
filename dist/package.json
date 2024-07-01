@@ -1,6 +1,6 @@
 {
     "name": "octagonal-wheels",
-    "version": "0.1.9",
+    "version": "0.1.11",
     "description": "This module is a compilation of wheels that have been reinvented for a specific purpose",
     "type": "module",
     "scripts": {
@@ -8,7 +8,7 @@
         "build": "npm run clean && rollup -c && npm run copy",
         "dev": "rollup -c -w",
         "test": "vitest",
-        "copy": "cp package.json dist/ && cp README.md dist/ && cp LICENSE dist/",
+        "copy": "node -e \"['package.json','.npmignore','README.md','LICENSE'].map(f=>require('fs').cpSync(`./${f}`, `./dist/${f}`));\"",
         "coverage": "vitest run --coverage"
     },
     "repository": "",

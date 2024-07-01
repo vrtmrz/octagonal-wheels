@@ -17,3 +17,11 @@ export declare function replaceAll(str: string, search: string, replace: string)
  * @returns The modified string with all occurrences of the specified substrings replaced.
  */
 export declare function replaceAllPairs(str: string, ...fromTo: [from: string, to: string][]): string;
+/**
+ * Escapes a string to HTML by replacing special characters with their corresponding HTML entities.
+ *
+ * @param str - The string to escape.
+ * @returns The escaped string.
+ * @remarks This function escapes the following characters: `<`, `>`, `&`, `"`, `'`, and `` ` ``. Not all special characters are escaped.
+ */
+export declare function escapeStringToHTML(str: string): string;

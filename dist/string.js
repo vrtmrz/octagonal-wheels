@@ -29,6 +29,28 @@ function replaceAllPairs(str, ...fromTo) {
     }
     return r;
 }
+/**
+ * Escapes a string to HTML by replacing special characters with their corresponding HTML entities.
+ *
+ * @param str - The string to escape.
+ * @returns The escaped string.
+ * @remarks This function escapes the following characters: `<`, `>`, `&`, `"`, `'`, and `` ` ``. Not all special characters are escaped.
+ */
+function escapeStringToHTML(str) {
+    if (!str)
+        return "";
+    return str.replace(/[<>&"'`]/g, (match) => {
+        const escape = {
+            "<": "&lt;",
+            ">": "&gt;",
+            "&": "&amp;",
+            '"': "&quot;",
+            "'": "&#39;",
+            "`": "&#x60;",
+        };
+        return escape[match];
+    });
+}
 
-export { replaceAll, replaceAllPairs };
+export { escapeStringToHTML, replaceAll, replaceAllPairs };
 //# sourceMappingURL=string.js.map

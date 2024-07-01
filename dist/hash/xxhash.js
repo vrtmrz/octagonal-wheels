@@ -3,6 +3,8 @@ export { default as xxhashOld } from 'xxhash-wasm';
 import e from '../patched_xxhash_wasm/xxhash-wasm.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { writeString, arrayBufferToBase64Single } from '../binary/base64.js';
+import '../binary/encodedUTF16.js';
+import '../binary/hex.js';
 
 let hashFunc;
 async function initHashFunc() {

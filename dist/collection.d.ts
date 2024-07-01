@@ -13,3 +13,12 @@ export declare function arrayToChunkedArray<T>(arr: T[], chunkLength: number): G
  * @returns {T[]} - An array with unique elements.
  */
 export declare function unique<T>(arr: T[]): T[];
+/**
+ * Generates a sequence of numbers from `from` to `to` (inclusive).
+ *
+ * @generator
+ * @param {number} from - The starting number of the sequence.
+ * @param {number} to - The ending number of the sequence.
+ * @yields {number} The next number in the sequence.
+  */
+export declare function range(from: number, to: number): Generator<number, void, unknown>;
