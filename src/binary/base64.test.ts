@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { base64ToArrayBuffer, arrayBufferToBase64, arrayBufferToBase64Single, writeString, readString, base64ToString } from "./base64";
+import { base64ToArrayBuffer, arrayBufferToBase64, arrayBufferToBase64Single, writeString, readString, base64ToString, tryConvertBase64ToArrayBuffer } from "./base64";
 
 describe('base64ToArrayBuffer', () => {
     it('should return an ArrayBuffer when given a valid base64 string', () => {
@@ -178,4 +178,20 @@ describe("Binary conversion combined", () => {
         expect(base64ToString(base64)).to.equal(testString);
         expect(buffer).to.deep.equal(new Uint8Array(result));
     });
+});
+describe('tryConvertBase64ToArrayBuffer', () => {
+    it('should return the converted ArrayBuffer when given a valid base64 string', () => {
+        const base64 = 'SGVsbG8gd29ybGQ='; // "Hello world" in base64
+        const result = tryConvertBase64ToArrayBuffer(base64);
+        expect(result).to.be.an.instanceOf(ArrayBuffer);
+        const r = readString(new Uint8Array(result as ArrayBuffer));
+        expect(r).to.equal('Hello world');
+    });
+
+    it('should return false when given an invalid base64 string', () => {
+        const base64 = '****InvalidBase64String';
+        const result = tryConvertBase64ToArrayBuffer(base64);
+        expect(result).to.equal(false);
+    });
+
 });

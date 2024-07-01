@@ -1,5 +1,5 @@
 // OK.
-import { arrayToChunkedArray, unique } from './collection';
+import { arrayToChunkedArray, range, unique } from './collection';
 import { describe, expect, test } from 'vitest'
 
 describe('unique function', () => {
@@ -35,5 +35,28 @@ describe('arrayToChunkedArray function', () => {
         const chunkLength = 3;
         const result = [...arrayToChunkedArray(array, chunkLength)];
         expect(result).to.deep.equal([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]]);
+    });
+});
+
+describe('range function', () => {
+    test('should return an empty array when from is greater than to', () => {
+        const from = 5;
+        const to = 1;
+        const result = [...range(from, to)];
+        expect(result).to.deep.equal([]);
+    });
+
+    test('should return an array with a single element when from is equal to to', () => {
+        const from = 5;
+        const to = 5;
+        const result = [...range(from, to)];
+        expect(result).to.deep.equal([5]);
+    });
+
+    test('should return a sequence of numbers from from to to (inclusive)', () => {
+        const from = 1;
+        const to = 5;
+        const result = [...range(from, to)];
+        expect(result).to.deep.equal([1, 2, 3, 4, 5]);
     });
 });

@@ -31,3 +31,27 @@ export function replaceAllPairs(str: string, ...fromTo: [from: string, to: strin
     }
     return r;
 }
+
+
+
+/**
+ * Escapes a string to HTML by replacing special characters with their corresponding HTML entities.
+ * 
+ * @param str - The string to escape.
+ * @returns The escaped string.
+ * @remarks This function escapes the following characters: `<`, `>`, `&`, `"`, `'`, and `` ` ``. Not all special characters are escaped.
+ */
+export function escapeStringToHTML(str: string) {
+    if (!str) return "";
+    return str.replace(/[<>&"'`]/g, (match) => {
+        const escape: any = {
+            "<": "&lt;",
+            ">": "&gt;",
+            "&": "&amp;",
+            '"': "&quot;",
+            "'": "&#39;",
+            "`": "&#x60;",
+        };
+        return escape[match];
+    });
+}

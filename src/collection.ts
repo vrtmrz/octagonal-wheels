@@ -23,3 +23,18 @@ export function* arrayToChunkedArray<T>(arr: T[], chunkLength: number): Generato
 export function unique<T>(arr: T[]): T[] {
     return [...new Set<T>(arr)]
 }
+
+/**
+ * Generates a sequence of numbers from `from` to `to` (inclusive).
+ *
+ * @generator
+ * @param {number} from - The starting number of the sequence.
+ * @param {number} to - The ending number of the sequence.
+ * @yields {number} The next number in the sequence.
+  */
+export function* range(from: number, to: number) {
+    for (let i = from; i <= to; i++) {
+        yield i;
+    }
+    return;
+}

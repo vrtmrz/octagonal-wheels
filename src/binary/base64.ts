@@ -212,3 +212,33 @@ export function base64ToString(base64: string | string[]): string {
         return base64
     }
 }
+
+const regexpBase64 = /^[A-Za-z0-9+/]+=*$/;
+
+/**
+ * Tries to convert a base64 string to an ArrayBuffer.
+ * 
+ * @param base64 - The base64 string to convert.
+ * @returns The converted ArrayBuffer if successful, otherwise false.
+ */
+export function tryConvertBase64ToArrayBuffer(base64: string): ArrayBuffer | false {
+    try {
+        const b64F = base64.replace(/\r|\n/g, "");
+        if (!regexpBase64.test(b64F)) {
+            return false;
+        }
+
+        const binary_string = globalThis.atob(b64F);
+        if (globalThis.btoa(binary_string) !== b64F) {
+            return false;
+        }
+        const len = binary_string.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+            bytes[i] = binary_string.charCodeAt(i);
+        }
+        return bytes.buffer;
+    } catch (ex) {
+        return false;
+    }
+}
