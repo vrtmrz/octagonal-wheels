@@ -11,7 +11,6 @@ import { fileURLToPath } from "node:url";
 const pkg = JSON.parse(fs.readFileSync("./package.json") + "");
 const LIB_VERSION = pkg?.name + "-" + pkg?.version;
 
-
 const moduleName = pkg?.name ?? "";
 
 const banner = `/*!
@@ -40,7 +39,7 @@ export default {
             format: "es",
             preserveSymlinks: true,
             preserveModules: true,
-            preserveModulesRoot: 'src',
+            preserveModulesRoot: "src",
             sourcemap: true,
         },
     ],

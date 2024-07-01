@@ -8,7 +8,7 @@
         "build": "npm run clean && rollup -c && npm run copy",
         "dev": "rollup -c -w",
         "test": "vitest",
-        "copy": "node -e \"['package.json','README.md','LICENSE'].map(f=>require('fs').cpSync(`./${f}`, `./dist/${f}`));\"",
+        "copy": "node -e \"['package.json','.npmignore','README.md','LICENSE'].map(f=>require('fs').cpSync(`./${f}`, `./dist/${f}`));\"",
         "coverage": "vitest run --coverage"
     },
     "repository": "",
