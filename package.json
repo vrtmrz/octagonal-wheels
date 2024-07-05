@@ -6,6 +6,7 @@
     "scripts": {
         "clean": "rimraf dist",
         "build": "npm run clean && rollup -c && npm run copy",
+        "doc": "npx typedoc --out ./docs ./src",
         "dev": "rollup -c -w",
         "test": "vitest",
         "copy": "node -e \"['package.json','.npmignore','README.md','LICENSE'].map(f=>require('fs').cpSync(`./${f}`, `./dist/${f}`));\"",
