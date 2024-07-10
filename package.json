@@ -9,7 +9,7 @@
         "doc": "npx typedoc --out ./docs ./src",
         "dev": "rollup -c -w",
         "test": "vitest",
-        "copy": "node -e \"['package.json','.npmignore','README.md','LICENSE'].map(f=>require('fs').cpSync(`./${f}`, `./dist/${f}`));\"",
+        "copy": "node release.js",
         "coverage": "vitest run --coverage"
     },
     "repository": "",
