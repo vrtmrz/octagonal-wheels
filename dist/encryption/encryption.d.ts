@@ -30,6 +30,13 @@ export declare function encrypt(input: string, passphrase: string, autoCalculate
  */
 export declare function obfuscatePath<T extends string>(path: T, passphrase: string, autoCalculateIterations: boolean): Promise<string>;
 /**
+ * Checks if a given path is probably obfuscated.
+ *
+ * @param path - The path to check.
+ * @returns `true` if the path is probably obfuscated, `false` otherwise.
+ */
+export declare function isPathProbablyObfuscated(path: string): boolean;
+/**
  * Decrypts the encrypted result using the provided passphrase.
  * @param encryptedResult - The encrypted result to decrypt.
  * @param passphrase - The passphrase used for decryption.

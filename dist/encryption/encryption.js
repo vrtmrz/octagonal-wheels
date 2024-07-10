@@ -211,6 +211,15 @@ async function obfuscatePath(path, passphrase, autoCalculateIterations) {
     return ret;
 }
 /**
+ * Checks if a given path is probably obfuscated.
+ *
+ * @param path - The path to check.
+ * @returns `true` if the path is probably obfuscated, `false` otherwise.
+ */
+function isPathProbablyObfuscated(path) {
+    return path.startsWith("%") && path.length > 64;
+}
+/**
  * Decrypts the encrypted result using the provided passphrase and returns the decrypted string.
  * @param encryptedResult - The encrypted result to decrypt.
  * @param passphrase - The passphrase used for decryption.
@@ -367,5 +376,5 @@ async function decryptBinary(encryptedResult, passphrase, autoCalculateIteration
     }
 }
 
-export { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, obfuscatePath, testCrypt, tryDecrypt };
+export { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, isPathProbablyObfuscated, obfuscatePath, testCrypt, tryDecrypt };
 //# sourceMappingURL=encryption.js.map
