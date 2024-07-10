@@ -249,6 +249,17 @@ export async function obfuscatePath<T extends string>(path: T, passphrase: strin
     return ret;
 }
 
+
+/**
+ * Checks if a given path is probably obfuscated.
+ * 
+ * @param path - The path to check.
+ * @returns `true` if the path is probably obfuscated, `false` otherwise.
+ */
+export function isPathProbablyObfuscated(path: string) {
+    return path.startsWith("%") && path.length > 64;
+}
+
 /**
  * Decrypts the encrypted result using the provided passphrase and returns the decrypted string.
  * @param encryptedResult - The encrypted result to decrypt.

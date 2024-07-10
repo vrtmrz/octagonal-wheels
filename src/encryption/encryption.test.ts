@@ -1,5 +1,5 @@
 import { expect, test, vi } from 'vitest';
-import { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, obfuscatePath, testCrypt, tryDecrypt } from './encryption';
+import { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, isPathProbablyObfuscated, obfuscatePath, testCrypt, tryDecrypt } from './encryption';
 import { hexStringToUint8Array, uint8ArrayToHexString } from '../binary';
 
 test('should return true if encryption and decryption are successful', async () => {
@@ -240,4 +240,27 @@ test('should auto calculation works', async () => {
         const decryptedResult1 = await decrypt(encryptedResult1, passphraseString, autoCalculateIterations);
         expect(decryptedResult1).toBe(inputString);
     }
+});
+test('should return true if the path is probably obfuscated', () => {
+    const path = '%931636970d4bc03e843d02f0d7f6cc4cdcdcf2a062af7b8c259e3af73edb64c8v7zdTqKnYzWgW6+ry1dHkPT8aMQJtIg2WwNu3aKXalrIow==';
+
+    const result = isPathProbablyObfuscated(path);
+
+    expect(result).toBe(true);
+});
+
+test('should return false if the path is not obfuscated', () => {
+    const path = '/path/to/file.txt';
+
+    const result = isPathProbablyObfuscated(path);
+
+    expect(result).toBe(false);
+});
+
+test('should return true if the path is probably obfuscated by actually obfuscated path', async () => {
+    const path = await obfuscatePath("test.md", "passwordTest", false);
+
+    const result = isPathProbablyObfuscated(path);
+
+    expect(result).toBe(true);
 });
