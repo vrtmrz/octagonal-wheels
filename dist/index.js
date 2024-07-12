@@ -24,6 +24,10 @@ import * as promises from './promises.js';
 export { promises };
 import * as string from './string.js';
 export { string };
+import * as number from './number.js';
+export { number };
+import * as encryption_index from './encryption/index.js';
+export { encryption_index as encryption };
 
 /**
  * Returns the version of the library.
@@ -32,7 +36,7 @@ export { string };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.12" ;
+    return "octagonal-wheels-0.1.13" ;
 }
 
 export { libVersion };

@@ -1,1 +1,1 @@
-{"version":3,"file":"const.js","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;"}
+{"version":3,"file":"const.js","sources":["../../src/common/const.ts"],"sourcesContent":["export const RESULT_TIMED_OUT = Symbol(\"timed out\");\nexport const RESULT_NOT_FOUND = Symbol(\"NotFound\");\n\n"],"names":[],"mappings":"MAAa,gBAAgB,GAAG,MAAM,CAAC,WAAW,EAAE;MACvC,gBAAgB,GAAG,MAAM,CAAC,UAAU;;;;"}

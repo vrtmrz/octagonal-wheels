@@ -20,7 +20,7 @@ export default defineConfig({
         browser: {
             provider: "playwright",
             enabled: true,
-            slowHijackESM: false,
+            // slowHijackESM: false,
             headless: true,
             fileParallelism: false,
             name: 'chromium', // browser name is required
