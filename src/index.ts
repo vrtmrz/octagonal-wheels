@@ -22,3 +22,5 @@ export * as function from "./function";
 export * as object from "./object";
 export * as promises from "./promises";
 export * as string from "./string";
+export * as number from "./number";
+export * as encryption from "./encryption";
