@@ -37,7 +37,7 @@ export default {
         {
             dir: "dist",
             format: "es",
-            preserveSymlinks: true,
+            // preserveSymlinks: true,
             preserveModules: true,
             preserveModulesRoot: "src",
             sourcemap: true,
@@ -50,6 +50,7 @@ export default {
                 platform: "browser",
                 compilerOptions: {
                     declaration: true,
+                    sourceMap: true,
                     outDir: "dist/types",
                 },
             },
