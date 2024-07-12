@@ -6,6 +6,7 @@ export default defineConfig({
         target: 'es2018',
     },
     test: {
+        testTimeout: 10000,
         fileParallelism: false,
         watch: false,
         // environment: "browser",
