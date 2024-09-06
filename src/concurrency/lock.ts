@@ -1,4 +1,4 @@
-import { fireAndForget, promiseWithResolver } from "../promises";
+import { fireAndForget, promiseWithResolver, yieldNextMicrotask } from "../promises";
 
 type Task<T> = () => Promise<T> | T;
 type Queue<T> = {
@@ -30,7 +30,7 @@ async function performTask<T>(queue: Queue<T>) {
         queue.isFinished = true;
         // This makes non-sense, we have make the latest queue while enqueuing. 
         if (next) {
-            fireAndForget(() => performTask(next));
+            fireAndForget(async () => { await yieldNextMicrotask(), performTask(next) });
         } else {
             queueTails.delete(queue.key);
         }

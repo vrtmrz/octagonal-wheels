@@ -2,6 +2,7 @@ import { decodeBinary } from '../binary/index.js';
 import { writeString, arrayBufferToBase64Single, readString } from '../binary/base64.js';
 import { uint8ArrayToHexString, hexStringToUint8Array } from '../binary/hex.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
+import { decryptV3, encryptV3 } from './encryptionv3.js';
 
 const KeyBuffs = new Map();
 const decKeyBuffs = new Map();
@@ -256,6 +257,9 @@ async function decryptV2(encryptedResult, passphrase, autoCalculateIterations) {
 async function decrypt(encryptedResult, passphrase, autoCalculateIterations) {
     try {
         if (encryptedResult[0] == "%") {
+            if (encryptedResult[1] === "~") {
+                return decryptV3(encryptedResult, passphrase);
+            }
             return decryptV2(encryptedResult, passphrase, autoCalculateIterations);
         }
         if (!encryptedResult.startsWith("[") || !encryptedResult.endsWith("]")) {
@@ -302,6 +306,19 @@ async function tryDecrypt(encryptedResult, passphrase, autoCalculateIterations) 
         return false;
     }
 }
+async function testCryptV3() {
+    const src = "✨supercalifragilisticexpialidocious✨⛰️";
+    const encoded = await encryptV3(src, "passwordTest");
+    const decrypted = await decrypt(encoded, "passwordTest", false);
+    if (src != decrypted) {
+        Logger("WARNING! Your device would not support encryption V3.", LOG_LEVEL_VERBOSE);
+        return false;
+    }
+    else {
+        Logger("CRYPT LOGIC (V3) OK", LOG_LEVEL_VERBOSE);
+        return true;
+    }
+}
 /**
  * Tests the encryption and decryption functionality.
  * @returns {Promise<boolean>} A promise that resolves to `true` if encryption and decryption are successful, and `false` otherwise.
@@ -326,7 +343,7 @@ async function testCrypt() {
         else {
             Logger("CRYPT LOGIC OK (Binary)", LOG_LEVEL_VERBOSE);
         }
-        return true;
+        return await testCryptV3();
     }
 }
 /**
@@ -376,5 +393,5 @@ async function decryptBinary(encryptedResult, passphrase, autoCalculateIteration
     }
 }
 
-export { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, isPathProbablyObfuscated, obfuscatePath, testCrypt, tryDecrypt };
+export { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, isPathProbablyObfuscated, obfuscatePath, testCrypt, testCryptV3, tryDecrypt };
 //# sourceMappingURL=encryption.js.map

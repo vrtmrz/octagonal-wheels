@@ -113,8 +113,12 @@ const QUANTUM = 32768;
  * todo: When Capacitor or Electron is upgraded, check and reappraise this.
  */
 
+const te = new TextEncoder();
+const td = new TextDecoder();
+
 export function writeString(string: string): Uint8Array {
     // Prepare enough buffer.
+    if (string.length > 128) return te.encode(string);
     const buffer = new Uint8Array(string.length * 4);
     const length = string.length;
     let index = 0;
@@ -153,6 +157,7 @@ export function writeString(string: string): Uint8Array {
  */
 export function readString(buffer: Uint8Array): string {
     const length = buffer.length;
+    if (length > 128) return td.decode(buffer);
     let index = 0;
     const end = length;
     let string = "";

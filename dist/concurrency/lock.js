@@ -1,4 +1,4 @@
-import { promiseWithResolver, fireAndForget } from '../promises.js';
+import { promiseWithResolver, fireAndForget, yieldNextMicrotask } from '../promises.js';
 
 const queueTails = new Map();
 async function performTask(queue) {
@@ -19,7 +19,7 @@ async function performTask(queue) {
         queue.isFinished = true;
         // This makes non-sense, we have make the latest queue while enqueuing. 
         if (next) {
-            fireAndForget(() => performTask(next));
+            fireAndForget(async () => { await yieldNextMicrotask(), performTask(next); });
         }
         else {
             queueTails.delete(queue.key);

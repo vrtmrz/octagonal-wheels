@@ -28,6 +28,8 @@ import * as number from './number.js';
 export { number };
 import * as encryption_index from './encryption/index.js';
 export { encryption_index as encryption };
+import * as context from './context.js';
+export { context };
 
 /**
  * Returns the version of the library.
@@ -36,7 +38,7 @@ export { encryption_index as encryption };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.13" ;
+    return "octagonal-wheels-0.1.14" ;
 }
 
 export { libVersion };

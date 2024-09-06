@@ -1,6 +1,7 @@
-import { expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, isPathProbablyObfuscated, obfuscatePath, testCrypt, tryDecrypt } from './encryption';
 import { hexStringToUint8Array, uint8ArrayToHexString } from '../binary';
+import { encryptV3 } from './encryptionv3';
 
 test('should return true if encryption and decryption are successful', async () => {
     const result = await testCrypt();
@@ -264,3 +265,24 @@ test('should return true if the path is probably obfuscated by actually obfuscat
 
     expect(result).toBe(true);
 });
+
+
+
+describe("v3", () => {
+    test("should be able to decrypt v3 style encrypted data", async () => {
+        const encrypted = "%~ddd35704b824765901296a21xi/lryj6A5QY+c/NkPSROop1p/POZ5EBQYRLkoGSHQ==";
+        const passphrase = "password";
+        const decrypted = await decrypt(encrypted, passphrase, false);
+        expect(decrypted).toBe("fancy-syncying!");
+    });
+    test("should be different results for same passphrase and input", async () => {
+        const result = new Set();
+        const passphrase = "password";
+        const input = "fancy-syncying!";
+        for (let i = 0; i < 100; i++) {
+            const encrypted = await encryptV3(input, passphrase);
+            expect(result.has(encrypted)).toBe(false);
+            result.add(encrypted);
+        }
+    });
+})

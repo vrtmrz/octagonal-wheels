@@ -1,4 +1,4 @@
-import { delay, fireAndForget, noop, promiseWithResolver } from './promises';
+import { delay, fireAndForget, noop, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback } from './promises';
 import { describe, expect, it } from 'vitest';
 
 describe('delay function', () => {
@@ -119,3 +119,27 @@ describe('fireAndForget function', () => {
         // No assertions needed, as the function should handle the error and do nothing
     });
 });
+
+describe('microtasks', () => {
+    it('microtasks order test', async () => {
+        const order: string[] = [];
+        const promise = Promise.resolve();
+        // for (let i = 0; <10; i++) {
+        const processes = [
+            yieldNextMicrotask().then(() => order.push('yieldNextMicrotask')),
+            yieldMicrotask().then(() => order.push('yieldMicrotask')),
+            yieldNextMicrotask().then(() => order.push('yieldNextMicrotask')),
+            promise.then(() => order.push('promise')),
+            yieldRequestIdleCallback().then(() => order.push('yieldRequestIdleCallback')),
+            yieldNextAnimationFrame().then(() => order.push('yieldNextAnimationFrame')),
+            promise.then(() => order.push('promise')),
+            yieldRequestIdleCallback().then(() => order.push('yieldRequestIdleCallback')),
+            yieldAnimationFrame().then(() => order.push('yieldAnimationFrame')),
+            yieldNextAnimationFrame().then(() => order.push('yieldNextAnimationFrame')),
+
+        ]
+        await Promise.all(processes);
+
+        expect(order).to.deep.equal(['promise', 'promise', 'yieldMicrotask', 'yieldNextMicrotask', 'yieldNextMicrotask', 'yieldNextAnimationFrame', 'yieldNextAnimationFrame', 'yieldAnimationFrame', 'yieldRequestIdleCallback', 'yieldRequestIdleCallback']);
+    });
+})

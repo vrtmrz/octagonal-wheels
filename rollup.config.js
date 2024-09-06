@@ -23,7 +23,7 @@ export default {
     platform: "browser",
     input: Object.fromEntries(
         globSync("src/**/*.ts")
-            .filter((file) => !file.endsWith(".test.ts"))
+            .filter((file) => !file.endsWith(".test.ts") && !file.endsWith(".bench.ts"))
             .map((file) => [
                 // This remove `src/` as well as the file extension from each
                 // file, so e.g. src/nested/foo.js becomes nested/foo

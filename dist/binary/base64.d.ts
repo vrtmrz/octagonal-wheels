@@ -25,16 +25,6 @@ export declare function arrayBufferToBase64Single(buffer: ArrayBuffer): Promise<
  * @returns A Promise that resolves to an array of base64 strings.
  */
 export declare function arrayBufferToBase64(buffer: ArrayBuffer): Promise<string[]>;
-/**
- *  Super fast Text Encoder / Decoder alternative.
- * @param {string} string - The string to convert.
- * @returns {Uint8Array} The Uint8Array buffer representing the string.
- * @see https://gist.github.com/kawanet/a66a0e2657464c57bcff2249286d3a24
- * @see https://qiita.com/kawanet/items/52062b0c86597f7dee7d
- *
- * remark: This is a super fast TextEncoder alternative.
- * todo: When Capacitor or Electron is upgraded, check and reappraise this.
- */
 export declare function writeString(string: string): Uint8Array;
 /**
  * Converts a Uint8Array buffer to a string.

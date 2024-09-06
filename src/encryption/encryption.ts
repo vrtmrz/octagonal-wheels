@@ -2,6 +2,7 @@ import { decodeBinary } from "../binary";
 import { arrayBufferToBase64Single, readString, writeString } from "../binary/base64";
 import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary/hex";
 import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger";
+import { decryptV3, encryptV3 } from "./encryptionv3";
 
 export type encodedData = [encryptedData: string, iv: string, salt: string];
 export type KeyBuffer = {
@@ -171,6 +172,7 @@ export async function encryptV1(input: string, passphrase: string, autoCalculate
     const ret = `["${encryptedData2}","${uint8ArrayToHexString(iv)}","${uint8ArrayToHexString(salt)}"]`;
     return ret;
 }
+
 /**
  * Encrypts the input string using AES-GCM encryption algorithm.
  * 
@@ -297,6 +299,9 @@ async function decryptV2(encryptedResult: string, passphrase: string, autoCalcul
 export async function decrypt(encryptedResult: string, passphrase: string, autoCalculateIterations: boolean): Promise<string> {
     try {
         if (encryptedResult[0] == "%") {
+            if (encryptedResult[1] === "~") {
+                return decryptV3(encryptedResult, passphrase);
+            }
             return decryptV2(encryptedResult, passphrase, autoCalculateIterations);
         }
         if (!encryptedResult.startsWith("[") || !encryptedResult.endsWith("]")) {
@@ -342,6 +347,19 @@ export async function tryDecrypt(encryptedResult: string, passphrase: string | f
     }
 }
 
+export async function testCryptV3() {
+    const src = "✨supercalifragilisticexpialidocious✨⛰️";
+    const encoded = await encryptV3(src, "passwordTest");
+    const decrypted = await decrypt(encoded, "passwordTest", false);
+    if (src != decrypted) {
+        Logger("WARNING! Your device would not support encryption V3.", LOG_LEVEL_VERBOSE);
+        return false;
+    } else {
+        Logger("CRYPT LOGIC (V3) OK", LOG_LEVEL_VERBOSE);
+        return true;
+    }
+}
+
 /**
  * Tests the encryption and decryption functionality.
  * @returns {Promise<boolean>} A promise that resolves to `true` if encryption and decryption are successful, and `false` otherwise.
@@ -366,8 +384,7 @@ export async function testCrypt() {
         } else {
             Logger("CRYPT LOGIC OK (Binary)", LOG_LEVEL_VERBOSE);
         }
-
-        return true;
+        return await testCryptV3();
     }
 }
 
@@ -416,3 +433,4 @@ export async function decryptBinary(encryptedResult: Uint8Array, passphrase: str
         throw ex;
     }
 }
+

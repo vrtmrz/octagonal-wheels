@@ -1,6 +1,6 @@
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { RESULT_TIMED_OUT } from '../common/const.js';
-import { promiseWithResolver, noop, delay, fireAndForget } from '../promises.js';
+import { promiseWithResolver, noop, delay, yieldNextMicrotask, fireAndForget } from '../promises.js';
 
 class Notifier {
     constructor() {
@@ -462,6 +462,7 @@ class QueueProcessor {
         let items;
         let queueRunOut = true;
         do {
+            await yieldNextMicrotask();
             if (!this._canCollectBatch()) {
                 // If we cannot collect any items from the queue, sleep until a next notify
                 queueRunOut = true;
@@ -550,7 +551,10 @@ class QueueProcessor {
                         }
                     };
                     this._notifier.notify();
-                    fireAndForget(() => batchTask());
+                    fireAndForget(async () => {
+                        await yieldNextMicrotask();
+                        await batchTask();
+                    });
                 }
                 await this._notifier.nextNotify;
             } while (!this._isSuspended);

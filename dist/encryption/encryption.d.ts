@@ -54,6 +54,7 @@ export declare function decrypt(encryptedResult: string, passphrase: string, aut
  * @returns A promise that resolves to the decrypted result if successful, or `false` if decryption fails.
  */
 export declare function tryDecrypt(encryptedResult: string, passphrase: string | false, autoCalculateIterations: boolean): Promise<string | false>;
+export declare function testCryptV3(): Promise<boolean>;
 /**
  * Tests the encryption and decryption functionality.
  * @returns {Promise<boolean>} A promise that resolves to `true` if encryption and decryption are successful, and `false` otherwise.
