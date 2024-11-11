@@ -24,4 +24,6 @@ export * as promises from "./promises";
 export * as string from "./string";
 export * as number from "./number";
 export * as encryption from "./encryption";
+export * as context from "./context";
 export * as actor from "./actor";
+export * as events from "./events";
