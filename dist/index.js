@@ -44,7 +44,7 @@ export { iterable_index as iterable };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.17";
+    return "octagonal-wheels-0.1.18";
 }
 
 export { libVersion };
