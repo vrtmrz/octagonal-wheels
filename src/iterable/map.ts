@@ -1,4 +1,4 @@
-async function* withIndex<T>(iterable: Iterable<T> | AsyncIterableIterator<T>): AsyncIterableIterator<[number, T]> {
+async function* withIndex<T>(iterable: Iterable<T> | AsyncIterable<T>): AsyncIterable<[number, T]> {
     let order = 0;
     for await (const t of iterable) {
         yield [order++, t];
@@ -12,7 +12,7 @@ async function* withIndex<T>(iterable: Iterable<T> | AsyncIterableIterator<T>): 
  * @param callback A function to be applied to each element of the iterable.
  * @param concurrency The number of concurrent processes.
  */
-export async function* withConcurrency<T, U>(iterable: Iterable<T> | AsyncIterableIterator<T>, callback: (t: T) => Promise<U>, concurrency: number): AsyncIterableIterator<U> {
+export async function* withConcurrency<T, U>(iterable: Iterable<T> | AsyncIterable<T>, callback: (t: T) => Promise<U>, concurrency: number): AsyncIterable<U> {
     const processes = new Set<Promise<[number, U]>>();
     const mapTaskToPromise = new Map<number, Promise<[number, U]>>();
     let serial = 0;
@@ -46,7 +46,7 @@ export async function* withConcurrency<T, U>(iterable: Iterable<T> | AsyncIterab
  * @param iterable Source iterable.
  * @param callback Filtering function.
  */
-export async function* filter<T>(iterable: Iterable<T> | AsyncIterableIterator<T>, callback: (t: T) => boolean | Promise<boolean>): AsyncIterableIterator<T> {
+export async function* filter<T>(iterable: Iterable<T> | AsyncIterable<T>, callback: (t: T) => boolean | Promise<boolean>): AsyncIterable<T> {
     for await (const t of iterable) {
         if (await callback(t)) {
             yield t;
@@ -60,7 +60,7 @@ export async function* filter<T>(iterable: Iterable<T> | AsyncIterableIterator<T
  * @param callback a function to be applied to each element of the iterable.
  * @param concurrency  the number of concurrent processes.
  */
-export async function* asyncMapWithConcurrency<T, U>(iterable: Iterable<T> | AsyncIterableIterator<T>, callback: (t: T) => Promise<U>, concurrency: number): AsyncIterableIterator<U> {
+export async function* asyncMapWithConcurrency<T, U>(iterable: Iterable<T> | AsyncIterable<T>, callback: (t: T) => Promise<U>, concurrency: number): AsyncIterable<U> {
     const buffer = new Map<number, U>();
     let head = 0;
     const source = withConcurrency(withIndex(iterable), async ([index, value]) => {
