@@ -13,11 +13,22 @@ export const delay = <T>(ms: number, result?: T): Promise<T> => {
     });
 };
 
+const UNRESOLVED = Symbol('UNRESOLVED');
+
+/**
+ * Checking whether a promise has been resolved.
+ * @param promise 
+ * @returns true if resolved, false if not.
+ */
+export async function isResolved(promise: Promise<unknown>): Promise<boolean> {
+    return await Promise.race([promise, Promise.resolve(UNRESOLVED)]) !== UNRESOLVED;
+}
+
 export type PromiseWithResolvers<T> = {
     promise: Promise<T>;
     resolve: (value: T | PromiseLike<T>) => void;
     reject: (reason?: any) => void;
-}
+};
 
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
@@ -31,7 +42,7 @@ export function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<T> {
         resolve = res;
         reject = rej;
     });
-    return { promise, resolve, reject }
+    return { promise, resolve, reject };
 }
 
 /**

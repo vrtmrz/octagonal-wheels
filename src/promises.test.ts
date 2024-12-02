@@ -1,4 +1,4 @@
-import { delay, fireAndForget, noop, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback } from './promises';
+import { delay, fireAndForget, isResolved, noop, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback } from './promises';
 import { describe, expect, it } from 'vitest';
 
 describe('delay function', () => {
@@ -137,9 +137,25 @@ describe('microtasks', () => {
             yieldAnimationFrame().then(() => order.push('yieldAnimationFrame')),
             yieldNextAnimationFrame().then(() => order.push('yieldNextAnimationFrame')),
 
-        ]
+        ];
         await Promise.all(processes);
 
         expect(order).to.deep.equal(['promise', 'promise', 'yieldMicrotask', 'yieldNextMicrotask', 'yieldNextMicrotask', 'yieldNextAnimationFrame', 'yieldNextAnimationFrame', 'yieldAnimationFrame', 'yieldRequestIdleCallback', 'yieldRequestIdleCallback']);
     });
-})
+
+
+});
+describe('isResolved function', () => {
+    it('should return true for a resolved promise', async () => {
+        const resolvedPromise = Promise.resolve('resolved');
+        const result = await isResolved(resolvedPromise);
+        expect(result).to.be.true;
+    });
+
+    it('should return false for a pending promise', async () => {
+        const pendingPromise = new Promise(() => { });
+        const result = await isResolved(pendingPromise);
+        expect(result).to.be.false;
+    });
+
+});
