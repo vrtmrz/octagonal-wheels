@@ -5,6 +5,12 @@
  * @returns A promise that resolves with the specified result value after the delay.
  */
 export declare const delay: <T>(ms: number, result?: T) => Promise<T>;
+/**
+ * Checking whether a promise has been resolved.
+ * @param promise
+ * @returns true if resolved, false if not.
+ */
+export declare function isResolved(promise: Promise<unknown>): Promise<boolean>;
 export type PromiseWithResolvers<T> = {
     promise: Promise<T>;
     resolve: (value: T | PromiseLike<T>) => void;

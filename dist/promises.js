@@ -11,6 +11,15 @@ const delay = (ms, result) => {
         }, ms);
     });
 };
+const UNRESOLVED = Symbol('UNRESOLVED');
+/**
+ * Checking whether a promise has been resolved.
+ * @param promise
+ * @returns true if resolved, false if not.
+ */
+async function isResolved(promise) {
+    return await Promise.race([promise, Promise.resolve(UNRESOLVED)]) !== UNRESOLVED;
+}
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
  * @returns An object containing the promise, resolve, and reject functions.
@@ -109,5 +118,5 @@ function yieldNextMicrotask() {
     return currentYieldingMicrotask;
 }
 
-export { delay, fireAndForget, nativePromiseWithResolvers, noop, polyfillPromiseWithResolvers, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback };
+export { delay, fireAndForget, isResolved, nativePromiseWithResolvers, noop, polyfillPromiseWithResolvers, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback };
 //# sourceMappingURL=promises.js.map
