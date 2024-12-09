@@ -1,5 +1,6 @@
-import { delay, fireAndForget, isResolved, noop, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback } from './promises';
+import { delay, fireAndForget, isResolved, noop, promiseWithResolver, TIMED_OUT_SIGNAL, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback } from './promises';
 import { describe, expect, it } from 'vitest';
+import { extendableDelay } from './promises';
 
 describe('delay function', () => {
     it('should resolve with the provided result after the specified delay', async () => {
@@ -158,4 +159,50 @@ describe('isResolved function', () => {
         expect(result).to.be.false;
     });
 
+
+});
+
+describe('extendableDelay function', () => {
+    it('should resolve with TIMED_OUT_SIGNAL after the specified timeout', async () => {
+        const timeout = 1000;
+        const { promise } = extendableDelay(timeout, 'cancelled');
+        const result = await promise;
+        expect(result).to.equal(TIMED_OUT_SIGNAL);
+    });
+
+    it('should resolve with the cancel value if cancelled before timeout', async () => {
+        const timeout = 1000;
+        const cancelValue = 'cancelled';
+        const { promise, cancel } = extendableDelay(timeout, cancelValue);
+        cancel(cancelValue);
+        const result = await promise;
+        expect(result).to.equal(cancelValue);
+    });
+
+    it('should extend the timeout and resolve with TIMED_OUT_SIGNAL after the extended timeout', async () => {
+        const initialTimeout = 1000;
+        const extendedTimeout = 2000;
+        const { promise, extend } = extendableDelay(initialTimeout, 'cancelled');
+        extend(extendedTimeout);
+        const startTime = Date.now();
+        const result = await promise;
+        const endTime = Date.now();
+        const elapsedTime = endTime - startTime;
+        expect(result).to.equal(TIMED_OUT_SIGNAL);
+        expect(elapsedTime).to.be.at.least(extendedTimeout);
+    });
+
+    it('should throw an error if trying to extend after resolution', async () => {
+        const timeout = 1000;
+        const { promise, extend } = extendableDelay(timeout, 'cancelled');
+        await promise;
+        expect(() => extend(500)).to.throw('Already resolved!');
+    });
+
+    it('should not throw any errors if trying to cancel after resolution', async () => {
+        const timeout = 1000;
+        const { promise, cancel } = extendableDelay(timeout, 'cancelled');
+        await promise;
+        expect(() => cancel('cancelled')).not.throw();
+    });
 });

@@ -17,11 +17,20 @@ const UNRESOLVED = Symbol('UNRESOLVED');
 
 /**
  * Checking whether a promise has been resolved.
- * @param promise 
+ * @param promise a checking promise
  * @returns true if resolved, false if not.
  */
 export async function isResolved(promise: Promise<unknown>): Promise<boolean> {
     return await Promise.race([promise, Promise.resolve(UNRESOLVED)]) !== UNRESOLVED;
+}
+/**
+ * Checking whether some promises have been resolved.
+ * @param promises checking promises
+ * @returns true if some promises have been resolved, false if not.
+ */
+export async function isSomeResolved(promises: Promise<unknown>[]): Promise<boolean> {
+    if (promises.length == 0) return false;
+    return await Promise.race([...promises, Promise.resolve(UNRESOLVED)]) !== UNRESOLVED;
 }
 
 export type PromiseWithResolvers<T> = {
@@ -133,4 +142,89 @@ export function yieldNextMicrotask() {
         currentYieldingMicrotask = undefined;
     })();
     return currentYieldingMicrotask;
+}
+
+export const TIMED_OUT_SIGNAL = Symbol("timed out");
+export type TIMED_OUT_SIGNAL = typeof TIMED_OUT_SIGNAL;
+/**
+ * Creates a delay that can be canceled.
+ *
+ * @template T - The type of the cancel signal.
+ * @param {number} timeout - The delay duration in milliseconds.
+ * @param {T} [cancel=TIMED_OUT_SIGNAL as T] - The value to resolve the promise with if the delay is canceled.
+ * @returns An object containing the promise and a cancel function.
+ * @returns {Promise<T>} promise - A promise that resolves with the cancel signal after the timeout.
+ * @returns {() => void} cancel - A function to cancel the delay.
+ */
+export function cancelableDelay<T = TIMED_OUT_SIGNAL>(timeout: number, cancel: T = TIMED_OUT_SIGNAL as T) {
+    let timer: ReturnType<typeof setTimeout> | undefined = undefined;
+    const promise = promiseWithResolver<T>();
+    timer = setTimeout(() => {
+        timer = undefined;
+        promise.resolve(cancel);
+    }, timeout);
+    return {
+        promise: promise.promise,
+        cancel() {
+            if (timer) {
+                clearTimeout(timer);
+                timer = undefined;
+            }
+        },
+    };
+}
+type ExtendableDelay<T, U extends string | symbol | number> = {
+    promise: Promise<T | U>;
+    cancel: (reason: T | U) => void;
+    extend(newTimeout: number): void;
+};
+
+/**
+ * Creates an extendable delay that can be cancelled or extended.
+ *
+ * @template U - The type of the cancel signal,
+ * @param {number} timeout - The initial timeout duration in milliseconds.
+ * @param {U} cancel - The signal to use when cancelling the delay.
+ * @returns {ExtendableDelay<TIMED_OUT_SIGNAL, U>} An object containing the promise, cancel function, and extend function.
+ *
+ * @property {Promise<TIMED_OUT_SIGNAL | U>} promise - The promise that resolves when the delay completes or is cancelled.
+ * @property {() => void} cancel - Cancels the delay and resolves the promise with the cancel signal.
+ * @property {(newTimeout: number) => void} extend - Extends the delay by the specified timeout duration.
+ *
+ * @throws {Error} If the delay has already been resolved.
+ */
+export function extendableDelay<U extends string | symbol | number = TIMED_OUT_SIGNAL>(timeout: number, cancel: U): ExtendableDelay<TIMED_OUT_SIGNAL, U> {
+    let timer: ReturnType<typeof setTimeout> | undefined = undefined;
+    const promise = promiseWithResolver<TIMED_OUT_SIGNAL | U>();
+    let resolved = false;
+    const setTimer = (newTimeout: number) => {
+        if (resolved) throw new Error("Already resolved!");
+        return setTimeout(() => {
+            timer = undefined;
+            promise.resolve(TIMED_OUT_SIGNAL);
+            resolved = true;
+        }, newTimeout);
+    };
+    const extendTimer = (newTimeout: number) => {
+        if (resolved) throw new Error("Already resolved!");
+        if (timer) {
+            clearTimeout(timer);
+            timer = undefined;
+        }
+        timer = setTimer(newTimeout);
+    };
+    const canceller = () => {
+        if (timer && !resolved) {
+            clearTimeout(timer);
+            timer = undefined;
+            promise.resolve(cancel);
+            resolved = true;
+        }
+    };
+    timer = setTimer(timeout);
+    return {
+        get promise() { return promise.promise; },
+        cancel: canceller,
+        extend: extendTimer
+    };
 }

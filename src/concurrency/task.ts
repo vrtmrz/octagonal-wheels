@@ -3,9 +3,9 @@ export type TaskProcessing<T> = Promise<T>;
 export type TaskWaiting<T> = () => Promise<T>;
 export type Task<T> = TaskProcessing<T> | TaskWaiting<T>;
 
-export type TaskResult<T, U extends Error> = { ok: T } | { err: U };
+export type TaskResult<T, U extends Error> = { ok: T; } | { err: U; };
 
-export type TaskResultWithKey<T, U extends Error> = TaskResult<T, U> & { key: number };
+export type TaskResultWithKey<T, U extends Error> = TaskResult<T, U> & { key: number; };
 
 export type ProcessingTaskResultWithKey<T, U extends Error> = Promise<TaskResultWithKey<T, U>>;
 
@@ -30,7 +30,7 @@ async function wrapEachProcess<T>(key: number, task: TaskProcessing<T>) {
         const r = await task;
         return { key, ok: r };
     } catch (ex) {
-        return { key, err: ex instanceof Error ? ex : new Error(`${ex}`) }
+        return { key, err: ex instanceof Error ? ex : new Error(`${ex}`) };
     }
 }
 
@@ -129,7 +129,7 @@ export async function mapAllTasksWithConcurrencyLimit<T>(limit: number, tasks: T
 }
 
 
-const tasks: { [key: string]: ReturnType<typeof setTimeout> } = {};
+const tasks: { [key: string]: ReturnType<typeof setTimeout>; } = {};
 export function scheduleTask(key: string, timeout: number, proc: (() => Promise<any> | void), skipIfTaskExist?: boolean) {
     if (skipIfTaskExist && key in tasks) {
         return;
@@ -152,7 +152,7 @@ export function cancelAllTasks() {
         delete tasks[v];
     }
 }
-const intervals: { [key: string]: ReturnType<typeof setInterval> } = {};
+const intervals: { [key: string]: ReturnType<typeof setInterval>; } = {};
 export function setPeriodicTask(key: string, timeout: number, proc: (() => Promise<any> | void)) {
     cancelPeriodicTask(key);
     intervals[key] = setInterval(async () => {
@@ -178,8 +178,8 @@ type WaitingItem = {
     waitFrom: number,
     timeout: number,
     timeoutPromise: ReturnType<typeof promiseWithResolver<boolean>>;
-    timer: ReturnType<typeof setTimeout>
-}
+    timer: ReturnType<typeof setTimeout>;
+};
 const waitingItems = new Map<string, WaitingItem>();
 
 export function waitForTimeout(key: string, timeout: number): Promise<boolean> {
@@ -196,7 +196,7 @@ export function waitForTimeout(key: string, timeout: number): Promise<boolean> {
         timeoutPromise: timeoutPromise,
         timer
     });
-    return timeoutPromise.promise
+    return timeoutPromise.promise;
 }
 export function finishWaitingForTimeout(key: string, hasTimeout: boolean = false): boolean {
     const x = waitingItems.get(key);
@@ -219,4 +219,35 @@ export function finishAllWaitingForTimeout(prefix: string, hasTimeout: boolean):
 
 export function isWaitingForTimeout(key: string): boolean {
     return waitingItems.has(key);
+}
+
+const sharedTasks = new Map<string, Promise<any>>();
+
+export type ResolverWithKey<T> = { key: string; resolver: PromiseWithResolvers<T>; };
+
+export function sharedTask<T>(key: string, proc: () => Promise<T>) {
+    if (sharedTasks.has(key)) {
+        return sharedTasks.get(key)! as Promise<T>;
+    }
+    const p = promiseWithResolver<T>();
+    const _proc = async () => {
+        try {
+            const r = await proc();
+            p.resolve(r);
+        } catch (ex) {
+            p.reject(ex);
+        } finally {
+            sharedTasks.delete(key);
+        }
+    };
+    sharedTasks.set(key, p.promise);
+    void _proc();
+    return p.promise;
+}
+
+export function wrapFunctionAsShared<P extends any[], T>(proc: (...p: P) => Promise<T>) {
+    return async (...p: P) => {
+        const key = proc.name + "-" + p.map(e => typeof e === "object" ? JSON.stringify(e) : `${e}`).join(",");
+        return await sharedTask(key, () => proc(...p));
+    };
 }

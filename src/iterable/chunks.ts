@@ -1,3 +1,6 @@
+import { PaceMaker } from "../concurrency/pacemaker";
+import { NOT_AVAILABLE, Inbox } from "../messagepassing/Inbox";
+import { cancelableDelay, promiseWithResolver, TIMED_OUT_SIGNAL } from "../promises";
 import { GeneratorSource } from "./source";
 
 type ChunkProcessOptions = {
@@ -5,6 +8,7 @@ type ChunkProcessOptions = {
      * The number of items to be packed into a single chunk.
      */
     unit: number;
+
     /**
      * The maximum time to wait for the next chunk to be filled.
      * If the timeout is reached, the current chunk will be yielded partially.

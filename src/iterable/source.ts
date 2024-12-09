@@ -6,7 +6,13 @@ export function generativeBuffer<T>() {
     let next = [current];
     let closed = false;
     let finished = false;
-
+    let onSizeUpdated: ((size: number) => void) | undefined;
+    const updateSize = () => {
+        if (onSizeUpdated) {
+            try { onSizeUpdated(next.length - 1); }
+            catch (_) { }
+        }
+    };
     return {
         enqueue(item: T) {
             if (closed || finished) {
@@ -16,6 +22,7 @@ export function generativeBuffer<T>() {
             const newNext = promiseWithResolver<T | typeof GENERATOR_CLOSED>();
             current = newNext;
             next.push(current);
+            updateSize();
             promise.resolve(item);
         },
         [Symbol.asyncIterator](): AsyncGenerator<Awaited<T>, void, unknown> {
@@ -45,6 +52,8 @@ export function generativeBuffer<T>() {
                         return;
                     }
                     throw e;
+                } finally {
+                    updateSize();
                 }
             }
             try {
@@ -53,42 +62,55 @@ export function generativeBuffer<T>() {
             } catch (e) {
                 console.log(`Error on cleanup: ${String(e)}`);
             }
+        },
+        get size() {
+            return next.length - 1;
         }
     };
 }
 
 
 export class GeneratorSource<T> {
-
-    next: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>[];
-    current: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>;
+    _next: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>[];
+    _current: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>;
+    _onSizeUpdated?: (size: number) => void;
+    _updateSize() {
+        if (this._onSizeUpdated) {
+            try { this._onSizeUpdated(this.size); }
+            catch (_) { }
+        }
+    }
+    get size() {
+        return this._next.length - 1;
+    }
     closed: boolean;
     finished: boolean;
-    constructor() {
+    constructor(onSizeUpdated?: (size: number) => void) {
         this.closed = false;
         this.finished = false;
-        this.current = promiseWithResolver<T | typeof GENERATOR_CLOSED>();
-        this.next = [this.current];
+        this._current = promiseWithResolver<T | typeof GENERATOR_CLOSED>();
+        this._next = [this._current];
+        this._onSizeUpdated = onSizeUpdated;
     }
     enqueue(item: T) {
         if (this.closed || this.finished) {
             throw new Error("Cannot enqueue to a closed or finished source");
         }
-        const promise = this.current;
+        const promise = this._current;
         const next = promiseWithResolver<T | typeof GENERATOR_CLOSED>();
-        this.current = next;
-        this.next.push(this.current);
+        this._current = next;
+        this._next.push(this._current);
+        this._updateSize();
         promise.resolve(item);
     }
     dispose() {
         if (this.closed) return;
         this.closed = true;
-        // this.closedPromise.resolve(GENERATOR_CLOSED);
-        this.current.resolve(GENERATOR_CLOSED);
+        this._current.resolve(GENERATOR_CLOSED);
     }
     finish() {
         this.finished = true;
-        this.current.resolve(GENERATOR_CLOSED);
+        this._current.resolve(GENERATOR_CLOSED);
     }
     [Symbol.asyncIterator]() {
         return this.values();
@@ -100,8 +122,8 @@ export class GeneratorSource<T> {
     async *values() {
         while (!this.closed) {
             try {
-                const ret = await this.next[0].promise;
-                this.next = this.next.slice(1); //// Drop the resolved promise
+                const ret = await this._next[0].promise;
+                this._next = this._next.slice(1); //// Drop the resolved promise
                 if (ret === GENERATOR_CLOSED) break;
                 yield ret;
             } catch (e) {
@@ -109,13 +131,15 @@ export class GeneratorSource<T> {
                     break;
                 }
                 throw e;
+            } finally {
+                this._updateSize();
             }
         }
         try {
-            this.next.forEach(p => {
+            this._next.forEach(p => {
                 p.reject();
             });
-            this.next.length = 0;
+            this._next.length = 0;
         } catch (e) {
             console.log(`Error on cleanup: ${String(e)}`);
         }
