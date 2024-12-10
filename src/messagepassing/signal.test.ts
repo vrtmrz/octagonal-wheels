@@ -6,10 +6,10 @@ describe('waitForSignal', () => {
     beforeEach(() => {
         vi.clearAllTimers();
         vi.useFakeTimers();
-    })
+    });
     afterEach(() => {
         vi.useRealTimers();
-    })
+    });
     it('should resolve with true when signal is received', async () => {
         const id = 'testSignal';
         const timeout = 1000;
@@ -32,10 +32,10 @@ describe('waitForValue', () => {
     beforeEach(() => {
         vi.clearAllTimers();
         vi.useFakeTimers();
-    })
+    });
     afterEach(() => {
         vi.useRealTimers();
-    })
+    });
     it('should resolve with the value when signal is received', async () => {
         const id = 'testSignal';
         const timeout = 1000;

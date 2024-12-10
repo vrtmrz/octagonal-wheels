@@ -6,7 +6,7 @@ declare const LIB_VERSION: string | undefined;
  * @returns The version of the library.
  */
 export function libVersion(): string {
-    return LIB_VERSION || "dev"
+    return LIB_VERSION || "dev";
 }
 
 export * as binary from "./binary";
@@ -28,3 +28,4 @@ export * as context from "./context";
 export * as actor from "./actor";
 export * as events from "./events";
 export * as iterable from "./iterable";
+export * as bureau from "./bureau";

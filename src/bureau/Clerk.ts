@@ -26,6 +26,11 @@ export type ClerkGroupOption<T, U extends ClerkBase<T>> = ClerkOptionBase<T> & {
     initialMemberCount: number;
 };
 
+export const SENTINEL_FINISHED = Symbol("finished");
+export const SENTINEL_FLUSH = Symbol("flush");
+
+export type SENTINELS = typeof SENTINEL_FINISHED | typeof SENTINEL_FLUSH;
+
 
 type FeederStateDetail = {
     hasStarted: boolean;
@@ -45,6 +50,7 @@ export abstract class ClerkBase<T> {
     _inbox: Inbox<T>;
     _name: string;
     abstract _onPick(item: T): Promise<void>;
+    _onSentinel?(item: SENTINELS): Promise<any>;
 
     _state: ClerkState = ClerkState.STALLED;
     _totalProcessed = 0;
@@ -80,6 +86,7 @@ export abstract class ClerkBase<T> {
     }
 
     _onProgress?: (state: ClerkStateDetail) => void;
+
     onProgress() {
         try {
             this._onProgress?.(this.stateDetail);
@@ -99,6 +106,10 @@ export abstract class ClerkBase<T> {
             this.onProgress();
             try {
                 const item = await this._inbox.pick(undefined, [this._disposePromise.promise]);
+                if (item === SENTINEL_FLUSH || item === SENTINEL_FINISHED) {
+                    await this._onSentinel?.(item as SENTINELS);
+                    continue;
+                }
                 if (item === NOT_AVAILABLE) {
                     if (this._inbox.isDisposed) {
                         this._state = ClerkState.DISPOSED;
@@ -243,7 +254,7 @@ export class ClerkGroup<T, U extends ClerkBase<T>> {
 
 export class Porter<T> extends ClerkBase<T> {
     _outgoing: Inbox<T[]>;
-    _timeout: number;
+    _timeout?: number;
     _maxSize: number;
     _buffer: T[] = [];
     _timeoutTimer: ReturnType<typeof setTimeout> | undefined;
@@ -264,20 +275,35 @@ export class Porter<T> extends ClerkBase<T> {
         return stateDetail;
     }
 
+    async _onSentinel(item: SENTINELS) {
+        if (item === SENTINEL_FLUSH) {
+            await this._flush();
+        } else if (item === SENTINEL_FINISHED) {
+            await this._flush();
+            // this.dispose();
+        }
+    }
+
     async _onPick(item: T): Promise<void> {
         this._buffer.push(item);
         if (this._buffer.length >= this._maxSize) {
             await this._flush();
         } else {
-            if (!this._timeoutTimer) {
-                this._timeoutTimer = setTimeout(() => {
-                    void this._flush();
-                }, this._timeout);
+            if (this._timeout) {
+                if (!this._timeoutTimer) {
+                    this._timeoutTimer = setTimeout(() => {
+                        void this._flush();
+                    }, this._timeout);
+                }
             }
         }
     }
 
-    constructor(params: { from: Inbox<T>, to: Inbox<T[]>, timeout: number, maxSize: number, }) {
+    flush() {
+        return this._flush();
+    }
+
+    constructor(params: { from: Inbox<T>, to: Inbox<T[]>, timeout?: number, maxSize: number, }) {
         super({ assigned: params.from });
         this._outgoing = params.to;
         this._timeout = params.timeout;
@@ -335,8 +361,14 @@ export class Feeder<T> {
         this._target = target;
         void yieldMicrotask().then(() => this._mainLoop());
     }
+
     async _mainLoop() {
         for await (const item of this._source) {
+            if (item === SENTINEL_FINISHED) {
+                continue;
+            } else if (item === SENTINEL_FLUSH) {
+                continue;
+            }
             this._totalFetched++;
             this._hasStarted = true;
             this.onProgress();
@@ -344,9 +376,13 @@ export class Feeder<T> {
             this._totalProcessed++;
             this.onProgress();
         }
+        // signal the end of the source
+        await this._target.post(SENTINEL_FLUSH as any);
+        await this._target.post(SENTINEL_FINISHED as any);
         this._hasFinished = true;
         this.onProgress();
     }
+
     get stateDetail(): FeederStateDetail {
         return {
             hasFinished: this._hasFinished,

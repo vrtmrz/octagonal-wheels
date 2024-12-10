@@ -68,6 +68,7 @@ export function serialized<T>(key: string | symbol, proc: Task<T>): Promise<T> {
 /**
  * If free, run task and return the result (Same as serialized).
  * If any process has running, share the result.
+ * Mostly same as `SlipBoard.issueAndProceed` but this is for general purpose.
  * @param key key of the group
  * @param proc process to run
  */

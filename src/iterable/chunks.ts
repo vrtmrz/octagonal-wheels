@@ -1,7 +1,7 @@
-import { PaceMaker } from "../concurrency/pacemaker";
-import { NOT_AVAILABLE, Inbox } from "../messagepassing/Inbox";
-import { cancelableDelay, promiseWithResolver, TIMED_OUT_SIGNAL } from "../promises";
-import { GeneratorSource } from "./source";
+import { PaceMaker } from "../bureau/pacemaker";
+import { NOT_AVAILABLE, InboxWithEvent } from "../bureau/Inbox";
+import { Feeder, Porter } from "../bureau/Clerk";
+import { promiseWithResolver } from "../promises";
 
 type ChunkProcessOptions = {
     /**
@@ -31,69 +31,62 @@ const FINISHED = Symbol("finished");
  * @param {ChunkProcessOptions} options
  */
 export async function* asChunk<T>(source: Iterable<T> | AsyncIterable<T>, { unit, timeout, interval }: ChunkProcessOptions): AsyncIterable<T[]> {
-    const outputSource = new GeneratorSource<T[] | typeof FINISHED>();
-    const pBuffer: T[] = [];
-    let previousYielded = 0;
-    let timeoutTimer: ReturnType<typeof setTimeout> | undefined = undefined;
+    const postBox = new InboxWithEvent<T>(unit * 10);
+    const outgoingBox = new InboxWithEvent<T[]>(10);
+    const completed = promiseWithResolver<void>();
+    const pacemaker = interval ? new PaceMaker(interval) : undefined;
+    let isCompleted = false;
 
-    const scheduleTimeout = () => {
-        if (timeout) {
-            if (!timeoutTimer) {
-                clearTimeout(timeoutTimer);
-            }
-            timeoutTimer = setTimeout(() => {
-                flush(false);
-                timeoutTimer = undefined;
-            }, timeout);
-        }
+
+    const porter = new Porter(
+        {
+            from: postBox, to: outgoingBox,
+            timeout: timeout,
+            maxSize: unit,
+        },
+    );
+    const feeder = new Feeder({
+        source, target: postBox,
+    });
+    const checkStates = () => {
+        if (porter.stateDetail.isBusy) return;
+        // if (harvester.stateDetail.isBusy) return;
+        if (!feeder.stateDetail.hasFinished) return;
+        if (outgoingBox.size != 0) return;
+        isCompleted = true;
+        completed.resolve();
     };
-    const enqueueItem = (item: T) => {
-        pBuffer.push(item);
-        if (pBuffer.length >= unit) {
-            flush(false);
-        }
-    };
-    const flush = (done: boolean) => {
-        const flushTo = done ? 0 : unit;
-        while (pBuffer.length >= flushTo) {
-            const chunk = pBuffer.splice(0, unit);
-            if (chunk.length === 0) {
+    feeder.setOnProgress((state) => {
+        checkStates();
+    });
+    porter.setOnProgress((state) => {
+        checkStates();
+    });
+    postBox.setOnProgress((state) => {
+        checkStates();
+    });
+    outgoingBox.setOnProgress((state) => {
+        checkStates();
+    });
+
+    do {
+        const chunk = await outgoingBox.pick(undefined, [completed.promise]);
+        if (chunk === NOT_AVAILABLE) {
+            if (isCompleted) {
                 break;
             }
-            outputSource.enqueue(chunk);
+            continue;
         }
-        if (done) {
-            outputSource.enqueue(FINISHED);
-        }
-    };
 
-    void (async () => {
-        for await (const item of source) {
-            enqueueItem(item);
+        if (pacemaker) {
+            await Promise.race([pacemaker.paced]);
         }
-        flush(true);
-    })();
 
-    for await (const chunk of outputSource) {
-        if (chunk === FINISHED) {
-            break;
-        }
-        scheduleTimeout();
-        if (interval) {
-            const now = Date.now();
-            const elapsed = now - previousYielded;
-            if (elapsed < interval) {
-                await new Promise(resolve => setTimeout(resolve, interval - elapsed));
-            }
-        }
         yield chunk;
-        previousYielded = Date.now();
-    }
-    // Cleanup
-    if (timeoutTimer) {
-        clearTimeout(timeoutTimer);
-    }
-    outputSource.dispose();
+        pacemaker?.mark();
+
+    } while (!isCompleted);
+    porter.dispose();
 }
 
 /**

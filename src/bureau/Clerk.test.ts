@@ -1,16 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { Clerk, ClerkGroup, ClerkState, Feeder, Harvester, Porter } from './Clerk';
-import { Inbox, InboxWithEvent, NOT_AVAILABLE } from './Inbox';
+import { Inbox, InboxWithEvent } from './Inbox';
 import { delay, promiseWithResolver, yieldMicrotask } from '../promises';
 
 
 
 describe('Clerk', () => {
-    // let postBox: Inbox<string>;
-
-    // beforeEach(() => {
-    //     postBox = new Inbox<string>(10);
-    // });
     it('should process items using the provided job function', async () => {
         const result: string[] = [];
         const completed = promiseWithResolver<void>();
