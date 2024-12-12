@@ -1,7 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { SlipBoard, globalSlipBoard } from './SlipBoard';
 import { delay, TIMED_OUT_SIGNAL } from '../promises';
-
+declare global {
+    interface LSSlips {
+        "hello": string;
+        "world": undefined;
+    }
+}
 describe('TrackingBoard', () => {
     it('should dispatch and listen to events without data', async () => {
         const board = new SlipBoard();
@@ -35,7 +40,7 @@ describe('TrackingBoard', () => {
         const event = 'hello';
         const timeout = 100;
 
-        const promise = board.awaitNext(event, "0", timeout);
+        const promise = board.awaitNext(event, "0", { timeout });
 
         await expect(promise).resolves.toBe(TIMED_OUT_SIGNAL);
     });
@@ -46,7 +51,7 @@ describe('TrackingBoard', () => {
         const data = 'world';
         const timeout = 100;
 
-        const promise = board.awaitNext(event, "0", timeout);
+        const promise = board.awaitNext(event, "0", { timeout });
         board.submit(event, "0", data);
 
         await expect(promise).resolves.toBe(data);
@@ -60,7 +65,7 @@ describe('TrackingBoard', () => {
         const timeout = 100;
         const promise = board.awaitNext(event, "0");
         board.submit(event, "0", data);
-        const promise2 = board.awaitNext(event, "1", timeout);
+        const promise2 = board.awaitNext(event, "1", { timeout });
         // board.submit(event, "1", data2);
         await expect(promise).resolves.toBe(data);
         await expect(promise2).resolves.toBe(TIMED_OUT_SIGNAL);
@@ -70,7 +75,7 @@ describe('TrackingBoard', () => {
         const event = 'hello';
         const data = 'world';
 
-        const promise = globalSlipBoard.awaitNext(event);
+        const promise = globalSlipBoard.awaitNext(event, "");
         globalSlipBoard.submit(event, "", data);
 
         await expect(promise).resolves.toBe(data);
@@ -114,5 +119,35 @@ describe('TrackingBoard', () => {
 
         };
         await expect(Promise.all(promises)).resolves.toEqual(["Failed", 1, "Failed", 1, "Failed", 1, "Failed", 1, "Failed", 1, "Failed"]);
+    });
+    it('should use globalTrackingBoard with and onNotAwaited', async () => {
+
+        let i = 0;
+        const incD = async (j: number) => {
+            if (j % 2 == 0) {
+                globalSlipBoard.submit("hello", `${j % 2}`, "Failed");
+                return;
+            }
+            await delay(50);
+            globalSlipBoard.submit("hello", `${j % 2}`, `${++i}`);
+
+        };
+        const promises: Promise<string>[] = [];
+        for (let j = 0; j <= 10; j++) {
+            const p1 = globalSlipBoard.awaitNext("hello", `${j % 2}`, {
+                onNotAwaited: () => incD(j),
+            });
+            promises.push(p1);
+        };
+        await delay(1000);
+        for (let j = 0; j <= 10; j++) {
+            const p1 = globalSlipBoard.awaitNext("hello", `${j % 2}`, {
+                onNotAwaited: () => incD(j),
+            });
+            promises.push(p1);
+        };
+        await expect(Promise.all(promises)).resolves.toEqual(["Failed", "1", "Failed", "1", "Failed", "1", "Failed", "1", "Failed", "1", "Failed",
+            "Failed", "2", "Failed", "2", "Failed", "2", "Failed", "2", "Failed", "2", "Failed"
+        ]);
     });
 });

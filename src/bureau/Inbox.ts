@@ -147,6 +147,22 @@ export class SyncInbox<T> {
     }
 
     /**
+     * Tries to cancel the last posted item.
+     * @returns The item picked, or `NOT_AVAILABLE` if no item is available.
+     */
+    tryCancelPost() {
+        if (this.size == 0) {
+            return NOT_AVAILABLE;
+        }
+        const pointingIdx = this._writeIdx & this._wrapAroundCount;
+        const item = this._buffer[pointingIdx];
+        this._buffer[pointingIdx] = undefined!;
+        this._writeIdx--;
+        this.__fixIdx();
+        return item;
+    }
+
+    /**
      * Tries to pick an item from the buffer.
      * @returns The item picked, or `NOT_AVAILABLE` if no item is available.
      */
@@ -161,6 +177,7 @@ export class SyncInbox<T> {
         this.__onPicked();
         return item;
     }
+
 }
 export class Inbox<T> extends SyncInbox<T> {
 

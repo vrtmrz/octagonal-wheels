@@ -184,4 +184,80 @@ describe('Inbox', () => {
         expect(await inbox.pick(undefined, [p.promise])).toBe(4);
 
     });
+
+    it('should cancel the last post correctly', async () => {
+        await inbox.post(1);
+        await inbox.post(2);
+        await inbox.post(3);
+
+        expect(inbox.size).toBe(3);
+        expect(inbox.free).toBe(0);
+
+        const cancelledItem = inbox.tryCancelPost();
+        expect(cancelledItem).toBe(3);
+        expect(inbox.size).toBe(2);
+        expect(inbox.free).toBe(1);
+        await inbox.post(4);
+        expect(inbox.size).toBe(3);
+        expect(inbox.free).toBe(0);
+
+        const item1 = await inbox.pick();
+        const item2 = await inbox.pick();
+        const item3 = await inbox.pick();
+        expect(item1).toBe(1);
+        expect(item2).toBe(2);
+        expect(item3).toBe(4);
+        expect(inbox.size).toBe(0);
+        expect(inbox.free).toBe(3);
+    });
+
+    it("should cancel all posts correctly", async () => {
+        await inbox.post(1);
+        await inbox.post(2);
+        await inbox.post(3);
+
+        expect(inbox.size).toBe(3);
+        expect(inbox.free).toBe(0);
+
+        const cancelledItems1 = inbox.tryCancelPost();
+        expect(cancelledItems1).toEqual(3);
+        const cancelledItems2 = inbox.tryCancelPost();
+        expect(cancelledItems2).toEqual(2);
+        const cancelledItems3 = inbox.tryCancelPost();
+        expect(cancelledItems3).toEqual(1);
+        const cancelledItems4 = inbox.tryCancelPost();
+        expect(cancelledItems4).toEqual(NOT_AVAILABLE);
+        expect(inbox.size).toBe(0);
+        expect(inbox.free).toBe(3);
+    });
+
+    it('should return NOT_AVAILABLE if the buffer is empty', () => {
+        expect(inbox.size).toBe(0);
+        expect(inbox.free).toBe(3);
+
+        const result = inbox.tryCancelPost();
+        expect(result).toBe(NOT_AVAILABLE);
+        expect(inbox.size).toBe(0);
+        expect(inbox.free).toBe(3);
+    });
+
+    it('should return NOT_AVAILABLE if the buffer has got be empty', async () => {
+        expect(inbox.size).toBe(0);
+        expect(inbox.free).toBe(3);
+
+        await inbox.post(1);
+        await inbox.post(2);
+
+        expect(inbox.size).toBe(2);
+        expect(inbox.free).toBe(1);
+        expect(await inbox.pick()).toBe(1);
+        expect(await inbox.pick()).toBe(2);
+        expect(inbox.size).toBe(0);
+        expect(inbox.free).toBe(3);
+
+        const result = inbox.tryCancelPost();
+        expect(result).toBe(NOT_AVAILABLE);
+        expect(inbox.size).toBe(0);
+        expect(inbox.free).toBe(3);
+    });
 });

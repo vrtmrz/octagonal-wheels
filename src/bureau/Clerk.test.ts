@@ -119,13 +119,7 @@ describe('Porter', () => {
             timeout: 50,
             maxSize: 3,
         });
-        // const narrator = new Clerk<string[]>({
-        //     assigned: outgoingBox,
-        //     job: async (items) => {
-        //         result.push(items);
-        //         await Promise.resolve();
-        //     }
-        // });
+
         const harvester = new Harvester<string[]>({
             assigned: outgoingBox,
         });
@@ -225,7 +219,73 @@ describe('Porter', () => {
         await delay(10);
         expect(porter.state).toBe(ClerkState.DISPOSED);
     });
+    it('should merge batches items if not have not drained', async () => {
+        const completed = promiseWithResolver<void>();
+        const postBox = new InboxWithEvent<string>(5);
+        const outgoingBox = new InboxWithEvent<string[]>(5);
 
+        const source = (async function* () {
+            for (let i = 1; i <= 3; i++) {
+                yield `item${i}`;
+            }
+            await delay(100);
+            for (let i = 4; i <= 8; i++) {
+                yield `item${i}`;
+            }
+        });
+        const porter = new Porter<string>({
+            from: postBox,
+            to: outgoingBox,
+            timeout: 50,
+            maxSize: 5,
+        });
+
+        let harvester: Harvester<string[]> | undefined = undefined;
+
+        const feeder = new Feeder({
+            source: source(),
+            target: postBox,
+        });
+        const checkStates = () => {
+            if (porter.stateDetail.isBusy) return;
+            if (!harvester) return;
+            if (harvester?.stateDetail.isBusy) return;
+            if (!feeder._hasFinished) return;
+            completed.resolve();
+        };
+
+
+        porter.setOnProgress((state) => {
+            checkStates();
+        });
+
+        feeder.setOnProgress((state) => {
+            checkStates();
+        });
+
+
+        const expected = [
+            ["item1", "item2", "item3", "item4", "item5"],
+            ["item6", "item7", "item8"],
+        ];
+
+
+        await delay(1000);
+        // await delay(10);
+        harvester = new Harvester<string[]>({
+            assigned: outgoingBox,
+        });
+        harvester.setOnProgress((state) => {
+            checkStates();
+        });
+        await completed.promise;
+
+        expect(harvester.drainAndReset()).toEqual(expected);
+
+        postBox.dispose();
+        await delay(10);
+        expect(porter.state).toBe(ClerkState.DISPOSED);
+    });
     it('should handle dispose correctly', async () => {
         const postBox = new Inbox<string>(5);
         const outgoingBox = new Inbox<string[]>(5);

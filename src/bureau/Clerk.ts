@@ -238,6 +238,10 @@ export class ClerkGroup<T, U extends ClerkBase<T>> {
         };
     }
 
+    get freeMembers() {
+        return this._clerks.filter(clerk => clerk.state === ClerkState.IDLE).length;
+    }
+
 
     dispose() {
         this._clerks.forEach(clerk => clerk.dispose());
@@ -258,16 +262,36 @@ export class Porter<T> extends ClerkBase<T> {
     _maxSize: number;
     _buffer: T[] = [];
     _timeoutTimer: ReturnType<typeof setTimeout> | undefined;
-
+    _flushing = Promise.resolve();
+    _separateChunk = false;
     async _flush() {
         this._timeoutTimer = undefined;
         if (this._buffer.length > 0) {
-            const postingItems = [...this._buffer];
-            this._buffer = [];
-            await this._outgoing.post(postingItems);
+            const previous = this._outgoing.tryCancelPost();
+            if (previous !== NOT_AVAILABLE) {
+                if (previous.length >= this._maxSize) {
+                    // If previous is full, drawback it to the buffer
+                    // We do not care about if the previous post is larger than the max size
+                    this._outgoing.tryPost(previous);
+                } else {
+                    // previous is not full, so we need to merge it with the current buffer
+                    this._buffer = [...previous, ...this._buffer];
+                    // then we need to push the buffer to the max size
+                    const filling = this._buffer.splice(0, this._maxSize);
+                    // It must be safe that we have canceled the previous post
+                    if (this._outgoing.tryPost(filling) === false) {
+                        throw new Error("This should not happen");
+                    }
+                }
+            }
+            const postingItems = this._buffer.splice(0, this._maxSize);
+            if (postingItems.length > 0) {
+                await this._outgoing.post(postingItems);
+                this.onProgress();
+            }
         }
-        this.onProgress();
     }
+
     get stateDetail(): ClerkStateDetail {
         const stateDetail = super.stateDetail;
         stateDetail.totalProcessed = this._totalProcessed - this._buffer.length;
@@ -301,6 +325,21 @@ export class Porter<T> extends ClerkBase<T> {
 
     flush() {
         return this._flush();
+    }
+
+    async changeParams(params: { timeout?: number, maxSize?: number; }) {
+        let anyChanged = false;
+        if (params.timeout != undefined && this._timeout !== params.timeout) {
+            this._timeout = params.timeout;
+            anyChanged = true;
+        }
+        if (params.maxSize != undefined && this._maxSize !== params.maxSize) {
+            this._maxSize = params.maxSize;
+            anyChanged = true;
+        }
+        if (anyChanged) {
+            await this.flush();
+        }
     }
 
     constructor(params: { from: Inbox<T>, to: Inbox<T[]>, timeout?: number, maxSize: number, }) {

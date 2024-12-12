@@ -30,13 +30,10 @@ export class PaceMaker {
         }
     }
 
-    /**
-     * The promise for waiting paced
-     */
-    get paced() {
+    _getPaced(doMark: boolean) {
         const now = Date.now();
         const prevMinimum = this._minimumNext;
-        this.mark(now);
+        if (doMark) this.mark(now);
         if (prevMinimum !== undefined) {
             const shouldWait = prevMinimum - now;
             if (shouldWait > 0) {
@@ -46,5 +43,18 @@ export class PaceMaker {
             }
         }
         return Promise.resolve();
+    }
+
+    /**
+     * The promise for waiting paced
+     */
+    get paced() {
+        return this._getPaced(true);
+    }
+    /**
+     * The promise for waiting paced since the last mark
+     */
+    get pacedSinceMark() {
+        return this._getPaced(false);
     }
 }
