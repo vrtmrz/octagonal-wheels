@@ -1,4 +1,4 @@
-import { PaceMaker } from "../bureau/pacemaker";
+import { PaceMaker } from "../bureau/PaceMaker";
 import { NOT_AVAILABLE, InboxWithEvent } from "../bureau/Inbox";
 import { Feeder, Porter } from "../bureau/Clerk";
 import { promiseWithResolver } from "../promises";
@@ -23,7 +23,7 @@ type ChunkProcessOptions = {
      */
     interval?: number;
 };
-const FINISHED = Symbol("finished");
+
 
 /**
  * async generator that yields chunks of items from the source.
