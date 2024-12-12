@@ -1,7 +1,7 @@
 //OK
 
 import { describe, beforeEach, it, expect } from 'vitest';
-import { Semaphore, SemaphoreObject, QueueNotifier, SemaphoreReleaser } from './semaphore';
+import { Semaphore, type SemaphoreObject } from './semaphore';
 import { delay } from '../promises';
 
 
@@ -39,19 +39,22 @@ describe('Semaphore', () => {
             } finally {
                 release();
             }
-        }
+        };
     });
 
     it('should acquire and release semaphore', async () => {
         const releaser = await semaphore.acquire();
         expect(releaser).to.be.a('function');
         releaser();
+        expect(semaphore.waiting).to.equal(0);
     });
 
     it('should concurrency kept in limit', async () => {
         const processes = Array.from({ length: 10 }, () => process());
+        expect(semaphore.waiting).to.equal(7);
         await Promise.all(processes);
         expect(runner.maxConcurrency).to.equal(3);
+        expect(semaphore.waiting).to.equal(0);
     });
 
     it('should limit the number of acquired semaphores', async () => {
@@ -67,6 +70,16 @@ describe('Semaphore', () => {
         releaser5();
         releaser2();
         releaser1();
+    });
+    it('should timeout if not acquired in time', async () => {
+        const l = await Promise.all(Array.from({ length: 3 }, () => semaphore.acquire()));
+        const now = Date.now();
+        const releaser = await semaphore.tryAcquire(1, 100);
+        const elapsed = Date.now() - now;
+        expect(elapsed).to.be.greaterThan(100);
+        expect(elapsed).to.be.lessThan(200);
+        expect(releaser).to.equal(false);
+        l.forEach((r) => r());
     });
 
 });

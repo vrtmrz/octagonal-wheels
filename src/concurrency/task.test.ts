@@ -106,12 +106,20 @@ describe('scheduleTask', () => {
 
 
 describe('waitForTimeout', () => {
+    beforeEach(() => {
+        vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+        vi.clearAllTimers();
+        vi.useRealTimers();
+    });
     test('should resolve after the specified timeout', async () => {
         const key = 'test1';
         const timeout = 1000;
 
         const promise = waitForTimeout(key, timeout);
-
+        vi.advanceTimersByTime(timeout);
         await expect(promise).resolves.toBeTruthy();
     });
 
@@ -121,7 +129,6 @@ describe('waitForTimeout', () => {
         const timeout = 1000;
 
         const promise = waitForTimeout(key, timeout);
-
         finishWaitingForTimeout(key);
 
         await expect(promise).resolves.toBeFalsy();
@@ -136,7 +143,7 @@ describe('waitForTimeout', () => {
 
         const promise1 = waitForTimeout(key1, timeout1);
         const promise2 = waitForTimeout(key2, timeout2);
-
+        vi.advanceTimersByTime(timeout2);
         await expect(promise1).resolves.toBeTruthy();
         await expect(promise2).resolves.toBeTruthy();
     });
@@ -144,34 +151,38 @@ describe('waitForTimeout', () => {
 
 
 describe('finishWaitingForTimeout', () => {
-    test('should finish waiting for timeout and return true if the key exists', () => {
+    beforeEach(() => {
+        vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+        vi.clearAllTimers();
+        vi.useRealTimers();
+    });
+    test('should finish waiting for timeout', () => {
         const key = 'test1';
         const hasTimeout = true;
-        waitForTimeout(key, 1000);
-        const result = finishWaitingForTimeout(key, hasTimeout);
-
-        expect(result).toBe(true);
-    });
-
-    test('should not finish waiting for timeout and return false if the key does not exist', () => {
-        const key = 'test2';
-        const hasTimeout = true;
-
-        const result = finishWaitingForTimeout(key, hasTimeout);
-
-        expect(result).toBe(false);
-    });
-
-    test('should not finish waiting for timeout and return false if the key exists but has already finished', () => {
-        const key = 'test3';
-        const hasTimeout = true;
-
+        const timeoutR = waitForTimeout(key, 1000);
         finishWaitingForTimeout(key, hasTimeout);
 
-        const result = finishWaitingForTimeout(key, hasTimeout);
-
-        expect(result).toBe(false);
+        expect(timeoutR).resolves.toBe(true);
     });
+    test('should finish waiting for timeout with false', () => {
+        const key = 'test1';
+        const hasTimeout = false;
+        const timeoutR = waitForTimeout(key, 1000);
+        finishWaitingForTimeout(key, hasTimeout);
+
+        expect(timeoutR).resolves.toBe(false);
+    });
+    test('should finish waiting for timeout with false', () => {
+        const key = 'test1';
+        const hasTimeout = false;
+        const timeoutR = waitForTimeout(key, 1000);
+        vi.advanceTimersByTime(1000);
+        expect(timeoutR).resolves.toBe(true);
+    });
+
 });
 
 

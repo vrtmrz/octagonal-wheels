@@ -1,4 +1,6 @@
-import { promiseWithResolver } from "../promises";
+import { TIMED_OUT_SIGNAL } from "../promises";
+import { shareRunningResult } from "./lock";
+import { globalSlipBoard } from "../messagepassing/signal";
 export type TaskProcessing<T> = Promise<T>;
 export type TaskWaiting<T> = () => Promise<T>;
 export type Task<T> = TaskProcessing<T> | TaskWaiting<T>;
@@ -128,36 +130,36 @@ export async function mapAllTasksWithConcurrencyLimit<T>(limit: number, tasks: T
     return ret;
 }
 
+const tasks = new Map<string, ReturnType<typeof setTimeout>>();
 
-const tasks: { [key: string]: ReturnType<typeof setTimeout>; } = {};
 export function scheduleTask(key: string, timeout: number, proc: (() => Promise<any> | void), skipIfTaskExist?: boolean) {
-    if (skipIfTaskExist && key in tasks) {
-        return;
+    if (tasks.has(key)) {
+        if (skipIfTaskExist) return;
+        cancelTask(key);
     }
-    cancelTask(key);
-    tasks[key] = setTimeout(async () => {
-        delete tasks[key];
-        await proc();
+    const newTask = setTimeout(() => {
+        tasks.delete(key);
+        void proc();
     }, timeout);
+    tasks.set(key, newTask);
 }
 export function cancelTask(key: string) {
-    if (key in tasks) {
-        clearTimeout(tasks[key]);
-        delete tasks[key];
+    const old = tasks.get(key);
+    if (old) {
+        clearTimeout(old);
+        tasks.delete(key);
     }
 }
 export function cancelAllTasks() {
-    for (const v in tasks) {
-        clearTimeout(tasks[v]);
-        delete tasks[v];
+    for (const v of tasks.keys()) {
+        cancelTask(v);
     }
 }
 const intervals: { [key: string]: ReturnType<typeof setInterval>; } = {};
 export function setPeriodicTask(key: string, timeout: number, proc: (() => Promise<any> | void)) {
     cancelPeriodicTask(key);
-    intervals[key] = setInterval(async () => {
-        delete intervals[key];
-        await proc();
+    intervals[key] = setInterval(() => {
+        void proc();
     }, timeout);
 }
 export function cancelPeriodicTask(key: string) {
@@ -168,86 +170,51 @@ export function cancelPeriodicTask(key: string) {
 }
 export function cancelAllPeriodicTask() {
     for (const v in intervals) {
-        clearInterval(intervals[v]);
-        delete intervals[v];
+        cancelPeriodicTask(v);
     }
 }
 
 
-type WaitingItem = {
-    waitFrom: number,
-    timeout: number,
-    timeoutPromise: ReturnType<typeof promiseWithResolver<boolean>>;
-    timer: ReturnType<typeof setTimeout>;
-};
-const waitingItems = new Map<string, WaitingItem>();
-
-export function waitForTimeout(key: string, timeout: number): Promise<boolean> {
-    if (waitingItems.has(key)) {
-        return waitingItems.get(key)!.timeoutPromise.promise;
-    }
-    const timeoutPromise = promiseWithResolver<boolean>();
-    const timer = setTimeout(() => {
-        finishWaitingForTimeout(key, true);
-    }, timeout);
-    waitingItems.set(key, {
-        waitFrom: Date.now(),
-        timeout,
-        timeoutPromise: timeoutPromise,
-        timer
+const waitingItems = new Set<string>();
+export async function waitForTimeout(key: string, timeout: number): Promise<boolean> {
+    return await shareRunningResult(key, async () => {
+        waitingItems.add(key);
+        try {
+            const ret = await globalSlipBoard.awaitNext("wait-for-timeout", key, { timeout });
+            if (ret === TIMED_OUT_SIGNAL) return true;
+            return ret;
+        } finally {
+            waitingItems.delete(key);
+        }
     });
-    return timeoutPromise.promise;
 }
-export function finishWaitingForTimeout(key: string, hasTimeout: boolean = false): boolean {
-    const x = waitingItems.get(key);
-    if (x) {
-        if (x.timer) clearTimeout(x.timer);
-        x.timeoutPromise.resolve(hasTimeout);
-        waitingItems.delete(key);
-        return true;
-    }
-    return false;
+export function finishWaitingForTimeout(key: string, hasTimeout: boolean = false): void {
+    globalSlipBoard.submit("wait-for-timeout", key, !!hasTimeout);
 }
 export function finishAllWaitingForTimeout(prefix: string, hasTimeout: boolean): void {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for (const [key, _] of waitingItems) {
-        if (key.startsWith(prefix)) {
-            finishWaitingForTimeout(key, hasTimeout);
-        }
-    }
+    void globalSlipBoard.submitToAll("wait-for-timeout", prefix, !!hasTimeout);
 }
 
 export function isWaitingForTimeout(key: string): boolean {
     return waitingItems.has(key);
 }
 
-const sharedTasks = new Map<string, Promise<any>>();
-
 export type ResolverWithKey<T> = { key: string; resolver: PromiseWithResolvers<T>; };
 
+/**
+ * @deprecated
+ * Use shareRunningResult instead.
+ * @param key 
+ * @param proc 
+ * @returns 
+ */
 export function sharedTask<T>(key: string, proc: () => Promise<T>) {
-    if (sharedTasks.has(key)) {
-        return sharedTasks.get(key)! as Promise<T>;
-    }
-    const p = promiseWithResolver<T>();
-    const _proc = async () => {
-        try {
-            const r = await proc();
-            p.resolve(r);
-        } catch (ex) {
-            p.reject(ex);
-        } finally {
-            sharedTasks.delete(key);
-        }
-    };
-    sharedTasks.set(key, p.promise);
-    void _proc();
-    return p.promise;
+    return shareRunningResult(key, proc);
 }
 
 export function wrapFunctionAsShared<P extends any[], T>(proc: (...p: P) => Promise<T>) {
     return async (...p: P) => {
         const key = proc.name + "-" + p.map(e => typeof e === "object" ? JSON.stringify(e) : `${e}`).join(",");
-        return await sharedTask(key, () => proc(...p));
+        return await shareRunningResult(key, () => proc(...p));
     };
 }
