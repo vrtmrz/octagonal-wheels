@@ -48,6 +48,8 @@ function generativeBuffer() {
                     }
                     throw e;
                 }
+                finally {
+                }
             }
             try {
                 next.forEach(p => p.reject(GENERATOR_CLOSED));
@@ -56,18 +58,38 @@ function generativeBuffer() {
             catch (e) {
                 console.log(`Error on cleanup: ${String(e)}`);
             }
+        },
+        get size() {
+            return next.length - 1;
         }
     };
 }
 class GeneratorSource {
-    constructor() {
-        Object.defineProperty(this, "next", {
+    _updateSize() {
+        if (this._onSizeUpdated) {
+            try {
+                this._onSizeUpdated(this.size);
+            }
+            catch (_) { }
+        }
+    }
+    get size() {
+        return this._next.length - 1;
+    }
+    constructor(onSizeUpdated) {
+        Object.defineProperty(this, "_next", {
             enumerable: true,
             configurable: true,
             writable: true,
             value: void 0
         });
-        Object.defineProperty(this, "current", {
+        Object.defineProperty(this, "_current", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "_onSizeUpdated", {
             enumerable: true,
             configurable: true,
             writable: true,
@@ -87,29 +109,30 @@ class GeneratorSource {
         });
         this.closed = false;
         this.finished = false;
-        this.current = promiseWithResolver();
-        this.next = [this.current];
+        this._current = promiseWithResolver();
+        this._next = [this._current];
+        this._onSizeUpdated = onSizeUpdated;
     }
     enqueue(item) {
         if (this.closed || this.finished) {
             throw new Error("Cannot enqueue to a closed or finished source");
         }
-        const promise = this.current;
+        const promise = this._current;
         const next = promiseWithResolver();
-        this.current = next;
-        this.next.push(this.current);
+        this._current = next;
+        this._next.push(this._current);
+        this._updateSize();
         promise.resolve(item);
     }
     dispose() {
         if (this.closed)
             return;
         this.closed = true;
-        // this.closedPromise.resolve(GENERATOR_CLOSED);
-        this.current.resolve(GENERATOR_CLOSED);
+        this._current.resolve(GENERATOR_CLOSED);
     }
     finish() {
         this.finished = true;
-        this.current.resolve(GENERATOR_CLOSED);
+        this._current.resolve(GENERATOR_CLOSED);
     }
     [Symbol.asyncIterator]() {
         return this.values();
@@ -121,8 +144,8 @@ class GeneratorSource {
     async *values() {
         while (!this.closed) {
             try {
-                const ret = await this.next[0].promise;
-                this.next = this.next.slice(1); //// Drop the resolved promise
+                const ret = await this._next[0].promise;
+                this._next = this._next.slice(1); //// Drop the resolved promise
                 if (ret === GENERATOR_CLOSED)
                     break;
                 yield ret;
@@ -133,12 +156,15 @@ class GeneratorSource {
                 }
                 throw e;
             }
+            finally {
+                this._updateSize();
+            }
         }
         try {
-            this.next.forEach(p => {
+            this._next.forEach(p => {
                 p.reject();
             });
-            this.next.length = 0;
+            this._next.length = 0;
         }
         catch (e) {
             console.log(`Error on cleanup: ${String(e)}`);

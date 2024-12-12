@@ -1,72 +1,65 @@
-import { GeneratorSource } from './source.js';
+import { PaceMaker } from '../bureau/PaceMaker.js';
+import { InboxWithEvent, NOT_AVAILABLE } from '../bureau/Inbox.js';
+import { Porter, Feeder } from '../bureau/Clerk.js';
+import { promiseWithResolver } from '../promises.js';
 
-const FINISHED = Symbol("finished");
 /**
  * async generator that yields chunks of items from the source.
  * @param source
  * @param {ChunkProcessOptions} options
  */
 async function* asChunk(source, { unit, timeout, interval }) {
-    const outputSource = new GeneratorSource();
-    const pBuffer = [];
-    let previousYielded = 0;
-    let timeoutTimer = undefined;
-    const scheduleTimeout = () => {
-        if (timeout) {
-            if (!timeoutTimer) {
-                clearTimeout(timeoutTimer);
-            }
-            timeoutTimer = setTimeout(() => {
-                flush(false);
-                timeoutTimer = undefined;
-            }, timeout);
-        }
+    const postBox = new InboxWithEvent(unit * 10);
+    const outgoingBox = new InboxWithEvent(10);
+    const completed = promiseWithResolver();
+    const pacemaker = interval ? new PaceMaker(interval) : undefined;
+    let isCompleted = false;
+    const porter = new Porter({
+        from: postBox, to: outgoingBox,
+        timeout: timeout,
+        maxSize: unit,
+    });
+    const feeder = new Feeder({
+        source, target: postBox,
+    });
+    const checkStates = () => {
+        if (porter.stateDetail.isBusy)
+            return;
+        // if (harvester.stateDetail.isBusy) return;
+        if (!feeder.stateDetail.hasFinished)
+            return;
+        if (outgoingBox.size != 0)
+            return;
+        isCompleted = true;
+        completed.resolve();
     };
-    const enqueueItem = (item) => {
-        pBuffer.push(item);
-        if (pBuffer.length >= unit) {
-            flush(false);
-        }
-    };
-    const flush = (done) => {
-        const flushTo = done ? 0 : unit;
-        while (pBuffer.length >= flushTo) {
-            const chunk = pBuffer.splice(0, unit);
-            if (chunk.length === 0) {
+    feeder.setOnProgress((state) => {
+        checkStates();
+    });
+    porter.setOnProgress((state) => {
+        checkStates();
+    });
+    postBox.setOnProgress((state) => {
+        checkStates();
+    });
+    outgoingBox.setOnProgress((state) => {
+        checkStates();
+    });
+    do {
+        const chunk = await outgoingBox.pick(undefined, [completed.promise]);
+        if (chunk === NOT_AVAILABLE) {
+            if (isCompleted) {
                 break;
             }
-            outputSource.enqueue(chunk);
+            continue;
         }
-        if (done) {
-            outputSource.enqueue(FINISHED);
-        }
-    };
-    void (async () => {
-        for await (const item of source) {
-            enqueueItem(item);
-        }
-        flush(true);
-    })();
-    for await (const chunk of outputSource) {
-        if (chunk === FINISHED) {
-            break;
-        }
-        scheduleTimeout();
-        if (interval) {
-            const now = Date.now();
-            const elapsed = now - previousYielded;
-            if (elapsed < interval) {
-                await new Promise(resolve => setTimeout(resolve, interval - elapsed));
-            }
+        if (pacemaker) {
+            await Promise.race([pacemaker.paced]);
         }
         yield chunk;
-        previousYielded = Date.now();
-    }
-    // Cleanup
-    if (timeoutTimer) {
-        clearTimeout(timeoutTimer);
-    }
-    outputSource.dispose();
+        pacemaker?.mark();
+    } while (!isCompleted);
+    porter.dispose();
 }
 /**
  * Flattens nested async or sync iterables.

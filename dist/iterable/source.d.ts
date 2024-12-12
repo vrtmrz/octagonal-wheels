@@ -7,13 +7,17 @@ export declare function generativeBuffer<T>(): {
     finish(): void;
     [Symbol.dispose](): void;
     values(): AsyncGenerator<Awaited<T>, void, unknown>;
+    readonly size: number;
 };
 export declare class GeneratorSource<T> {
-    next: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>[];
-    current: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>;
+    _next: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>[];
+    _current: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>;
+    _onSizeUpdated?: (size: number) => void;
+    _updateSize(): void;
+    get size(): number;
     closed: boolean;
     finished: boolean;
-    constructor();
+    constructor(onSizeUpdated?: (size: number) => void);
     enqueue(item: T): void;
     dispose(): void;
     finish(): void;

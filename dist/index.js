@@ -36,6 +36,8 @@ import * as events from './events.js';
 export { events };
 import * as iterable_index from './iterable/index.js';
 export { iterable_index as iterable };
+import * as bureau_index from './bureau/index.js';
+export { bureau_index as bureau };
 
 /**
  * Returns the version of the library.
@@ -44,7 +46,7 @@ export { iterable_index as iterable };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.18";
+    return "octagonal-wheels-0.1.19";
 }
 
 export { libVersion };

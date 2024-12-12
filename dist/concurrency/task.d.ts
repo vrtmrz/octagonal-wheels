@@ -41,6 +41,19 @@ export declare function setPeriodicTask(key: string, timeout: number, proc: (() 
 export declare function cancelPeriodicTask(key: string): void;
 export declare function cancelAllPeriodicTask(): void;
 export declare function waitForTimeout(key: string, timeout: number): Promise<boolean>;
-export declare function finishWaitingForTimeout(key: string, hasTimeout?: boolean): boolean;
+export declare function finishWaitingForTimeout(key: string, hasTimeout?: boolean): void;
 export declare function finishAllWaitingForTimeout(prefix: string, hasTimeout: boolean): void;
 export declare function isWaitingForTimeout(key: string): boolean;
+export type ResolverWithKey<T> = {
+    key: string;
+    resolver: PromiseWithResolvers<T>;
+};
+/**
+ * @deprecated
+ * Use shareRunningResult instead.
+ * @param key
+ * @param proc
+ * @returns
+ */
+export declare function sharedTask<T>(key: string, proc: () => Promise<T>): Promise<T>;
+export declare function wrapFunctionAsShared<P extends any[], T>(proc: (...p: P) => Promise<T>): (...p: P) => Promise<T>;

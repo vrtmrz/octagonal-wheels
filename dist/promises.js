@@ -14,11 +14,21 @@ const delay = (ms, result) => {
 const UNRESOLVED = Symbol('UNRESOLVED');
 /**
  * Checking whether a promise has been resolved.
- * @param promise
+ * @param promise a checking promise
  * @returns true if resolved, false if not.
  */
 async function isResolved(promise) {
     return await Promise.race([promise, Promise.resolve(UNRESOLVED)]) !== UNRESOLVED;
+}
+/**
+ * Checking whether some promises have been resolved.
+ * @param promises checking promises
+ * @returns true if some promises have been resolved, false if not.
+ */
+async function isSomeResolved(promises) {
+    if (promises.length == 0)
+        return false;
+    return await Promise.race([...promises, Promise.resolve(UNRESOLVED)]) !== UNRESOLVED;
 }
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
@@ -117,6 +127,85 @@ function yieldNextMicrotask() {
     })();
     return currentYieldingMicrotask;
 }
+const TIMED_OUT_SIGNAL = Symbol("timed out");
+/**
+ * Creates a delay that can be canceled.
+ *
+ * @template T - The type of the cancel signal.
+ * @param {number} timeout - The delay duration in milliseconds.
+ * @param {T} [cancel=TIMED_OUT_SIGNAL as T] - The value to resolve the promise with if the delay is canceled.
+ * @returns An object containing the promise and a cancel function.
+ * @returns {Promise<T>} promise - A promise that resolves with the cancel signal after the timeout.
+ * @returns {() => void} cancel - A function to cancel the delay.
+ */
+function cancelableDelay(timeout, cancel = TIMED_OUT_SIGNAL) {
+    let timer = undefined;
+    const promise = promiseWithResolver();
+    timer = setTimeout(() => {
+        timer = undefined;
+        promise.resolve(cancel);
+    }, timeout);
+    return {
+        promise: promise.promise,
+        cancel() {
+            if (timer) {
+                clearTimeout(timer);
+                timer = undefined;
+            }
+        },
+    };
+}
+/**
+ * Creates an extendable delay that can be cancelled or extended.
+ *
+ * @template U - The type of the cancel signal,
+ * @param {number} timeout - The initial timeout duration in milliseconds.
+ * @param {U} cancel - The signal to use when cancelling the delay.
+ * @returns {ExtendableDelay<TIMED_OUT_SIGNAL, U>} An object containing the promise, cancel function, and extend function.
+ *
+ * @property {Promise<TIMED_OUT_SIGNAL | U>} promise - The promise that resolves when the delay completes or is cancelled.
+ * @property {() => void} cancel - Cancels the delay and resolves the promise with the cancel signal.
+ * @property {(newTimeout: number) => void} extend - Extends the delay by the specified timeout duration.
+ *
+ * @throws {Error} If the delay has already been resolved.
+ */
+function extendableDelay(timeout, cancel) {
+    let timer = undefined;
+    const promise = promiseWithResolver();
+    let resolved = false;
+    const setTimer = (newTimeout) => {
+        if (resolved)
+            throw new Error("Already resolved!");
+        return setTimeout(() => {
+            timer = undefined;
+            promise.resolve(TIMED_OUT_SIGNAL);
+            resolved = true;
+        }, newTimeout);
+    };
+    const extendTimer = (newTimeout) => {
+        if (resolved)
+            throw new Error("Already resolved!");
+        if (timer) {
+            clearTimeout(timer);
+            timer = undefined;
+        }
+        timer = setTimer(newTimeout);
+    };
+    const canceller = () => {
+        if (timer && !resolved) {
+            clearTimeout(timer);
+            timer = undefined;
+            promise.resolve(cancel);
+            resolved = true;
+        }
+    };
+    timer = setTimer(timeout);
+    return {
+        get promise() { return promise.promise; },
+        cancel: canceller,
+        extend: extendTimer
+    };
+}
 
-export { delay, fireAndForget, isResolved, nativePromiseWithResolvers, noop, polyfillPromiseWithResolvers, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback };
+export { TIMED_OUT_SIGNAL, cancelableDelay, delay, extendableDelay, fireAndForget, isResolved, isSomeResolved, nativePromiseWithResolvers, noop, polyfillPromiseWithResolvers, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback };
 //# sourceMappingURL=promises.js.map

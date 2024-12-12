@@ -50,6 +50,11 @@ async function* filter(iterable, callback) {
         }
     }
 }
+async function* map(iterable, callback) {
+    for await (const t of iterable) {
+        yield await callback(t);
+    }
+}
 /**
  * apply a function to each element of an iterable asynchronously, as keeping the order of the elements.
  * @param iterable an iterable items to be processed.
@@ -81,5 +86,5 @@ async function* asyncMapWithConcurrency(iterable, callback, concurrency) {
     }
 }
 
-export { asyncMapWithConcurrency, filter, withConcurrency };
+export { asyncMapWithConcurrency, filter, map, withConcurrency };
 //# sourceMappingURL=map.js.map

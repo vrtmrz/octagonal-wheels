@@ -7,10 +7,16 @@
 export declare const delay: <T>(ms: number, result?: T) => Promise<T>;
 /**
  * Checking whether a promise has been resolved.
- * @param promise
+ * @param promise a checking promise
  * @returns true if resolved, false if not.
  */
 export declare function isResolved(promise: Promise<unknown>): Promise<boolean>;
+/**
+ * Checking whether some promises have been resolved.
+ * @param promises checking promises
+ * @returns true if some promises have been resolved, false if not.
+ */
+export declare function isSomeResolved(promises: Promise<unknown>[]): Promise<boolean>;
 export type PromiseWithResolvers<T> = {
     promise: Promise<T>;
     resolve: (value: T | PromiseLike<T>) => void;
@@ -69,3 +75,40 @@ export declare function yieldRequestIdleCallback(options?: Parameters<typeof req
 export declare function yieldAnimationFrame(): Promise<number>;
 export declare function yieldNextAnimationFrame(): Promise<number>;
 export declare function yieldNextMicrotask(): Promise<void>;
+export declare const TIMED_OUT_SIGNAL: unique symbol;
+export type TIMED_OUT_SIGNAL = typeof TIMED_OUT_SIGNAL;
+/**
+ * Creates a delay that can be canceled.
+ *
+ * @template T - The type of the cancel signal.
+ * @param {number} timeout - The delay duration in milliseconds.
+ * @param {T} [cancel=TIMED_OUT_SIGNAL as T] - The value to resolve the promise with if the delay is canceled.
+ * @returns An object containing the promise and a cancel function.
+ * @returns {Promise<T>} promise - A promise that resolves with the cancel signal after the timeout.
+ * @returns {() => void} cancel - A function to cancel the delay.
+ */
+export declare function cancelableDelay<T = TIMED_OUT_SIGNAL>(timeout: number, cancel?: T): {
+    promise: Promise<T>;
+    cancel(): void;
+};
+type ExtendableDelay<T, U extends string | symbol | number> = {
+    promise: Promise<T | U>;
+    cancel: (reason: T | U) => void;
+    extend(newTimeout: number): void;
+};
+/**
+ * Creates an extendable delay that can be cancelled or extended.
+ *
+ * @template U - The type of the cancel signal,
+ * @param {number} timeout - The initial timeout duration in milliseconds.
+ * @param {U} cancel - The signal to use when cancelling the delay.
+ * @returns {ExtendableDelay<TIMED_OUT_SIGNAL, U>} An object containing the promise, cancel function, and extend function.
+ *
+ * @property {Promise<TIMED_OUT_SIGNAL | U>} promise - The promise that resolves when the delay completes or is cancelled.
+ * @property {() => void} cancel - Cancels the delay and resolves the promise with the cancel signal.
+ * @property {(newTimeout: number) => void} extend - Extends the delay by the specified timeout duration.
+ *
+ * @throws {Error} If the delay has already been resolved.
+ */
+export declare function extendableDelay<U extends string | symbol | number = TIMED_OUT_SIGNAL>(timeout: number, cancel: U): ExtendableDelay<TIMED_OUT_SIGNAL, U>;
+export {};
