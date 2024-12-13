@@ -1,12 +1,14 @@
 ## Octagonal Wheels
 
-This module is a compilation of wheels that have been reinvented for a specific purpose.
+Quod opus sit...
+
+This module is a compilation of wheels that have been reinvented for a __specific purpose__.
 
 Specific purposes are, for example
-- To reduce dependencies
 - In certain environments...
   - to specialise in speed
   - to specialise in memory usage
+- To reduce dependencies
 - To assist in achieving the above objectives efficiently.
 
 Mainly targeted to browsers, Electron Apps, and, Chrome Extensions.
