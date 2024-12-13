@@ -3,7 +3,7 @@
         "target": "ES2020",
         "useDefineForClassFields": true,
         "module": "ESNext",
-        "lib": ["ES2020", "DOM", "DOM.Iterable", "ESNext.Promise"],
+        "lib": ["ES2020", "DOM", "DOM.Iterable", "ESNext.Promise","ES2021.WeakRef"],
         "skipLibCheck": true,
         /* Bundler mode */
         "moduleResolution": "bundler",
