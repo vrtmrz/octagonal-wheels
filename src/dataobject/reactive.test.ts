@@ -84,6 +84,24 @@ describe('reactive', () => {
         source.value = newValue;
         expect(notifiedValue).to.equal(newValue);
     });
+    it('should notify change handlers when the value is updated (multiple)', () => {
+        const initialValue = 10;
+        const newValue1 = 20;
+        const newValue2 = 30;
+        const newValue3 = 40;
+        const source = reactiveSource(initialValue);
+        const reactiveValue = reactive(() => source.value);
+        const notifiedValues: number[] = [];
+        reactiveValue.onChanged((instance) => {
+            notifiedValues.push(instance.value);
+        });
+        source.value = newValue1;
+        source.value = newValue2;
+        source.value = newValue2;
+        source.value = newValue3;
+        // expect(notifiedValue).to.equal(newValue);
+        expect(notifiedValues).to.deep.equal([newValue1, newValue2, newValue3]);
+    });
 
     it('should not notify change handlers when the value is not updated', () => {
         let notifiedValue: number | undefined;
@@ -150,7 +168,29 @@ describe('reactive', () => {
         expect(computeFunc2).toBeCalledTimes(2);
         expect(computeFunc).toBeCalledTimes(1);
     });
+
+    it("should allow nested reactive values", () => {
+        const value_1_1 = reactiveSource(1);
+        const value_1_2 = reactiveSource(1);
+        const value_2_1 = reactive(() => value_1_1.value + 1); // 2
+        const value_3_a = reactive(() => value_2_1.value + 1 + value_1_2.value); // 4
+        const value_4_a = reactive(() => value_3_a.value * 1 + value_1_1.value); // 5
+        const value_5_a = reactive(() => value_4_a.value * 1 + value_2_1.value); // 7
+        expect(value_5_a.value).to.equal(7);
+        value_1_1.value = 2;
+        expect(value_5_a.value).to.equal(10);
+        expect(value_5_a.value).to.equal(10);
+        value_1_1.value = 3;
+        value_1_2.value = 2;
+        expect(value_5_a.value).to.equal(14);
+        expect(value_5_a.value).to.equal(14);
+        value_1_1.value = 3;
+        value_1_1.value = 4;
+        value_1_1.value = 5;
+        value_1_1.value = 6;
+    });
 });
+
 describe('computed', () => {
     it('should return the computed value', () => {
         const initialValue = 10;
