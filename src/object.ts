@@ -16,6 +16,8 @@ export function extractObject<T>(template: Partial<T>, obj: T): Partial<T> {
     return ret;
 }
 
+const SYMBOL_A = Symbol('a');
+const SYMBOL_B = Symbol('b');
 
 /**
  * Checks if two objects are different.
@@ -37,7 +39,7 @@ export function isObjectDifferent(a: any, b: any, ignoreUndefined: boolean = fal
         if (ignoreUndefined) {
             return keys.map(key => a?.[key] !== undefined && b?.[key] !== undefined && isObjectDifferent(a?.[key], b?.[key])).some(e => e == true);
         }
-        return keys.map(key => isObjectDifferent(a?.[key], b?.[key])).some(e => e == true);
+        return keys.map(key => isObjectDifferent(key in a ? a[key] : SYMBOL_A, key in b ? b[key] : SYMBOL_B)).some(e => e == true);
     } else {
         return a !== b;
     }

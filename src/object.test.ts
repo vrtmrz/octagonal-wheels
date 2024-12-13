@@ -79,4 +79,30 @@ describe('isObjectDifferent', () => {
         const result = isObjectDifferent(obj1, obj2, false);
         expect(result).to.be.true;
     });
+
+    it('should return true when ignoreUndefined is false and both properties are undefined', () => {
+        const obj1 = { name: 'John', age: undefined };
+        const obj2 = { name: 'John', age: undefined };
+        const result = isObjectDifferent(obj1, obj2, false);
+        expect(result).to.be.false;
+    });
+
+
+    it('should return false when ignoreUndefined is true and some extra properties are undefined', () => {
+        const obj1 = { name: 'John', age: 25 };
+        const obj2 = { name: 'John', age: 25, email: undefined };
+        const result = isObjectDifferent(obj1, obj2, true);
+        expect(result).to.be.false;
+        const result2 = isObjectDifferent(obj2, obj1, true);
+        expect(result2).to.be.false;
+    });
+
+    it('should return true when ignoreUndefined is false and some extra properties are undefined', () => {
+        const obj1 = { name: 'John', age: 25 };
+        const obj2 = { name: 'John', age: 25, email: undefined };
+        const result = isObjectDifferent(obj1, obj2, false);
+        expect(result).to.be.true;
+        const result2 = isObjectDifferent(obj2, obj1, false);
+        expect(result2).to.be.true;
+    });
 });
