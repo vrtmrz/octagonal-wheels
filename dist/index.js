@@ -46,7 +46,7 @@ export { bureau_index as bureau };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.20";
+    return "octagonal-wheels-0.1.21";
 }
 
 export { libVersion };
