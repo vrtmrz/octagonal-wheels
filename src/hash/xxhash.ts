@@ -1,13 +1,14 @@
-import { default as xxhashOld, type Exports } from "xxhash-wasm";
 //@ts-ignore
 import { default as xxhashNew } from "../patched_xxhash_wasm/xxhash-wasm.js";
 import type { XXHashAPI } from "xxhash-wasm-102";
 import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.js";
-import { writeString, arrayBufferToBase64Single } from "../binary";
+import { fallbackMixedHashEach } from "./purejs.js";
 
-export { xxhashOld, xxhashNew }
+export { xxhashNew };
 
-let hashFunc: (input: string, seed?: number) => string;
+// Default hash function (Initialised to fallback once).
+// This will be updated to xxhash once it is initialised (on initHashFunc).
+let hashFunc: (input: string, seed?: number) => string = (str) => fallbackMixedHashEach(str);
 
 async function initHashFunc() {
     try {
@@ -17,32 +18,17 @@ async function initHashFunc() {
     } catch (ex) {
         Logger(`Could not initialise xxhash. fallback...`, LOG_LEVEL_VERBOSE);
         Logger(ex);
-        try {
-            const { h32 } = (await xxhashOld()) as unknown as Exports;
-            hashFunc = (str) => h32(str);
-        } catch (ex) {
-            Logger(`Could not initialise old xxhash for plugin: use sha1`, LOG_LEVEL_VERBOSE);
-            Logger(ex);
-            hashFunc = (str) => str;
-        }
+        hashFunc = (str) => fallbackMixedHashEach(str);
+
     }
     return hashFunc;
 }
-initHashFunc();
-/**
- * Calculates the SHA-1 hash of the given string.
- * 
- * @param src - The string to calculate the hash for.
- * @returns A promise that resolves to the SHA-1 hash as a base64-encoded string.
- */
-export async function sha1(src: string): Promise<string> {
-    const bytes = writeString(src);
-    const digest = await globalThis.crypto.subtle.digest({ name: "SHA-1" }, bytes);
-    return await arrayBufferToBase64Single(digest);
-}
+
+// And, here to initialise the hash function
+void initHashFunc();
 
 /**
- * Calculates the digest hash of an array of strings using xxhash.
+ * Calculates the digest hash of an array of strings using prepared hash function.
  * 
  * @param src - The array of strings to calculate the hash for.
  * @returns The digest hash of the input array.
@@ -57,3 +43,4 @@ export function digestHash(src: string[]): string {
     }
     return hash;
 }
+
