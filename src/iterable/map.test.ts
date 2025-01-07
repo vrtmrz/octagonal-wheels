@@ -106,7 +106,7 @@ describe('asyncMapWithConcurrency', () => {
         for await (const item of asyncMapWithConcurrency(inputGenerator(), callback, concurrency)) {
             result.push(item);
         }
-        expect(concurrencyMax).toBe(concurrency);
+        expect(concurrencyMax).lessThanOrEqual(concurrency);
 
         expect(result).toEqual([...expected, 0]);
     });

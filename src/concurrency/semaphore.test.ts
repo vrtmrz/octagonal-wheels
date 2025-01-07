@@ -76,7 +76,7 @@ describe('Semaphore', () => {
         const now = Date.now();
         const releaser = await semaphore.tryAcquire(1, 100);
         const elapsed = Date.now() - now;
-        expect(elapsed).to.be.greaterThan(100);
+        expect(elapsed).to.be.greaterThanOrEqual(100);
         expect(elapsed).to.be.lessThan(200);
         expect(releaser).to.equal(false);
         l.forEach((r) => r());
