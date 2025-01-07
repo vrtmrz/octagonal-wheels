@@ -23,7 +23,7 @@ export default {
     platform: "browser",
     input: Object.fromEntries(
         globSync("src/**/*.ts")
-            .filter((file) => !file.endsWith(".test.ts") && !file.endsWith(".bench.ts"))
+            .filter((file) => !file.endsWith(".test.ts") && !file.endsWith(".bench.ts") && !file.endsWith(".d.ts"))
             .map((file) => [
                 // This remove `src/` as well as the file extension from each
                 // file, so e.g. src/nested/foo.js becomes nested/foo
@@ -41,6 +41,12 @@ export default {
             preserveModules: true,
             preserveModulesRoot: "src",
             sourcemap: true,
+            // sourcemapPathTransform: (relativeSourcePath, sourcemapPath) => {
+            //     const sep = path.sep;
+            //     const sepEscaped = sep === "\\" ? "\\\\" : sep;
+            //     const regExp = new RegExp(`^(\.${sepEscaped})+src${sepEscaped}`);
+            //     return 'octagonal-wheels/' + relativeSourcePath.replace(regExp, "");
+            // }
         },
     ],
     external: [/node_modules/],
