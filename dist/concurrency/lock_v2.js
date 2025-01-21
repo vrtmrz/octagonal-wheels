@@ -30,9 +30,9 @@ const skipDuplicatedMap = new Map();
 function serialized(key, proc) {
     const prev = serializedMap.get(key);
     const p = promiseWithResolver();
+    queueCount.set(key, (queueCount.get(key) ?? 0) + 1);
     const nextTask = async () => {
         try {
-            queueCount.set(key, (queueCount.get(key) ?? 0) + 1);
             p.resolve(await proc());
         }
         catch (ex) {
