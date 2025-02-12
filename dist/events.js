@@ -11,29 +11,91 @@ class EventHub {
             writable: true,
             value: new EventTarget()
         });
+        Object.defineProperty(this, "_assigned", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: new Map()
+        });
+        Object.defineProperty(this, "_allAssigned", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: new Map()
+        });
+    }
+    _issueSignal(key, callback) {
+        let assigned = this._assigned.get(key);
+        if (assigned === undefined) {
+            assigned = new WeakMap();
+        }
+        const controllerRef = assigned.get(callback);
+        let controller = controllerRef?.deref();
+        if (!controller || controller.signal.aborted) {
+            controller = new AbortController();
+            const refController = new WeakRef(controller);
+            controller.signal.addEventListener('abort', () => {
+                this._assigned.get(key)?.delete(callback);
+                this._allAssigned.get(key)?.delete(refController);
+            }, { once: true });
+            assigned.set(callback, refController);
+            this._assigned.set(key, assigned);
+            const allAssigned = this._allAssigned.get(key) ?? new Set();
+            allAssigned.add(refController);
+            this._allAssigned.set(key, allAssigned);
+            return controller;
+        }
+        return controller;
     }
     emitEvent(event, data) {
         this._emitter.dispatchEvent(new CustomEvent(`${event.toString()}`, { detail: data ?? undefined }));
     }
-    on(event, callback) {
+    on(event, callback, options) {
         const onEvent = (e) => void callback(e, e instanceof CustomEvent ? e?.detail : undefined);
         const key = event;
-        this._emitter.addEventListener(key, onEvent);
-        return () => this._emitter.removeEventListener(key, onEvent);
+        const controller = this._issueSignal(key, callback);
+        this._emitter.addEventListener(key, onEvent, { ...options, signal: controller.signal });
+        return () => this.off(event, callback);
     }
-    onEvent(event, callback) {
-        return this.on(event, (_, data) => {
-            callback(data);
-        });
+    /**
+     * Removes an event listener for a specific event.
+     * @param event
+     * @param callback
+     */
+    off(event, callback) {
+        const key = event;
+        if (callback) {
+            const w = this._assigned.get(key)?.get(callback);
+            const controller = w?.deref();
+            controller?.abort();
+        }
+        else {
+            this._allAssigned.get(key)?.forEach(w => {
+                const controller = w.deref();
+                controller?.abort();
+            });
+        }
+    }
+    /**
+     * Removes all event listeners.
+     */
+    offAll() {
+        for (const [key,] of this._allAssigned) {
+            this.off(key);
+        }
+    }
+    onEvent(event, callback, options) {
+        const onEvent = (e) => void callback(e instanceof CustomEvent ? e?.detail : undefined);
+        const key = event;
+        const controller = this._issueSignal(key, callback);
+        this._emitter.addEventListener(key, onEvent, { ...options, signal: controller.signal });
+        return () => this.off(event, callback);
     }
     once(event, callback) {
-        const off = this.on(event, (e, data) => {
-            off();
-            callback(e, data);
-        });
+        return this.on(event, callback, { once: true });
     }
     onceEvent(event, callback) {
-        this.once(event, (_, data) => callback(data));
+        return this.on(event, (_, data) => callback(data), { once: true });
     }
     waitFor(event) {
         return new Promise(resolve => {
