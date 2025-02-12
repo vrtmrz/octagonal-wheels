@@ -170,5 +170,78 @@ describe('EventHub-low-level', () => {
 
         expect(totalCalled).toBe(1);
     });
+});
+describe('EventHub-off', () => {
+
+    it('should handle onceEvent correctly', () => {
+        const hub = createEventHub();
+        const callback = vi.fn();
+
+        hub.onceEvent('hello_test', callback);
+        hub.emitEvent('hello_test', 'test1');
+        hub.emitEvent('hello_test', 'test2');
+
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(callback).toHaveBeenCalledWith('test1');
+    });
+
+    it('should remove specific event listener with off', () => {
+        const hub = createEventHub();
+        const callback1 = vi.fn();
+        const callback2 = vi.fn();
+
+        hub.on('world_test', callback1);
+        hub.on('world_test', callback2);
+
+        hub.off('world_test', callback1);
+        hub.emitEvent('world_test');
+
+        expect(callback1).not.toHaveBeenCalled();
+        expect(callback2).toHaveBeenCalled();
+    });
+
+    it('should handle multiple events with same callback', () => {
+        const hub = createEventHub();
+        const callback = vi.fn();
+
+        hub.onEvent('world_test', callback);
+        hub.onEvent('hello_test', callback);
+
+        hub.emitEvent('world_test');
+        hub.emitEvent('hello_test', 'test');
+
+        expect(callback).toHaveBeenCalledTimes(2);
+    });
+
+    it('should handle multiple events with same callback and off one of them', () => {
+        const hub = createEventHub();
+        const callback = vi.fn();
+
+        hub.onEvent('world_test', callback);
+        hub.onEvent('hello_test', callback);
+        hub.off('world_test', callback);
+        hub.emitEvent('world_test');
+        hub.emitEvent('hello_test', 'test');
+
+        expect(callback).toHaveBeenCalledTimes(1);
+    });
 
 });
+describe("event-off-all", () => {
+    it('should remove all event listeners with offAll', () => {
+        const hub = createEventHub();
+        const callback1 = vi.fn();
+        const callback2 = vi.fn();
+
+        hub.onEvent('world_test', callback1);
+        hub.onEvent('hello_test', callback2);
+
+        hub.offAll();
+
+        hub.emitEvent('world_test');
+        hub.emitEvent('hello_test', 'test');
+
+        expect(callback1).not.toHaveBeenCalled();
+        expect(callback2).not.toHaveBeenCalled();
+    });
+})
