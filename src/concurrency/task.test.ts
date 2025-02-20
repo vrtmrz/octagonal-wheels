@@ -159,45 +159,45 @@ describe('finishWaitingForTimeout', () => {
         vi.clearAllTimers();
         vi.useRealTimers();
     });
-    test('should finish waiting for timeout', () => {
+    test('should finish waiting for timeout', async () => {
         const key = 'test1';
         const hasTimeout = true;
         const timeoutR = waitForTimeout(key, 1000);
         finishWaitingForTimeout(key, hasTimeout);
 
-        expect(timeoutR).resolves.toBe(true);
+        await expect(timeoutR).resolves.toBe(true);
     });
-    test('should finish waiting for timeout with false', () => {
+    test('should finish waiting for timeout with false', async () => {
         const key = 'test1';
         const hasTimeout = false;
         const timeoutR = waitForTimeout(key, 1000);
         finishWaitingForTimeout(key, hasTimeout);
 
-        expect(timeoutR).resolves.toBe(false);
+        await expect(timeoutR).resolves.toBe(false);
     });
-    test('should finish waiting for timeout with false', () => {
+    test('should finish waiting for timeout with false', async () => {
         const key = 'test1';
         const hasTimeout = false;
         const timeoutR = waitForTimeout(key, 1000);
         vi.advanceTimersByTime(1000);
-        expect(timeoutR).resolves.toBe(true);
+        await expect(timeoutR).resolves.toBe(true);
     });
 
 });
 
 
 describe('finishAllWaitingForTimeout', () => {
-    test('should finish waiting for timeout for all keys with the given prefix and return true', () => {
+    test('should finish waiting for timeout for all keys with the given prefix and return true', async () => {
         const prefix = 'test-';
         const promise1 = waitForTimeout("test-", 1000);
         const promise2 = waitForTimeout("test-", 1000);
         const promise3 = waitForTimeout("xxxx-", 1000);
 
         finishAllWaitingForTimeout(prefix, true);
-        expect(promise1).resolves.toBeTruthy();
-        expect(promise2).resolves.toBeTruthy();
+        await expect(promise1).resolves.toBeTruthy();
+        await expect(promise2).resolves.toBeTruthy();
         finishAllWaitingForTimeout("xxxx-", false);
-        expect(promise3).resolves.toBeFalsy();
+        await expect(promise3).resolves.toBeFalsy();
     });
 });
 

@@ -33,7 +33,7 @@ test('should decrypt binary fails with the wrong passphrase', async () => {
     const autoCalculateIterations = false;
 
     const encryptedResult = await encryptBinary(input, passphrase, autoCalculateIterations);
-    expect(decryptBinary(encryptedResult, wrongPassphrase, autoCalculateIterations)).rejects.toThrowError();
+    await expect(decryptBinary(encryptedResult, wrongPassphrase, autoCalculateIterations)).rejects.toThrowError();
 });
 
 test('should encrypted string should be unique', async () => {
@@ -137,7 +137,7 @@ test('should obfuscate path fails with wrong passphrase', async () => {
     expect(obfuscatedPath).toMatch(/^%([0-9a-fA-F]{32})([0-9a-fA-F]{32}).*$/);
     expect(obfuscatedPath).not.toBe(path);
     expect(obfuscatedPath).toBe("%931636970d4bc03e843d02f0d7f6cc4cdcdcf2a062af7b8c259e3af73edb64c8v7zdTqKnYzWgW6+ry1dHkPT8aMQJtIg2WwNu3aKXalrIow==");
-    expect(decrypt(obfuscatedPath, wrongPassphrase, autoCalculateIterations)).rejects.toThrowError();
+    await expect(decrypt(obfuscatedPath, wrongPassphrase, autoCalculateIterations)).rejects.toThrowError();
 });
 
 

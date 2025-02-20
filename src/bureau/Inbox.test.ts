@@ -122,10 +122,10 @@ describe('Inbox', () => {
         expect(inbox.size).toBe(0);
         expect(inbox.free).toBe(0);
         expect(inbox.isDisposed).toBe(true);
-        expect(postPromise).rejects.toThrowError();
+        await expect(postPromise).rejects.toThrowError();
 
-        expect(() => inbox.post(4)).rejects.toThrowError();
-        expect(() => inbox.pick()).rejects.toThrowError();
+        await expect(() => inbox.post(4)).rejects.toThrowError();
+        await expect(() => inbox.pick()).rejects.toThrowError();
 
     });
 
@@ -144,10 +144,10 @@ describe('Inbox', () => {
         expect(inbox.size).toBe(0);
         expect(inbox.free).toBe(0);
         expect(inbox.isDisposed).toBe(true);
-        expect(pickPromise).rejects.toThrowError();
+        await expect(pickPromise).rejects.toThrowError();
 
-        expect(() => inbox.post(4)).rejects.toThrowError();
-        expect(() => inbox.pick()).rejects.toThrowError();
+        await expect(() => inbox.post(4)).rejects.toThrowError();
+        await expect(() => inbox.pick()).rejects.toThrowError();
 
     });
 

@@ -81,7 +81,7 @@ describe('EventHub-high-level', () => {
 });
 
 describe('EventHub-low-level', () => {
-    it('should emit and listen to events without data', () => {
+    it('should emit and listen to events without data', async () => {
         const hub = createEventHub();
         const p = promiseWithResolver<string>();
 
@@ -89,11 +89,11 @@ describe('EventHub-low-level', () => {
             p.resolve(e.type);
         });
         hub.emitEvent('world_test');
-        expect(p.promise).resolves.toBe('world_test');
+        await expect(p.promise).resolves.toBe('world_test');
         // expect(callback).toHaveBeenCalled();
     });
 
-    it('should emit and listen to events with data', () => {
+    it('should emit and listen to events with data', async () => {
         const hub = createEventHub();
         const p = promiseWithResolver<{
             type: string;
@@ -118,11 +118,11 @@ describe('EventHub-low-level', () => {
         });
         hub.emitEvent('hello_test', 'world_test');
 
-        expect(p.promise).resolves.toEqual({
+        await expect(p.promise).resolves.toEqual({
             type: 'hello_test',
             data: 'world_test'
         });
-        expect(p2.promise).resolves.toEqual({
+        await expect(p2.promise).resolves.toEqual({
             type: 'hello_test',
             data: 'world_test'
         });

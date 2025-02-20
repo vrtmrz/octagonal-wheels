@@ -83,11 +83,11 @@ describe('OpenKeyValueDatabase', () => {
         await database.destroy();
 
         const key = 'test-key';
-        expect((async () => await database.clear())).rejects.toThrowError();
-        expect((async () => await database.del(key))).rejects.toThrowError();
-        expect((async () => await database.set(key, "a"))).rejects.toThrowError();
-        expect((async () => await database.get(key))).rejects.toThrowError();
-        expect((async () => await database.keys())).rejects.toThrowError();
+        await expect((async () => await database.clear())).rejects.toThrowError();
+        await expect((async () => await database.del(key))).rejects.toThrowError();
+        await expect((async () => await database.set(key, "a"))).rejects.toThrowError();
+        await expect((async () => await database.get(key))).rejects.toThrowError();
+        await expect((async () => await database.keys())).rejects.toThrowError();
     });
     test('should close the database', async () => {
 
@@ -98,11 +98,11 @@ describe('OpenKeyValueDatabase', () => {
         // Assert
         // Verify that the database is closed by attempting to get a value
         const key = 'test-key';
-        expect((async () => await database.clear())).rejects.toThrowError();
-        expect((async () => await database.del(key))).rejects.toThrowError();
-        expect((async () => await database.set(key, "a"))).rejects.toThrowError();
-        expect((async () => await database.get(key))).rejects.toThrowError();
-        expect((async () => await database.keys())).rejects.toThrowError();
+        await expect((async () => await database.clear())).rejects.toThrowError();
+        await expect((async () => await database.del(key))).rejects.toThrowError();
+        await expect((async () => await database.set(key, "a"))).rejects.toThrowError();
+        await expect((async () => await database.get(key))).rejects.toThrowError();
+        await expect((async () => await database.keys())).rejects.toThrowError();
     });
 
 });

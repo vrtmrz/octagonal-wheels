@@ -167,7 +167,7 @@ describe.sequential("actor", () => {
         // const m = vi.spyOn(console, 'log');
         const z = new DestroyedActor();
         z.destroy();
-        expect(async () => z.postToThisInstance("hurray")).rejects.toThrow("The actor has been destroyed");
+        await expect(async () => z.postToThisInstance("hurray")).rejects.toThrow("The actor has been destroyed");
         // z.postToThisInstance("hurray");
     });
     // const m = vi.spyOn(console, 'log');

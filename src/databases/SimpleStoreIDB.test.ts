@@ -152,13 +152,13 @@ describe('SimpleStoreIDB', () => {
         await store.destroy();
 
         const key = 'test-key';
-        expect((async () => await store.clear())).rejects.toThrowError();
-        expect((async () => await store.delete(key))).rejects.toThrowError();
-        expect((async () => await store.set(key, "a"))).rejects.toThrowError();
-        expect((async () => await store.get(key))).rejects.toThrowError();
-        expect((async () => await store.keys())).rejects.toThrowError();
-        expect((async () => await store.keysIDB())).rejects.toThrowError();
-        expect((async () => await store.destroy())).rejects.toThrowError();
+        await expect((async () => await store.clear())).rejects.toThrowError();
+        await expect((async () => await store.delete(key))).rejects.toThrowError();
+        await expect((async () => await store.set(key, "a"))).rejects.toThrowError();
+        await expect((async () => await store.get(key))).rejects.toThrowError();
+        await expect((async () => await store.keys())).rejects.toThrowError();
+        await expect((async () => await store.keysIDB())).rejects.toThrowError();
+        await expect((async () => await store.destroy())).rejects.toThrowError();
     });
     test('should close the database', async () => {
 
@@ -169,12 +169,12 @@ describe('SimpleStoreIDB', () => {
         // Assert
         // Verify that the database is closed by attempting to get a value
         const key = 'test-key';
-        expect((async () => await store.clear())).rejects.toThrowError();
-        expect((async () => await store.delete(key))).rejects.toThrowError();
-        expect((async () => await store.set(key, "a"))).rejects.toThrowError();
-        expect((async () => await store.get(key))).rejects.toThrowError();
-        expect((async () => await store.keys())).rejects.toThrowError();
-        expect((async () => await store.keysIDB())).rejects.toThrowError();
+        await expect((async () => await store.clear())).rejects.toThrowError();
+        await expect((async () => await store.delete(key))).rejects.toThrowError();
+        await expect((async () => await store.set(key, "a"))).rejects.toThrowError();
+        await expect((async () => await store.get(key))).rejects.toThrowError();
+        await expect((async () => await store.keys())).rejects.toThrowError();
+        await expect((async () => await store.keysIDB())).rejects.toThrowError();
     });
 
 });
