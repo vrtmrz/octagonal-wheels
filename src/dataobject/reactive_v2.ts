@@ -1,6 +1,7 @@
 // Reactive and less-computing expression evaluator
 // Inspired from Vue
 
+import { FallbackWeakRef } from "../common/polyfill";
 import { isObjectDifferent } from "../object";
 
 let context: InternalReactiveInstance<any> | undefined;
@@ -69,7 +70,7 @@ type reactiveParams<T> = {
 
 type RefReactiveInstance<T> = {
     id: number;
-    instance: WeakRef<InternalReactiveInstance<T>>;
+    instance: FallbackWeakRef<InternalReactiveInstance<T>>;
 };
 const topologicalSortCache = new Map<number, RefReactiveInstance<unknown>[]>();
 
@@ -85,18 +86,6 @@ function resetTopologicalSortCacheFor(ids: number[]) {
         }
     });
 }
-const wr = "WeakRef" in globalThis ? globalThis.WeakRef : (class WeakRef {
-    // If WeakRef implementation has been missing, we will use a simple polyfill
-    // This is for old iOS devices that do not support WeakRef (before Safari 14.5)
-    // I know that Obsidian now supports Safari 14.5 and above now, but I will keep this for compatibility with older versions.
-    __target;
-    constructor(target: any) {
-        this.__target = target;
-    }
-    deref() {
-        return this.__target;
-    }
-}) as unknown as typeof WeakRef;
 function topologicalSort(startNode: InternalReactiveInstance<unknown>): InternalReactiveInstance<unknown>[] {
     if (topologicalSortCache.has(startNode.id)) {
         const ref = topologicalSortCache.get(startNode.id);
@@ -131,7 +120,7 @@ function topologicalSort(startNode: InternalReactiveInstance<unknown>): Internal
 
     visit(startNode);
     const result = sorted.reverse();
-    topologicalSortCache.set(startNode.id, result.map(e => ({ id: e.id, instance: new wr(e) })));
+    topologicalSortCache.set(startNode.id, result.map(e => ({ id: e.id, instance: new FallbackWeakRef(e) })));
     return result; // The order of the sorted array is the order of the dependency
 }
 

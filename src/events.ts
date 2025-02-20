@@ -1,3 +1,4 @@
+import { FallbackWeakRef } from "./common/polyfill";
 declare global {
     interface LSEvents {
         "hello": string;
@@ -25,8 +26,8 @@ type EventDataType<ET extends Record<string, any>, K extends keyof ET> = ET[K] e
 export class EventHub<Events extends AnyHubEvents = LSEvents> {
     _emitter = new EventTarget();
 
-    _assigned = new Map<string, WeakMap<CallableFunction, WeakRef<AbortController>>>();
-    _allAssigned = new Map<string, Set<WeakRef<AbortController>>>();
+    _assigned = new Map<string, WeakMap<CallableFunction, FallbackWeakRef<AbortController>>>();
+    _allAssigned = new Map<string, Set<FallbackWeakRef<AbortController>>>();
 
     _issueSignal(key: string, callback: CallableFunction) {
         let assigned = this._assigned.get(key);
@@ -37,7 +38,7 @@ export class EventHub<Events extends AnyHubEvents = LSEvents> {
         let controller: AbortController | undefined = controllerRef?.deref();
         if (!controller || controller.signal.aborted) {
             controller = new AbortController();
-            const refController = new WeakRef(controller);
+            const refController = new FallbackWeakRef(controller);
             controller.signal.addEventListener('abort', () => {
                 this._assigned.get(key)?.delete(callback);
                 this._allAssigned.get(key)?.delete(refController);
