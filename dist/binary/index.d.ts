@@ -15,7 +15,7 @@ export declare function concatUInt8Array(arrays: Uint8Array[]): Uint8Array;
  * @returns The decoded ArrayBuffer.
  * @remarks Now, Self-hosted LiveSync always use base64 for encoding/decoding.
  */
-export declare function decodeBinary(src: string | string[]): ArrayBufferLike;
+export declare function decodeBinary(src: string | string[]): ArrayBuffer;
 /**
  * Encodes a binary data into a string array using base64 encoding.
  *

@@ -15,5 +15,5 @@ export declare function encodeBinaryEach(buffer: Uint8Array): Promise<string>;
  * @deprecated Use `encodeBinary` instead. `encodeBinary` uses a base64 encoding, which is more efficient and reliable.
  */
 export declare function _encodeBinary(buffer: Uint8Array): Promise<string[]>;
-export declare function decodeToArrayBuffer(src: string[]): ArrayBufferLike;
+export declare function decodeToArrayBuffer(src: string[]): ArrayBuffer;
 export declare function _decodeToArrayBuffer(src: string): ArrayBuffer;

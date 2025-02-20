@@ -1,4 +1,4 @@
-import { cancelableDelay, TIMED_OUT_SIGNAL, fireAndForget, promiseWithResolver, yieldMicrotask } from '../promises.js';
+import { fireAndForget, yieldMicrotask, promiseWithResolver, cancelableDelay, TIMED_OUT_SIGNAL } from '../promises.js';
 
 function Semaphore(limit) {
     let counter = 0;

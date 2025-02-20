@@ -1,3 +1,5 @@
+import { FallbackWeakRef } from './common/polyfill.js';
+
 /**
  * A class that provides an event hub for managing custom events.
  *
@@ -33,7 +35,7 @@ class EventHub {
         let controller = controllerRef?.deref();
         if (!controller || controller.signal.aborted) {
             controller = new AbortController();
-            const refController = new WeakRef(controller);
+            const refController = new FallbackWeakRef(controller);
             controller.signal.addEventListener('abort', () => {
                 this._assigned.get(key)?.delete(callback);
                 this._allAssigned.get(key)?.delete(refController);

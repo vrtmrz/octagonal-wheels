@@ -1,3 +1,4 @@
+import { FallbackWeakRef } from "./common/polyfill";
 declare global {
     interface LSEvents {
         "hello": string;
@@ -19,8 +20,8 @@ type EventType<K> = K extends string ? K : never;
  */
 export declare class EventHub<Events extends AnyHubEvents = LSEvents> {
     _emitter: EventTarget;
-    _assigned: Map<string, WeakMap<CallableFunction, WeakRef<AbortController>>>;
-    _allAssigned: Map<string, Set<WeakRef<AbortController>>>;
+    _assigned: Map<string, WeakMap<CallableFunction, FallbackWeakRef<AbortController>>>;
+    _allAssigned: Map<string, Set<FallbackWeakRef<AbortController>>>;
     _issueSignal(key: string, callback: CallableFunction): AbortController;
     /**
      * Emits an event without data.
