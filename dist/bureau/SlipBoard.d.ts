@@ -1,4 +1,4 @@
-import { TIMED_OUT_SIGNAL } from "../promises";
+import { TIMED_OUT_SIGNAL, type PromiseWithResolvers } from "../promises";
 import { RESULT_TIMED_OUT } from "../common/const";
 export type WithTimeout<T> = T | typeof RESULT_TIMED_OUT;
 declare const GENERIC_COMPATIBILITY_VALUE = "x-compatibility-value";

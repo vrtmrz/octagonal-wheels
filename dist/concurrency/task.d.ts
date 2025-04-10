@@ -1,3 +1,4 @@
+import { type PromiseWithResolvers } from "../promises";
 export type TaskProcessing<T> = Promise<T>;
 export type TaskWaiting<T> = () => Promise<T>;
 export type Task<T> = TaskProcessing<T> | TaskWaiting<T>;
