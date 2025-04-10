@@ -1,4 +1,4 @@
-import { cancelableDelay, isSomeResolved, promiseWithResolver } from "../promises";
+import { cancelableDelay, isSomeResolved, promiseWithResolver, type PromiseWithResolvers } from "../promises";
 export const NOT_AVAILABLE = Symbol("NotAvailable");
 export type NOT_AVAILABLE = typeof NOT_AVAILABLE;
 

@@ -1,4 +1,4 @@
-import { cancelableDelay, fireAndForget, promiseWithResolver, TIMED_OUT_SIGNAL, yieldMicrotask } from "../promises";
+import { cancelableDelay, fireAndForget, promiseWithResolver, TIMED_OUT_SIGNAL, yieldMicrotask, type PromiseWithResolvers } from "../promises";
 import { RESULT_TIMED_OUT } from "../common/const";
 
 export type WithTimeout<T> = T | typeof RESULT_TIMED_OUT;

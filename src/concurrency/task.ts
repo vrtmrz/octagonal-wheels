@@ -1,4 +1,4 @@
-import { TIMED_OUT_SIGNAL } from "../promises";
+import { TIMED_OUT_SIGNAL, type PromiseWithResolvers } from "../promises";
 import { shareRunningResult } from "./lock";
 import { globalSlipBoard } from "../messagepassing/signal";
 export type TaskProcessing<T> = Promise<T>;
