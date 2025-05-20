@@ -1,6 +1,6 @@
 import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger";
 import { promiseWithResolver, yieldMicrotask } from "../promises";
-import { DISPOSE_ERROR, Inbox, NOT_AVAILABLE, InboxStateDetail } from "./Inbox";
+import { DISPOSE_ERROR, type Inbox, NOT_AVAILABLE, type InboxStateDetail } from "./Inbox";
 
 export enum ClerkState {
     IDLE = "idle",

@@ -1,4 +1,4 @@
-import { RESULT_NOT_FOUND, RESULT_TIMED_OUT } from "../common/const";
+import { type RESULT_NOT_FOUND, RESULT_TIMED_OUT } from "../common/const";
 
 export type WithTimeout<T> = T | typeof RESULT_TIMED_OUT;
 export type WithNotFound<T> = T | typeof RESULT_NOT_FOUND;

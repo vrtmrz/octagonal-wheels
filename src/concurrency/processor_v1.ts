@@ -1,7 +1,7 @@
 import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger";
 import type { ReactiveSource } from "../dataobject/reactive";
 import { RESULT_TIMED_OUT } from "../common/const";
-import { noop, delay, fireAndForget, promiseWithResolver, PromiseWithResolvers, yieldNextMicrotask } from "../promises";
+import { noop, delay, fireAndForget, promiseWithResolver, type PromiseWithResolvers, yieldNextMicrotask } from "../promises";
 export class Notifier {
 
     _p: PromiseWithResolvers<void> = promiseWithResolver<void>();

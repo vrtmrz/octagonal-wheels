@@ -1,7 +1,7 @@
 /*
 Regulator 
 */
-import { promiseWithResolver, PromiseWithResolvers } from "../promises";
+import { promiseWithResolver, type PromiseWithResolvers } from "../promises";
 /**
  * Regulator 
  * @description

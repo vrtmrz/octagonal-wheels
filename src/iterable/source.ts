@@ -10,7 +10,7 @@ export function generativeBuffer<T>() {
     const updateSize = () => {
         if (onSizeUpdated) {
             try { onSizeUpdated(next.length - 1); }
-            catch (_) { }
+            catch (_) { /* NO OP*/ }
         }
     };
     return {
@@ -77,7 +77,7 @@ export class GeneratorSource<T> {
     _updateSize() {
         if (this._onSizeUpdated) {
             try { this._onSizeUpdated(this.size); }
-            catch (_) { }
+            catch (_) {/* NO OP*/ }
         }
     }
     get size() {

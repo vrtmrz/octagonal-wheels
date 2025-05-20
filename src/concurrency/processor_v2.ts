@@ -1,7 +1,7 @@
 import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger";
 import type { ReactiveSource } from "../dataobject/reactive";
 import { RESULT_TIMED_OUT } from "../common/const";
-import { noop, delay, fireAndForget, promiseWithResolver, PromiseWithResolvers, TIMED_OUT_SIGNAL, cancelableDelay } from "../promises";
+import { noop, delay, fireAndForget, promiseWithResolver, type PromiseWithResolvers, type TIMED_OUT_SIGNAL, cancelableDelay } from "../promises";
 import { EventHub } from "../events";
 import { PaceMaker } from "../bureau/PaceMaker";
 import { Clerk, ClerkGroup } from "../bureau/Clerk";

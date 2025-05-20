@@ -285,6 +285,7 @@ export class Inbox<T> extends SyncInbox<T> {
 
         } while (!this._isDisposed);
         // This means the inbox is disposed while waiting, probably by the cancellation promise.
+        // deno-lint-ignore no-unreachable
         return false;
     }
 
@@ -333,6 +334,7 @@ export class Inbox<T> extends SyncInbox<T> {
 
         } while (!this.isDisposed);
         // This means the inbox is disposed while waiting, probably by the cancellation promise.
+        // deno-lint-ignore no-unreachable
         return NOT_AVAILABLE;
 
     }
