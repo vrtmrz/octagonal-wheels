@@ -10,4 +10,4 @@
 const EVENT_PROGRESS: "progress" = "progress";
 ```
 
-Defined in: [src/bureau/Inbox.ts:342](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L342)
+Defined in: [src/bureau/Inbox.ts:344](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L344)

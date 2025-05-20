@@ -386,7 +386,7 @@ Defined in: [src/bureau/Inbox.ts:234](https://github.com/vrtmrz/octagonal-wheels
 pick(timeout?: number, cancellation?: Promise<any>[]): Promise<typeof NOT_AVAILABLE | T>;
 ```
 
-Defined in: [src/bureau/Inbox.ts:298](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L298)
+Defined in: [src/bureau/Inbox.ts:299](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L299)
 
 Picks an item from the buffer.
 Waits until an item is available.

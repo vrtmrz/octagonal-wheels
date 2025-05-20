@@ -1,4 +1,4 @@
-import { Inbox, InboxStateDetail } from "./Inbox";
+import { type Inbox, type InboxStateDetail } from "./Inbox";
 export declare enum ClerkState {
     IDLE = "idle",
     DISPOSED = "disposed",

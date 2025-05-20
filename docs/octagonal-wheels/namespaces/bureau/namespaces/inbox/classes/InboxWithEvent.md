@@ -6,7 +6,7 @@
 
 # Class: InboxWithEvent\<T\>
 
-Defined in: [src/bureau/Inbox.ts:353](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L353)
+Defined in: [src/bureau/Inbox.ts:355](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L355)
 
 ## Extends
 
@@ -26,7 +26,7 @@ Defined in: [src/bureau/Inbox.ts:353](https://github.com/vrtmrz/octagonal-wheels
 new InboxWithEvent<T>(capacity: number, onProgress?: (detail: InboxStateDetail) => void): InboxWithEvent<T>;
 ```
 
-Defined in: [src/bureau/Inbox.ts:355](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L355)
+Defined in: [src/bureau/Inbox.ts:357](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L357)
 
 #### Parameters
 
@@ -48,13 +48,13 @@ Defined in: [src/bureau/Inbox.ts:355](https://github.com/vrtmrz/octagonal-wheels
 | Property | Type | Default value | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
 | <a id="_buffer"></a> `_buffer` | `T`[] | `undefined` | [`Inbox`](Inbox.md).[`_buffer`](Inbox.md#_buffer) | [src/bureau/Inbox.ts:18](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L18) |
-| <a id="_callback"></a> `_callback?` | (`detail`: [`InboxStateDetail`](../type-aliases/InboxStateDetail.md)) => `void` | `undefined` | - | [src/bureau/Inbox.ts:354](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L354) |
+| <a id="_callback"></a> `_callback?` | (`detail`: [`InboxStateDetail`](../type-aliases/InboxStateDetail.md)) => `void` | `undefined` | - | [src/bureau/Inbox.ts:356](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L356) |
 | <a id="_capacity"></a> `_capacity` | `number` | `undefined` | [`Inbox`](Inbox.md).[`_capacity`](Inbox.md#_capacity) | [src/bureau/Inbox.ts:17](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L17) |
 | <a id="_disposedpromise"></a> `_disposedPromise` | [`PromiseWithResolvers`](../../../../promises/type-aliases/PromiseWithResolvers.md)\<`void`\> | `undefined` | [`Inbox`](Inbox.md).[`_disposedPromise`](Inbox.md#_disposedpromise) | [src/bureau/Inbox.ts:24](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L24) |
 | <a id="_isdisposed"></a> `_isDisposed` | `boolean` | `false` | [`Inbox`](Inbox.md).[`_isDisposed`](Inbox.md#_isdisposed) | [src/bureau/Inbox.ts:23](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L23) |
 | <a id="_lockfull"></a> `_lockFull` | \| `undefined` \| [`PromiseWithResolvers`](../../../../promises/type-aliases/PromiseWithResolvers.md)\<*typeof* [`READY_POST_SIGNAL`](../variables/READY_POST_SIGNAL.md)\> | `undefined` | [`Inbox`](Inbox.md).[`_lockFull`](Inbox.md#_lockfull) | [src/bureau/Inbox.ts:184](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L184) |
 | <a id="_lockready"></a> `_lockReady` | \| `undefined` \| [`PromiseWithResolvers`](../../../../promises/type-aliases/PromiseWithResolvers.md)\<*typeof* [`READY_PICK_SIGNAL`](../variables/READY_PICK_SIGNAL.md)\> | `undefined` | [`Inbox`](Inbox.md).[`_lockReady`](Inbox.md#_lockready) | [src/bureau/Inbox.ts:185](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L185) |
-| <a id="_processed"></a> `_processed` | `number` | `0` | - | [src/bureau/Inbox.ts:360](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L360) |
+| <a id="_processed"></a> `_processed` | `number` | `0` | - | [src/bureau/Inbox.ts:362](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L362) |
 | <a id="_readidx"></a> `_readIdx` | `number` | `0` | [`Inbox`](Inbox.md).[`_readIdx`](Inbox.md#_readidx) | [src/bureau/Inbox.ts:21](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L21) |
 | <a id="_wraparoundcount"></a> `_wrapAroundCount` | `number` | `0` | [`Inbox`](Inbox.md).[`_wrapAroundCount`](Inbox.md#_wraparoundcount) | [src/bureau/Inbox.ts:22](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L22) |
 | <a id="_writeidx"></a> `_writeIdx` | `number` | `0` | [`Inbox`](Inbox.md).[`_writeIdx`](Inbox.md#_writeidx) | [src/bureau/Inbox.ts:20](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L20) |
@@ -291,7 +291,7 @@ Defined in: [src/bureau/Inbox.ts:225](https://github.com/vrtmrz/octagonal-wheels
 __onProgress(): void;
 ```
 
-Defined in: [src/bureau/Inbox.ts:361](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L361)
+Defined in: [src/bureau/Inbox.ts:363](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L363)
 
 #### Returns
 
@@ -399,7 +399,7 @@ Defined in: [src/bureau/Inbox.ts:234](https://github.com/vrtmrz/octagonal-wheels
 pick(timeout?: number, cancellation?: Promise<any>[]): Promise<typeof NOT_AVAILABLE | T>;
 ```
 
-Defined in: [src/bureau/Inbox.ts:298](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L298)
+Defined in: [src/bureau/Inbox.ts:299](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L299)
 
 Picks an item from the buffer.
 Waits until an item is available.
@@ -463,7 +463,7 @@ whether the item is posted.
 setOnProgress(callback: (detail: InboxStateDetail) => void): void;
 ```
 
-Defined in: [src/bureau/Inbox.ts:368](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L368)
+Defined in: [src/bureau/Inbox.ts:370](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Inbox.ts#L370)
 
 #### Parameters
 

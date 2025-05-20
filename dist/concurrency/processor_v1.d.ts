@@ -1,5 +1,5 @@
 import type { ReactiveSource } from "../dataobject/reactive";
-import { PromiseWithResolvers } from "../promises";
+import { type PromiseWithResolvers } from "../promises";
 export declare class Notifier {
     _p: PromiseWithResolvers<void>;
     isUsed: boolean;

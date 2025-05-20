@@ -70,7 +70,7 @@ class GeneratorSource {
             try {
                 this._onSizeUpdated(this.size);
             }
-            catch (_) { }
+            catch (_) { /* NO OP*/ }
         }
     }
     get size() {

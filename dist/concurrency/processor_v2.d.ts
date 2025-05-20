@@ -1,5 +1,5 @@
 import type { ReactiveSource } from "../dataobject/reactive";
-import { PromiseWithResolvers, TIMED_OUT_SIGNAL } from "../promises";
+import { type PromiseWithResolvers, type TIMED_OUT_SIGNAL } from "../promises";
 import { EventHub } from "../events";
 import { PaceMaker } from "../bureau/PaceMaker";
 import { Clerk, ClerkGroup } from "../bureau/Clerk";
