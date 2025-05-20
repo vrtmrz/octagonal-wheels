@@ -22,7 +22,7 @@ class Notifier {
             return;
         }
         this.isUsed = false;
-        this._p.promise.finally(noop);
+        void this._p.promise.finally(noop);
         this._p.resolve();
         this._p = promiseWithResolver();
     }
