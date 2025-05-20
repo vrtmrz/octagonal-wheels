@@ -1,3 +1,4 @@
+/* istanbul ignore file -- @preserve */
 declare const LIB_VERSION: string | undefined;
 /**
  * Returns the version of the library.
@@ -29,3 +30,4 @@ export * as actor from "./actor";
 export * as events from "./events";
 export * as iterable from "./iterable";
 export * as bureau from "./bureau";
+export * as conduit from "./conduit";
