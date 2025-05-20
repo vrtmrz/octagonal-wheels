@@ -1,0 +1,32 @@
+[**octagonal-wheels**](../../../../README.md)
+
+***
+
+[octagonal-wheels](../../../../globals.md) / [encryption](../README.md) / encryptV1
+
+# Function: encryptV1()
+
+```ts
+function encryptV1(
+   input: string, 
+   passphrase: string, 
+autoCalculateIterations: boolean): Promise<string>;
+```
+
+Defined in: [src/encryption/encryption.ts:161](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L161)
+
+Encrypts the input string using AES-GCM encryption algorithm.
+
+## Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `input` | `string` | The string to be encrypted. |
+| `passphrase` | `string` | The passphrase used for encryption. |
+| `autoCalculateIterations` | `boolean` | A boolean indicating whether to automatically calculate the iterations for key derivation. |
+
+## Returns
+
+`Promise`\<`string`\>
+
+A string representing the encrypted data, initialization vector (IV), and salt in JSON format.
