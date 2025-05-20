@@ -1,4 +1,5 @@
-// vitest.config.ts
+/// <reference types="@vitest/browser/providers/playwright" />
+/// <reference types="@vitest/browser/providers/webdriverio" />
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
@@ -9,6 +10,7 @@ export default defineConfig({
         testTimeout: 10000,
         fileParallelism: false,
         watch: false,
+
         // environment: "browser",
         include: ['src/**/*.test.ts'],
         coverage: {
@@ -20,15 +22,24 @@ export default defineConfig({
         browser: {
             provider: "playwright",
             enabled: true,
+            screenshotFailures: false,
+            instances: [
+                {
+                    browser: 'chromium',
+
+
+                    // options: {
+                    //     headless: true,
+                    //     slowMo: 0,
+                    //     args: ['--no-sandbox', '--disable-setuid-sandbox'],
+                    // },
+                },
+            ],
             // slowHijackESM: false,
             headless: true,
             fileParallelism: false,
-            name: 'chromium', // browser name is required
-            providerOptions: {
-                launch: {
-                    devtools: true,
-                }
-            }
+            // name: 'chromium', // browser name is required
+
         },
     },
 })

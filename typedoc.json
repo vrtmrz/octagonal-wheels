@@ -1,0 +1,16 @@
+{
+    "useCodeBlocks": true,
+    "expandObjects": true,
+    "expandParameters": true,
+    // "useHTMLAnchors": true,
+    // "disableSources": true,
+    "gitRevision": "main",
+    // "flattenOutputFiles": true,
+    "parametersFormat": "table",
+    "interfacePropertiesFormat": "table",
+    "classPropertiesFormat": "table",
+    "typeAliasPropertiesFormat": "table",
+    "enumMembersFormat": "table",
+    "propertyMembersFormat": "table",
+    // "typeDeclarationFormat": "table",
+}
