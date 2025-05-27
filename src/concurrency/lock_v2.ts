@@ -1,5 +1,5 @@
 // --- asynchronous execution / locking utilities
-import { fireAndForget, promiseWithResolver } from "../promises";
+import { fireAndForget, promiseWithResolver } from "../promises.ts";
 
 type Task<T> = () => Promise<T> | T;
 
@@ -60,6 +60,48 @@ export function serialized<T>(key: string | symbol, proc: Task<T>): Promise<T> {
     } else {
         serializedMap.set(key, nextTask());
     }
+    return p.promise;
+}
+
+const latestProcessMap = new Map<string | symbol, Promise<any>>();
+export const SYMBOL_SKIPPED = Symbol("SKIPPED");
+
+export function onlyLatest<T>(key: string | symbol, proc: Task<T>): Promise<T | typeof SYMBOL_SKIPPED> {
+    const p = promiseWithResolver<T | typeof SYMBOL_SKIPPED>();
+    latestProcessMap.set(key, p.promise);
+    fireAndForget(async () => {
+        try {
+            await serialized(key, async () => {
+                try {
+                    const latestProcess = latestProcessMap.get(key);
+                    // If the latest process is not this one (meaning another process is waiting or running), this process is skipped.
+                    if (latestProcess && latestProcess !== p.promise) {
+                        p.resolve(SYMBOL_SKIPPED);
+                        return;
+                    }
+                    // Otherwise, run the process
+                    try {
+                        const r = await proc();
+                        p.resolve(r);
+                    } catch (ex) {
+                        p.reject(ex);
+                    }
+                    return;
+                } finally {
+                    // After the process is done, delete the mark if it is still the latest one.
+                    if (latestProcessMap.get(key) === p.promise) {
+                        latestProcessMap.delete(key);
+                    }
+                }
+            })
+        } catch (ex) {
+            // Ensure that the promise is removed from the map after completion.
+            if (latestProcessMap.get(key) === p.promise) {
+                latestProcessMap.delete(key);
+            }
+            p.reject(ex);
+        }
+    });
     return p.promise;
 }
 
