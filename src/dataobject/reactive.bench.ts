@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest';
 
-import * as v1 from "./reactive_v1";
-import * as v2 from "./reactive_v2";
+import * as v1 from "./reactive_v1.ts";
+import * as v2 from "./reactive_v2.ts";
 
 
 for (const mode of ["R/W", "R/O", "W/O"]) {

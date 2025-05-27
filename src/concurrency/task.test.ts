@@ -1,6 +1,6 @@
 // OK
 import { describe, beforeEach, vi, afterEach, test, expect } from 'vitest';
-import { scheduleTask, cancelTask, isWaitingForTimeout, waitForTimeout, finishWaitingForTimeout, finishAllWaitingForTimeout, cancelAllTasks, pipeArrayToGenerator, pipeGeneratorToGenerator, unwrapTaskResult, processAllTasksWithConcurrencyLimit, mapAllTasksWithConcurrencyLimit } from './task';
+import { scheduleTask, cancelTask, isWaitingForTimeout, waitForTimeout, finishWaitingForTimeout, finishAllWaitingForTimeout, cancelAllTasks, pipeArrayToGenerator, pipeGeneratorToGenerator, unwrapTaskResult, processAllTasksWithConcurrencyLimit, mapAllTasksWithConcurrencyLimit } from "./task.ts";
 
 class Runner {
     maxConcurrency = 0;
@@ -218,8 +218,8 @@ test('isWaitingForTimeout should return false if the key is not waiting for time
     expect(result).toBe(false);
 });
 
-import { processAllGeneratorTasksWithConcurrencyLimit } from './task';
-import { delay } from '../promises';
+import { processAllGeneratorTasksWithConcurrencyLimit } from "./task.ts";
+import { delay } from "../promises.ts";
 
 describe('processAllGeneratorTasksWithConcurrencyLimit', () => {
 

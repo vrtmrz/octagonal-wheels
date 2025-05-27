@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { Trench } from "./memutil";
-import { SimpleStoreIDB } from "../databases/SimpleStoreIDB";
-import { delay } from "../promises";
+import { Trench } from "./memutil.ts";
+import { SimpleStoreIDB } from "../databases/SimpleStoreIDB.ts";
+import { delay } from "../promises.ts";
 
 describe('Trench', () => {
     let db: SimpleStoreIDB<any>;

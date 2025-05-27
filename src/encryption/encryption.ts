@@ -1,8 +1,8 @@
-import { decodeBinary } from "../binary";
-import { arrayBufferToBase64Single, readString, writeString } from "../binary/base64";
-import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary/hex";
-import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger";
-import { decryptV3, encryptV3 } from "./encryptionv3";
+import { decodeBinary } from "../binary/index.ts";
+import { arrayBufferToBase64Single, readString, writeString } from "../binary/base64.ts";
+import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary/hex.ts";
+import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
+import { decryptV3, encryptV3 } from "./encryptionv3.ts";
 
 export type encodedData = [encryptedData: string, iv: string, salt: string];
 export type KeyBuffer = {

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { EventHub } from './events';
-import { promiseWithResolver } from './promises';
+import { EventHub } from './events.ts';
+import { promiseWithResolver } from "./promises.ts";
 
 
 declare global {

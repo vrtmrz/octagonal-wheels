@@ -1,5 +1,5 @@
-import { isObjectDifferent } from "../object";
-import { type PromiseWithResolvers, promiseWithResolver, fireAndForget } from "../promises";
+import { isObjectDifferent } from "../object.ts";
+import { type PromiseWithResolvers, promiseWithResolver, fireAndForget } from "../promises.ts";
 
 /**
  * RefinerOptions interface defines the options for the Refiner class.

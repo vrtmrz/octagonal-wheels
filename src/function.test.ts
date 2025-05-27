@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test, vi, type Mock, type MockedFunction } from 'vitest';
-import { throttle } from './function';
-import { delay } from './promises';
+import { throttle } from "./function.ts";
 
 describe('throttle function', () => {
     let mockFunction: MockedFunction<() => void>;

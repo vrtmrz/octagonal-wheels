@@ -1,6 +1,6 @@
-import { TIMED_OUT_SIGNAL, type PromiseWithResolvers } from "../promises";
-import { shareRunningResult } from "./lock";
-import { globalSlipBoard } from "../messagepassing/signal";
+import { TIMED_OUT_SIGNAL, type PromiseWithResolvers } from "../promises.ts";
+import { shareRunningResult } from "./lock.ts";
+import { globalSlipBoard } from "../messagepassing/signal.ts";
 export type TaskProcessing<T> = Promise<T>;
 export type TaskWaiting<T> = () => Promise<T>;
 export type Task<T> = TaskProcessing<T> | TaskWaiting<T>;

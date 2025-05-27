@@ -1,6 +1,6 @@
-import { isObjectDifferent } from "../object";
-import { delay } from "../promises";
-import { Refiner, RefinerSync } from "./Refiner";
+import { isObjectDifferent } from "../object.ts";
+import { delay } from "../promises.ts";
+import { Refiner, RefinerSync } from "./Refiner.ts";
 import { expect, test, vi } from "vitest";
 
 test("Refiner computes and caches the result", async () => {

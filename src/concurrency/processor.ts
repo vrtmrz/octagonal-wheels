@@ -1,1 +1,1 @@
-export * from "./processor_v2";
+export * from "./processor_v2.ts";

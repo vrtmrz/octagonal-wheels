@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { SlipBoard, globalSlipBoard } from './SlipBoard';
-import { delay, TIMED_OUT_SIGNAL } from '../promises';
+import { SlipBoard, globalSlipBoard } from "./SlipBoard.ts";
+import { delay, TIMED_OUT_SIGNAL } from "../promises.ts";
 declare global {
     interface LSSlips {
         "hello": string;

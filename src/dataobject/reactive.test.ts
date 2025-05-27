@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { computed, reactive, reactiveSource } from './reactive';
+import { computed, reactive, reactiveSource } from "./reactive.ts";
 
 describe('reactiveSource', () => {
     it('should return a reactive source with the initial value', () => {

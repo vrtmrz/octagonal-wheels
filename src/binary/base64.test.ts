@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { base64ToArrayBuffer, arrayBufferToBase64, arrayBufferToBase64Single, writeString, readString, base64ToString, tryConvertBase64ToArrayBuffer } from "./base64";
+import { base64ToArrayBuffer, arrayBufferToBase64, arrayBufferToBase64Single, writeString, readString, base64ToString, tryConvertBase64ToArrayBuffer } from "./base64.ts";
 
 describe('base64ToArrayBuffer', () => {
     it('should return an ArrayBuffer when given a valid base64 string', () => {

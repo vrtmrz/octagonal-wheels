@@ -1,6 +1,6 @@
 import { deleteDB, openDB, type IDBPDatabase } from "idb";
-import { SimpleStoreBase } from "./SimpleStoreBase";
-import { fireAndForget } from "../promises";
+import { SimpleStoreBase } from "./SimpleStoreBase.ts";
+import { fireAndForget } from "../promises.ts";
 
 /**
  * Represents a simple store using IndexedDB.

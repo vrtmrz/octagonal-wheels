@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { Notifier } from './processor';
 
-import { QueueProcessor } from './processor';
-import { delay } from '../promises';
+import { QueueProcessor } from "./processor.ts";
+import { delay } from "../promises.ts";
 
 
 

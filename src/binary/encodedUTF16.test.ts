@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decodeBinary } from ".";
-import { _decodeToArrayBuffer, _encodeBinary, decodeToArrayBuffer } from "./encodedUTF16";
+import { _decodeToArrayBuffer, _encodeBinary, decodeToArrayBuffer } from "./encodedUTF16.ts";
 
 describe("old_encodeBinary", () => {
     it("should encode a binary buffer into an array of strings", async () => {

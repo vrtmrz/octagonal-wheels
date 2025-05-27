@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { Manifold } from "./manifold";
+import { Manifold } from "./manifold.ts";
 
 describe("Manifold", () => {
 	it("add, remove, clear, set", async () => {

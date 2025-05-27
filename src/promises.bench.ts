@@ -1,5 +1,5 @@
 import { bench, describe } from "vitest";
-import { nativePromiseWithResolvers, polyfillPromiseWithResolvers } from "./promises";
+import { nativePromiseWithResolvers, polyfillPromiseWithResolvers } from "./promises.ts";
 
 describe('PromiseWithResolver bench', () => {
     bench("native", async () => {

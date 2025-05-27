@@ -1,4 +1,4 @@
-import { cancelableDelay, TIMED_OUT_SIGNAL, fireAndForget, promiseWithResolver, yieldMicrotask, type PromiseWithResolvers } from "../promises";
+import { cancelableDelay, TIMED_OUT_SIGNAL, fireAndForget, promiseWithResolver, yieldMicrotask, type PromiseWithResolvers } from "../promises.ts";
 export type SemaphoreReleaser = () => void;
 export type SemaphoreObject = {
     acquire(quantity?: number): Promise<SemaphoreReleaser>;

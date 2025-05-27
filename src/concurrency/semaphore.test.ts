@@ -1,8 +1,8 @@
 //OK
 
 import { describe, beforeEach, it, expect } from 'vitest';
-import { Semaphore, type SemaphoreObject } from './semaphore';
-import { delay } from '../promises';
+import { Semaphore, type SemaphoreObject } from "./semaphore.ts";
+import { delay } from "../promises.ts";
 
 
 class Runner {

@@ -1,6 +1,6 @@
-import { mixedHash, epochFNV1a, fallbackMixedHashEach, fallbackMixedHash, sha1Hash } from './purejs';
+import { mixedHash, epochFNV1a, fallbackMixedHashEach, fallbackMixedHash, sha1Hash } from "./purejs.ts";
 import { describe, it, expect } from 'vitest';
-import { sha1 } from './purejs';
+import { sha1 } from "./purejs.ts";
 
 describe('mixedHash', () => {
     it('should return correct hash for an empty string', () => {

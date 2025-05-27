@@ -1,8 +1,8 @@
 //@ts-ignore
 import { default as xxhashNew } from "../patched_xxhash_wasm/xxhash-wasm.js";
 import type { XXHashAPI } from "xxhash-wasm-102";
-import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.js";
-import { fallbackMixedHashEach } from "./purejs.js";
+import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
+import { fallbackMixedHashEach } from "./purejs.ts";
 
 export { xxhashNew };
 

@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
-import { base64ToArrayBuffer } from "./base64";
-import { concatUInt8Array, decodeBinary, encodeBinary } from "./index";
-import { _decodeToArrayBuffer, decodeToArrayBuffer } from "./encodedUTF16";
+import { base64ToArrayBuffer } from "./base64.ts";
+import { concatUInt8Array, decodeBinary, encodeBinary } from "./index.ts";
+import { _decodeToArrayBuffer, decodeToArrayBuffer } from "./encodedUTF16.ts";
 
 test('concatUInt8Array should concatenate multiple Uint8Array arrays into a single Uint8Array', () => {
     const array1 = new Uint8Array([1, 2, 3]);

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { Clerk, ClerkGroup, ClerkState, Feeder, Harvester, Porter } from './Clerk';
-import { Inbox, InboxWithEvent } from './Inbox';
-import { delay, promiseWithResolver, yieldMicrotask } from '../promises';
+import { Clerk, ClerkGroup, ClerkState, Feeder, Harvester, Porter } from "./Clerk.ts";
+import { Inbox, InboxWithEvent } from "./Inbox.ts";
+import { delay, promiseWithResolver, yieldMicrotask } from "../promises.ts";
 
 
 

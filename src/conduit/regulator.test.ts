@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { Regulator } from "./regulator";
-import { delay } from "../promises";
+import { Regulator } from "./regulator.ts";
+import { delay } from "../promises.ts";
 
 describe("Regulator", () => {
     it("should process items with default concurrency (1)", async () => {

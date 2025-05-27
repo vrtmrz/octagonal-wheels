@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { RESULT_TIMED_OUT } from '../common/const';
-import { sendSignal, sendValue, waitForSignal, waitForValue } from './signal';
+import { RESULT_TIMED_OUT } from "../common/const.ts";
+import { sendSignal, sendValue, waitForSignal, waitForValue } from "./signal.ts";
 
 describe('waitForSignal', () => {
     beforeEach(() => {

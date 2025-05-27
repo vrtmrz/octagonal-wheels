@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { sizeToHumanReadable } from './number';
+import { sizeToHumanReadable } from "./number.ts";
 
 test('should return "0.00B" when size is 0', () => {
     const size = 0;

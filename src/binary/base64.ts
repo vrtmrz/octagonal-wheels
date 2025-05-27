@@ -1,4 +1,4 @@
-import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger";
+import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
 /**
  * Converts a base64 string or an array of base64 strings to an ArrayBuffer.
  * @param base64 - The base64 string or an array of base64 strings to convert.

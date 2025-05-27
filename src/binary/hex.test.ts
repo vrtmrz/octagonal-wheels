@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { hexStringToUint8Array, uint8ArrayToHexString } from './hex';
+import { hexStringToUint8Array, uint8ArrayToHexString } from "./hex.ts";
 
 test('should convert Uint8Array to hexadecimal string', () => {
     const input = new Uint8Array([0, 1, 2, 10, 15, 16, 255]);

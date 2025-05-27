@@ -1,4 +1,4 @@
-import { range } from "../collection";
+import { range } from "../collection.ts";
 
 const BINARY_CHUNK_MAX = 1024 * 1024 * 30;
 

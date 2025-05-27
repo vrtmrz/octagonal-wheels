@@ -1,7 +1,7 @@
-import { PaceMaker } from "../bureau/PaceMaker";
-import { NOT_AVAILABLE, InboxWithEvent } from "../bureau/Inbox";
-import { Feeder, Porter } from "../bureau/Clerk";
-import { promiseWithResolver } from "../promises";
+import { PaceMaker } from "../bureau/PaceMaker.ts";
+import { NOT_AVAILABLE, InboxWithEvent } from "../bureau/Inbox.ts";
+import { Feeder, Porter } from "../bureau/Clerk.ts";
+import { promiseWithResolver } from "../promises.ts";
 
 type ChunkProcessOptions = {
     /**

@@ -1,11 +1,11 @@
-import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger";
-import type { ReactiveSource } from "../dataobject/reactive";
-import { RESULT_TIMED_OUT } from "../common/const";
-import { noop, delay, fireAndForget, promiseWithResolver, type PromiseWithResolvers, type TIMED_OUT_SIGNAL, cancelableDelay } from "../promises";
-import { EventHub } from "../events";
-import { PaceMaker } from "../bureau/PaceMaker";
-import { Clerk, ClerkGroup } from "../bureau/Clerk";
-import { Inbox } from "../bureau/Inbox";
+import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
+import type { ReactiveSource } from "../dataobject/reactive.ts";
+import { RESULT_TIMED_OUT } from "../common/const.ts";
+import { noop, delay, fireAndForget, promiseWithResolver, type PromiseWithResolvers, type TIMED_OUT_SIGNAL, cancelableDelay } from "../promises.ts";
+import { EventHub } from "../events.ts";
+import { PaceMaker } from "../bureau/PaceMaker.ts";
+import { Clerk, ClerkGroup } from "../bureau/Clerk.ts";
+import { Inbox } from "../bureau/Inbox.ts";
 
 /**
  * @deprecated Use EventHub and waitFor instead.

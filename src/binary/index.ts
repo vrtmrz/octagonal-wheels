@@ -1,5 +1,5 @@
-import { arrayBufferToBase64, base64ToArrayBuffer } from "./base64";
-import { _decodeToArrayBuffer, decodeToArrayBuffer } from "./encodedUTF16";
+import { arrayBufferToBase64, base64ToArrayBuffer } from "./base64.ts";
+import { _decodeToArrayBuffer, decodeToArrayBuffer } from "./encodedUTF16.ts";
 
 /**
  * Concatenates multiple Uint8Array arrays into a single Uint8Array.
@@ -54,6 +54,6 @@ export async function encodeBinary(src: Uint8Array | ArrayBuffer): Promise<strin
 }
 
 
-export * from "./base64";
-export * from "./encodedUTF16";
-export * from "./hex";
+export * from "./base64.ts";
+export * from "./encodedUTF16.ts";
+export * from "./hex.ts";

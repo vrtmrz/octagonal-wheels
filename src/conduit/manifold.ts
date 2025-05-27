@@ -1,4 +1,4 @@
-import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger";
+import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
 
 /*
  * Manifold

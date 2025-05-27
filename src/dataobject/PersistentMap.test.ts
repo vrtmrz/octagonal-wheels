@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
-import { PersistentMap } from './PersistentMap';
+import { PersistentMap } from "./PersistentMap.ts";
 
 describe('PersistentMap', () => {
     let map: PersistentMap<number>;

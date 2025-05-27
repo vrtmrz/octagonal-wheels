@@ -1,5 +1,5 @@
-import { arrayBufferToBase64Single, base64ToArrayBuffer, readString, writeString } from "../binary/base64";
-import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary/hex";
+import { arrayBufferToBase64Single, base64ToArrayBuffer, readString, writeString } from "../binary/base64.ts";
+import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary/hex.ts";
 
 const webcrypto = globalThis.crypto;
 const SALT_STR = "fancySyncForYou!";

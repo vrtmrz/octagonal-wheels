@@ -1,4 +1,4 @@
-import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger";
+import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
 
 /**
  * Represents a Least Recently Used (LRU) Cache.

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { Inbox, NOT_AVAILABLE } from './Inbox';
-import { isResolved, promiseWithResolver } from '../promises';
+import { Inbox, NOT_AVAILABLE } from "./Inbox.ts";
+import { isResolved, promiseWithResolver } from "../promises.ts";
 
 describe('Inbox', () => {
     let inbox: Inbox<number>;

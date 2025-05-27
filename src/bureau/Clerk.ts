@@ -1,6 +1,6 @@
-import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger";
-import { promiseWithResolver, yieldMicrotask } from "../promises";
-import { DISPOSE_ERROR, type Inbox, NOT_AVAILABLE, type InboxStateDetail } from "./Inbox";
+import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
+import { promiseWithResolver, yieldMicrotask } from "../promises.ts";
+import { DISPOSE_ERROR, type Inbox, NOT_AVAILABLE, type InboxStateDetail } from "./Inbox.ts";
 
 export enum ClerkState {
     IDLE = "idle",
@@ -292,14 +292,14 @@ export class Porter<T> extends ClerkBase<T> {
         }
     }
 
-    get stateDetail(): ClerkStateDetail {
+    override get stateDetail(): ClerkStateDetail {
         const stateDetail = super.stateDetail;
         stateDetail.totalProcessed = this._totalProcessed - this._buffer.length;
         stateDetail.isBusy = stateDetail.isBusy || !!this._timeoutTimer || this._buffer.length > 0;
         return stateDetail;
     }
 
-    async _onSentinel(item: SENTINELS) {
+    override async _onSentinel(item: SENTINELS) {
         if (item === SENTINEL_FLUSH) {
             await this._flush();
         } else if (item === SENTINEL_FINISHED) {
@@ -349,7 +349,7 @@ export class Porter<T> extends ClerkBase<T> {
         this._maxSize = params.maxSize;
     }
 
-    dispose(): void {
+    override dispose(): void {
         if (this._timeoutTimer) clearTimeout(this._timeoutTimer);
         super.dispose();
     }
@@ -465,7 +465,7 @@ export class Harvester<T> extends ClerkBase<T> {
         super(params);
     }
 
-    dispose(): void {
+    override dispose(): void {
         super.dispose();
     }
 

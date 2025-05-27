@@ -1,5 +1,5 @@
 // Pure JS implementation of hash functions for fallback purposes.
-import { arrayBufferToBase64Single, writeString } from "../binary";
+import { arrayBufferToBase64Single, writeString } from "../binary/index.ts";
 
 // Constants for FNV-1a hash algorithm
 export const epochFNV1a = 2166136261 >>> 0;

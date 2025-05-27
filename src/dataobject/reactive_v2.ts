@@ -1,8 +1,8 @@
 // Reactive and less-computing expression evaluator
 // Inspired from Vue
 
-import { FallbackWeakRef } from "../common/polyfill";
-import { isObjectDifferent } from "../object";
+import { FallbackWeakRef } from "../common/polyfill.ts";
+import { isObjectDifferent } from "../object.ts";
 
 let context: InternalReactiveInstance<any> | undefined;
 export type ReactiveChangeHandler<T> = (instance: ReactiveInstance<T>) => unknown;

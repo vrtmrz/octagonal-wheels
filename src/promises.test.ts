@@ -1,6 +1,6 @@
-import { delay, fireAndForget, isResolved, noop, promiseWithResolver, TIMED_OUT_SIGNAL, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback } from './promises';
+import { delay, fireAndForget, isResolved, noop, promiseWithResolver, TIMED_OUT_SIGNAL, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback } from "./promises.ts";
 import { describe, expect, it } from 'vitest';
-import { extendableDelay } from './promises';
+import { extendableDelay } from "./promises.ts";
 
 describe('delay function', () => {
     it('should resolve with the provided result after the specified delay', async () => {

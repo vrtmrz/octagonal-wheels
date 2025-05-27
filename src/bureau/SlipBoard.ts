@@ -1,5 +1,5 @@
-import { cancelableDelay, fireAndForget, promiseWithResolver, TIMED_OUT_SIGNAL, yieldMicrotask, type PromiseWithResolvers } from "../promises";
-import { RESULT_TIMED_OUT } from "../common/const";
+import { cancelableDelay, fireAndForget, promiseWithResolver, TIMED_OUT_SIGNAL, yieldMicrotask, type PromiseWithResolvers } from "../promises.ts";
+import { RESULT_TIMED_OUT } from "../common/const.ts";
 
 export type WithTimeout<T> = T | typeof RESULT_TIMED_OUT;
 const GENERIC_COMPATIBILITY_VALUE = "x-compatibility-value";

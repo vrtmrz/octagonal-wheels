@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { escapeStringToHTML, replaceAll, replaceAllPairs } from './string';
+import { escapeStringToHTML, replaceAll, replaceAllPairs } from "./string.ts";
 
 describe('replaceAll', () => {
     it('should replace all occurrences of a substring with another substring', () => {

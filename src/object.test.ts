@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractObject, isObjectDifferent } from './object';
+import { extractObject, isObjectDifferent } from "./object.ts";
 
 describe('extractObject', () => {
     it('should return a new object with properties from the template object filled with corresponding values from the input object', () => {

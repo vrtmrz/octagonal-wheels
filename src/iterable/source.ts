@@ -1,4 +1,4 @@
-import { promiseWithResolver } from "../promises";
+import { promiseWithResolver } from "../promises.ts";
 
 const GENERATOR_CLOSED = Symbol("closed");
 export function generativeBuffer<T>() {

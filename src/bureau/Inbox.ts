@@ -1,4 +1,4 @@
-import { cancelableDelay, isSomeResolved, promiseWithResolver, type PromiseWithResolvers } from "../promises";
+import { cancelableDelay, isSomeResolved, promiseWithResolver, type PromiseWithResolvers } from "../promises.ts";
 export const NOT_AVAILABLE = Symbol("NotAvailable");
 export type NOT_AVAILABLE = typeof NOT_AVAILABLE;
 
@@ -222,16 +222,16 @@ export class Inbox<T> extends SyncInbox<T> {
         this._lockReady?.resolve(READY_PICK_SIGNAL);
         this._lockReady = undefined;
     }
-    __onPosted() {
+    override __onPosted() {
         super.__onPosted();
         this._notifyReady();
     }
-    __onPicked() {
+    override __onPicked() {
         super.__onPicked();
         this._notifyFree();
     }
 
-    dispose() {
+    override dispose() {
         super.dispose();
         if (this._lockFull) {
             this._lockFull.reject(new Error(DISPOSE_ERROR));
@@ -360,7 +360,7 @@ export class InboxWithEvent<T> extends Inbox<T> {
     }
 
     _processed = 0;
-    __onProgress() {
+    override __onProgress() {
         this._processed++;
         const event = new CustomEvent<InboxStateDetail>(EVENT_PROGRESS, {
             detail: this.state

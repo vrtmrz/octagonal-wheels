@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
-import { digestHash } from './xxhash';
-import { sha1 } from './purejs';
+import { digestHash } from "./xxhash.ts";
+import { sha1 } from "./purejs.ts";
 
 test('sha1 should return the correct hash for a given string', async () => {
     const input = 'Hello, World!';

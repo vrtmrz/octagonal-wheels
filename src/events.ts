@@ -1,4 +1,4 @@
-import { FallbackWeakRef } from "./common/polyfill";
+import { FallbackWeakRef } from "./common/polyfill.ts";
 declare global {
     interface LSEvents {
         "hello": string;
