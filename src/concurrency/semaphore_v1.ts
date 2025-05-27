@@ -31,6 +31,7 @@ export type SemaphoreObject = {
  * Semaphore handling lib.
  * @param limit Maximum number that can be acquired.
  * @returns Instance of SemaphoreObject
+ * @deprecated Use `semaphore_v2` instead.
  */
 export function Semaphore(limit: number, onRelease?: (currentQueue: QueueNotifier[]) => Promise<void> | void): SemaphoreObject {
     let _limit = limit;

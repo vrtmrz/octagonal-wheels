@@ -1,1 +1,1 @@
-export * from "./lock_v2";
+export * from "./lock_v2.ts";

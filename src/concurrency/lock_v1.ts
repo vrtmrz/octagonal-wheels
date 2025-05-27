@@ -1,4 +1,8 @@
-import { fireAndForget, promiseWithResolver, yieldNextMicrotask } from "../promises";
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
+ */
+import { fireAndForget, promiseWithResolver, yieldNextMicrotask } from "../promises.ts";
 
 type Task<T> = () => Promise<T> | T;
 type Queue<T> = {
@@ -13,7 +17,10 @@ type Queue<T> = {
 
 
 const queueTails = new Map<string | symbol, Queue<any> | undefined>();
-
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
+ */
 async function performTask<T>(queue: Queue<T>) {
     if (queue.isRunning) {
         // The same queue has been started
@@ -81,6 +88,8 @@ function _enqueue<T>(key: string | symbol, task: Task<T>, { swapIfExist, shareRe
  * @param key key of the group
  * @param proc process to run
  * @returns result of the process
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 export function serialized<T>(key: string | symbol, proc: Task<T>): Promise<T> {
     return _enqueue(key, proc);
@@ -91,6 +100,8 @@ export function serialized<T>(key: string | symbol, proc: Task<T>): Promise<T> {
  * If any process has running, share the result.
  * @param key key of the group
  * @param proc process to run
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 export function shareRunningResult<T>(key: string | symbol, proc: Task<T>): Promise<T> {
     const current = queueTails.get(key);
@@ -122,6 +133,8 @@ export function shareRunningResult<T>(key: string | symbol, proc: Task<T>): Prom
  * @param key - The key to identify the task.
  * @param proc - The task to be executed.
  * @returns A promise that resolves to the result of the task, or `null` if the task is duplicated.
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 export function skipIfDuplicated<T>(key: string | symbol, proc: Task<T>): Promise<T | null> {
     if (queueTails.get(key) !== undefined) return Promise.resolve(null);
@@ -137,6 +150,8 @@ const waitingProcess = new Map<string, () => Promise<any>>();
  * @param key - The key used to identify the process.
  * @param proc - The process to be executed.
  * @returns A Promise that resolves once the process has been scheduled.
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 export async function scheduleOnceIfDuplicated<T>(key: string, proc: () => Promise<T>): Promise<void> {
     if (isLockAcquired(key)) {
@@ -154,6 +169,8 @@ export async function scheduleOnceIfDuplicated<T>(key: string, proc: () => Promi
  * Checks if a lock is acquired for the given key.
  * @param key - The key to check for lock acquisition.
  * @returns `true` if the lock is acquired, `false` otherwise.
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 export function isLockAcquired(key: string): boolean {
     return queueTails.get(key) !== undefined;

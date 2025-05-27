@@ -1,7 +1,11 @@
-import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger";
-import type { ReactiveSource } from "../dataobject/reactive";
-import { RESULT_TIMED_OUT } from "../common/const";
-import { noop, delay, fireAndForget, promiseWithResolver, type PromiseWithResolvers, yieldNextMicrotask } from "../promises";
+import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
+import type { ReactiveSource } from "../dataobject/reactive.ts";
+import { RESULT_TIMED_OUT } from "../common/const.ts";
+import { noop, delay, fireAndForget, promiseWithResolver, type PromiseWithResolvers, yieldNextMicrotask } from "../promises.ts";
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 export class Notifier {
 
     _p: PromiseWithResolvers<void> = promiseWithResolver<void>();
@@ -68,6 +72,10 @@ type ProcessorParams<T> = {
 
 type ProcessorResult<T> = Promise<T[]> | T[] | undefined | void | Promise<void> | Promise<undefined>;
 type Processor<T, U> = (entity: T[]) => ProcessorResult<U>;
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 export class QueueProcessor<T, U> {
     _queue: T[] = [];
     _processor: Processor<T, U>;
@@ -503,6 +511,10 @@ export class QueueProcessor<T, U> {
     }
 }
 
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 export function stopAllRunningProcessors(): void {
     const processors = [...allRunningProcessors];
     for (const processor of processors) {
