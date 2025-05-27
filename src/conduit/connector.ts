@@ -1,4 +1,4 @@
-import { promiseWithResolver } from "../promises";
+import { promiseWithResolver } from "../promises.ts";
 
 
 /**
@@ -57,6 +57,8 @@ export interface ConnectorFuncOf<T extends any[], U> {
      * @returns void
      */
     disconnect(): void;
+
+    readonly isConnected: boolean;
 }
 /**
  * ConnectorInstanceOf
@@ -81,12 +83,20 @@ export interface ConnectorInstanceOf<T> {
      */
     connected(): Promise<T>;
     /**
+     * Get the connected instance synchronously
+     * @description
+     * @returns the connected instance
+     * @throws Error if no instance is connected yet
+     */
+    connectedSync(): T;
+    /**
      * Disconnect the connected instance
      * @description
      * This will remove the instance from the connector and clear the connection.
      * @returns void
      */
     disconnect(): void;
+    readonly isConnected: boolean;
 }
 
 function getFuncOf<T extends any[], U>(name: string): ConnectorFuncOf<T, U> {
@@ -121,6 +131,9 @@ function getFuncOf<T extends any[], U>(name: string): ConnectorFuncOf<T, U> {
             connectedFunctionTask = promiseWithResolver<ConnectorFunc<T, U>>();
             onDisconnect?.();
             onDisconnect = undefined;
+        },
+        get isConnected() {
+            return connectedFunction !== undefined;
         }
     } satisfies ConnectorFuncOf<T, U>;
     return inst;
@@ -145,11 +158,20 @@ function getInstanceOf<T>(name: string): ConnectorInstanceOf<T> {
             }
             return await connectedInstance.promise;
         },
+        connectedSync: (): T => {
+            if (!instance) {
+                throw new Error(`Instance not connected: ${name}`);
+            }
+            return instance;
+        },
         disconnect: () => {
             instance = undefined;
             connectedInstance = promiseWithResolver<ConnectorInstance<T>>();
             onDisconnect?.();
             onDisconnect = undefined;
+        },
+        get isConnected() {
+            return instance !== undefined;
         }
     } satisfies ConnectorInstanceOf<T>;
     return inst;

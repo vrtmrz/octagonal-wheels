@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { Connector } from "./connector";
+import { Connector } from "./connector.ts";
 
 describe("Connector.funcOf", () => {
     it("should connect and invoke a function", async () => {
@@ -37,6 +37,11 @@ describe("Connector.funcOf", () => {
     it("should throw if invoked synchronously before connected", () => {
         const conn = Connector.funcOf<[number], number>("sync2");
         expect(() => conn.invokeSync(4)).toThrowError();
+        expect(conn.isConnected).toBe(false);
+        conn.connect((n) => n * 2);
+        const result = conn.invokeSync(4);
+        expect(result).toBe(8);
+        expect(conn.isConnected).toBe(true);
     });
     it("should able to disconnect and set a new function", async () => {
         const conn = Connector.funcOf<[number], number>("disconnect");
@@ -173,9 +178,7 @@ describe("Connector.instanceOf", () => {
     class SharedInstance2 {
         constructor(public value: number, public name?: string) { }
     }
-    class SharedInstance3 {
-        constructor(public value: number) { }
-    }
+
     it("should be able to connect exact class instance pointing (w/ name)", async () => {
         const obj = new SharedInstance(42, "sharedInstance");
         const conn = Connector.classInstanceOf(SharedInstance);
@@ -233,5 +236,32 @@ describe("Connector.instanceOf", () => {
         expect(connB).not.toBe(conn);
         expect(instance2).not.toBe(connectedObj);
         expect(instance2.value).toBe(100);
+    });
+
+    it("should throw error if not connected yet", async () => {
+        const conn = Connector.instanceOf<{ foo: string }>("notConnected");
+        expect(() => conn.connectedSync()).toThrowError();
+        expect(conn.isConnected).toBe(false);
+        const promise = conn.connected();
+        conn.connect({ foo: "bar" });
+        const instance = await promise;
+        expect(conn.isConnected).toBe(true);
+        expect(instance.foo).toBe("bar");
+        const instanceSync = conn.connectedSync();
+        expect(instanceSync.foo).toBe("bar");
+        expect(instanceSync).toBe(instance);
+
+        const conn2 = Connector.classInstanceOf<typeof SharedInstance2>("notConnected2");
+        expect(() => conn2.connectedSync()).toThrowError();
+        const promise2 = conn2.connected();
+        expect(conn2.isConnected).toBe(false);
+        conn2.connect(new SharedInstance2(100));
+        const instance2 = await promise2;
+        expect(conn2.isConnected).toBe(true);
+        expect(instance2.value).toBe(100);
+        const instance2Sync = conn2.connectedSync();
+        expect(instance2Sync.value).toBe(100);
+        expect(instance2Sync).toBe(instance2);
+
     });
 });
