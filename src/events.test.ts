@@ -7,11 +7,12 @@ declare global {
     interface TestEvents {
         "hello_test": string;
         "world_test": undefined;
+        "test_event": string;
     }
 }
 
-function createEventHub() {
-    const hub = new EventHub<TestEvents>();
+function createEventHub(emitter?: EventTarget) {
+    const hub = new EventHub<TestEvents>(emitter);
     return hub;
 }
 describe('EventHub-high-level', () => {
@@ -225,6 +226,20 @@ describe('EventHub-off', () => {
 
         expect(callback).toHaveBeenCalledTimes(1);
     });
+    it('should remove specific event listener with off by return-callback', () => {
+        const hub = createEventHub();
+        const callback1 = vi.fn();
+        const callback2 = vi.fn();
+
+        const off1 = hub.on('world_test', callback1);
+        hub.on('world_test', callback2);
+
+        off1();
+        hub.emitEvent('world_test');
+
+        expect(callback1).not.toHaveBeenCalled();
+        expect(callback2).toHaveBeenCalled();
+    });
 
 });
 describe("event-off-all", () => {
@@ -245,3 +260,40 @@ describe("event-off-all", () => {
         expect(callback2).not.toHaveBeenCalled();
     });
 })
+
+describe("multiple-hubs", () => {
+    it('should handle multiple hubs independently', () => {
+        const hub1 = createEventHub();
+        const hub2 = createEventHub();
+        const callback1 = vi.fn();
+        const callback2 = vi.fn();
+
+        hub1.onEvent('test_event', callback1);
+        hub2.onEvent('test_event', callback2);
+
+        hub1.emitEvent('test_event', 'data1');
+        hub2.emitEvent('test_event', 'data2');
+
+        expect(callback1).toHaveBeenCalledWith('data1');
+        expect(callback1).not.toHaveBeenCalledWith('data2');
+        expect(callback2).not.toHaveBeenCalledWith('data1');
+        expect(callback2).toHaveBeenCalledWith('data2');
+    });
+    it('should share events between hubs', () => {
+        const hub1 = createEventHub(window);
+        const hub2 = createEventHub(window);
+        const callback1 = vi.fn();
+        const callback2 = vi.fn();
+
+        hub1.onEvent('test_event', callback1);
+        hub2.onEvent('test_event', callback2);
+
+        hub1.emitEvent('test_event', 'data1');
+        hub2.emitEvent('test_event', 'data2');
+
+        expect(callback1).toHaveBeenCalledWith('data1');
+        expect(callback1).toHaveBeenCalledWith('data2');
+        expect(callback2).toHaveBeenCalledWith('data1');
+        expect(callback2).toHaveBeenCalledWith('data2');
+    });
+});
