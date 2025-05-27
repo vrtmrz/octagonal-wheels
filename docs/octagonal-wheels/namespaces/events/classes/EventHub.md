@@ -21,8 +21,18 @@ A class that provides an event hub for managing custom events.
 ### Constructor
 
 ```ts
-new EventHub<Events>(): EventHub<Events>;
+new EventHub<Events>(emitter?: EventTarget): EventHub<Events>;
 ```
+
+Defined in: [src/events.ts:37](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L37)
+
+Creates an instance of the EventHub.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `emitter?` | `EventTarget` | An optional EventTarget to use as the event emitter. If not provided, a dedicated new EventTarget will be created. i.e., it can share the same emitter with other EventHubs (e.g., for a global event bus, or separately built apps via window object). |
 
 #### Returns
 
@@ -32,9 +42,8 @@ new EventHub<Events>(): EventHub<Events>;
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="_allassigned"></a> `_allAssigned` | `Map`\<`string`, `Set`\<`FallbackWeakRef`\<`AbortController`\>\>\> | [src/events.ts:30](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L30) |
-| <a id="_assigned"></a> `_assigned` | `Map`\<`string`, `WeakMap`\<`CallableFunction`, `FallbackWeakRef`\<`AbortController`\>\>\> | [src/events.ts:29](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L29) |
-| <a id="_emitter"></a> `_emitter` | `EventTarget` | [src/events.ts:27](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L27) |
+| <a id="_allassigned"></a> `_allAssigned` | `Map`\<`string`, `Set`\<`FallbackWeakRef`\<`AbortController`\>\>\> | [src/events.ts:42](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L42) |
+| <a id="_assigned"></a> `_assigned` | `Map`\<`string`, `WeakMap`\<`CallableFunction`, `FallbackWeakRef`\<`AbortController`\>\>\> | [src/events.ts:41](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L41) |
 
 ## Methods
 
@@ -44,7 +53,7 @@ new EventHub<Events>(): EventHub<Events>;
 _issueSignal(key: string, callback: CallableFunction): AbortController;
 ```
 
-Defined in: [src/events.ts:32](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L32)
+Defined in: [src/events.ts:44](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L44)
 
 #### Parameters
 
@@ -67,7 +76,7 @@ Defined in: [src/events.ts:32](https://github.com/vrtmrz/octagonal-wheels/blob/m
 emitEvent<ET, K>(event: EventTypeWithoutData<ET, K>): void;
 ```
 
-Defined in: [src/events.ts:64](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L64)
+Defined in: [src/events.ts:76](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L76)
 
 Emits an event without data.
 
@@ -94,7 +103,7 @@ Emits an event without data.
 emitEvent<ET, K>(event: EventTypeWithData<ET, K>, data: ET[K]): void;
 ```
 
-Defined in: [src/events.ts:75](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L75)
+Defined in: [src/events.ts:87](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L87)
 
 Emits an event with data.
 
@@ -124,7 +133,7 @@ Emits an event with data.
 off<ET, K>(event: EventType<K>, callback?: CallableFunction): void;
 ```
 
-Defined in: [src/events.ts:133](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L133)
+Defined in: [src/events.ts:145](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L145)
 
 Removes an event listener for a specific event.
 
@@ -154,7 +163,7 @@ Removes an event listener for a specific event.
 offAll(): void;
 ```
 
-Defined in: [src/events.ts:153](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L153)
+Defined in: [src/events.ts:165](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L165)
 
 Removes all event listeners.
 
@@ -175,7 +184,7 @@ on<ET, K>(
    options?: AddEventListenerOptions): () => void;
 ```
 
-Defined in: [src/events.ts:95](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L95)
+Defined in: [src/events.ts:107](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L107)
 
 Registers an event listener for a specific event.
 
@@ -215,7 +224,7 @@ on<ET, K>(
    options?: AddEventListenerOptions): () => void;
 ```
 
-Defined in: [src/events.ts:109](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L109)
+Defined in: [src/events.ts:121](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L121)
 
 Registers an event listener for a specific event.
 
@@ -256,7 +265,7 @@ A function to remove the event listener.
 once<ET, K>(event: EventTypeWithoutData<ET, K>, callback: (e: Event) => void): () => void;
 ```
 
-Defined in: [src/events.ts:207](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L207)
+Defined in: [src/events.ts:219](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L219)
 
 Registers a one-time event listener for a specific event.
 
@@ -290,7 +299,7 @@ Registers a one-time event listener for a specific event.
 once<ET, K>(event: EventTypeWithData<ET, K>, callback: (e: Event, data: ET[K]) => void): () => void;
 ```
 
-Defined in: [src/events.ts:219](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L219)
+Defined in: [src/events.ts:231](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L231)
 
 Registers a one-time event listener for a specific event.
 
@@ -328,7 +337,7 @@ Registers a one-time event listener for a specific event.
 onceEvent<ET, K>(event: EventTypeWithoutData<ET, K>, callback: () => void): () => void;
 ```
 
-Defined in: [src/events.ts:238](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L238)
+Defined in: [src/events.ts:250](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L250)
 
 Registers a one-time event listener for a specific event, with a callback that only receives the event data.
 
@@ -362,7 +371,7 @@ Registers a one-time event listener for a specific event, with a callback that o
 onceEvent<ET, K>(event: EventTypeWithData<ET, K>, callback: (data: ET[K]) => void): () => void;
 ```
 
-Defined in: [src/events.ts:250](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L250)
+Defined in: [src/events.ts:262](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L262)
 
 Registers a one-time event listener for a specific event, with a callback that only receives the event data.
 
@@ -403,7 +412,7 @@ onEvent<ET, K>(
    options?: AddEventListenerOptions): () => void;
 ```
 
-Defined in: [src/events.ts:168](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L168)
+Defined in: [src/events.ts:180](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L180)
 
 Registers an event listener for a specific event, with a callback that only receives the event data.
 
@@ -443,7 +452,7 @@ onEvent<ET, K>(
    options?: AddEventListenerOptions): () => void;
 ```
 
-Defined in: [src/events.ts:182](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L182)
+Defined in: [src/events.ts:194](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L194)
 
 Registers an event listener for a specific event, with a callback that only receives the event data.
 
@@ -484,7 +493,7 @@ A function to remove the event listener.
 waitFor<ET, K>(event: EventTypeWithoutData<ET, K>): Promise<null>;
 ```
 
-Defined in: [src/events.ts:269](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L269)
+Defined in: [src/events.ts:281](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L281)
 
 Waits for a specific event to be emitted.
 
@@ -513,7 +522,7 @@ A Promise that resolves with null.
 waitFor<ET, K>(event: EventTypeWithData<ET, K>): Promise<ET[K]>;
 ```
 
-Defined in: [src/events.ts:280](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L280)
+Defined in: [src/events.ts:292](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/events.ts#L292)
 
 Waits for a specific event to be emitted and returns a promise that resolves with the event data.
 
