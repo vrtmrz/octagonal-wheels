@@ -57,6 +57,33 @@ describe("Connector.funcOf", () => {
         const result2 = await conn.invoke(4);
         expect(result2).toBe(12);
     });
+    it("should call teardown callback when disconnected", async () => {
+        const conn = Connector.funcOf<[number], number>("teardown");
+        let tornDown = false;
+        conn.connect((n) => n * 2, () => {
+            tornDown = true;
+        });
+        conn.disconnect();
+        expect(tornDown).toBe(true);
+    });
+    it("should be able to connect exact function pointing", async () => {
+        const func = (n: number) => n * 2;
+        const conn = Connector.funcOf(func);
+        conn.connect(func);
+        const result = await conn.invoke(4);
+        expect(result).toBe(8);
+    });
+    it("should share the same function instance", async () => {
+        const func = (n: number) => n * 2;
+        const conn = Connector.funcOf(func);
+        conn.connect(func);
+        const result = await conn.invoke(4);
+        expect(result).toBe(8);
+        const conn2 = Connector.funcOf(func);
+        expect(conn2).toBe(conn);
+        const result2 = await conn2.invoke(4);
+        expect(result2).toBe(8);
+    });
 });
 
 describe("Connector.instanceOf", () => {
@@ -109,6 +136,102 @@ describe("Connector.instanceOf", () => {
         const newObj = { value: 100 };
         conn.connect(newObj);
         const instance2 = await conn.connected();
+        expect(instance2.value).toBe(100);
+    });
+    it("should call teardown callback when disconnected", async () => {
+        const obj = { value: 42 };
+        let tornDown = false;
+        const conn = Connector.instanceOf<typeof obj>("teardown");
+        conn.connect(obj, () => {
+            tornDown = true;
+        });
+        conn.disconnect();
+        expect(tornDown).toBe(true);
+    });
+    it("should be able to connect exact instance pointing (w/o name)", async () => {
+        const obj = { value: 42 };
+        const conn = Connector.instanceOf(obj);
+        conn.connect(obj);
+        const instance = await conn.connected();
+        expect(instance.value).toBe(42);
+        const conn2 = Connector.instanceOf(obj);
+        expect(conn2).toBe(conn);
+        const instance2 = await conn2.connected();
+        expect(instance2).toBe(instance);
+        expect(instance2.value).toBe(42);
+        const objB = { value: 100 };
+        const connB = Connector.instanceOf(objB);
+        connB.connect(objB);
+        expect(connB).not.toBe(conn);
+        const instanceB = await connB.connected();
+        expect(instanceB.value).toBe(100);
+
+    });
+    class SharedInstance {
+        constructor(public value: number, public name?: string) { }
+    }
+    class SharedInstance2 {
+        constructor(public value: number, public name?: string) { }
+    }
+    class SharedInstance3 {
+        constructor(public value: number) { }
+    }
+    it("should be able to connect exact class instance pointing (w/ name)", async () => {
+        const obj = new SharedInstance(42, "sharedInstance");
+        const conn = Connector.classInstanceOf(SharedInstance);
+        conn.connect(obj);
+        const connectedObj = await conn.connected();
+        expect(connectedObj.value).toBe(42);
+        expect(connectedObj.name).toBe("sharedInstance");
+        const conn2 = Connector.classInstanceOf<typeof SharedInstance>("SharedInstance");
+        const connectedObj2 = await conn2.connected();
+        expect(conn2).toBe(conn);
+        expect(connectedObj2).toBe(connectedObj);
+        expect(connectedObj2.value).toBe(42);
+        const obj2 = new SharedInstance2(100, "sharedInstance");
+        // They have the same name, but should be handled as different instances, because they are different classes !
+        const connB = Connector.classInstanceOf(SharedInstance2);
+        connB.connect(obj2);
+        const instance2 = await connB.connected();
+        expect(connB).not.toBe(conn);
+        expect(instance2).not.toBe(connectedObj);
+        expect(instance2.value).toBe(100);
+        expect(instance2.name).toBe("sharedInstance");
+        expect(instance2 instanceof SharedInstance2).toBe(true);
+        expect(instance2 instanceof SharedInstance).toBe(false);
+        const connB2 = Connector.classInstanceOf<typeof SharedInstance2>("SharedInstance2");
+        expect(connB2).toBe(connB);
+        const instance2B = await connB2.connected();
+        expect(instance2B).toBe(instance2);
+        expect(instance2B.value).toBe(100);
+        expect(instance2B.name).toBe("sharedInstance");
+        expect(instance2B instanceof SharedInstance2).toBe(true);
+        expect(instance2B instanceof SharedInstance).toBe(false);
+        expect(connB2).not.toBe(conn);
+    });
+    it("should throws if connected with non-class instance", () => {
+        const obj = { value: 42 };
+        expect(() => Connector.classInstanceOf(obj as any)).toThrow();
+    });
+    it("should share the same instance pointing (w/ name)", async () => {
+        const obj = { value: 42, name: "sharedInstance" };
+        const obj2 = { value: 100, name: "sharedInstance2" };
+        const conn = Connector.instanceOf(obj);
+        conn.connect(obj);
+        const connectedObj = await conn.connected();
+        const conn2 = Connector.instanceOf(obj);
+        expect(conn2).toBe(conn);
+        expect(connectedObj).toBe(obj);
+        expect(connectedObj.value).toBe(42);
+        const conn3 = Connector.instanceOf("sharedInstance");
+        expect(conn3).toBe(conn);
+        await conn2.connected(); // Ensure it resolves
+        await conn3.connected(); // Ensure it resolves
+        const connB = Connector.instanceOf(obj2);
+        connB.connect(obj2);
+        const instance2 = await connB.connected();
+        expect(connB).not.toBe(conn);
+        expect(instance2).not.toBe(connectedObj);
         expect(instance2.value).toBe(100);
     });
 });
