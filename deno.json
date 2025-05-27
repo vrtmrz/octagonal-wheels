@@ -149,6 +149,13 @@
         "./memory/LRUCache": "./src/memory/LRUCache.ts",
         "./memory/LRUCache.ts": "./src/memory/LRUCache.ts"
     },
+    "compilerOptions": {
+        "lib": [
+            "dom",
+            "deno.window",
+            "es2020"
+        ]
+    },
     "lint": {
         "exclude": [
             "dist/**",

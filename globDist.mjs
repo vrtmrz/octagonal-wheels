@@ -35,7 +35,7 @@ const map = files.flatMap((file) => {
     ];
 });
 const exportObject = {
-    ".": `${distDirName}/index.js`,
+    ".": `./${distDirName}/index.js`,
     "./package.json": `./package.json`,
     ...Object.fromEntries(map),
 };

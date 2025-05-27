@@ -16,7 +16,7 @@
         "coverage": "vitest run --coverage"
     },
     "exports": {
-        ".": "dist/index.js",
+        ".": "./dist/index.js",
         "./package.json": "./package.json",
         "./string": "./dist/string.js",
         "./string.js": "./dist/string.js",
