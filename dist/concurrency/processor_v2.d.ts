@@ -1,9 +1,9 @@
-import type { ReactiveSource } from "../dataobject/reactive";
-import { type PromiseWithResolvers, type TIMED_OUT_SIGNAL } from "../promises";
-import { EventHub } from "../events";
-import { PaceMaker } from "../bureau/PaceMaker";
-import { Clerk, ClerkGroup } from "../bureau/Clerk";
-import { Inbox } from "../bureau/Inbox";
+import type { ReactiveSource } from "../dataobject/reactive.ts";
+import { type PromiseWithResolvers, type TIMED_OUT_SIGNAL } from "../promises.ts";
+import { EventHub } from "../events.ts";
+import { PaceMaker } from "../bureau/PaceMaker.ts";
+import { Clerk, ClerkGroup } from "../bureau/Clerk.ts";
+import { Inbox } from "../bureau/Inbox.ts";
 /**
  * @deprecated Use EventHub and waitFor instead.
  */

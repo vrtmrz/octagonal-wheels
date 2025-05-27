@@ -10,6 +10,7 @@ function makeUniqueString() {
  * Semaphore handling lib.
  * @param limit Maximum number that can be acquired.
  * @returns Instance of SemaphoreObject
+ * @deprecated Use `semaphore_v2` instead.
  */
 function Semaphore(limit, onRelease) {
     let _limit = limit;

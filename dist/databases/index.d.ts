@@ -1,3 +1,3 @@
-export * as keyvaluedatabase from "./KeyValueDB";
-export * as simplestorebase from "./SimpleStoreBase";
-export * as simplestoreidb from "./SimpleStoreIDB";
+export * as keyvaluedatabase from "./KeyValueDB.ts";
+export * as simplestorebase from "./SimpleStoreBase.ts";
+export * as simplestoreidb from "./SimpleStoreIDB.ts";

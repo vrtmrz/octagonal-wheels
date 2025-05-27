@@ -23,6 +23,6 @@ export declare function decodeBinary(src: string | string[]): ArrayBuffer;
  * @returns A promise that resolves to a string array representing the encoded binary data.
  */
 export declare function encodeBinary(src: Uint8Array | ArrayBuffer): Promise<string[]>;
-export * from "./base64";
-export * from "./encodedUTF16";
-export * from "./hex";
+export * from "./base64.ts";
+export * from "./encodedUTF16.ts";
+export * from "./hex.ts";

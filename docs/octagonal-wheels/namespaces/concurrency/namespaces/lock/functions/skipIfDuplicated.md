@@ -10,7 +10,7 @@
 function skipIfDuplicated<T>(key: string | symbol, proc: Task<T>): Promise<null | T>;
 ```
 
-Defined in: [src/concurrency/lock\_v2.ts:102](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/lock_v2.ts#L102)
+Defined in: [src/concurrency/lock\_v2.ts:144](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/lock_v2.ts#L144)
 
 Skips the execution of a task if it is already duplicated.
 

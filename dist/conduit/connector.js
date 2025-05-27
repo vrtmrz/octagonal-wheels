@@ -31,6 +31,9 @@ function getFuncOf(name) {
             connectedFunctionTask = promiseWithResolver();
             onDisconnect?.();
             onDisconnect = undefined;
+        },
+        get isConnected() {
+            return connectedFunction !== undefined;
         }
     };
     return inst;
@@ -54,11 +57,20 @@ function getInstanceOf(name) {
             }
             return await connectedInstance.promise;
         },
+        connectedSync: () => {
+            if (!instance) {
+                throw new Error(`Instance not connected: ${name}`);
+            }
+            return instance;
+        },
         disconnect: () => {
             instance = undefined;
             connectedInstance = promiseWithResolver();
             onDisconnect?.();
             onDisconnect = undefined;
+        },
+        get isConnected() {
+            return instance !== undefined;
         }
     };
     return inst;
@@ -106,7 +118,7 @@ function _instanceOf(name) {
     if (connectedInstancesOf.has(name)) {
         return connectedInstancesOf.get(name);
     }
-    const instance = getInstanceOf();
+    const instance = getInstanceOf(name);
     connectedInstancesOf.set(name, instance);
     return instance;
 }

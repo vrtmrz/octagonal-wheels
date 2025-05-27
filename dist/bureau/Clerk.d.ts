@@ -1,4 +1,4 @@
-import { type Inbox, type InboxStateDetail } from "./Inbox";
+import { type Inbox, type InboxStateDetail } from "./Inbox.ts";
 export declare enum ClerkState {
     IDLE = "idle",
     DISPOSED = "disposed",
@@ -45,7 +45,7 @@ export declare abstract class ClerkBase<T> {
     _totalFailed: number;
     _totalFetched: number;
     _disposed: boolean;
-    _disposePromise: import("../promises").PromiseWithResolvers<void>;
+    _disposePromise: import("../promises.ts").PromiseWithResolvers<void>;
     get state(): ClerkState;
     constructor(params: ClerkOptionBase<T>);
     get stateDetail(): ClerkStateDetail;

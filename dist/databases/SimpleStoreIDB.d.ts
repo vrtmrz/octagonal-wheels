@@ -1,5 +1,5 @@
 import { type IDBPDatabase } from "idb";
-import { SimpleStoreBase } from "./SimpleStoreBase";
+import { SimpleStoreBase } from "./SimpleStoreBase.ts";
 /**
  * Represents a simple store using IndexedDB.
  * @template T - The type of the values stored in the store.

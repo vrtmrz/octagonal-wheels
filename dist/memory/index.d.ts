@@ -1,2 +1,2 @@
-export * as lrucache from "./LRUCache";
-export * as memutil from "./memutil";
+export * as lrucache from "./LRUCache.ts";
+export * as memutil from "./memutil.ts";

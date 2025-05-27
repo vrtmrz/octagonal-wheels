@@ -1,5 +1,9 @@
-import type { ReactiveSource } from "../dataobject/reactive";
-import { type PromiseWithResolvers } from "../promises";
+import type { ReactiveSource } from "../dataobject/reactive.ts";
+import { type PromiseWithResolvers } from "../promises.ts";
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 export declare class Notifier {
     _p: PromiseWithResolvers<void>;
     isUsed: boolean;
@@ -49,6 +53,10 @@ type ProcessorParams<T> = {
 };
 type ProcessorResult<T> = Promise<T[]> | T[] | undefined | void | Promise<void> | Promise<undefined>;
 type Processor<T, U> = (entity: T[]) => ProcessorResult<U>;
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 export declare class QueueProcessor<T, U> {
     _queue: T[];
     _processor: Processor<T, U>;
@@ -143,5 +151,9 @@ export declare class QueueProcessor<T, U> {
     terminateAll(): void;
     terminate(): void;
 }
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 export declare function stopAllRunningProcessors(): void;
 export {};

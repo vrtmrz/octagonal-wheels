@@ -1,1 +1,1 @@
-export * from "./semaphore_v2";
+export * from "./semaphore_v2.ts";

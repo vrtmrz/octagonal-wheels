@@ -1,4 +1,4 @@
-import { type PromiseWithResolvers } from "../promises";
+import { type PromiseWithResolvers } from "../promises.ts";
 /**
  * RefinerOptions interface defines the options for the Refiner class.
  */

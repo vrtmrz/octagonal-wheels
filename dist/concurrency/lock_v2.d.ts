@@ -6,6 +6,8 @@ type Task<T> = () => Promise<T> | T;
  * @returns result of the process
  */
 export declare function serialized<T>(key: string | symbol, proc: Task<T>): Promise<T>;
+export declare const SYMBOL_SKIPPED: unique symbol;
+export declare function onlyLatest<T>(key: string | symbol, proc: Task<T>): Promise<T | typeof SYMBOL_SKIPPED>;
 /**
  * If free, run task and return the result (Same as serialized).
  * If any process has running, share the result.

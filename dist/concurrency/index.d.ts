@@ -1,4 +1,4 @@
-export * as lock from "./lock";
-export * as processor from "./processor";
-export * as semaphore from "./semaphore";
-export * as task from "./task";
+export * as lock from "./lock.ts";
+export * as processor from "./processor.ts";
+export * as semaphore from "./semaphore.ts";
+export * as task from "./task.ts";

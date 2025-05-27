@@ -10,7 +10,7 @@
 function isLockAcquired(key: string | symbol): boolean;
 ```
 
-Defined in: [src/concurrency/lock\_v2.ts:151](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/lock_v2.ts#L151)
+Defined in: [src/concurrency/lock\_v2.ts:193](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/lock_v2.ts#L193)
 
 Checks if a serialised-processing-lock is acquired for the given key.
 

@@ -1,4 +1,4 @@
-import { promiseWithResolver } from "../promises";
+import { promiseWithResolver } from "../promises.ts";
 declare const GENERATOR_CLOSED: unique symbol;
 export declare function generativeBuffer<T>(): {
     enqueue(item: T): void;

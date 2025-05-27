@@ -1,1 +1,1 @@
-export * from "../bureau/SlipBoard";
+export * from "../bureau/SlipBoard.ts";

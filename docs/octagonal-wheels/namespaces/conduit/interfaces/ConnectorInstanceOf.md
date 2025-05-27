@@ -6,7 +6,7 @@
 
 # Interface: ConnectorInstanceOf\<T\>
 
-Defined in: [src/conduit/connector.ts:69](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L69)
+Defined in: [src/conduit/connector.ts:71](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L71)
 
 ConnectorInstanceOf
 
@@ -21,6 +21,12 @@ It is used to connect an instance to a name, and then retrieve that instance lat
 | ------ | ------ |
 | `T` | the type of the instance |
 
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="isconnected"></a> `isConnected` | `readonly` | `boolean` | [src/conduit/connector.ts:99](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L99) |
+
 ## Methods
 
 ### connect()
@@ -29,7 +35,7 @@ It is used to connect an instance to a name, and then retrieve that instance lat
 connect(obj: T, teardown?: () => void): void;
 ```
 
-Defined in: [src/conduit/connector.ts:76](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L76)
+Defined in: [src/conduit/connector.ts:78](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L78)
 
 Connect an instance to the connector
 
@@ -54,7 +60,7 @@ Connect an instance to the connector
 connected(): Promise<T>;
 ```
 
-Defined in: [src/conduit/connector.ts:82](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L82)
+Defined in: [src/conduit/connector.ts:84](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L84)
 
 Get the connected instance
 
@@ -68,13 +74,37 @@ a promise that resolves to the connected instance
 
 ***
 
+### connectedSync()
+
+```ts
+connectedSync(): T;
+```
+
+Defined in: [src/conduit/connector.ts:91](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L91)
+
+Get the connected instance synchronously
+
+#### Returns
+
+`T`
+
+the connected instance
+
+#### Description
+
+#### Throws
+
+Error if no instance is connected yet
+
+***
+
 ### disconnect()
 
 ```ts
 disconnect(): void;
 ```
 
-Defined in: [src/conduit/connector.ts:89](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L89)
+Defined in: [src/conduit/connector.ts:98](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L98)
 
 Disconnect the connected instance
 

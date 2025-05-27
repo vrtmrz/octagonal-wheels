@@ -22,6 +22,12 @@ It is used to connect a function to a name, and then invoke that function later.
 | `T` *extends* `any`[] | the type of the arguments |
 | `U` | the type of the return value |
 
+## Properties
+
+| Property | Modifier | Type | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="isconnected"></a> `isConnected` | `readonly` | `boolean` | [src/conduit/connector.ts:61](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L61) |
+
 ## Methods
 
 ### connect()

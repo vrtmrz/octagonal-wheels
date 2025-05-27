@@ -1,4 +1,4 @@
-import type { SimpleStore } from "../databases/SimpleStoreBase";
+import type { SimpleStore } from "../databases/SimpleStoreBase.ts";
 export declare const PREFIX_TRENCH = "trench";
 export declare const PREFIX_EPHEMERAL = "ephemeral";
 export declare const PREFIX_PERMANENT = "permanent";

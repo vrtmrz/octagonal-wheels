@@ -1,4 +1,4 @@
-import { type PromiseWithResolvers } from "../promises";
+import { type PromiseWithResolvers } from "../promises.ts";
 export declare const NOT_AVAILABLE: unique symbol;
 export type NOT_AVAILABLE = typeof NOT_AVAILABLE;
 export declare const READY_PICK_SIGNAL: unique symbol;

@@ -10,7 +10,7 @@
 function shareRunningResult<T>(key: string | symbol, proc: Task<T>): Promise<T>;
 ```
 
-Defined in: [src/concurrency/lock\_v2.ts:74](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/lock_v2.ts#L74)
+Defined in: [src/concurrency/lock\_v2.ts:116](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/lock_v2.ts#L116)
 
 If free, run task and return the result (Same as serialized).
 If any process has running, share the result.

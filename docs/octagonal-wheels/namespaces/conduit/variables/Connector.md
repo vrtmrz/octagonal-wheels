@@ -22,7 +22,7 @@ const Connector: {
 };
 ```
 
-Defined in: [src/conduit/connector.ts:284](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L284)
+Defined in: [src/conduit/connector.ts:306](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L306)
 
 Connector
 

@@ -1,6 +1,14 @@
 import { promiseWithResolver, fireAndForget, yieldNextMicrotask } from '../promises.js';
 
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
+ */
 const queueTails = new Map();
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
+ */
 async function performTask(queue) {
     if (queue.isRunning) {
         // The same queue has been started
@@ -60,6 +68,8 @@ function _enqueue(key, task, { swapIfExist, shareResult } = {}) {
  * @param key key of the group
  * @param proc process to run
  * @returns result of the process
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 function serialized(key, proc) {
     return _enqueue(key, proc);
@@ -69,6 +79,8 @@ function serialized(key, proc) {
  * If any process has running, share the result.
  * @param key key of the group
  * @param proc process to run
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 function shareRunningResult(key, proc) {
     const current = queueTails.get(key);
@@ -98,6 +110,8 @@ function shareRunningResult(key, proc) {
  * @param key - The key to identify the task.
  * @param proc - The task to be executed.
  * @returns A promise that resolves to the result of the task, or `null` if the task is duplicated.
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 function skipIfDuplicated(key, proc) {
     if (queueTails.get(key) !== undefined)
@@ -112,6 +126,8 @@ const waitingProcess = new Map();
  * @param key - The key used to identify the process.
  * @param proc - The process to be executed.
  * @returns A Promise that resolves once the process has been scheduled.
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 async function scheduleOnceIfDuplicated(key, proc) {
     if (isLockAcquired(key)) {
@@ -129,6 +145,8 @@ async function scheduleOnceIfDuplicated(key, proc) {
  * Checks if a lock is acquired for the given key.
  * @param key - The key to check for lock acquisition.
  * @returns `true` if the lock is acquired, `false` otherwise.
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use lock_v2.ts instead.
  */
 function isLockAcquired(key) {
     return queueTails.get(key) !== undefined;

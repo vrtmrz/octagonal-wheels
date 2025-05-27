@@ -1,3 +1,3 @@
-export * as xxhash from "./xxhash";
-export * as purejs from "./purejs";
-export * as crc32 from "./crc32";
+export * as xxhash from "./xxhash.ts";
+export * as purejs from "./purejs.ts";
+export * as crc32 from "./crc32.ts";

@@ -10,7 +10,7 @@
 function scheduleOnceIfDuplicated<T>(key: string, proc: () => Promise<T>): Promise<undefined | null | T>;
 ```
 
-Defined in: [src/concurrency/lock\_v2.ts:130](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/lock_v2.ts#L130)
+Defined in: [src/concurrency/lock\_v2.ts:172](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/lock_v2.ts#L172)
 
 Schedules a process to be executed once if it is not already running.
 If the process is already running, it will be added to the waiting queue. An existing waiting process will be replaced.

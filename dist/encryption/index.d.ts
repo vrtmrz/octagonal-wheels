@@ -1,2 +1,2 @@
-export * from './encryption';
-export * from "./encryptionv3";
+export * from "./encryption.ts";
+export * from "./encryptionv3.ts";

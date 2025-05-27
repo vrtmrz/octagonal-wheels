@@ -58,6 +58,49 @@ function serialized(key, proc) {
     }
     return p.promise;
 }
+const latestProcessMap = new Map();
+const SYMBOL_SKIPPED = Symbol("SKIPPED");
+function onlyLatest(key, proc) {
+    const p = promiseWithResolver();
+    latestProcessMap.set(key, p.promise);
+    fireAndForget(async () => {
+        try {
+            await serialized(key, async () => {
+                try {
+                    const latestProcess = latestProcessMap.get(key);
+                    // If the latest process is not this one (meaning another process is waiting or running), this process is skipped.
+                    if (latestProcess && latestProcess !== p.promise) {
+                        p.resolve(SYMBOL_SKIPPED);
+                        return;
+                    }
+                    // Otherwise, run the process
+                    try {
+                        const r = await proc();
+                        p.resolve(r);
+                    }
+                    catch (ex) {
+                        p.reject(ex);
+                    }
+                    return;
+                }
+                finally {
+                    // After the process is done, delete the mark if it is still the latest one.
+                    if (latestProcessMap.get(key) === p.promise) {
+                        latestProcessMap.delete(key);
+                    }
+                }
+            });
+        }
+        catch (ex) {
+            // Ensure that the promise is removed from the map after completion.
+            if (latestProcessMap.get(key) === p.promise) {
+                latestProcessMap.delete(key);
+            }
+            p.reject(ex);
+        }
+    });
+    return p.promise;
+}
 /**
  * If free, run task and return the result (Same as serialized).
  * If any process has running, share the result.
@@ -145,5 +188,5 @@ function isLockAcquired(key) {
     return count > 0;
 }
 
-export { isLockAcquired, scheduleOnceIfDuplicated, serialized, shareRunningResult, skipIfDuplicated };
+export { SYMBOL_SKIPPED, isLockAcquired, onlyLatest, scheduleOnceIfDuplicated, serialized, shareRunningResult, skipIfDuplicated };
 //# sourceMappingURL=lock_v2.js.map

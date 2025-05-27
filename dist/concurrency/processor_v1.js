@@ -2,6 +2,10 @@ import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { RESULT_TIMED_OUT } from '../common/const.js';
 import { promiseWithResolver, noop, delay, yieldNextMicrotask, fireAndForget } from '../promises.js';
 
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 class Notifier {
     constructor() {
         Object.defineProperty(this, "_p", {
@@ -33,6 +37,10 @@ class Notifier {
 }
 let processNo = 0;
 const allRunningProcessors = new Set([]);
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 class QueueProcessor {
     get nowProcessing() {
         return this.processingEntities;
@@ -589,6 +597,10 @@ class QueueProcessor {
         allRunningProcessors.delete(this);
     }
 }
+/**
+ * @deprecated This module is deprecated and will be removed in the future.
+ * use processor_v2.ts instead.
+ */
 function stopAllRunningProcessors() {
     const processors = [...allRunningProcessors];
     for (const processor of processors) {

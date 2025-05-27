@@ -54,6 +54,7 @@ export interface ConnectorFuncOf<T extends any[], U> {
      * @returns void
      */
     disconnect(): void;
+    readonly isConnected: boolean;
 }
 /**
  * ConnectorInstanceOf
@@ -78,12 +79,20 @@ export interface ConnectorInstanceOf<T> {
      */
     connected(): Promise<T>;
     /**
+     * Get the connected instance synchronously
+     * @description
+     * @returns the connected instance
+     * @throws Error if no instance is connected yet
+     */
+    connectedSync(): T;
+    /**
      * Disconnect the connected instance
      * @description
      * This will remove the instance from the connector and clear the connection.
      * @returns void
      */
     disconnect(): void;
+    readonly isConnected: boolean;
 }
 /**
 * Get a function connector
