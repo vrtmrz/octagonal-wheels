@@ -27,10 +27,10 @@ It is used to connect a function to a name, and then invoke that function later.
 ### connect()
 
 ```ts
-connect(func: ConnectorFunc<T, U>): void;
+connect(func: ConnectorFunc<T, U>, teardown?: () => void): void;
 ```
 
-Defined in: [src/conduit/connector.ts:37](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L37)
+Defined in: [src/conduit/connector.ts:38](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L38)
 
 Connect a function to the connector
 
@@ -39,6 +39,7 @@ Connect a function to the connector
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `func` | [`ConnectorFunc`](../type-aliases/ConnectorFunc.md)\<`T`, `U`\> | The function to connect |
+| `teardown?` | () => `void` | Optional callback to be called when the function is disconnected |
 
 #### Returns
 
@@ -54,7 +55,7 @@ Connect a function to the connector
 disconnect(): void;
 ```
 
-Defined in: [src/conduit/connector.ts:58](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L58)
+Defined in: [src/conduit/connector.ts:59](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L59)
 
 Disconnect the connected function
 
@@ -76,7 +77,7 @@ This will remove the function from the connector and clear the connection.
 invoke(...args: T): Promise<Awaited<U>>;
 ```
 
-Defined in: [src/conduit/connector.ts:44](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L44)
+Defined in: [src/conduit/connector.ts:45](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L45)
 
 Invoke the connected function
 
@@ -104,7 +105,7 @@ If no function is connected yet, this will wait for the function to be connected
 invokeSync(...args: T): U;
 ```
 
-Defined in: [src/conduit/connector.ts:51](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L51)
+Defined in: [src/conduit/connector.ts:52](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L52)
 
 Invoke the connected function synchronously
 

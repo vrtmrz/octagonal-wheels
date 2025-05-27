@@ -19,7 +19,17 @@ type EventType<K> = K extends string ? K : never;
  * @template Events - The type of events that the EventHub will handle. This type should be an object with event names as keys and event data types as values. This make all events strongly typed.
  */
 export declare class EventHub<Events extends AnyHubEvents = LSEvents> {
+    /**
+     * The event emitter used to dispatch and listen for events.
+     *
+     * @private
+     */
     _emitter: EventTarget;
+    /**
+     * Creates an instance of the EventHub.
+     * @param emitter - An optional EventTarget to use as the event emitter. If not provided, a dedicated new EventTarget will be created. i.e., it can share the same emitter with other EventHubs (e.g., for a global event bus, or separately built apps via window object).
+    */
+    constructor(emitter?: EventTarget);
     _assigned: Map<string, WeakMap<CallableFunction, FallbackWeakRef<AbortController>>>;
     _allAssigned: Map<string, Set<FallbackWeakRef<AbortController>>>;
     _issueSignal(key: string, callback: CallableFunction): AbortController;

@@ -6,12 +6,21 @@ import { FallbackWeakRef } from './common/polyfill.js';
  * @template Events - The type of events that the EventHub will handle. This type should be an object with event names as keys and event data types as values. This make all events strongly typed.
  */
 class EventHub {
-    constructor() {
+    /**
+     * Creates an instance of the EventHub.
+     * @param emitter - An optional EventTarget to use as the event emitter. If not provided, a dedicated new EventTarget will be created. i.e., it can share the same emitter with other EventHubs (e.g., for a global event bus, or separately built apps via window object).
+    */
+    constructor(emitter) {
+        /**
+         * The event emitter used to dispatch and listen for events.
+         *
+         * @private
+         */
         Object.defineProperty(this, "_emitter", {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: new EventTarget()
+            value: void 0
         });
         Object.defineProperty(this, "_assigned", {
             enumerable: true,
@@ -25,6 +34,7 @@ class EventHub {
             writable: true,
             value: new Map()
         });
+        this._emitter = emitter ?? new EventTarget();
     }
     _issueSignal(key, callback) {
         let assigned = this._assigned.get(key);

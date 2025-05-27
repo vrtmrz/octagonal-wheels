@@ -3,13 +3,15 @@ import { promiseWithResolver } from '../promises.js';
 function getFuncOf(name) {
     let connectedFunction;
     let connectedFunctionTask = promiseWithResolver();
+    let onDisconnect;
     const inst = {
-        connect: (func) => {
+        connect: (func, onDisconnectCallback) => {
             if (connectedFunction) {
                 inst.disconnect();
             }
             connectedFunctionTask.resolve(func);
             connectedFunction = func;
+            onDisconnect = onDisconnectCallback;
         },
         invoke: async (...args) => {
             if (connectedFunction) {
@@ -27,6 +29,8 @@ function getFuncOf(name) {
         disconnect: () => {
             connectedFunction = undefined;
             connectedFunctionTask = promiseWithResolver();
+            onDisconnect?.();
+            onDisconnect = undefined;
         }
     };
     return inst;
@@ -34,13 +38,15 @@ function getFuncOf(name) {
 function getInstanceOf(name) {
     let connectedInstance = promiseWithResolver();
     let instance = undefined;
+    let onDisconnect;
     const inst = {
-        connect: (obj) => {
+        connect: (obj, onDisconnectCallback) => {
             if (instance) {
                 inst.disconnect();
             }
             connectedInstance.resolve(obj);
             instance = obj;
+            onDisconnect = onDisconnectCallback;
         },
         connected: async () => {
             if (instance) {
@@ -51,12 +57,95 @@ function getInstanceOf(name) {
         disconnect: () => {
             instance = undefined;
             connectedInstance = promiseWithResolver();
+            onDisconnect?.();
+            onDisconnect = undefined;
         }
     };
     return inst;
 }
 const connectedFunctionsOf = new Map();
 const connectedInstancesOf = new Map();
+const weakFuncMap = new WeakMap();
+const weakInstanceMap = new WeakMap();
+/**
+* Get a function connector
+* @description
+* This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
+* @param func A function to connect
+* @returns <ConnectorFuncOf<T, U>>
+*/
+function funcOf(param) {
+    let name;
+    if (typeof param === "function") {
+        if (weakFuncMap.has(param)) {
+            name = `func-${weakFuncMap.get(param)}`;
+        }
+        else {
+            const id = Date.now().toString(36) + Math.random().toString(36).substring(2, 15);
+            weakFuncMap.set(param, id);
+            name = `func-${id}`;
+        }
+    }
+    else {
+        name = param;
+    }
+    if (connectedFunctionsOf.has(name)) {
+        return connectedFunctionsOf.get(name);
+    }
+    const func = getFuncOf(name);
+    connectedFunctionsOf.set(name, func);
+    return func;
+}
+/**
+ * Get a connector to instance by the name (internal function)
+ * @param name The name of the instance (decided by each type of instance)
+ * @description This function retrieves the connector instance associated with the given name.
+ * @returns The connector instance associated with the name.
+     */
+function _instanceOf(name) {
+    if (connectedInstancesOf.has(name)) {
+        return connectedInstancesOf.get(name);
+    }
+    const instance = getInstanceOf();
+    connectedInstancesOf.set(name, instance);
+    return instance;
+}
+function classInstanceOf(classType) {
+    if (typeof classType === "string") {
+        return _instanceOf(classType);
+    }
+    let name;
+    if (classType && typeof classType === "function" && classType.name) {
+        name = classType.name;
+    }
+    else {
+        throw new Error("Seems not a class type, please provide a class type or a name");
+    }
+    return _instanceOf(name);
+}
+function objectInstanceOf(instanceObject) {
+    let name;
+    if ("name" in instanceObject && typeof instanceObject.name === "string") {
+        name = instanceObject.name;
+    }
+    if (!name) {
+        if (weakInstanceMap.has(instanceObject)) {
+            name = `instance-${weakInstanceMap.get(instanceObject)}`;
+        }
+        else {
+            const id = Date.now().toString(36) + Math.random().toString(36).substring(2, 15);
+            weakInstanceMap.set(instanceObject, id);
+            name = `instance-${id}`;
+        }
+    }
+    return _instanceOf(name);
+}
+function instanceOf(param) {
+    if (typeof param === "string") {
+        return _instanceOf(param);
+    }
+    return objectInstanceOf(param);
+}
 /**
  * Connector
  * @description
@@ -64,36 +153,9 @@ const connectedInstancesOf = new Map();
  * It provides a way to connect a function or an instance to a name, and then invoke that function or instance later.
  */
 const Connector = {
-    /**
-     * Get a function connector
-     * @description
-     * This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
-     * @param name
-     * @returns <ConnectorFuncOf<T, U>>
-     */
-    funcOf(name) {
-        if (connectedFunctionsOf.has(name)) {
-            return connectedFunctionsOf.get(name);
-        }
-        const func = getFuncOf(name);
-        connectedFunctionsOf.set(name, func);
-        return func;
-    },
-    /**
-     * Connect a instance to the name
-     * @description
-     * This method returns a instance connector that allows you to connect a instance to a name and then retrieve that instance later.
-     * @param name
-     * @returns
-     */
-    instanceOf(name) {
-        if (connectedInstancesOf.has(name)) {
-            return connectedInstancesOf.get(name);
-        }
-        const instance = getInstanceOf();
-        connectedInstancesOf.set(name, instance);
-        return instance;
-    }
+    funcOf,
+    instanceOf,
+    classInstanceOf
 };
 
 export { Connector };

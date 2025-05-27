@@ -8,21 +8,97 @@
 
 ```ts
 const Connector: {
-  funcOf: ConnectorFuncOf<T, U>;
-  instanceOf: ConnectorInstanceOf<T>;
+  classInstanceOf: {
+   <T>  (classType: T): ConnectorInstanceOf<InstanceType<T>>;
+   <T>  (name: string): ConnectorInstanceOf<InstanceType<T>>;
+  };
+  funcOf: <T, U>(param: 
+     | string
+    | ConnectorFunc<T, U>) => ConnectorFuncOf<T, U>;
+  instanceOf: {
+   <T>  (name: string): ConnectorInstanceOf<T>;
+   <T>  (instanceObject: T): ConnectorInstanceOf<T>;
+  };
 };
 ```
 
-Defined in: [src/conduit/connector.ts:159](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L159)
+Defined in: [src/conduit/connector.ts:284](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/connector.ts#L284)
 
 Connector
 
 ## Type declaration
 
+### classInstanceOf()
+
+```ts
+classInstanceOf: {
+<T>  (classType: T): ConnectorInstanceOf<InstanceType<T>>;
+<T>  (name: string): ConnectorInstanceOf<InstanceType<T>>;
+};
+```
+
+#### Call Signature
+
+```ts
+<T>(classType: T): ConnectorInstanceOf<InstanceType<T>>;
+```
+
+Get a class instance connector
+
+##### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* (...`args`: `any`[]) => `any` |
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `classType` | `T` | The class type to connect |
+
+##### Returns
+
+[`ConnectorInstanceOf`](../interfaces/ConnectorInstanceOf.md)\<`InstanceType`\<`T`\>\>
+
+The connector instance associated with the class instance.
+
+#### Call Signature
+
+```ts
+<T>(name: string): ConnectorInstanceOf<InstanceType<T>>;
+```
+
+Get a class instance connector by name
+
+##### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` *extends* `_classType`\<`any`\> |
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `name` | `string` | The name of the class type to connect |
+
+##### Returns
+
+[`ConnectorInstanceOf`](../interfaces/ConnectorInstanceOf.md)\<`InstanceType`\<`T`\>\>
+
+The connector instance associated with the class type.
+
+##### Description
+
+This function retrieves the connector instance associated with the given name.
+
 ### funcOf()
 
 ```ts
-funcOf<T, U>(name: string): ConnectorFuncOf<T, U>;
+funcOf: <T, U>(param: 
+  | string
+| ConnectorFunc<T, U>) => ConnectorFuncOf<T, U>;
 ```
 
 Get a function connector
@@ -36,9 +112,9 @@ Get a function connector
 
 #### Parameters
 
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| `name` | `string` |  |
+| Parameter | Type |
+| ------ | ------ |
+| `param` | \| `string` \| [`ConnectorFunc`](../type-aliases/ConnectorFunc.md)\<`T`, `U`\> |
 
 #### Returns
 
@@ -53,28 +129,67 @@ This method returns a function connector that allows you to connect a function t
 ### instanceOf()
 
 ```ts
-instanceOf<T>(name: string): ConnectorInstanceOf<T>;
+instanceOf: {
+<T>  (name: string): ConnectorInstanceOf<T>;
+<T>  (instanceObject: T): ConnectorInstanceOf<T>;
+};
 ```
 
-Connect a instance to the name
+#### Call Signature
 
-#### Type Parameters
+```ts
+<T>(name: string): ConnectorInstanceOf<T>;
+```
+
+Get a connector to instance by the name
+
+##### Type Parameters
 
 | Type Parameter |
 | ------ |
 | `T` |
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `name` | `string` |  |
+| `name` | `string` | The name of the instance to connect. |
 
-#### Returns
+##### Returns
 
 [`ConnectorInstanceOf`](../interfaces/ConnectorInstanceOf.md)\<`T`\>
 
-#### Description
+<ConnectorInstanceOf<T>>
+
+##### Description
+
+This method returns a instance connector that allows you to connect a instance to a name and then retrieve that instance later.
+
+#### Call Signature
+
+```ts
+<T>(instanceObject: T): ConnectorInstanceOf<T>;
+```
+
+Get a connector to instance by the instance object
+
+##### Type Parameters
+
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` *extends* `object` | The type of the instance |
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `instanceObject` | `T` | The instance object to connect |
+
+##### Returns
+
+[`ConnectorInstanceOf`](../interfaces/ConnectorInstanceOf.md)\<`T`\>
+
+##### Description
 
 This method returns a instance connector that allows you to connect a instance to a name and then retrieve that instance later.
 
