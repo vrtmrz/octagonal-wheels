@@ -1,14 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi } from "vitest";
 import { computed, reactive, reactiveSource } from "./reactive.ts";
 
-describe('reactiveSource', () => {
-    it('should return a reactive source with the initial value', () => {
+describe("reactiveSource", () => {
+    it("should return a reactive source with the initial value", () => {
         const initialValue = 10;
         const source = reactiveSource(initialValue);
         expect(source.value).to.equal(initialValue);
     });
 
-    it('should update the value when assigned a new value', () => {
+    it("should update the value when assigned a new value", () => {
         const initialValue = 10;
         const newValue = 20;
         const source = reactiveSource(initialValue);
@@ -16,7 +16,7 @@ describe('reactiveSource', () => {
         expect(source.value).to.equal(newValue);
     });
 
-    it('should notify change handlers when the value is updated', () => {
+    it("should notify change handlers when the value is updated", () => {
         let notifiedValue: number | undefined;
         const initialValue = 10;
         const newValue = 20;
@@ -28,7 +28,7 @@ describe('reactiveSource', () => {
         expect(notifiedValue).to.equal(newValue);
     });
 
-    it('should not notify change handlers when the value is not updated', () => {
+    it("should not notify change handlers when the value is not updated", () => {
         let notifiedValue: number | undefined;
         const initialValue = 10;
         const source = reactiveSource(initialValue);
@@ -39,7 +39,7 @@ describe('reactiveSource', () => {
         expect(notifiedValue).to.be.undefined;
     });
 
-    it('should remove change handlers when offChanged is called', () => {
+    it("should remove change handlers when offChanged is called", () => {
         let notifiedValue: number | undefined;
         const initialValue = 10;
         const newValue = 20;
@@ -56,14 +56,14 @@ describe('reactiveSource', () => {
         expect(notifiedValue).to.be.undefined;
     });
 });
-describe('reactive', () => {
-    it('should return a reactive value with the initial value', () => {
+describe("reactive", () => {
+    it("should return a reactive value with the initial value", () => {
         const initialValue = 10;
         const reactiveValue = reactive(() => initialValue);
         expect(reactiveValue.value).to.equal(initialValue);
     });
 
-    it('should update the value when assigned a new value', () => {
+    it("should update the value when assigned a new value", () => {
         const initialValue = 10;
         const newValue = 20;
         const source = reactiveSource(initialValue);
@@ -72,7 +72,7 @@ describe('reactive', () => {
         expect(reactiveValue.value).to.equal(newValue);
     });
 
-    it('should notify change handlers when the value is updated', () => {
+    it("should notify change handlers when the value is updated", () => {
         let notifiedValue: number | undefined;
         const initialValue = 10;
         const newValue = 20;
@@ -84,7 +84,7 @@ describe('reactive', () => {
         source.value = newValue;
         expect(notifiedValue).to.equal(newValue);
     });
-    it('should notify change handlers when the value is updated (multiple)', () => {
+    it("should notify change handlers when the value is updated (multiple)", () => {
         const initialValue = 10;
         const newValue1 = 20;
         const newValue2 = 30;
@@ -103,7 +103,7 @@ describe('reactive', () => {
         expect(notifiedValues).to.deep.equal([newValue1, newValue2, newValue3]);
     });
 
-    it('should not notify change handlers when the value is not updated', () => {
+    it("should not notify change handlers when the value is not updated", () => {
         let notifiedValue: number | undefined;
         const initialValue = 10;
         const source = reactiveSource(initialValue);
@@ -115,7 +115,7 @@ describe('reactive', () => {
         expect(notifiedValue).to.be.undefined;
     });
 
-    it('should remove change handlers when offChanged is called', () => {
+    it("should remove change handlers when offChanged is called", () => {
         let notifiedValue: number | undefined;
         const initialValue = 10;
         const newValue = 20;
@@ -132,7 +132,6 @@ describe('reactive', () => {
         source.value = initialValue;
         expect(notifiedValue).to.be.undefined;
     });
-
 
     it("should not recalculate the value when the dependencies don't change", () => {
         const initialValue = 10;
@@ -191,14 +190,14 @@ describe('reactive', () => {
     });
 });
 
-describe('computed', () => {
-    it('should return the computed value', () => {
+describe("computed", () => {
+    it("should return the computed value", () => {
         const initialValue = 10;
         const computedValue = computed(() => initialValue * 2);
         expect(computedValue()).to.equal(initialValue * 2);
     });
 
-    it('should update the computed value when dependencies change', () => {
+    it("should update the computed value when dependencies change", () => {
         const initialValue = 10;
         const dependencyValue = reactiveSource(initialValue);
         const computedValue = computed(() => dependencyValue.value * 2);
@@ -208,7 +207,7 @@ describe('computed', () => {
         expect(computedValue()).to.equal(20 * 2);
     });
 
-    it('should not update the computed value when dependencies do not change', () => {
+    it("should not update the computed value when dependencies do not change", () => {
         const initialValue = 10;
         const dependencyValue = reactiveSource(initialValue);
         const computedValue = computed(() => dependencyValue.value * 2);
@@ -217,5 +216,4 @@ describe('computed', () => {
         dependencyValue.value = initialValue;
         expect(computedValue()).to.equal(initialValue * 2);
     });
-
 });

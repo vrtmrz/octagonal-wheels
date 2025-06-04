@@ -1,14 +1,14 @@
-import { describe, it, expect } from 'vitest';
-import { generativeBuffer, GeneratorSource } from './source';
+import { describe, it, expect } from "vitest";
+import { generativeBuffer, GeneratorSource } from "./source";
 
 function createGeneratorSource<T>(modeFunc: boolean) {
     if (modeFunc) return generativeBuffer<T>();
     return new GeneratorSource<T>();
 }
 for (const modeFunc of [true, false]) {
-    const title = modeFunc ? 'generativeBuffer' : 'GeneratorSource';
+    const title = modeFunc ? "generativeBuffer" : "GeneratorSource";
     describe(title, () => {
-        it('should enqueue and iterate values', async () => {
+        it("should enqueue and iterate values", async () => {
             const source = createGeneratorSource<number>(modeFunc);
             source.enqueue(1);
             source.enqueue(2);
@@ -23,7 +23,7 @@ for (const modeFunc of [true, false]) {
             expect(result).toEqual([1, 2, 3]);
         });
 
-        it('should handle dispose correctly', async () => {
+        it("should handle dispose correctly", async () => {
             const source = createGeneratorSource<number>(modeFunc);
             source.enqueue(1);
             source.enqueue(2);
@@ -37,7 +37,7 @@ for (const modeFunc of [true, false]) {
             expect(result).toEqual([]);
         });
 
-        it('should not enqueue after dispose', async () => {
+        it("should not enqueue after dispose", async () => {
             const source = createGeneratorSource<number>(modeFunc);
             source.enqueue(1);
             source.dispose();
@@ -51,7 +51,7 @@ for (const modeFunc of [true, false]) {
             expect(result).toEqual([]);
         });
 
-        it('should not enqueue after finish', async () => {
+        it("should not enqueue after finish", async () => {
             const source = createGeneratorSource<number>(modeFunc);
             source.enqueue(1);
             source.finish();

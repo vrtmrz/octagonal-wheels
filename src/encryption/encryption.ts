@@ -27,7 +27,10 @@ const webcrypto = globalThis.crypto;
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the number of iterations based on the passphrase length.
  * @returns A Promise that resolves to an array containing the encryption key and salt.
  */
-async function getKeyForEncrypt(passphrase: string, autoCalculateIterations: boolean): Promise<[CryptoKey, Uint8Array]> {
+async function getKeyForEncrypt(
+    passphrase: string,
+    autoCalculateIterations: boolean
+): Promise<[CryptoKey, Uint8Array]> {
     // For performance, the plugin reuses the key KEY_RECYCLE_COUNT times.
     const buffKey = `${passphrase}-${autoCalculateIterations}`;
     const f = KeyBuffs.get(buffKey);
@@ -39,7 +42,9 @@ async function getKeyForEncrypt(passphrase: string, autoCalculateIterations: boo
         f.count--;
     }
     const passphraseLen = 15 - passphrase.length;
-    const iteration = autoCalculateIterations ? ((passphraseLen > 0 ? passphraseLen : 0) * 1000) + 121 - passphraseLen : 100000;
+    const iteration = autoCalculateIterations
+        ? (passphraseLen > 0 ? passphraseLen : 0) * 1000 + 121 - passphraseLen
+        : 100000;
     const passphraseBin = new TextEncoder().encode(passphrase);
     const digest = await webcrypto.subtle.digest({ name: "SHA-256" }, passphraseBin);
     const keyMaterial = await webcrypto.subtle.importKey("raw", digest, { name: "PBKDF2" }, false, ["deriveKey"]);
@@ -68,14 +73,17 @@ let decKeyIdx = 0;
 let decKeyMin = 0;
 /**
  * Retrieves the encryption key for decryption.
- * 
+ *
  * @param passphrase - The passphrase used for encryption.
  * @param salt - The salt value used for encryption.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iteration count.
  * @returns A promise that resolves to a tuple containing the encryption key and the salt value.
  */
-async function getKeyForDecryption(passphrase: string, salt: Uint8Array, autoCalculateIterations: boolean): Promise<[CryptoKey, Uint8Array]> {
-
+async function getKeyForDecryption(
+    passphrase: string,
+    salt: Uint8Array,
+    autoCalculateIterations: boolean
+): Promise<[CryptoKey, Uint8Array]> {
     keyGCCount--;
     if (keyGCCount < 0) {
         keyGCCount = KEY_RECYCLE_COUNT;
@@ -96,7 +104,9 @@ async function getKeyForDecryption(passphrase: string, salt: Uint8Array, autoCal
         return [f.key, f.salt];
     }
     const passphraseLen = 15 - passphrase.length;
-    const iteration = autoCalculateIterations ? ((passphraseLen > 0 ? passphraseLen : 0) * 1000) + 121 - passphraseLen : 100000;
+    const iteration = autoCalculateIterations
+        ? (passphraseLen > 0 ? passphraseLen : 0) * 1000 + 121 - passphraseLen
+        : 100000;
 
     const passphraseBin = new TextEncoder().encode(passphrase);
     const digest = await webcrypto.subtle.digest({ name: "SHA-256" }, passphraseBin);
@@ -123,7 +133,7 @@ async function getKeyForDecryption(passphrase: string, salt: Uint8Array, autoCal
 
 /**
  * Retrieves the semi-static field used for encryption.
- * 
+ *
  * @param reset - Optional parameter to reset the field.
  * @returns The semi-static field.
  */
@@ -138,7 +148,7 @@ function getSemiStaticField(reset?: boolean) {
 
 /**
  * Generates a nonce for encryption.
- * 
+ *
  * @returns The generated nonce.
  */
 function getNonce() {
@@ -168,18 +178,18 @@ export async function encryptV1(input: string, passphrase: string, autoCalculate
     const plainStringified = JSON.stringify(input);
     const plainStringBuffer: Uint8Array = writeString(plainStringified);
     const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plainStringBuffer);
-    const encryptedData2 = (await arrayBufferToBase64Single(encryptedDataArrayBuffer));
+    const encryptedData2 = await arrayBufferToBase64Single(encryptedDataArrayBuffer);
     const ret = `["${encryptedData2}","${uint8ArrayToHexString(iv)}","${uint8ArrayToHexString(salt)}"]`;
     return ret;
 }
 
 /**
  * Encrypts the input string using AES-GCM encryption algorithm.
- * 
+ *
  * @param input - The string to be encrypted.
  * @param passphrase - The passphrase used for encryption.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations for key derivation.
- * @returns The encrypted data with initialization vector (iv) and salt. <br>  |%| iv(32) | salt(32) | data ....  
+ * @returns The encrypted data with initialization vector (iv) and salt. <br>  |%| iv(32) | salt(32) | data ....
  */
 export async function encrypt(input: string, passphrase: string, autoCalculateIterations: boolean) {
     const [key, salt] = await getKeyForEncrypt(passphrase, autoCalculateIterations);
@@ -188,11 +198,11 @@ export async function encrypt(input: string, passphrase: string, autoCalculateIt
     const fixedPart = getSemiStaticField();
     const invocationPart = getNonce();
     const iv = new Uint8Array([...fixedPart, ...new Uint8Array(invocationPart.buffer)]);
-    const dataBuf = writeString(input)
+    const dataBuf = writeString(input);
     const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, key, dataBuf);
-    const encryptedData2 = "" + await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer));
+    const encryptedData2 = "" + (await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer)));
     // return data with iv and salt.
-    // |%| iv(32) | salt(32) | data ....  
+    // |%| iv(32) | salt(32) | data ....
     const ret = `%${uint8ArrayToHexString(iv)}${uint8ArrayToHexString(salt)}${encryptedData2}`;
     return ret;
 }
@@ -203,12 +213,20 @@ export async function encrypt(input: string, passphrase: string, autoCalculateIt
  * @param autoCalculateIterations - A flag indicating whether to automatically calculate the number of iterations based on the passphrase length.
  * @returns A promise that resolves to an array containing the generated key, salt, and IV.
  */
-async function getKeyForObfuscatePath(passphrase: string, dataBuf: Uint8Array, autoCalculateIterations: boolean): Promise<[CryptoKey, Uint8Array, Uint8Array]> {
+async function getKeyForObfuscatePath(
+    passphrase: string,
+    dataBuf: Uint8Array,
+    autoCalculateIterations: boolean
+): Promise<[CryptoKey, Uint8Array, Uint8Array]> {
     const passphraseLen = 15 - passphrase.length;
-    const iteration = autoCalculateIterations ? ((passphraseLen > 0 ? passphraseLen : 0) * 1000) + 121 - passphraseLen : 100000;
+    const iteration = autoCalculateIterations
+        ? (passphraseLen > 0 ? passphraseLen : 0) * 1000 + 121 - passphraseLen
+        : 100000;
     const passphraseBin = new TextEncoder().encode(passphrase);
     const digest = await webcrypto.subtle.digest({ name: "SHA-256" }, passphraseBin);
-    const buf2 = new Uint8Array(await webcrypto.subtle.digest({ name: "SHA-256" }, new Uint8Array([...dataBuf, ...passphraseBin])));
+    const buf2 = new Uint8Array(
+        await webcrypto.subtle.digest({ name: "SHA-256" }, new Uint8Array([...dataBuf, ...passphraseBin]))
+    );
     const salt = buf2.slice(0, 16);
     const iv = buf2.slice(16, 32);
     const keyMaterial = await webcrypto.subtle.importKey("raw", digest, { name: "PBKDF2" }, false, ["deriveKey"]);
@@ -231,10 +249,10 @@ async function getKeyForObfuscatePath(passphrase: string, dataBuf: Uint8Array, a
  * @param path - The path to obfuscate.
  * @param passphrase - The passphrase used for encryption.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations.
- * @returns The obfuscated path: |%| iv(32) | salt(32) | data ....  
+ * @returns The obfuscated path: |%| iv(32) | salt(32) | data ....
  */
 export async function obfuscatePath<T extends string>(path: T, passphrase: string, autoCalculateIterations: boolean) {
-    const dataBuf = writeString(path)
+    const dataBuf = writeString(path);
     const [key, salt, iv] = await getKeyForObfuscatePath(passphrase, dataBuf, autoCalculateIterations);
     const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt(
         {
@@ -242,19 +260,18 @@ export async function obfuscatePath<T extends string>(path: T, passphrase: strin
             iv: iv,
         },
         key,
-        dataBuf,
+        dataBuf
     );
     const encryptedData2 = await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer));
     // return data with iv and salt.
-    // |%| iv(32) | salt(32) | data ....  
+    // |%| iv(32) | salt(32) | data ....
     const ret = `%${uint8ArrayToHexString(iv)}${uint8ArrayToHexString(salt)}${encryptedData2}`;
     return ret;
 }
 
-
 /**
  * Checks if a given path is probably obfuscated.
- * 
+ *
  * @param path - The path to check.
  * @returns `true` if the path is probably obfuscated, `false` otherwise.
  */
@@ -270,14 +287,18 @@ export function isPathProbablyObfuscated(path: string) {
  * @returns A Promise that resolves to the decrypted string.
  * @throws If decryption fails or an error occurs during the decryption process.
  */
-async function decryptV2(encryptedResult: string, passphrase: string, autoCalculateIterations: boolean): Promise<string> {
+async function decryptV2(
+    encryptedResult: string,
+    passphrase: string,
+    autoCalculateIterations: boolean
+): Promise<string> {
     try {
         const ivStr = encryptedResult.substring(1, 33);
         const salt = encryptedResult.substring(33, 65);
         const encryptedData = encryptedResult.substring(65);
         const [key] = await getKeyForDecryption(passphrase, hexStringToUint8Array(salt), autoCalculateIterations);
         const iv = hexStringToUint8Array(ivStr);
-        const encryptedDataArrayBuffer = decodeBinary(encryptedData)
+        const encryptedDataArrayBuffer = decodeBinary(encryptedData);
         const dataBuffer = await webcrypto.subtle.decrypt({ name: "AES-GCM", iv }, key, encryptedDataArrayBuffer);
         const plain = readString(new Uint8Array(dataBuffer));
         return plain;
@@ -296,7 +317,11 @@ async function decryptV2(encryptedResult: string, passphrase: string, autoCalcul
  * @returns A Promise that resolves to the decrypted string.
  * @throws If the encrypted data is corrupted or if decryption fails.
  */
-export async function decrypt(encryptedResult: string, passphrase: string, autoCalculateIterations: boolean): Promise<string> {
+export async function decrypt(
+    encryptedResult: string,
+    passphrase: string,
+    autoCalculateIterations: boolean
+): Promise<string> {
     try {
         if (encryptedResult[0] == "%") {
             if (encryptedResult[1] === "~") {
@@ -307,7 +332,10 @@ export async function decrypt(encryptedResult: string, passphrase: string, autoC
         if (!encryptedResult.startsWith("[") || !encryptedResult.endsWith("]")) {
             throw new Error("Encrypted data corrupted!");
         }
-        const w: any = encryptedResult.substring(1, encryptedResult.length - 1).split(",").map(e => e[0] == '"' ? e.substring(1, e.length - 1) : e);
+        const w: any = encryptedResult
+            .substring(1, encryptedResult.length - 1)
+            .split(",")
+            .map((e) => (e[0] == '"' ? e.substring(1, e.length - 1) : e));
         const [encryptedData, ivString, salt]: encodedData = w;
         const [key] = await getKeyForDecryption(passphrase, hexStringToUint8Array(salt), autoCalculateIterations);
         const iv = hexStringToUint8Array(ivString);
@@ -319,7 +347,11 @@ export async function decrypt(encryptedResult: string, passphrase: string, autoC
         for (let i = len; i >= 0; --i) {
             encryptedDataArrayBuffer[i] = encryptedDataBin.charCodeAt(i);
         }
-        const plainStringBuffer: ArrayBuffer = await webcrypto.subtle.decrypt({ name: "AES-GCM", iv }, key, encryptedDataArrayBuffer);
+        const plainStringBuffer: ArrayBuffer = await webcrypto.subtle.decrypt(
+            { name: "AES-GCM", iv },
+            key,
+            encryptedDataArrayBuffer
+        );
         const plainStringified = readString(new Uint8Array(plainStringBuffer));
         const plain = JSON.parse(plainStringified);
         return plain;
@@ -332,17 +364,21 @@ export async function decrypt(encryptedResult: string, passphrase: string, autoC
 
 /**
  * Tries to decrypt the encrypted result using the provided passphrase.
- * 
+ *
  * @param encryptedResult - The encrypted result to decrypt.
  * @param passphrase - The passphrase used for decryption.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations.
  * @returns A promise that resolves to the decrypted result if successful, or `false` if decryption fails.
  */
-export async function tryDecrypt(encryptedResult: string, passphrase: string | false, autoCalculateIterations: boolean): Promise<string | false> {
+export async function tryDecrypt(
+    encryptedResult: string,
+    passphrase: string | false,
+    autoCalculateIterations: boolean
+): Promise<string | false> {
     if (!passphrase) return false;
     try {
         return await decrypt(encryptedResult, passphrase, autoCalculateIterations);
-    } catch (ex) {
+    } catch {
         return false;
     }
 }
@@ -390,7 +426,7 @@ export async function testCrypt() {
 
 /**
  * Encrypts binary data using AES-GCM encryption algorithm.
- * 
+ *
  * @param input - The binary data to be encrypted.
  * @param passphrase - The passphrase used to derive the encryption key.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the number of iterations for key derivation.
@@ -403,8 +439,10 @@ export async function encryptBinary(input: Uint8Array, passphrase: string, autoC
     const fixedPart = getSemiStaticField();
     const invocationPart = getNonce();
     const iv = new Uint8Array([...fixedPart, ...new Uint8Array(invocationPart.buffer)]);
-    const dataBuf = input
-    const encryptedDataArrayBuffer = new Uint8Array(await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, key, dataBuf));
+    const dataBuf = input;
+    const encryptedDataArrayBuffer = new Uint8Array(
+        await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, key, dataBuf)
+    );
     const ret = new Uint8Array(encryptedDataArrayBuffer.byteLength + iv.byteLength + salt.byteLength);
     ret.set(iv, 0);
     ret.set(salt, iv.byteLength);
@@ -419,18 +457,21 @@ export async function encryptBinary(input: Uint8Array, passphrase: string, autoC
  * @returns A Promise that resolves to the decrypted binary data as a Uint8Array.
  * @throws If decryption fails or an error occurs during the decryption process.
  */
-export async function decryptBinary(encryptedResult: Uint8Array, passphrase: string, autoCalculateIterations: boolean): Promise<Uint8Array> {
+export async function decryptBinary(
+    encryptedResult: Uint8Array,
+    passphrase: string,
+    autoCalculateIterations: boolean
+): Promise<Uint8Array> {
     try {
         const iv = encryptedResult.slice(0, 16);
         const salt = encryptedResult.slice(16, 32);
         const encryptedData = encryptedResult.slice(32);
         const [key] = await getKeyForDecryption(passphrase, salt, autoCalculateIterations);
         const dataBuffer = await webcrypto.subtle.decrypt({ name: "AES-GCM", iv }, key, encryptedData);
-        return new Uint8Array(dataBuffer)
+        return new Uint8Array(dataBuffer);
     } catch (ex) {
         Logger("Couldn't decode! You should wrong the passphrases (V2 Bin)", LOG_LEVEL_VERBOSE);
         Logger(ex, LOG_LEVEL_VERBOSE);
         throw ex;
     }
 }
-

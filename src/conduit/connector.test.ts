@@ -65,9 +65,12 @@ describe("Connector.funcOf", () => {
     it("should call teardown callback when disconnected", async () => {
         const conn = Connector.funcOf<[number], number>("teardown");
         let tornDown = false;
-        conn.connect((n) => n * 2, () => {
-            tornDown = true;
-        });
+        conn.connect(
+            (n) => n * 2,
+            () => {
+                tornDown = true;
+            }
+        );
         conn.disconnect();
         expect(tornDown).toBe(true);
     });
@@ -170,13 +173,18 @@ describe("Connector.instanceOf", () => {
         expect(connB).not.toBe(conn);
         const instanceB = await connB.connected();
         expect(instanceB.value).toBe(100);
-
     });
     class SharedInstance {
-        constructor(public value: number, public name?: string) { }
+        constructor(
+            public value: number,
+            public name?: string
+        ) {}
     }
     class SharedInstance2 {
-        constructor(public value: number, public name?: string) { }
+        constructor(
+            public value: number,
+            public name?: string
+        ) {}
     }
 
     it("should be able to connect exact class instance pointing (w/ name)", async () => {
@@ -262,6 +270,5 @@ describe("Connector.instanceOf", () => {
         const instance2Sync = conn2.connectedSync();
         expect(instance2Sync.value).toBe(100);
         expect(instance2Sync).toBe(instance2);
-
     });
 });

@@ -1,6 +1,6 @@
 /**
  * Binds a context object to a function, creating a new function that will invoke the original function with the provided context object.
- * 
+ *
  * @param ctx - The context object to bind to the function.
  * @param func - The function to bind the context to.
  * @returns A new function that will invoke the original function with the provided context.
@@ -8,11 +8,13 @@
  * @template U - The return type of the original function.
  * @template Context - The type of the context object.
  */
-export function bindContext<T extends any[], U extends any | Promise<any>, Context>(ctx: Context, func: (ctx: Context, ...args: T) => U): (...args: T) => U {
+export function bindContext<T extends any[], U extends any | Promise<any>, Context>(
+    ctx: Context,
+    func: (ctx: Context, ...args: T) => U
+): (...args: T) => U {
     const context = ctx;
     return (...args: T) => func(context, ...args);
 }
-
 
 /**
  * Binds a context retrieving function to a given function.
@@ -24,7 +26,10 @@ export function bindContext<T extends any[], U extends any | Promise<any>, Conte
  * @param func - The function to bind the context to.
  * @returns A new function that calls the original function with the bound context.
  */
-export function bindContextFunc<T extends any[], U, Context>(ctxFun: () => Context, func: (ctx: Context, ...args: T) => U): (...args: T) => U {
+export function bindContextFunc<T extends any[], U, Context>(
+    ctxFun: () => Context,
+    func: (ctx: Context, ...args: T) => U
+): (...args: T) => U {
     const context = ctxFun;
     return (...args: T) => func(context(), ...args);
 }

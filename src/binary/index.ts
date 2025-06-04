@@ -3,7 +3,7 @@ import { _decodeToArrayBuffer, decodeToArrayBuffer } from "./encodedUTF16.ts";
 
 /**
  * Concatenates multiple Uint8Array arrays into a single Uint8Array.
- * 
+ *
  * @param arrays - An array of Uint8Array arrays to be concatenated.
  * @returns A new Uint8Array containing the concatenated values.
  */
@@ -23,7 +23,7 @@ export function concatUInt8Array(arrays: Uint8Array[]): Uint8Array {
  * If the input is an empty string or array, it returns an empty ArrayBuffer.
  * If the input starts with '%', it decodes the string(s) using `_decodeToArrayBuffer` function.
  * Otherwise, it decodes the string(s) using `base64ToArrayBuffer` function.
- * 
+ *
  * @param src - The binary string or array of binary strings to decode.
  * @returns The decoded ArrayBuffer.
  * @remarks Now, Self-hosted LiveSync always use base64 for encoding/decoding.
@@ -45,14 +45,13 @@ export function decodeBinary(src: string | string[]) {
 
 /**
  * Encodes a binary data into a string array using base64 encoding.
- * 
+ *
  * @param src - The binary data to be encoded. It can be either a Uint8Array or an ArrayBuffer.
  * @returns A promise that resolves to a string array representing the encoded binary data.
  */
 export async function encodeBinary(src: Uint8Array | ArrayBuffer): Promise<string[]> {
     return await arrayBufferToBase64(src);
 }
-
 
 export * from "./base64.ts";
 export * from "./encodedUTF16.ts";

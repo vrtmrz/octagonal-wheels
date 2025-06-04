@@ -5,22 +5,21 @@ import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
  * @returns The converted ArrayBuffer.
  */
 export function base64ToArrayBuffer(base64: string | string[]): ArrayBuffer {
-    if (typeof (base64) == "string") return base64ToArrayBufferInternalBrowser(base64);
-    const bufItems = base64.map(e => base64ToArrayBufferInternalBrowser(e));
+    if (typeof base64 == "string") return base64ToArrayBufferInternalBrowser(base64);
+    const bufItems = base64.map((e) => base64ToArrayBufferInternalBrowser(e));
     const len = bufItems.reduce((p, c) => p + c.byteLength, 0);
     const joinedArray = new Uint8Array(len);
     let offset = 0;
-    bufItems.forEach(e => {
+    bufItems.forEach((e) => {
         joinedArray.set(new Uint8Array(e), offset);
         offset += e.byteLength;
     });
     return joinedArray.buffer;
 }
 
-
 /**
  * Converts a base64 string to an ArrayBuffer in a browser environment.
- * 
+ *
  * @param base64 - The base64 string to convert.
  * @returns The converted ArrayBuffer.
  */
@@ -44,7 +43,6 @@ export function base64ToArrayBufferInternalBrowser(base64: string): ArrayBuffer 
 
 const encodeChunkSize = 3 * 50000000;
 
-
 /**
  * Converts an ArrayBuffer or Uint8Array to a base64-encoded string in a browser environment.
  * @param buffer The input buffer to be converted.
@@ -56,7 +54,8 @@ function arrayBufferToBase64internalBrowser(buffer: DataView | Uint8Array): Prom
         const reader = new FileReader();
         reader.onload = function (evt) {
             const dataURI = evt.target?.result?.toString() || "";
-            if (buffer.byteLength != 0 && (dataURI == "" || dataURI == "data:")) return rej(new TypeError("Could not parse the encoded string"));
+            if (buffer.byteLength != 0 && (dataURI == "" || dataURI == "data:"))
+                return rej(new TypeError("Could not parse the encoded string"));
             const result = dataURI.substring(dataURI.indexOf(",") + 1);
             res(result);
         };
@@ -66,7 +65,7 @@ function arrayBufferToBase64internalBrowser(buffer: DataView | Uint8Array): Prom
 
 /**
  * Converts an ArrayBuffer to a base64 string.
- * 
+ *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
  */
@@ -77,7 +76,7 @@ export async function arrayBufferToBase64Single(buffer: ArrayBuffer): Promise<st
 }
 /**
  * Converts an ArrayBuffer to a base64 string.
- * 
+ *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to an array of base64 strings.
  */
@@ -96,19 +95,18 @@ export async function arrayBufferToBase64(buffer: ArrayBuffer): Promise<string[]
     return pieces;
 }
 
-
 //
 // Safari's JavaScriptCOre hardcoded the argument limit to 65536
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
 const QUANTUM = 32768;
 
 /**
- *  Super fast Text Encoder / Decoder alternative. 
+ *  Super fast Text Encoder / Decoder alternative.
  * @param {string} string - The string to convert.
  * @returns {Uint8Array} The Uint8Array buffer representing the string.
  * @see https://gist.github.com/kawanet/a66a0e2657464c57bcff2249286d3a24
  * @see https://qiita.com/kawanet/items/52062b0c86597f7dee7d
- * 
+ *
  * remark: This is a super fast TextEncoder alternative.
  * todo: When Capacitor or Electron is upgraded, check and reappraise this.
  */
@@ -130,20 +128,20 @@ export function writeString(string: string): Uint8Array {
             buffer[index++] = chr;
         } else if (chr < 0x800) {
             // 2 bytes
-            buffer[index++] = 0xC0 | (chr >>> 6);
-            buffer[index++] = 0x80 | (chr & 0x3F);
-        } else if (chr < 0xD800 || chr > 0xDFFF) {
+            buffer[index++] = 0xc0 | (chr >>> 6);
+            buffer[index++] = 0x80 | (chr & 0x3f);
+        } else if (chr < 0xd800 || chr > 0xdfff) {
             // 3 bytes
-            buffer[index++] = 0xE0 | (chr >>> 12);
-            buffer[index++] = 0x80 | ((chr >>> 6) & 0x3F);
-            buffer[index++] = 0x80 | (chr & 0x3F);
+            buffer[index++] = 0xe0 | (chr >>> 12);
+            buffer[index++] = 0x80 | ((chr >>> 6) & 0x3f);
+            buffer[index++] = 0x80 | (chr & 0x3f);
         } else {
             // 4 bytes - surrogate pair
-            chr = (((chr - 0xD800) << 10) | (string.charCodeAt(idx++) - 0xDC00)) + 0x10000;
-            buffer[index++] = 0xF0 | (chr >>> 18);
-            buffer[index++] = 0x80 | ((chr >>> 12) & 0x3F);
-            buffer[index++] = 0x80 | ((chr >>> 6) & 0x3F);
-            buffer[index++] = 0x80 | (chr & 0x3F);
+            chr = (((chr - 0xd800) << 10) | (string.charCodeAt(idx++) - 0xdc00)) + 0x10000;
+            buffer[index++] = 0xf0 | (chr >>> 18);
+            buffer[index++] = 0x80 | ((chr >>> 12) & 0x3f);
+            buffer[index++] = 0x80 | ((chr >>> 6) & 0x3f);
+            buffer[index++] = 0x80 | (chr & 0x3f);
         }
     }
     return buffer.slice(0, index);
@@ -151,7 +149,7 @@ export function writeString(string: string): Uint8Array {
 
 /**
  * Converts a Uint8Array buffer to a string.
- * 
+ *
  * @param buffer - The Uint8Array buffer to convert.
  * @returns The converted string.
  */
@@ -166,25 +164,28 @@ export function readString(buffer: Uint8Array): string {
         const cEnd = Math.min(index + QUANTUM, end);
         while (index < cEnd) {
             const chr = buffer[index++];
-            if (chr < 128) { // 1 byte
+            if (chr < 128) {
+                // 1 byte
                 chunk.push(chr);
-            } else if ((chr & 0xE0) === 0xC0) { // 2 bytes
-                chunk.push((chr & 0x1F) << 6 |
-                    (buffer[index++] & 0x3F));
-            } else if ((chr & 0xF0) === 0xE0) { // 3 bytes
-                chunk.push((chr & 0x0F) << 12 |
-                    (buffer[index++] & 0x3F) << 6 |
-                    (buffer[index++] & 0x3F));
-            } else if ((chr & 0xF8) === 0xF0) { // 4 bytes
-                let code = (chr & 0x07) << 18 |
-                    (buffer[index++] & 0x3F) << 12 |
-                    (buffer[index++] & 0x3F) << 6 |
-                    (buffer[index++] & 0x3F);
+            } else if ((chr & 0xe0) === 0xc0) {
+                // 2 bytes
+                chunk.push(((chr & 0x1f) << 6) | (buffer[index++] & 0x3f));
+            } else if ((chr & 0xf0) === 0xe0) {
+                // 3 bytes
+                chunk.push(((chr & 0x0f) << 12) | ((buffer[index++] & 0x3f) << 6) | (buffer[index++] & 0x3f));
+            } else if ((chr & 0xf8) === 0xf0) {
+                // 4 bytes
+                let code =
+                    ((chr & 0x07) << 18) |
+                    ((buffer[index++] & 0x3f) << 12) |
+                    ((buffer[index++] & 0x3f) << 6) |
+                    (buffer[index++] & 0x3f);
                 if (code < 0x010000) {
                     chunk.push(code);
-                } else { // surrogate pair
+                } else {
+                    // surrogate pair
                     code -= 0x010000;
-                    chunk.push((code >>> 10) + 0xD800, (code & 0x3FF) + 0xDC00);
+                    chunk.push((code >>> 10) + 0xd800, (code & 0x3ff) + 0xdc00);
                 }
             }
         }
@@ -192,7 +193,6 @@ export function readString(buffer: Uint8Array): string {
     }
     return string;
 }
-
 
 /**
  * Converts a base64 string or an array of base64 strings to a regular string.
@@ -202,7 +202,7 @@ export function readString(buffer: Uint8Array): string {
  */
 export function base64ToString(base64: string | string[]): string {
     try {
-        if (typeof base64 != "string") return base64.map(e => base64ToString(e)).join("");
+        if (typeof base64 != "string") return base64.map((e) => base64ToString(e)).join("");
         const binary_string = atob(base64);
         const len = binary_string.length;
         const bytes = new Uint8Array(len);
@@ -214,7 +214,7 @@ export function base64ToString(base64: string | string[]): string {
         Logger("Base64 To String error", LOG_LEVEL_VERBOSE);
         Logger(ex, LOG_LEVEL_VERBOSE);
         if (typeof base64 != "string") return base64.join("");
-        return base64
+        return base64;
     }
 }
 
@@ -222,7 +222,7 @@ const regexpBase64 = /^[A-Za-z0-9+/]+=*$/;
 
 /**
  * Tries to convert a base64 string to an ArrayBuffer.
- * 
+ *
  * @param base64 - The base64 string to convert.
  * @returns The converted ArrayBuffer if successful, otherwise false.
  */
@@ -243,7 +243,7 @@ export function tryConvertBase64ToArrayBuffer(base64: string): ArrayBuffer | fal
             bytes[i] = binary_string.charCodeAt(i);
         }
         return bytes.buffer;
-    } catch (ex) {
+    } catch {
         return false;
     }
 }

@@ -1,6 +1,19 @@
 // OK
-import { describe, beforeEach, vi, afterEach, test, expect } from 'vitest';
-import { scheduleTask, cancelTask, isWaitingForTimeout, waitForTimeout, finishWaitingForTimeout, finishAllWaitingForTimeout, cancelAllTasks, pipeArrayToGenerator, pipeGeneratorToGenerator, unwrapTaskResult, processAllTasksWithConcurrencyLimit, mapAllTasksWithConcurrencyLimit } from "./task.ts";
+import { describe, beforeEach, vi, afterEach, test, expect } from "vitest";
+import {
+    scheduleTask,
+    cancelTask,
+    isWaitingForTimeout,
+    waitForTimeout,
+    finishWaitingForTimeout,
+    finishAllWaitingForTimeout,
+    cancelAllTasks,
+    pipeArrayToGenerator,
+    pipeGeneratorToGenerator,
+    unwrapTaskResult,
+    processAllTasksWithConcurrencyLimit,
+    mapAllTasksWithConcurrencyLimit,
+} from "./task.ts";
 
 class Runner {
     maxConcurrency = 0;
@@ -19,11 +32,10 @@ class Runner {
         } finally {
             this.currentConcurrency--;
         }
-
     }
 }
 
-describe('scheduleTask', () => {
+describe("scheduleTask", () => {
     beforeEach(() => {
         vi.useFakeTimers();
     });
@@ -33,8 +45,8 @@ describe('scheduleTask', () => {
         vi.useRealTimers();
     });
 
-    test('should schedule a task and execute it after the specified timeout', () => {
-        const key = 'task1';
+    test("should schedule a task and execute it after the specified timeout", () => {
+        const key = "task1";
         const timeout = 1000;
         const proc = vi.fn();
 
@@ -47,8 +59,8 @@ describe('scheduleTask', () => {
         expect(proc).toBeCalled();
     });
 
-    test('should not execute the task if it is canceled before the timeout', () => {
-        const key = 'task2';
+    test("should not execute the task if it is canceled before the timeout", () => {
+        const key = "task2";
         const timeout = 1000;
         const proc = vi.fn();
 
@@ -59,8 +71,8 @@ describe('scheduleTask', () => {
 
         expect(proc).not.toBeCalled();
     });
-    test('should not execute multiple tasks if they are canceled before the timeout', () => {
-        const key = 'task2';
+    test("should not execute multiple tasks if they are canceled before the timeout", () => {
+        const key = "task2";
         const timeout = 1000;
         const proc = vi.fn();
 
@@ -75,11 +87,11 @@ describe('scheduleTask', () => {
         expect(proc).not.toBeCalled();
     });
 
-    test('should skip scheduling the task if it already exists and skipIfTaskExist is true', () => {
-        const key = 'task3';
+    test("should skip scheduling the task if it already exists and skipIfTaskExist is true", () => {
+        const key = "task3";
         const timeout = 1000;
         let v = 0;
-        const proc = vi.fn((z) => v = z);
+        const proc = vi.fn((z) => (v = z));
 
         scheduleTask(key, timeout, () => proc(1), true);
         scheduleTask(key, timeout, () => proc(2), true); // This should be skipped
@@ -89,11 +101,11 @@ describe('scheduleTask', () => {
         expect(proc).toBeCalledTimes(1);
         expect(v).toBe(1);
     });
-    test('should skip scheduling the task if it already exists and skipIfTaskExist is false', () => {
-        const key = 'task3';
+    test("should skip scheduling the task if it already exists and skipIfTaskExist is false", () => {
+        const key = "task3";
         const timeout = 1000;
         let v = 0;
-        const proc = vi.fn((z) => v = z);
+        const proc = vi.fn((z) => (v = z));
         scheduleTask(key, timeout, () => proc(1)); // This should be canceled
         scheduleTask(key, timeout, () => proc(2));
 
@@ -104,8 +116,7 @@ describe('scheduleTask', () => {
     });
 });
 
-
-describe('waitForTimeout', () => {
+describe("waitForTimeout", () => {
     beforeEach(() => {
         vi.useFakeTimers();
     });
@@ -114,8 +125,8 @@ describe('waitForTimeout', () => {
         vi.clearAllTimers();
         vi.useRealTimers();
     });
-    test('should resolve after the specified timeout', async () => {
-        const key = 'test1';
+    test("should resolve after the specified timeout", async () => {
+        const key = "test1";
         const timeout = 1000;
 
         const promise = waitForTimeout(key, timeout);
@@ -123,9 +134,8 @@ describe('waitForTimeout', () => {
         await expect(promise).resolves.toBeTruthy();
     });
 
-
-    test('should reject if finishWaitingForTimeout is called before the timeout', async () => {
-        const key = 'test2';
+    test("should reject if finishWaitingForTimeout is called before the timeout", async () => {
+        const key = "test2";
         const timeout = 1000;
 
         const promise = waitForTimeout(key, timeout);
@@ -134,11 +144,11 @@ describe('waitForTimeout', () => {
         await expect(promise).resolves.toBeFalsy();
     });
 
-    test('should resolve for multiple keys with different timeouts', async () => {
-        const key1 = 'test3';
+    test("should resolve for multiple keys with different timeouts", async () => {
+        const key1 = "test3";
         const timeout1 = 1000;
 
-        const key2 = 'test4';
+        const key2 = "test4";
         const timeout2 = 2000;
 
         const promise1 = waitForTimeout(key1, timeout1);
@@ -149,8 +159,7 @@ describe('waitForTimeout', () => {
     });
 });
 
-
-describe('finishWaitingForTimeout', () => {
+describe("finishWaitingForTimeout", () => {
     beforeEach(() => {
         vi.useFakeTimers();
     });
@@ -159,36 +168,34 @@ describe('finishWaitingForTimeout', () => {
         vi.clearAllTimers();
         vi.useRealTimers();
     });
-    test('should finish waiting for timeout', async () => {
-        const key = 'test1';
+    test("should finish waiting for timeout", async () => {
+        const key = "test1";
         const hasTimeout = true;
         const timeoutR = waitForTimeout(key, 1000);
         finishWaitingForTimeout(key, hasTimeout);
 
         await expect(timeoutR).resolves.toBe(true);
     });
-    test('should finish waiting for timeout with false', async () => {
-        const key = 'test1';
+    test("should finish waiting for timeout with false", async () => {
+        const key = "test1";
         const hasTimeout = false;
         const timeoutR = waitForTimeout(key, 1000);
         finishWaitingForTimeout(key, hasTimeout);
 
         await expect(timeoutR).resolves.toBe(false);
     });
-    test('should finish waiting for timeout with false', async () => {
-        const key = 'test1';
+    test("should finish waiting for timeout with false", async () => {
+        const key = "test1";
         const hasTimeout = false;
         const timeoutR = waitForTimeout(key, 1000);
         vi.advanceTimersByTime(1000);
         await expect(timeoutR).resolves.toBe(true);
     });
-
 });
 
-
-describe('finishAllWaitingForTimeout', () => {
-    test('should finish waiting for timeout for all keys with the given prefix and return true', async () => {
-        const prefix = 'test-';
+describe("finishAllWaitingForTimeout", () => {
+    test("should finish waiting for timeout for all keys with the given prefix and return true", async () => {
+        const prefix = "test-";
         const promise1 = waitForTimeout("test-", 1000);
         const promise2 = waitForTimeout("test-", 1000);
         const promise3 = waitForTimeout("xxxx-", 1000);
@@ -201,8 +208,8 @@ describe('finishAllWaitingForTimeout', () => {
     });
 });
 
-test('isWaitingForTimeout should return true if the key is waiting for timeout', () => {
-    const key = 'test1';
+test("isWaitingForTimeout should return true if the key is waiting for timeout", () => {
+    const key = "test1";
     waitForTimeout(key, 1000);
 
     const result = isWaitingForTimeout(key);
@@ -210,8 +217,8 @@ test('isWaitingForTimeout should return true if the key is waiting for timeout',
     expect(result).toBe(true);
 });
 
-test('isWaitingForTimeout should return false if the key is not waiting for timeout', () => {
-    const key = 'test2';
+test("isWaitingForTimeout should return false if the key is not waiting for timeout", () => {
+    const key = "test2";
 
     const result = isWaitingForTimeout(key);
 
@@ -221,9 +228,8 @@ test('isWaitingForTimeout should return false if the key is not waiting for time
 import { processAllGeneratorTasksWithConcurrencyLimit } from "./task.ts";
 import { delay } from "../promises.ts";
 
-describe('processAllGeneratorTasksWithConcurrencyLimit', () => {
-
-    test('should process all tasks (Generator) with the given concurrency limit', async () => {
+describe("processAllGeneratorTasksWithConcurrencyLimit", () => {
+    test("should process all tasks (Generator) with the given concurrency limit", async () => {
         let runner = new Runner();
         const numbers = [...new Array(100)].map((_, i) => i);
         const taskGen = pipeArrayToGenerator(numbers, async (i) => {
@@ -239,7 +245,7 @@ describe('processAllGeneratorTasksWithConcurrencyLimit', () => {
         let result = 0;
         for await (const r of process) {
             const rx = unwrapTaskResult(r);
-            if (typeof rx === 'number') {
+            if (typeof rx === "number") {
                 result += rx;
             }
         }
@@ -248,9 +254,8 @@ describe('processAllGeneratorTasksWithConcurrencyLimit', () => {
     });
 });
 
-
-describe('processAllTasksWithConcurrencyLimit', () => {
-    test('should process all tasks (Array) with the given concurrency limit', async () => {
+describe("processAllTasksWithConcurrencyLimit", () => {
+    test("should process all tasks (Array) with the given concurrency limit", async () => {
         let runner = new Runner();
         const numbers = [...new Array(100)].map((_, i) => i);
         const computedTask = numbers.map((i) => () => {
@@ -264,7 +269,7 @@ describe('processAllTasksWithConcurrencyLimit', () => {
         let result = 0;
         for await (const r of process) {
             const rx = unwrapTaskResult(r);
-            if (typeof rx === 'number') {
+            if (typeof rx === "number") {
                 result += rx;
             }
         }
@@ -272,8 +277,8 @@ describe('processAllTasksWithConcurrencyLimit', () => {
         expect(runner.maxConcurrency).toBe(10);
     });
 });
-describe('mapAllTasksWithConcurrencyLimit', () => {
-    test('should process all tasks (Array) with the given concurrency limit', async () => {
+describe("mapAllTasksWithConcurrencyLimit", () => {
+    test("should process all tasks (Array) with the given concurrency limit", async () => {
         let runner = new Runner();
         const numbers = [...new Array(100)].map((_, i) => i);
         const computedTask = numbers.map((i) => () => {
@@ -284,15 +289,15 @@ describe('mapAllTasksWithConcurrencyLimit', () => {
         });
 
         const wrappedResult = await mapAllTasksWithConcurrencyLimit(10, computedTask);
-        const result = wrappedResult.map(unwrapTaskResult).filter((r): r is number => typeof r === 'number');
+        const result = wrappedResult.map(unwrapTaskResult).filter((r): r is number => typeof r === "number");
         expect(runner.maxConcurrency).toBe(10);
         // Check Ordered
-        expect(result).deep.equal(numbers.map(e => e * 2));
+        expect(result).deep.equal(numbers.map((e) => e * 2));
     });
 });
 
-describe('tasks-etc', () => {
-    test('et-cetra', async () => {
+describe("tasks-etc", () => {
+    test("et-cetra", async () => {
         let runner = new Runner();
         const numbers = [...new Array(100)].map((_, i) => i);
         const computedTask = numbers.map((i) => () => {
@@ -307,7 +312,7 @@ describe('tasks-etc', () => {
         let result = 0;
         for await (const r of process) {
             const rx = unwrapTaskResult(r);
-            if (typeof rx === 'number') {
+            if (typeof rx === "number") {
                 result += rx;
             }
         }

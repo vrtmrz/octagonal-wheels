@@ -1,21 +1,21 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from "vitest";
 import { Inbox, NOT_AVAILABLE } from "./Inbox.ts";
 import { isResolved, promiseWithResolver } from "../promises.ts";
 
-describe('Inbox', () => {
+describe("Inbox", () => {
     let inbox: Inbox<number>;
 
     beforeEach(() => {
         inbox = new Inbox<number>(3);
     });
 
-    it('should initialize with the correct capacity', () => {
+    it("should initialize with the correct capacity", () => {
         expect(inbox._capacity).toBe(3);
         expect(inbox.size).toBe(0);
         expect(inbox.free).toBe(3);
     });
 
-    it('should post and pick items correctly', async () => {
+    it("should post and pick items correctly", async () => {
         await inbox.post(1);
         await inbox.post(2);
         await inbox.post(3);
@@ -34,7 +34,7 @@ describe('Inbox', () => {
         expect(inbox.free).toBe(3);
     });
 
-    it('should handle tryPost and tryPick correctly', async () => {
+    it("should handle tryPost and tryPick correctly", async () => {
         await inbox.tryPost(1);
         await inbox.tryPost(2);
         await inbox.tryPost(3);
@@ -58,11 +58,11 @@ describe('Inbox', () => {
         expect(inbox.free).toBe(3);
     });
 
-    it('should throw an error if capacity is less than or equal to 0', () => {
-        expect(() => new Inbox<number>(0)).toThrow('Capacity must be greater than 0');
+    it("should throw an error if capacity is less than or equal to 0", () => {
+        expect(() => new Inbox<number>(0)).toThrow("Capacity must be greater than 0");
     });
 
-    it('should wait for free space when posting in blocking mode', async () => {
+    it("should wait for free space when posting in blocking mode", async () => {
         await inbox.post(1);
         await inbox.post(2);
         await inbox.post(3);
@@ -76,7 +76,7 @@ describe('Inbox', () => {
         expect(inbox.free).toBe(0);
     });
 
-    it('should wait for items when picking in blocking mode', async () => {
+    it("should wait for items when picking in blocking mode", async () => {
         const pickPromise = inbox.pick();
         await inbox.post(1);
         const pickResult = await pickPromise;
@@ -107,10 +107,9 @@ describe('Inbox', () => {
 
         const postBox2 = new Inbox<number>(256);
         expect(postBox2._wrapAroundCount).toBe(511);
-
     });
 
-    it('should dispose correctly while posting', async () => {
+    it("should dispose correctly while posting", async () => {
         await inbox.post(1);
         await inbox.post(2);
         await inbox.post(3);
@@ -126,10 +125,9 @@ describe('Inbox', () => {
 
         await expect(() => inbox.post(4)).rejects.toThrowError();
         await expect(() => inbox.pick()).rejects.toThrowError();
-
     });
 
-    it('should dispose correctly while picking', async () => {
+    it("should dispose correctly while picking", async () => {
         await inbox.post(1);
         await inbox.post(2);
         await inbox.post(3);
@@ -148,7 +146,6 @@ describe('Inbox', () => {
 
         await expect(() => inbox.post(4)).rejects.toThrowError();
         await expect(() => inbox.pick()).rejects.toThrowError();
-
     });
 
     it("should timeout correctly", async () => {
@@ -157,14 +154,14 @@ describe('Inbox', () => {
         await inbox.post(3);
         const postPromise = inbox.post(4, 100);
         expect(await isResolved(postPromise)).toBe(false);
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise((r) => setTimeout(r, 200));
         expect(await postPromise).toBe(false);
         expect(await inbox.pick()).toBe(1);
         expect(await inbox.pick()).toBe(2);
         expect(await inbox.pick()).toBe(3);
         const pickPromise = inbox.pick(100);
         expect(await isResolved(pickPromise)).toBe(false);
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise((r) => setTimeout(r, 200));
         expect(await pickPromise).toBe(NOT_AVAILABLE);
     });
 
@@ -182,10 +179,9 @@ describe('Inbox', () => {
         expect(await inbox.pick()).toBe(3);
         //p.promise has not been resolved, so 4 will be picked up
         expect(await inbox.pick(undefined, [p.promise])).toBe(4);
-
     });
 
-    it('should cancel the last post correctly', async () => {
+    it("should cancel the last post correctly", async () => {
         await inbox.post(1);
         await inbox.post(2);
         await inbox.post(3);
@@ -231,7 +227,7 @@ describe('Inbox', () => {
         expect(inbox.free).toBe(3);
     });
 
-    it('should return NOT_AVAILABLE if the buffer is empty', () => {
+    it("should return NOT_AVAILABLE if the buffer is empty", () => {
         expect(inbox.size).toBe(0);
         expect(inbox.free).toBe(3);
 
@@ -241,7 +237,7 @@ describe('Inbox', () => {
         expect(inbox.free).toBe(3);
     });
 
-    it('should return NOT_AVAILABLE if the buffer has got be empty', async () => {
+    it("should return NOT_AVAILABLE if the buffer has got be empty", async () => {
         expect(inbox.size).toBe(0);
         expect(inbox.free).toBe(3);
 

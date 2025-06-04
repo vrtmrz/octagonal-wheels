@@ -9,8 +9,11 @@ export function generativeBuffer<T>() {
     let onSizeUpdated: ((size: number) => void) | undefined;
     const updateSize = () => {
         if (onSizeUpdated) {
-            try { onSizeUpdated(next.length - 1); }
-            catch (_) { /* NO OP*/ }
+            try {
+                onSizeUpdated(next.length - 1);
+            } catch {
+                /* NO OP*/
+            }
         }
     };
     return {
@@ -57,7 +60,7 @@ export function generativeBuffer<T>() {
                 }
             }
             try {
-                next.forEach(p => p.reject(GENERATOR_CLOSED));
+                next.forEach((p) => p.reject(GENERATOR_CLOSED));
                 next.length = 0;
             } catch (e) {
                 console.log(`Error on cleanup: ${String(e)}`);
@@ -65,10 +68,9 @@ export function generativeBuffer<T>() {
         },
         get size() {
             return next.length - 1;
-        }
+        },
     };
 }
-
 
 export class GeneratorSource<T> {
     _next: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>[];
@@ -76,8 +78,11 @@ export class GeneratorSource<T> {
     _onSizeUpdated?: (size: number) => void;
     _updateSize() {
         if (this._onSizeUpdated) {
-            try { this._onSizeUpdated(this.size); }
-            catch (_) {/* NO OP*/ }
+            try {
+                this._onSizeUpdated(this.size);
+            } catch {
+                /* NO OP*/
+            }
         }
     }
     get size() {
@@ -136,7 +141,7 @@ export class GeneratorSource<T> {
             }
         }
         try {
-            this._next.forEach(p => {
+            this._next.forEach((p) => {
                 p.reject();
             });
             this._next.length = 0;
@@ -145,4 +150,3 @@ export class GeneratorSource<T> {
         }
     }
 }
-

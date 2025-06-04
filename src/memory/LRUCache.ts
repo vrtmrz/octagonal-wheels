@@ -96,8 +96,7 @@ export class LRUCache<K, V> {
                 this.cache.delete(key);
                 if (this.enableReversed) this.revCache.delete(value);
                 this.cachedLength -= `${value}`.length;
-                if (this.cache.size <= this.maxCache && this.cachedLength <= this.maxCachedLength)
-                    break;
+                if (this.cache.size <= this.maxCache && this.cachedLength <= this.maxCachedLength) break;
             }
         } else {
             // console.log([this.cache.size, this.cachedLength]);

@@ -2,7 +2,6 @@ import { cancelableDelay, isSomeResolved, promiseWithResolver, type PromiseWithR
 export const NOT_AVAILABLE = Symbol("NotAvailable");
 export type NOT_AVAILABLE = typeof NOT_AVAILABLE;
 
-
 export const READY_PICK_SIGNAL = Symbol("lockReady");
 export type READY_PICK_SIGNAL = typeof READY_PICK_SIGNAL;
 
@@ -11,9 +10,7 @@ export type READY_POST_SIGNAL = typeof READY_POST_SIGNAL;
 
 export const DISPOSE_ERROR = "Inbox has been disposed";
 
-
 export class SyncInbox<T> {
-
     _capacity: number;
     _buffer: T[];
     // Read from head, write to tail.
@@ -65,8 +62,8 @@ export class SyncInbox<T> {
     }
 
     /**
-   * Whether the buffer is full.
-   */
+     * Whether the buffer is full.
+     */
     get isFull() {
         return this.free == 0;
     }
@@ -103,7 +100,7 @@ export class SyncInbox<T> {
             free: this.free,
             isFull: this.isFull,
             isRunningOut: this.isRunningOut,
-            isReady: this.isReady
+            isReady: this.isReady,
         };
     }
 
@@ -177,10 +174,8 @@ export class SyncInbox<T> {
         this.__onPicked();
         return item;
     }
-
 }
 export class Inbox<T> extends SyncInbox<T> {
-
     _lockFull: PromiseWithResolvers<READY_POST_SIGNAL> | undefined;
     _lockReady: PromiseWithResolvers<READY_PICK_SIGNAL> | undefined;
 
@@ -190,7 +185,6 @@ export class Inbox<T> extends SyncInbox<T> {
      */
     constructor(capacity: number) {
         super(capacity);
-
     }
 
     async _waitForFree(): Promise<READY_POST_SIGNAL> {
@@ -259,7 +253,7 @@ export class Inbox<T> extends SyncInbox<T> {
             // If cancellation is provided, check if it is resolved.
             // And if it is resolved, return false before actually posting item
             // Possibly we can accept an item and move this check to after tryPost for performance.
-            if (cancellation && cancellation.length > 0 && await (isSomeResolved(cancellation))) {
+            if (cancellation && cancellation.length > 0 && (await isSomeResolved(cancellation))) {
                 return false;
             }
 
@@ -272,7 +266,8 @@ export class Inbox<T> extends SyncInbox<T> {
             const tasks = [
                 this._waitForFree(),
                 ...(timeout ? [(p = cancelableDelay(timeout)).promise] : []),
-                ...(cancellation ? cancellation : [])] as Promise<any>[];
+                ...(cancellation ? cancellation : []),
+            ] as Promise<any>[];
             const r = await Promise.race(tasks);
             p?.cancel();
             if (r === READY_POST_SIGNAL) {
@@ -282,7 +277,6 @@ export class Inbox<T> extends SyncInbox<T> {
             }
             // Other case, timeout or cancelled by the cancellation promise.
             return false;
-
         } while (!this._isDisposed);
         // This means the inbox is disposed while waiting, probably by the cancellation promise.
         // deno-lint-ignore no-unreachable
@@ -290,12 +284,12 @@ export class Inbox<T> extends SyncInbox<T> {
     }
 
     /**
-       * Picks an item from the buffer.
-       * Waits until an item is available.
-       * @param timeout The timeout in milliseconds.
-       * @param cancellation The promise that cancels the operation.
-       * @returns The item picked.
-       */
+     * Picks an item from the buffer.
+     * Waits until an item is available.
+     * @param timeout The timeout in milliseconds.
+     * @param cancellation The promise that cancels the operation.
+     * @returns The item picked.
+     */
     async pick(timeout?: number, cancellation?: Promise<any>[]): Promise<T | NOT_AVAILABLE> {
         // console.log(`blocking: ${nonBlocking} timeout: ${timeout} cancellation: ${cancellation}`);
         // console.log(`Picking ${this._readIdx} -> ${this._writeIdx} `);
@@ -307,7 +301,7 @@ export class Inbox<T> extends SyncInbox<T> {
             // If cancellation is provided, check if it is resolved.
             // And if it is resolved, return NOT_AVAILABLE before actually picking item.
             // Possibly we can accept an item and move this check to after tryPick for performance.
-            if (cancellation && cancellation.length > 0 && await (isSomeResolved(cancellation))) {
+            if (cancellation && cancellation.length > 0 && (await isSomeResolved(cancellation))) {
                 return NOT_AVAILABLE;
             }
             const item = this.tryPick();
@@ -319,7 +313,8 @@ export class Inbox<T> extends SyncInbox<T> {
             const tasks = [
                 this._waitForReady(),
                 ...(timeout ? [(p = cancelableDelay(timeout)).promise] : []),
-                ...(cancellation ? cancellation : [])] as Promise<any>[];
+                ...(cancellation ? cancellation : []),
+            ] as Promise<any>[];
             // console.log(tasks);
             const r = await Promise.race(tasks);
             // console.log(`Tasks!:${String(r)}`);
@@ -331,14 +326,11 @@ export class Inbox<T> extends SyncInbox<T> {
             }
             // Cancelled by the cancellation promise.
             return NOT_AVAILABLE;
-
         } while (!this.isDisposed);
         // This means the inbox is disposed while waiting, probably by the cancellation promise.
         // deno-lint-ignore no-unreachable
         return NOT_AVAILABLE;
-
     }
-
 }
 
 export const EVENT_PROGRESS = "progress";
@@ -363,7 +355,7 @@ export class InboxWithEvent<T> extends Inbox<T> {
     override __onProgress() {
         this._processed++;
         const event = new CustomEvent<InboxStateDetail>(EVENT_PROGRESS, {
-            detail: this.state
+            detail: this.state,
         });
         this._callback?.(event.detail);
     }

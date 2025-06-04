@@ -1,12 +1,14 @@
-import { describe, bench } from 'vitest';
+import { describe, bench } from "vitest";
 
 import * as v1 from "./reactive_v1.ts";
 import * as v2 from "./reactive_v2.ts";
 
-
 for (const mode of ["R/W", "R/O", "W/O"]) {
-    describe('Reactive Source Benchmark ' + mode, () => {
-        for (const [title, target] of [["v1", v1], ["v2", v2]] as const) {
+    describe("Reactive Source Benchmark " + mode, () => {
+        for (const [title, target] of [
+            ["v1", v1],
+            ["v2", v2],
+        ] as const) {
             // describe(`reactive-benchmark-${title}`, () => {
             // const title = target === v1 ? 'v1' : 'v2';
             const value_1_1 = target.reactiveSource(1);
@@ -42,5 +44,4 @@ for (const mode of ["R/W", "R/O", "W/O"]) {
             }
         }
     });
-
 }

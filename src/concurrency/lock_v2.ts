@@ -93,7 +93,7 @@ export function onlyLatest<T>(key: string | symbol, proc: Task<T>): Promise<T | 
                         latestProcessMap.delete(key);
                     }
                 }
-            })
+            });
         } catch (ex) {
             // Ensure that the promise is removed from the map after completion.
             if (latestProcessMap.get(key) === p.promise) {
@@ -104,7 +104,6 @@ export function onlyLatest<T>(key: string | symbol, proc: Task<T>): Promise<T | 
     });
     return p.promise;
 }
-
 
 /**
  * If free, run task and return the result (Same as serialized).
@@ -133,10 +132,9 @@ export function shareRunningResult<T>(key: string | symbol, proc: Task<T>): Prom
     return p.promise;
 }
 
-
 /**
  * Skips the execution of a task if it is already duplicated.
- * 
+ *
  * @param key - The key to identify the task.
  * @param proc - The task to be executed.
  * @returns A promise that resolves to the result of the task, or `null` if the task is duplicated.
@@ -170,7 +168,6 @@ export function skipIfDuplicated<T>(key: string | symbol, proc: Task<T>): Promis
  * @returns A Promise that resolves once the process has been scheduled.
  */
 export async function scheduleOnceIfDuplicated<T>(key: string, proc: () => Promise<T>): Promise<T | null | undefined> {
-
     if (isLockAcquired(key)) {
         waitingProcessMap.set(key, proc);
         return Promise.resolve(undefined);

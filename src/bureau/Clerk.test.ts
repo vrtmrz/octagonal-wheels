@@ -1,12 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 import { Clerk, ClerkGroup, ClerkState, Feeder, Harvester, Porter } from "./Clerk.ts";
 import { Inbox, InboxWithEvent } from "./Inbox.ts";
 import { delay, promiseWithResolver, yieldMicrotask } from "../promises.ts";
 
-
-
-describe('Clerk', () => {
-    it('should process items using the provided job function', async () => {
+describe("Clerk", () => {
+    it("should process items using the provided job function", async () => {
         const result: string[] = [];
         const completed = promiseWithResolver<void>();
         const postBox = new Inbox<string>(5);
@@ -34,7 +32,6 @@ describe('Clerk', () => {
             const testStr = "Hello " + i;
             expected.push(testStr);
             await postBox.post(testStr);
-
         }
         await completed.promise;
 
@@ -102,12 +99,10 @@ describe('Clerk', () => {
         expect(clerk.state).toBe(ClerkState.DISPOSED);
         expect(clerk2.state).toBe(ClerkState.DISPOSED);
     });
-
-
 });
 
-describe('Porter', () => {
-    it('should batch items and post them to the outgoing inbox', async () => {
+describe("Porter", () => {
+    it("should batch items and post them to the outgoing inbox", async () => {
         // const result: string[][] = [];
         const completed = promiseWithResolver<void>();
         const postBox = new InboxWithEvent<string>(5);
@@ -124,12 +119,11 @@ describe('Porter', () => {
             assigned: outgoingBox,
         });
 
-
         const expected = [
             ["item1", "item2", "item3"],
             ["item4", "item5", "item6"],
             ["item7", "item8", "item9"],
-            ["item10"]
+            ["item10"],
         ];
 
         for (let i = 1; i <= 10; i++) {
@@ -156,12 +150,12 @@ describe('Porter', () => {
         expect(porter.state).toBe(ClerkState.DISPOSED);
     });
 
-    it('should flush items after timeout if maxSize is not reached', async () => {
+    it("should flush items after timeout if maxSize is not reached", async () => {
         const completed = promiseWithResolver<void>();
         const postBox = new InboxWithEvent<string>(5);
         const outgoingBox = new InboxWithEvent<string[]>(5);
 
-        const source = (async function* () {
+        const source = async function* () {
             for (let i = 1; i <= 3; i++) {
                 yield `item${i}`;
             }
@@ -169,7 +163,7 @@ describe('Porter', () => {
             for (let i = 4; i <= 8; i++) {
                 yield `item${i}`;
             }
-        });
+        };
         const porter = new Porter<string>({
             from: postBox,
             to: outgoingBox,
@@ -202,12 +196,10 @@ describe('Porter', () => {
             checkStates();
         });
 
-
         const expected = [
             ["item1", "item2", "item3"],
             ["item4", "item5", "item6", "item7", "item8"],
         ];
-
 
         // await delay(100);
         // await delay(10);
@@ -219,12 +211,12 @@ describe('Porter', () => {
         await delay(10);
         expect(porter.state).toBe(ClerkState.DISPOSED);
     });
-    it('should merge batches items if not have not drained', async () => {
+    it("should merge batches items if not have not drained", async () => {
         const completed = promiseWithResolver<void>();
         const postBox = new InboxWithEvent<string>(5);
         const outgoingBox = new InboxWithEvent<string[]>(5);
 
-        const source = (async function* () {
+        const source = async function* () {
             for (let i = 1; i <= 3; i++) {
                 yield `item${i}`;
             }
@@ -232,7 +224,7 @@ describe('Porter', () => {
             for (let i = 4; i <= 8; i++) {
                 yield `item${i}`;
             }
-        });
+        };
         const porter = new Porter<string>({
             from: postBox,
             to: outgoingBox,
@@ -254,7 +246,6 @@ describe('Porter', () => {
             completed.resolve();
         };
 
-
         porter.setOnProgress((state) => {
             checkStates();
         });
@@ -263,12 +254,10 @@ describe('Porter', () => {
             checkStates();
         });
 
-
         const expected = [
             ["item1", "item2", "item3", "item4", "item5"],
             ["item6", "item7", "item8"],
         ];
-
 
         await delay(1000);
         // await delay(10);
@@ -286,7 +275,7 @@ describe('Porter', () => {
         await delay(10);
         expect(porter.state).toBe(ClerkState.DISPOSED);
     });
-    it('should handle dispose correctly', async () => {
+    it("should handle dispose correctly", async () => {
         const postBox = new Inbox<string>(5);
         const outgoingBox = new Inbox<string[]>(5);
 
@@ -303,11 +292,9 @@ describe('Porter', () => {
         await porter.onDisposed;
         expect(porter.state).toBe(ClerkState.DISPOSED);
     });
-
-
 });
-describe('ClerkGroup', () => {
-    it('should hire initial members and process items', async () => {
+describe("ClerkGroup", () => {
+    it("should hire initial members and process items", async () => {
         const result: string[] = [];
         const completed = promiseWithResolver<void>();
         const postBox = new Inbox<string>(5);
@@ -325,7 +312,7 @@ describe('ClerkGroup', () => {
             initialMemberCount: 3,
         });
 
-        clerkGroup._clerks.forEach(clerk => {
+        clerkGroup._clerks.forEach((clerk) => {
             clerk.setOnProgress((state) => {
                 const detail = state.inboxDetail;
                 if (detail.size == 0 && detail.processed != 0 && state.state == ClerkState.IDLE) {
@@ -351,12 +338,12 @@ describe('ClerkGroup', () => {
         postBox.dispose();
         await delay(10);
         clerkGroup.dispose();
-        clerkGroup._clerks.forEach(clerk => {
+        clerkGroup._clerks.forEach((clerk) => {
             expect(clerk.state).toBe(ClerkState.DISPOSED);
         });
     });
 
-    it('should adjust member count correctly', async () => {
+    it("should adjust member count correctly", async () => {
         const result: string[] = [];
         const completed = promiseWithResolver<void>();
         const postBox = new Inbox<string>(5);
@@ -380,7 +367,7 @@ describe('ClerkGroup', () => {
         clerkGroup.adjustMemberCount(1);
         expect(clerkGroup._clerks.length).toBe(1);
 
-        clerkGroup._clerks.forEach(clerk => {
+        clerkGroup._clerks.forEach((clerk) => {
             clerk.setOnProgress((state) => {
                 const detail = state.inboxDetail;
                 if (detail.size == 0 && detail.processed != 0 && state.state == ClerkState.IDLE) {
@@ -406,12 +393,12 @@ describe('ClerkGroup', () => {
         postBox.dispose();
         await delay(10);
         clerkGroup.dispose();
-        clerkGroup._clerks.forEach(clerk => {
+        clerkGroup._clerks.forEach((clerk) => {
             expect(clerk.state).toBe(ClerkState.DISPOSED);
         });
     });
 
-    it('should return correct state details', async () => {
+    it("should return correct state details", async () => {
         const postBox = new Inbox<string>(5);
 
         const job = async (item: string) => {
@@ -445,7 +432,7 @@ describe('ClerkGroup', () => {
         postBox.dispose();
         await delay(10);
         clerkGroup.dispose();
-        clerkGroup._clerks.forEach(clerk => {
+        clerkGroup._clerks.forEach((clerk) => {
             expect(clerk.state).toBe(ClerkState.DISPOSED);
         });
     });

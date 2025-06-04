@@ -1,6 +1,5 @@
 import { promiseWithResolver } from "../promises.ts";
 
-
 /**
  * ConnectorFunc
  * @description
@@ -10,7 +9,7 @@ import { promiseWithResolver } from "../promises.ts";
  * @param U the type of the return value
  * @returns a promise that resolves to the return value of the function
  */
-export type ConnectorFunc<T extends any[], U> = (...args: T) => U
+export type ConnectorFunc<T extends any[], U> = (...args: T) => U;
 export type ConnectorWrappedFunc<T extends any[], U> = (...args: T) => U | Promise<Awaited<U>>;
 /**
  * ConnectorInstance
@@ -19,7 +18,7 @@ export type ConnectorWrappedFunc<T extends any[], U> = (...args: T) => U | Promi
  * It is used to connect an instance to a name, and then retrieve that instance later.
  * @param T the type of the instance
  */
-export type ConnectorInstance<T> = T
+export type ConnectorInstance<T> = T;
 /**
  * ConnectorFuncOf
  * @description
@@ -100,7 +99,6 @@ export interface ConnectorInstanceOf<T> {
 }
 
 function getFuncOf<T extends any[], U>(name: string): ConnectorFuncOf<T, U> {
-
     let connectedFunction: ConnectorFunc<T, U> | undefined;
     let connectedFunctionTask = promiseWithResolver<ConnectorFunc<T, U>>();
     let onDisconnect: (() => void) | undefined;
@@ -134,7 +132,7 @@ function getFuncOf<T extends any[], U>(name: string): ConnectorFuncOf<T, U> {
         },
         get isConnected() {
             return connectedFunction !== undefined;
-        }
+        },
     } satisfies ConnectorFuncOf<T, U>;
     return inst;
 }
@@ -172,7 +170,7 @@ function getInstanceOf<T>(name: string): ConnectorInstanceOf<T> {
         },
         get isConnected() {
             return instance !== undefined;
-        }
+        },
     } satisfies ConnectorInstanceOf<T>;
     return inst;
 }
@@ -184,12 +182,12 @@ const weakFuncMap = new WeakMap<ConnectorFunc<any, any>, string>();
 const weakInstanceMap = new WeakMap<ConnectorInstance<any>, string>();
 
 /**
-* Get a function connector
-* @description 
-* This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
-* @param func A function to connect 
-* @returns <ConnectorFuncOf<T, U>>
-*/
+ * Get a function connector
+ * @description
+ * This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
+ * @param func A function to connect
+ * @returns <ConnectorFuncOf<T, U>>
+ */
 function funcOf<T extends any[], U>(param: string | ConnectorFunc<T, U>): ConnectorFuncOf<T, U> {
     let name: string;
     if (typeof param === "function") {
@@ -216,7 +214,7 @@ function funcOf<T extends any[], U>(param: string | ConnectorFunc<T, U>): Connec
  * @param name The name of the instance (decided by each type of instance)
  * @description This function retrieves the connector instance associated with the given name.
  * @returns The connector instance associated with the name.
-     */
+ */
 function _instanceOf<T>(name: string) {
     if (connectedInstancesOf.has(name)) {
         return connectedInstancesOf.get(name) as ConnectorInstanceOf<T>;
@@ -234,14 +232,16 @@ type _classType<T> = new (...args: any[]) => T;
  * @returns The connector instance associated with the class instance.
  */
 function classInstanceOf<T extends new (...args: any[]) => any>(classType: T): ConnectorInstanceOf<InstanceType<T>>;
-/** 
+/**
  *  Get a class instance connector by name
  * @description This function retrieves the connector instance associated with the given name.
  * @param name The name of the class type to connect
  * @returns The connector instance associated with the class type.
  */
 function classInstanceOf<T extends _classType<any>>(name: string): ConnectorInstanceOf<InstanceType<T>>;
-function classInstanceOf<T extends _classType<any>, N extends string = string>(classType: T | N): ConnectorInstanceOf<InstanceType<T>> {
+function classInstanceOf<T extends _classType<any>, N extends string = string>(
+    classType: T | N
+): ConnectorInstanceOf<InstanceType<T>> {
     if (typeof classType === "string") {
         return _instanceOf<InstanceType<T>>(classType);
     }
@@ -271,7 +271,6 @@ function objectInstanceOf<T extends object>(instanceObject: T): ConnectorInstanc
     return _instanceOf<T>(name);
 }
 
-
 /**
  * Get a connector to instance by the name
  * @description
@@ -282,7 +281,7 @@ function objectInstanceOf<T extends object>(instanceObject: T): ConnectorInstanc
 function instanceOf<T>(name: string): ConnectorInstanceOf<T>;
 /**
  * Get a connector to instance by the instance object
- * @description 
+ * @description
  * This method returns a instance connector that allows you to connect a instance to a name and then retrieve that instance later.
  * @template T The type of the instance
  * @param instanceObject The instance object to connect
@@ -295,8 +294,6 @@ function instanceOf<T extends object>(param: string | T): ConnectorInstanceOf<T>
     return objectInstanceOf(param);
 }
 
-
-
 /**
  * Connector
  * @description
@@ -306,5 +303,5 @@ function instanceOf<T extends object>(param: string | T): ConnectorInstanceOf<T>
 export const Connector = {
     funcOf,
     instanceOf,
-    classInstanceOf
+    classInstanceOf,
 } as const;

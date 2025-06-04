@@ -12,13 +12,17 @@ async function* withIndex<T>(iterable: Iterable<T> | AsyncIterable<T>): AsyncIte
  * @param callback A function to be applied to each element of the iterable.
  * @param concurrency The number of concurrent processes.
  */
-export async function* withConcurrency<T, U>(iterable: Iterable<T> | AsyncIterable<T>, callback: (t: T) => Promise<U> | U, concurrency: number): AsyncIterable<U> {
+export async function* withConcurrency<T, U>(
+    iterable: Iterable<T> | AsyncIterable<T>,
+    callback: (t: T) => Promise<U> | U,
+    concurrency: number
+): AsyncIterable<U> {
     const processes = new Set<Promise<[number, U]>>();
     const mapTaskToPromise = new Map<number, Promise<[number, U]>>();
     let serial = 0;
     const enqueue = (item: T) => {
         const idx = serial++;
-        const promise = (async () => [idx, await callback(item) as U] as [number, U])();
+        const promise = (async () => [idx, (await callback(item)) as U] as [number, U])();
         processes.add(promise);
         mapTaskToPromise.set(idx, promise);
     };
@@ -28,7 +32,6 @@ export async function* withConcurrency<T, U>(iterable: Iterable<T> | AsyncIterab
         processes.delete(item);
         mapTaskToPromise.delete(r[0]);
         return r[1];
-
     };
     for await (const t of iterable) {
         while (processes.size >= concurrency) {
@@ -46,7 +49,10 @@ export async function* withConcurrency<T, U>(iterable: Iterable<T> | AsyncIterab
  * @param iterable Source iterable.
  * @param callback Filtering function.
  */
-export async function* filter<T>(iterable: Iterable<T> | AsyncIterable<T>, callback: (t: T) => boolean | Promise<boolean>): AsyncIterable<T> {
+export async function* filter<T>(
+    iterable: Iterable<T> | AsyncIterable<T>,
+    callback: (t: T) => boolean | Promise<boolean>
+): AsyncIterable<T> {
     for await (const t of iterable) {
         if (await callback(t)) {
             yield t;
@@ -54,7 +60,10 @@ export async function* filter<T>(iterable: Iterable<T> | AsyncIterable<T>, callb
     }
 }
 
-export async function* map<T, U>(iterable: Iterable<T> | AsyncIterable<T>, callback: (t: T) => U | Promise<U>): AsyncIterable<U> {
+export async function* map<T, U>(
+    iterable: Iterable<T> | AsyncIterable<T>,
+    callback: (t: T) => U | Promise<U>
+): AsyncIterable<U> {
     for await (const t of iterable) {
         yield await callback(t);
     }
@@ -66,12 +75,20 @@ export async function* map<T, U>(iterable: Iterable<T> | AsyncIterable<T>, callb
  * @param callback a function to be applied to each element of the iterable.
  * @param concurrency  the number of concurrent processes.
  */
-export async function* asyncMapWithConcurrency<T, U>(iterable: Iterable<T> | AsyncIterable<T>, callback: (t: T) => U | Promise<U>, concurrency: number): AsyncIterable<U> {
+export async function* asyncMapWithConcurrency<T, U>(
+    iterable: Iterable<T> | AsyncIterable<T>,
+    callback: (t: T) => U | Promise<U>,
+    concurrency: number
+): AsyncIterable<U> {
     const buffer = new Map<number, U>();
     let head = 0;
-    const source = withConcurrency(withIndex(iterable), async ([index, value]) => {
-        return [index, await callback(value)] as const;
-    }, concurrency);
+    const source = withConcurrency(
+        withIndex(iterable),
+        async ([index, value]) => {
+            return [index, await callback(value)] as const;
+        },
+        concurrency
+    );
     for await (const t of source) {
         const [index, value] = t;
         buffer.set(index, value);
@@ -87,6 +104,6 @@ export async function* asyncMapWithConcurrency<T, U>(iterable: Iterable<T> | Asy
         head++;
     }
     if (buffer.size > 0) {
-        throw new Error('Buffer not empty');
+        throw new Error("Buffer not empty");
     }
 }

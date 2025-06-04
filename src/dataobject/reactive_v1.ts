@@ -12,18 +12,18 @@ export type ReactiveValue<T> = {
     readonly value: T;
     onChanged: (handler: ReactiveChangeHandler<T>) => void;
     offChanged: (handler: ReactiveChangeHandler<T>) => void;
-}
+};
 export type ReactiveSource<T> = {
     value: T;
     onChanged: (handler: ReactiveChangeHandler<T>) => void;
     offChanged: (handler: ReactiveChangeHandler<T>) => void;
-}
+};
 
 export type ReactiveInstance<T> = {
     readonly value: T;
     markDirty(): void;
     rippleChanged(): void;
-}
+};
 
 /**
  * Creates a reactive instance with the given initial value.
@@ -46,19 +46,21 @@ export function reactiveSource<T>(initialValue: T): ReactiveSource<T> {
 export function reactive<T>(expression: (prev?: T) => T, initialValue?: T): ReactiveValue<T> {
     return _reactive({ expression, initialValue });
 }
-type reactiveParams<T> = {
-    expression: (prev?: T) => T,
-    initialValue?: T
-} | {
-    expression?: (prev?: T) => T,
-    initialValue: T
-}
+type reactiveParams<T> =
+    | {
+          expression: (prev?: T) => T;
+          initialValue?: T;
+      }
+    | {
+          expression?: (prev?: T) => T;
+          initialValue: T;
+      };
 
 function _reactive<T>({ expression, initialValue }: reactiveParams<T>): ReactiveValue<T> {
     let value: T;
     let _isDirty = false;
 
-    const changeHandlers = new Set<((value: ReactiveInstance<T>) => unknown)>;
+    const changeHandlers = new Set<(value: ReactiveInstance<T>) => unknown>();
 
     const instance = {
         myContext: new Set<ReactiveInstance<unknown>>(),
@@ -67,14 +69,14 @@ function _reactive<T>({ expression, initialValue }: reactiveParams<T>): Reactive
             instance.markDependedDirty();
         },
         rippleChanged() {
-            changeHandlers.forEach(e => e(instance));
-            instance.myContext.forEach(e => e.rippleChanged())
+            changeHandlers.forEach((e) => e(instance));
+            instance.myContext.forEach((e) => e.rippleChanged());
         },
         markClean() {
             _isDirty = false;
         },
         markDependedDirty() {
-            instance.myContext.forEach(e => e.markDirty())
+            instance.myContext.forEach((e) => e.markDirty());
         },
         get isDirty() {
             return _isDirty;
@@ -111,8 +113,8 @@ function _reactive<T>({ expression, initialValue }: reactiveParams<T>): Reactive
         },
         offChanged(handler: ReactiveChangeHandler<T>) {
             changeHandlers.delete(handler);
-        }
-    }
+        },
+    };
 
     value = initialize();
 

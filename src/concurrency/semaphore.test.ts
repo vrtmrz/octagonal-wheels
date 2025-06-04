@@ -1,9 +1,8 @@
 //OK
 
-import { describe, beforeEach, it, expect } from 'vitest';
+import { describe, beforeEach, it, expect } from "vitest";
 import { Semaphore, type SemaphoreObject } from "./semaphore.ts";
 import { delay } from "../promises.ts";
-
 
 class Runner {
     maxConcurrency = 0;
@@ -24,14 +23,16 @@ class Runner {
         }
     }
 }
-describe('Semaphore', () => {
+describe("Semaphore", () => {
     let semaphore: SemaphoreObject;
     let runner: Runner;
     let process: () => Promise<void>;
 
     beforeEach(() => {
         semaphore = Semaphore(3);
-        runner = new Runner(async () => { await delay(100); });
+        runner = new Runner(async () => {
+            await delay(100);
+        });
         process = async () => {
             const release = await semaphore.acquire();
             try {
@@ -42,14 +43,14 @@ describe('Semaphore', () => {
         };
     });
 
-    it('should acquire and release semaphore', async () => {
+    it("should acquire and release semaphore", async () => {
         const releaser = await semaphore.acquire();
-        expect(releaser).to.be.a('function');
+        expect(releaser).to.be.a("function");
         releaser();
         expect(semaphore.waiting).to.equal(0);
     });
 
-    it('should concurrency kept in limit', async () => {
+    it("should concurrency kept in limit", async () => {
         const processes = Array.from({ length: 10 }, () => process());
         expect(semaphore.waiting).to.equal(7);
         await Promise.all(processes);
@@ -57,7 +58,7 @@ describe('Semaphore', () => {
         expect(semaphore.waiting).to.equal(0);
     });
 
-    it('should limit the number of acquired semaphores', async () => {
+    it("should limit the number of acquired semaphores", async () => {
         const releaser1 = await semaphore.acquire();
         const releaser2 = await semaphore.acquire();
         const releaser3 = await semaphore.acquire();
@@ -65,13 +66,13 @@ describe('Semaphore', () => {
         expect(releaser4).to.equal(false);
         releaser3();
         const releaser5 = await semaphore.tryAcquire();
-        expect(releaser5).to.be.a('function');
+        expect(releaser5).to.be.a("function");
         //@ts-ignore
         releaser5();
         releaser2();
         releaser1();
     });
-    it('should timeout if not acquired in time', async () => {
+    it("should timeout if not acquired in time", async () => {
         const l = await Promise.all(Array.from({ length: 3 }, () => semaphore.acquire()));
         const now = Date.now();
         const releaser = await semaphore.tryAcquire(1, 100);
@@ -81,5 +82,4 @@ describe('Semaphore', () => {
         expect(releaser).to.equal(false);
         l.forEach((r) => r());
     });
-
 });

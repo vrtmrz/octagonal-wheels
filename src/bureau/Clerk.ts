@@ -9,7 +9,6 @@ export enum ClerkState {
     STALLED = "not-started",
 }
 
-
 export type ClerkOptionBase<T> = {
     name?: string;
     assigned: Inbox<T>;
@@ -18,7 +17,6 @@ export type ClerkOptionBase<T> = {
 export type ClerkOption<T> = ClerkOptionBase<T> & {
     job: (item: T) => Promise<any> | any;
 };
-
 
 export type ClerkGroupOption<T, U extends ClerkBase<T>> = ClerkOptionBase<T> & {
     job: (item: T) => Promise<any> | any;
@@ -31,20 +29,19 @@ export const SENTINEL_FLUSH = Symbol("flush");
 
 export type SENTINELS = typeof SENTINEL_FINISHED | typeof SENTINEL_FLUSH;
 
-
 type FeederStateDetail = {
     hasStarted: boolean;
     hasFinished: boolean;
-    totalFetched: number,
-    totalProcessed: number,
+    totalFetched: number;
+    totalProcessed: number;
 };
 type ClerkStateDetail = {
-    inboxDetail: InboxStateDetail,
-    totalFetched: number,
-    totalProcessed: number,
-    isBusy: boolean,
-    hasStarted: boolean,
-    state: ClerkState,
+    inboxDetail: InboxStateDetail;
+    totalFetched: number;
+    totalProcessed: number;
+    isBusy: boolean;
+    hasStarted: boolean;
+    state: ClerkState;
 };
 export abstract class ClerkBase<T> {
     _inbox: Inbox<T>;
@@ -81,7 +78,7 @@ export abstract class ClerkBase<T> {
             totalProcessed: this._totalProcessed,
             state: this._state,
             hasStarted: hasStarted,
-            isBusy: isBusy
+            isBusy: isBusy,
         };
     }
 
@@ -123,7 +120,6 @@ export abstract class ClerkBase<T> {
                 try {
                     await this._onPick(item);
                     this._totalSuccess++;
-
                 } catch (ex) {
                     this._totalFailed++;
                     Logger("Error on processing job on clerk");
@@ -156,11 +152,9 @@ export abstract class ClerkBase<T> {
     get onDisposed() {
         return this._disposePromise.promise;
     }
-
 }
 
 export class Clerk<T> extends ClerkBase<T> {
-
     async _onPick(item: T): Promise<void> {
         return await this._job(item);
     }
@@ -171,9 +165,7 @@ export class Clerk<T> extends ClerkBase<T> {
         super(params);
         this._job = params.job;
     }
-
 }
-
 
 export class ClerkGroup<T, U extends ClerkBase<T>> {
     _clerks: U[];
@@ -182,7 +174,6 @@ export class ClerkGroup<T, U extends ClerkBase<T>> {
     _hiredCount = 0;
     _job: (item: T) => Promise<any>;
     _instantiate: (params: ClerkOption<T>) => U;
-
 
     constructor(params: ClerkGroupOption<T, U>) {
         const { assigned, job, instantiate, initialMemberCount } = params;
@@ -194,14 +185,13 @@ export class ClerkGroup<T, U extends ClerkBase<T>> {
         for (let i = 0; i < initialMemberCount; i++) {
             this.hireMember({ assigned, job });
         }
-
     }
     hireMember(params: ClerkOption<T>) {
         const name = `${this._nameBase}-${this._hiredCount++}`;
         const clerk = this._instantiate({
             name,
             assigned: params.assigned,
-            job: params.job
+            job: params.job,
         });
         this._clerks.push(clerk);
     }
@@ -222,11 +212,11 @@ export class ClerkGroup<T, U extends ClerkBase<T>> {
         }
     }
     get stateDetail(): ClerkStateDetail {
-        const states = this._clerks.map(clerk => clerk.stateDetail);
+        const states = this._clerks.map((clerk) => clerk.stateDetail);
         const totalFetched = states.reduce((acc, state) => acc + state.totalFetched, 0);
         const totalProcessed = states.reduce((acc, state) => acc + state.totalProcessed, 0);
-        const isBusy = states.some(state => state.isBusy);
-        const hasStarted = states.some(state => state.hasStarted);
+        const isBusy = states.some((state) => state.isBusy);
+        const hasStarted = states.some((state) => state.hasStarted);
         const inboxDetail = this._assigned.state;
         return {
             totalFetched,
@@ -234,20 +224,18 @@ export class ClerkGroup<T, U extends ClerkBase<T>> {
             inboxDetail,
             isBusy,
             hasStarted,
-            state: ClerkState.IDLE
+            state: ClerkState.IDLE,
         };
     }
 
     get freeMembers() {
-        return this._clerks.filter(clerk => clerk.state === ClerkState.IDLE).length;
+        return this._clerks.filter((clerk) => clerk.state === ClerkState.IDLE).length;
     }
-
 
     dispose() {
-        this._clerks.forEach(clerk => clerk.dispose());
+        this._clerks.forEach((clerk) => clerk.dispose());
     }
 }
-
 
 /**
  * A clerk that making batch of items and posts that to another inbox.
@@ -327,7 +315,7 @@ export class Porter<T> extends ClerkBase<T> {
         return this._flush();
     }
 
-    async changeParams(params: { timeout?: number, maxSize?: number; }) {
+    async changeParams(params: { timeout?: number; maxSize?: number }) {
         let anyChanged = false;
         if (params.timeout != undefined && this._timeout !== params.timeout) {
             this._timeout = params.timeout;
@@ -342,7 +330,7 @@ export class Porter<T> extends ClerkBase<T> {
         }
     }
 
-    constructor(params: { from: Inbox<T>, to: Inbox<T[]>, timeout?: number, maxSize: number, }) {
+    constructor(params: { from: Inbox<T>; to: Inbox<T[]>; timeout?: number; maxSize: number }) {
         super({ assigned: params.from });
         this._outgoing = params.to;
         this._timeout = params.timeout;
@@ -353,25 +341,24 @@ export class Porter<T> extends ClerkBase<T> {
         if (this._timeoutTimer) clearTimeout(this._timeoutTimer);
         super.dispose();
     }
-
 }
 
 /**
  * The `Feeder` class is responsible for fetching items from a source and posting them to a target inbox.
  * It supports both synchronous and asynchronous iteration over the source.
- * 
+ *
  * @template T - The type of items being processed.
- * 
+ *
  * @property {FeederStateDetail} stateDetail - Returns the current state details of the feeder.
  * @method onProgress - Calls the progress callback with the current state details.
  * @method setOnProgress - Sets the progress callback function.
- * 
+ *
  * @constructor
  * @param {Object} params - The parameters for the feeder.
  * @param {Iterable<T> | AsyncIterable<T>} params.source - The source of items to be processed.
  * @param {Inbox<T>} params.target - The target inbox where items are posted.
  * @param {(state: FeederStateDetail) => void} [params.onProgress] - Optional callback function to report progress.
- * 
+ *
  * @method _mainLoop - The main loop that fetches items from the source and posts them to the target.
  * @method stateDetail - Returns the current state details of the feeder.
  */
@@ -382,7 +369,7 @@ export class Feeder<T> {
     _totalProcessed = 0;
     _source: Iterable<T> | AsyncIterable<T>;
     _target: Inbox<T>;
-    _onProgress?: (state: FeederStateDetail) => void = () => { };
+    _onProgress?: (state: FeederStateDetail) => void = () => {};
     onProgress() {
         try {
             this._onProgress?.(this.stateDetail);
@@ -394,7 +381,11 @@ export class Feeder<T> {
         this._onProgress = callback;
     }
 
-    constructor(params: { source: Iterable<T> | AsyncIterable<T>, target: Inbox<T>, onProgress?: (state: FeederStateDetail) => void; }) {
+    constructor(params: {
+        source: Iterable<T> | AsyncIterable<T>;
+        target: Inbox<T>;
+        onProgress?: (state: FeederStateDetail) => void;
+    }) {
         const { source, target } = params;
         this._source = source;
         this._target = target;
@@ -440,7 +431,6 @@ export class Feeder<T> {
  * @method drainAndReset - Drains the buffer and resets it.
  */
 export class Harvester<T> extends ClerkBase<T> {
-
     _buffer: T[] = [];
     _timeoutTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -468,5 +458,4 @@ export class Harvester<T> extends ClerkBase<T> {
     override dispose(): void {
         super.dispose();
     }
-
 }

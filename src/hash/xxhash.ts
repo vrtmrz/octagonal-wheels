@@ -19,7 +19,6 @@ async function initHashFunc() {
         Logger(`Could not initialise xxhash. fallback...`, LOG_LEVEL_VERBOSE);
         Logger(ex);
         hashFunc = (str) => fallbackMixedHashEach(str);
-
     }
     return hashFunc;
 }
@@ -29,7 +28,7 @@ void initHashFunc();
 
 /**
  * Calculates the digest hash of an array of strings using prepared hash function.
- * 
+ *
  * @param src - The array of strings to calculate the hash for.
  * @returns The digest hash of the input array.
  */
@@ -43,4 +42,3 @@ export function digestHash(src: string[]): string {
     }
     return hash;
 }
-

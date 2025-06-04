@@ -1,13 +1,19 @@
 import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
 import type { ReactiveSource } from "../dataobject/reactive.ts";
 import { RESULT_TIMED_OUT } from "../common/const.ts";
-import { noop, delay, fireAndForget, promiseWithResolver, type PromiseWithResolvers, yieldNextMicrotask } from "../promises.ts";
+import {
+    noop,
+    delay,
+    fireAndForget,
+    promiseWithResolver,
+    type PromiseWithResolvers,
+    yieldNextMicrotask,
+} from "../promises.ts";
 /**
  * @deprecated This module is deprecated and will be removed in the future.
  * use processor_v2.ts instead.
  */
 export class Notifier {
-
     _p: PromiseWithResolvers<void> = promiseWithResolver<void>();
     isUsed = false;
     notify() {
@@ -94,7 +100,7 @@ export class QueueProcessor<T, U> {
     _keepResultUntilDownstreamConnected = false;
     _keptResult = [] as U[];
 
-    _runOnUpdateBatch: () => void = () => { };
+    _runOnUpdateBatch: () => void = () => {};
 
     // Parameters
 
@@ -168,7 +174,12 @@ export class QueueProcessor<T, U> {
 
     _notifier: Notifier = new Notifier();
 
-    constructor(processor: Processor<T, U>, params?: ProcessorParams<U>, items?: T[], enqueueProcessor?: (queue: T[], newEntity: T) => T[]) {
+    constructor(
+        processor: Processor<T, U>,
+        params?: ProcessorParams<U>,
+        items?: T[],
+        enqueueProcessor?: (queue: T[], newEntity: T) => T[]
+    ) {
         this._root = this;
         this._processor = processor;
         this.batchSize = params?.batchSize ?? 1;
@@ -177,10 +188,13 @@ export class QueueProcessor<T, U> {
         this.delay = params?.delay ?? 0;
         this.maintainDelay = params?.maintainDelay ?? false;
         this.interval = params?.interval ?? 0;
-        if (params?.keepResultUntilDownstreamConnected) this._keepResultUntilDownstreamConnected = params.keepResultUntilDownstreamConnected;
+        if (params?.keepResultUntilDownstreamConnected)
+            this._keepResultUntilDownstreamConnected = params.keepResultUntilDownstreamConnected;
         if (params?.remainingReactiveSource) this._remainingReactiveSource = params?.remainingReactiveSource;
-        if (params?.totalRemainingReactiveSource) this._totalRemainingReactiveSource = params?.totalRemainingReactiveSource;
-        if (params?.processingEntitiesReactiveSource) this._processingEntitiesReactiveSource = params?.processingEntitiesReactiveSource;
+        if (params?.totalRemainingReactiveSource)
+            this._totalRemainingReactiveSource = params?.totalRemainingReactiveSource;
+        if (params?.processingEntitiesReactiveSource)
+            this._processingEntitiesReactiveSource = params?.processingEntitiesReactiveSource;
         if (params?.suspended !== undefined) this._isSuspended = params?.suspended;
         if (enqueueProcessor) this.replaceEnqueueProcessor(enqueueProcessor);
         if (params?.pipeTo !== undefined) {
@@ -194,7 +208,7 @@ export class QueueProcessor<T, U> {
     /**
      * replace enqueue logic.
      * @param processor enqueue logic. this should return new queue.
-     * @returns 
+     * @returns
      */
     replaceEnqueueProcessor(processor: (queue: T[], newItem: T) => T[]): this {
         this._enqueueProcessor = processor;
@@ -202,8 +216,8 @@ export class QueueProcessor<T, U> {
     }
 
     /**
-     * Modify the queue by force. 
-     * @param processor 
+     * Modify the queue by force.
+     * @param processor
      * @remarks I know that you have known this is very dangerous.
      */
     modifyQueue(processor: (queue: T[]) => T[]): void {
@@ -222,8 +236,8 @@ export class QueueProcessor<T, U> {
 
     /**
      * Set the handler for when the queue has been modified
-     * @param proc 
-     * @returns 
+     * @param proc
+     * @returns
      */
     onUpdateProgress(proc: () => void): this {
         this._runOnUpdateBatch = proc;
@@ -232,8 +246,8 @@ export class QueueProcessor<T, U> {
 
     /**
      * Join another processor
-     * @param pipeTo 
-     * @returns 
+     * @param pipeTo
+     * @returns
      */
     pipeTo<V>(pipeTo: QueueProcessor<U, V>): QueueProcessor<U, V> {
         this._pipeTo = pipeTo;
@@ -274,7 +288,6 @@ export class QueueProcessor<T, U> {
         return this._isSuspended || this._pipeTo?.isSuspended || false;
     }
 
-
     _updateReactiveSource(): void {
         this.root.updateReactiveSource();
     }
@@ -285,7 +298,6 @@ export class QueueProcessor<T, U> {
         if (this._remainingReactiveSource) this._remainingReactiveSource.value = this.remaining;
         if (this._totalRemainingReactiveSource) this._totalRemainingReactiveSource.value = this.totalRemaining;
         if (this._processingEntitiesReactiveSource) this._processingEntitiesReactiveSource.value = this.nowProcessing;
-
     }
     _updateBatchProcessStatus(): void {
         this._updateReactiveSource();
@@ -298,7 +310,6 @@ export class QueueProcessor<T, U> {
     _canCollectBatch(): boolean {
         return this._queue.length !== 0;
     }
-
 
     enqueue(entity: T): this {
         this._queue = this._enqueueProcessor(this._queue, entity);
@@ -367,7 +378,7 @@ export class QueueProcessor<T, U> {
             this._keptResult.push(...ret);
         }
     }
-    async * pump(): AsyncGenerator<T[], void, unknown> {
+    async *pump(): AsyncGenerator<T[], void, unknown> {
         let items: T[];
         let queueRunOut = true;
         do {
@@ -397,12 +408,12 @@ export class QueueProcessor<T, U> {
         } while (this._canCollectBatch() && !this._isSuspended);
     }
     _processingBatches: Set<number> = new Set<number>();
-    addProcessingBatch: (typeof this._processingBatches.add) = (value) => {
+    addProcessingBatch: typeof this._processingBatches.add = (value) => {
         const r = this._processingBatches.add(value);
         this._updateBatchProcessStatus();
         return r;
     };
-    deleteProcessingBatch: (typeof this._processingBatches.delete) = (value) => {
+    deleteProcessingBatch: typeof this._processingBatches.delete = (value) => {
         const r = this._processingBatches.delete(value);
         this._updateBatchProcessStatus();
         return r;

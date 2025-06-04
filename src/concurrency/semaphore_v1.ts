@@ -1,4 +1,3 @@
-
 function makeUniqueString() {
     const randomStrSrc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const temp = [...Array(30)]
@@ -25,7 +24,6 @@ export type SemaphoreObject = {
     tryAcquire(quantity?: number, timeout?: number, memo?: string): Promise<SemaphoreReleaser | false>;
     peekQueues(): QueueNotifier[];
     setLimit(limit: number): void;
-
 };
 /**
  * Semaphore handling lib.
@@ -33,7 +31,10 @@ export type SemaphoreObject = {
  * @returns Instance of SemaphoreObject
  * @deprecated Use `semaphore_v2` instead.
  */
-export function Semaphore(limit: number, onRelease?: (currentQueue: QueueNotifier[]) => Promise<void> | void): SemaphoreObject {
+export function Semaphore(
+    limit: number,
+    onRelease?: (currentQueue: QueueNotifier[]) => Promise<void> | void
+): SemaphoreObject {
     let _limit = limit;
 
     let currentProcesses = 0;
@@ -42,8 +43,8 @@ export function Semaphore(limit: number, onRelease?: (currentQueue: QueueNotifie
      * Semaphore processing pump
      */
     function execProcess() {
-        //Delete already finished 
-        queue = queue.filter(e => e.state != "DONE");
+        //Delete already finished
+        queue = queue.filter((e) => e.state != "DONE");
 
         // acquiring semaphore by order
         for (const queueItem of queue) {
@@ -62,10 +63,10 @@ export function Semaphore(limit: number, onRelease?: (currentQueue: QueueNotifie
 
     /**
      * Mark DONE.
-     * @param key 
+     * @param key
      */
     function release(key: string) {
-        const finishedTask = queue.find(e => e.key == key);
+        const finishedTask = queue.find((e) => e.key == key);
         if (!finishedTask) {
             throw new Error("Missing locked semaphore!");
         }
@@ -74,7 +75,7 @@ export function Semaphore(limit: number, onRelease?: (currentQueue: QueueNotifie
             currentProcesses -= finishedTask.quantity;
         }
         finishedTask.state = "DONE";
-        if (onRelease) onRelease(queue.filter(e => e.state != "DONE"));
+        if (onRelease) void onRelease(queue.filter((e) => e.state != "DONE"));
         execProcess();
     }
     return {
@@ -90,11 +91,13 @@ export function Semaphore(limit: number, onRelease?: (currentQueue: QueueNotifie
             // function for notify
             // When we call this function, semaphore acquired by resolving promise.
             // (Or, notify acquiring is timed out.)
-            let notify = (_: boolean) => { };
-            const semaphoreStopper = new Promise<SemaphoreReleaser | false>(res => {
+            let notify = (_: boolean) => {};
+            const semaphoreStopper = new Promise<SemaphoreReleaser | false>((res) => {
                 notify = (result: boolean) => {
                     if (result) {
-                        res(() => { release(key); });
+                        res(() => {
+                            release(key);
+                        });
                     } else {
                         res(false);
                     }
@@ -106,13 +109,14 @@ export function Semaphore(limit: number, onRelease?: (currentQueue: QueueNotifie
                 semaphoreStopper,
                 quantity,
                 memo,
-                state: "NONE"
+                state: "NONE",
             };
-            if (timeout) notifier.timer = setTimeout(() => {
-                // If acquiring is timed out, clear queue and notify failed.
-                release(key);
-                notify(false);
-            }, timeout);
+            if (timeout)
+                notifier.timer = setTimeout(() => {
+                    // If acquiring is timed out, clear queue and notify failed.
+                    release(key);
+                    notify(false);
+                }, timeout);
 
             // Push into the queue once.
             queue.push(notifier);
@@ -126,11 +130,11 @@ export function Semaphore(limit: number, onRelease?: (currentQueue: QueueNotifie
         acquire(quantity = 1, memo?: string): Promise<SemaphoreReleaser> {
             return this._acquire(quantity, memo ?? "", 0) as Promise<SemaphoreReleaser>;
         },
-        tryAcquire(quantity = 1, timeout = 1, memo?: string,): Promise<SemaphoreReleaser | false> {
+        tryAcquire(quantity = 1, timeout = 1, memo?: string): Promise<SemaphoreReleaser | false> {
             return this._acquire(quantity, memo ?? "", timeout);
         },
         peekQueues() {
             return queue;
-        }
+        },
     };
 }

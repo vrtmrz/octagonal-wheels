@@ -9,7 +9,7 @@ export class PaceMaker {
     /**
      * Change the interval of the pacing.
      * This will reset the minimum next pacing time.
-     * @param interval 
+     * @param interval
      */
     changeInterval(interval: number) {
         if (interval !== this._interval) {
@@ -20,7 +20,7 @@ export class PaceMaker {
 
     /**
      * Mark the current time as the basis for the next pacing.
-     * @param now 
+     * @param now
      */
     mark(now: number = Date.now()) {
         if (this._minimumNext === undefined) {
@@ -37,9 +37,11 @@ export class PaceMaker {
         if (prevMinimum !== undefined) {
             const shouldWait = prevMinimum - now;
             if (shouldWait > 0) {
-                return new Promise<void>(resolve => setTimeout(() => {
-                    resolve();
-                }, shouldWait));
+                return new Promise<void>((resolve) =>
+                    setTimeout(() => {
+                        resolve();
+                    }, shouldWait)
+                );
             }
         }
         return Promise.resolve();

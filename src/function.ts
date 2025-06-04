@@ -13,7 +13,6 @@ export const throttle = <T extends (...args: any[]) => any>(func: T, timeout: nu
     let timer: ReturnType<typeof setTimeout> | undefined;
     let lastTime: number = 0; // initialize lastTime to 0
     return (...args: Parameters<T>) => {
-
         if (!lastTime) {
             func(...args);
             lastTime = Date.now();

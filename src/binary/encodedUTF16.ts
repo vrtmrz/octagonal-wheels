@@ -5,18 +5,16 @@ const BINARY_CHUNK_MAX = 1024 * 1024 * 30;
 // Table for converting encoding binary
 const table = {} as Record<number, number>;
 const revTable = {} as Record<number, number>;
-const decoderStreamAvailable = (typeof TextDecoderStream !== "undefined");
+const decoderStreamAvailable = typeof TextDecoderStream !== "undefined";
 
 [...range(0xc0, 0x1bf)].forEach((e, i) => {
     table[i] = e;
     revTable[e] = i;
-})
-
-
+});
 
 /**
  * Encodes a binary buffer into a UTF-16 string.
- * 
+ *
  * @param buffer - The binary buffer to encode.
  * @returns A promise that resolves to the encoded UTF-16 string.
  * @deprecated This function is not recommended for use.
@@ -36,7 +34,6 @@ export async function encodeBinaryEach(buffer: Uint8Array): Promise<string> {
     // Return it as utf-16 string.
     return await decodeAsync(out);
 }
-
 
 /**
  * Encodes a binary buffer into an array of strings.
@@ -58,15 +55,13 @@ export async function _encodeBinary(buffer: Uint8Array): Promise<string[]> {
     return Promise.all(out);
 }
 
-
-
 async function decodeAsync(buffer: Uint16Array): Promise<string> {
     if (buffer.length == 0) return "";
     if (!decoderStreamAvailable) return await decodeAsyncReader(buffer);
     const decoderStream = new TextDecoderStream("utf-16");
     const writer = decoderStream.writable.getWriter();
-    writer.write(buffer);
-    writer.close();
+    await writer.write(buffer);
+    await writer.close();
 
     const reader = decoderStream.readable.getReader();
     const result = await reader.read();
@@ -77,8 +72,6 @@ async function decodeAsync(buffer: Uint16Array): Promise<string> {
 
     return result.value;
 }
-
-
 
 function decodeAsyncReader(buffer: Uint16Array): Promise<string> {
     return new Promise<string>((res, rej) => {
@@ -93,14 +86,13 @@ function decodeAsyncReader(buffer: Uint16Array): Promise<string> {
     });
 }
 
-
 export function decodeToArrayBuffer(src: string[]) {
     if (src.length == 1) return _decodeToArrayBuffer(src[0]);
-    const bufItems = src.map(e => _decodeToArrayBuffer(e));
+    const bufItems = src.map((e) => _decodeToArrayBuffer(e));
     const len = bufItems.reduce((p, c) => p + c.byteLength, 0);
     const joinedArray = new Uint8Array(len);
     let offset = 0;
-    bufItems.forEach(e => {
+    bufItems.forEach((e) => {
         joinedArray.set(new Uint8Array(e), offset);
         offset += e.byteLength;
     });
@@ -119,5 +111,5 @@ export function _decodeToArrayBuffer(src: string): ArrayBuffer {
             out[i] = revTable[char];
         }
     }
-    return out.buffer
+    return out.buffer;
 }

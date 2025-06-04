@@ -1,4 +1,3 @@
-
 /**
  * Extracts properties from an object based on a template object.
  * Only properties present in the template object will be included in the result.
@@ -16,12 +15,12 @@ export function extractObject<T>(template: Partial<T>, obj: T): Partial<T> {
     return ret;
 }
 
-const SYMBOL_A = Symbol('a');
-const SYMBOL_B = Symbol('b');
+const SYMBOL_A = Symbol("a");
+const SYMBOL_B = Symbol("b");
 
 /**
  * Checks if two objects are different.
- * 
+ *
  * @param a - The first object to compare.
  * @param b - The second object to compare.
  * @param ignoreUndefined - Optional. If set to true, undefined properties will be ignored during comparison. Default is false.
@@ -37,9 +36,13 @@ export function isObjectDifferent(a: any, b: any, ignoreUndefined: boolean = fal
         }
         const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
         if (ignoreUndefined) {
-            return keys.map(key => a?.[key] !== undefined && b?.[key] !== undefined && isObjectDifferent(a?.[key], b?.[key])).some(e => e == true);
+            return keys
+                .map((key) => a?.[key] !== undefined && b?.[key] !== undefined && isObjectDifferent(a?.[key], b?.[key]))
+                .some((e) => e == true);
         }
-        return keys.map(key => isObjectDifferent(key in a ? a[key] : SYMBOL_A, key in b ? b[key] : SYMBOL_B)).some(e => e == true);
+        return keys
+            .map((key) => isObjectDifferent(key in a ? a[key] : SYMBOL_A, key in b ? b[key] : SYMBOL_B))
+            .some((e) => e == true);
     } else {
         return a !== b;
     }

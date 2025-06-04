@@ -5,9 +5,9 @@ export type TaskProcessing<T> = Promise<T>;
 export type TaskWaiting<T> = () => Promise<T>;
 export type Task<T> = TaskProcessing<T> | TaskWaiting<T>;
 
-export type TaskResult<T, U extends Error> = { ok: T; } | { err: U; };
+export type TaskResult<T, U extends Error> = { ok: T } | { err: U };
 
-export type TaskResultWithKey<T, U extends Error> = TaskResult<T, U> & { key: number; };
+export type TaskResultWithKey<T, U extends Error> = TaskResult<T, U> & { key: number };
 
 export type ProcessingTaskResultWithKey<T, U extends Error> = Promise<TaskResultWithKey<T, U>>;
 
@@ -24,7 +24,6 @@ function isTaskWaiting<T>(task: Task<T>): task is TaskWaiting<T> {
         return true;
     }
     throw new Error("Invalid state");
-
 }
 
 async function wrapEachProcess<T>(key: number, task: TaskProcessing<T>) {
@@ -36,14 +35,16 @@ async function wrapEachProcess<T>(key: number, task: TaskProcessing<T>) {
     }
 }
 
-
 /**
  * Perform all tasks within given concurrency.
  * @param limit Concurrency limit
  * @param tasks Tasks to perform all
- * 
+ *
  */
-export async function* processAllGeneratorTasksWithConcurrencyLimit<T>(limit: number, tasks: AsyncGenerator<Task<T>, undefined, unknown>): AsyncGenerator<TaskResultWithKey<T, Error>, void, unknown> {
+export async function* processAllGeneratorTasksWithConcurrencyLimit<T>(
+    limit: number,
+    tasks: AsyncGenerator<Task<T>, undefined, unknown>
+): AsyncGenerator<TaskResultWithKey<T, Error>, void, unknown> {
     const nowProcessing = new Map<number, ProcessingTaskResultWithKey<T, Error>>();
     let idx = 0;
 
@@ -51,8 +52,7 @@ export async function* processAllGeneratorTasksWithConcurrencyLimit<T>(limit: nu
 
     let generatorDone = false;
     while (nowProcessing.size > 0 || !generatorDone) {
-        L2:
-        while (nowProcessing.size < limit && !generatorDone) {
+        L2: while (nowProcessing.size < limit && !generatorDone) {
             const w = await tasks.next();
             if (w.done) {
                 generatorDone = true;
@@ -73,13 +73,16 @@ export async function* processAllGeneratorTasksWithConcurrencyLimit<T>(limit: nu
     }
 }
 
-export async function* pipeGeneratorToGenerator<T, U>(generator: AsyncGenerator<T>, callback: (obj: T) => Promise<U>): AsyncGenerator<TaskWaiting<U>> {
+export async function* pipeGeneratorToGenerator<T, U>(
+    generator: AsyncGenerator<T>,
+    callback: (obj: T) => Promise<U>
+): AsyncGenerator<TaskWaiting<U>> {
     for await (const e of generator) {
         const closure = () => callback(e);
         yield closure;
     }
 }
-export async function* pipeArrayToGenerator<T, U>(array: T[], callback: (obj: T) => Promise<U>): AsyncGenerator<TaskWaiting<U>> {
+export function* pipeArrayToGenerator<T, U>(array: T[], callback: (obj: T) => Promise<U>): Generator<TaskWaiting<U>> {
     for (const e of array) {
         const closure = () => callback(e);
         yield closure;
@@ -90,16 +93,18 @@ export async function* pipeArrayToGenerator<T, U>(array: T[], callback: (obj: T)
  * Perform all tasks within given concurrency.
  * @param limit Concurrency limit
  * @param tasks Tasks to perform all
- * 
+ *
  */
-export async function* processAllTasksWithConcurrencyLimit<T>(limit: number, tasks: Task<T>[]): AsyncGenerator<TaskResultWithKey<T, Error>, void, unknown> {
+export async function* processAllTasksWithConcurrencyLimit<T>(
+    limit: number,
+    tasks: Task<T>[]
+): AsyncGenerator<TaskResultWithKey<T, Error>, void, unknown> {
     const nowProcessing = new Map<number, ProcessingTaskResultWithKey<T, Error>>();
     let idx = 0;
     const pendingTasks = tasks.reverse();
 
     while (pendingTasks.length > 0 || nowProcessing.size > 0) {
-        L2:
-        while (nowProcessing.size < limit && pendingTasks.length > 0) {
+        L2: while (nowProcessing.size < limit && pendingTasks.length > 0) {
             const task = pendingTasks.pop(); // Pop is faster than shift.
             if (task === undefined) {
                 break L2;
@@ -119,20 +124,23 @@ export async function* processAllTasksWithConcurrencyLimit<T>(limit: number, tas
  * Perform all tasks and returns all result by keeping the order.
  * @param limit Concurrency limit
  * @param tasks Tasks to perform all
- * @returns 
+ * @returns
  */
-export async function mapAllTasksWithConcurrencyLimit<T>(limit: number, tasks: Task<T>[]): Promise<TaskResultWithKey<T, Error>[]> {
+export async function mapAllTasksWithConcurrencyLimit<T>(
+    limit: number,
+    tasks: Task<T>[]
+): Promise<TaskResultWithKey<T, Error>[]> {
     const results = new Map<number, TaskResultWithKey<T, Error>>();
     for await (const v of processAllTasksWithConcurrencyLimit(limit, tasks)) {
         results.set(v.key, v);
     }
-    const ret = [...results.entries()].sort((a, b) => a[0] - b[0]).map(e => e[1]);
+    const ret = [...results.entries()].sort((a, b) => a[0] - b[0]).map((e) => e[1]);
     return ret;
 }
 
 const tasks = new Map<string, ReturnType<typeof setTimeout>>();
 
-export function scheduleTask(key: string, timeout: number, proc: (() => Promise<any> | void), skipIfTaskExist?: boolean) {
+export function scheduleTask(key: string, timeout: number, proc: () => Promise<any> | void, skipIfTaskExist?: boolean) {
     if (tasks.has(key)) {
         if (skipIfTaskExist) return;
         cancelTask(key);
@@ -155,8 +163,8 @@ export function cancelAllTasks() {
         cancelTask(v);
     }
 }
-const intervals: { [key: string]: ReturnType<typeof setInterval>; } = {};
-export function setPeriodicTask(key: string, timeout: number, proc: (() => Promise<any> | void)) {
+const intervals: { [key: string]: ReturnType<typeof setInterval> } = {};
+export function setPeriodicTask(key: string, timeout: number, proc: () => Promise<any> | void) {
     cancelPeriodicTask(key);
     intervals[key] = setInterval(() => {
         void proc();
@@ -173,7 +181,6 @@ export function cancelAllPeriodicTask() {
         cancelPeriodicTask(v);
     }
 }
-
 
 const waitingItems = new Set<string>();
 export async function waitForTimeout(key: string, timeout: number): Promise<boolean> {
@@ -199,14 +206,14 @@ export function isWaitingForTimeout(key: string): boolean {
     return waitingItems.has(key);
 }
 
-export type ResolverWithKey<T> = { key: string; resolver: PromiseWithResolvers<T>; };
+export type ResolverWithKey<T> = { key: string; resolver: PromiseWithResolvers<T> };
 
 /**
  * @deprecated
  * Use shareRunningResult instead.
- * @param key 
- * @param proc 
- * @returns 
+ * @param key
+ * @param proc
+ * @returns
  */
 export function sharedTask<T>(key: string, proc: () => Promise<T>) {
     return shareRunningResult(key, proc);
@@ -214,7 +221,7 @@ export function sharedTask<T>(key: string, proc: () => Promise<T>) {
 
 export function wrapFunctionAsShared<P extends any[], T>(proc: (...p: P) => Promise<T>) {
     return async (...p: P) => {
-        const key = proc.name + "-" + p.map(e => typeof e === "object" ? JSON.stringify(e) : `${e}`).join(",");
+        const key = proc.name + "-" + p.map((e) => (typeof e === "object" ? JSON.stringify(e) : `${e}`)).join(",");
         return await shareRunningResult(key, () => proc(...p));
     };
 }

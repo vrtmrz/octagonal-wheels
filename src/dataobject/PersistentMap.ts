@@ -21,12 +21,12 @@ export class PersistentMap<T> {
         this._save();
     }
     _save(): void {
-        localStorage.setItem(this._key, JSON.stringify([...this._map.entries()]))
+        localStorage.setItem(this._key, JSON.stringify([...this._map.entries()]));
     }
     _load(suppliedEntries: readonly (readonly [string, T])[] = []): Promise<void> {
         try {
             const savedSource = localStorage.getItem(this._key) ?? "";
-            const sourceToParse = (savedSource === "") ? "[]" : savedSource;
+            const sourceToParse = savedSource === "" ? "[]" : savedSource;
             const obj = JSON.parse(sourceToParse) as [string, T][];
             this._map = new Map([...obj, ...suppliedEntries]);
         } catch (ex) {
@@ -72,10 +72,9 @@ export class PersistentMap<T> {
     constructor(key: string, entries?: readonly (readonly [string, T])[]) {
         this._key = key;
         this._map = new Map(entries ?? []);
-        this._load(entries)
+        void this._load(entries);
     }
     // get ready():Promise<boolean>{
 
     // }
-
 }

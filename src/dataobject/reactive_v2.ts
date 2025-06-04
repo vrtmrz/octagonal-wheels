@@ -18,7 +18,6 @@ export type ReactiveSource<T> = {
     value: T;
     onChanged: (handler: ReactiveChangeHandler<T>) => void;
     offChanged: (handler: ReactiveChangeHandler<T>) => void;
-
 };
 
 export type ReactiveInstance<T> = {
@@ -58,15 +57,17 @@ export function reactiveSource<T>(initialValue: T): ReactiveSource<T> {
 export function reactive<T>(expression: (prev?: T) => T, initialValue?: T): ReactiveValue<T> {
     return _reactive({ expression, initialValue });
 }
-type reactiveParams<T> = {
-    expression: (prev?: T) => T,
-    initialValue?: T;
-    isSource?: boolean;
-} | {
-    expression?: (prev?: T) => T,
-    initialValue: T;
-    isSource?: boolean;
-};
+type reactiveParams<T> =
+    | {
+          expression: (prev?: T) => T;
+          initialValue?: T;
+          isSource?: boolean;
+      }
+    | {
+          expression?: (prev?: T) => T;
+          initialValue: T;
+          isSource?: boolean;
+      };
 
 type RefReactiveInstance<T> = {
     id: number;
@@ -79,7 +80,7 @@ const topologicalSortCache = new Map<number, RefReactiveInstance<unknown>[]>();
 // }
 
 function resetTopologicalSortCacheFor(ids: number[]) {
-    ids.forEach(id => topologicalSortCache.delete(id));
+    ids.forEach((id) => topologicalSortCache.delete(id));
     topologicalSortCache.forEach((value, key) => {
         if (!ids.includes(key)) {
             topologicalSortCache.delete(key);
@@ -90,7 +91,7 @@ function topologicalSort(startNode: InternalReactiveInstance<unknown>): Internal
     if (topologicalSortCache.has(startNode.id)) {
         const ref = topologicalSortCache.get(startNode.id);
         if (ref) {
-            const result = ref.map(e => e.instance.deref()).filter(e => e) as InternalReactiveInstance<unknown>[];
+            const result = ref.map((e) => e.instance.deref()).filter((e) => e) as InternalReactiveInstance<unknown>[];
             if (result.length === ref.length) {
                 return result;
             }
@@ -120,7 +121,10 @@ function topologicalSort(startNode: InternalReactiveInstance<unknown>): Internal
 
     visit(startNode);
     const result = sorted.reverse();
-    topologicalSortCache.set(startNode.id, result.map(e => ({ id: e.id, instance: new FallbackWeakRef(e) })));
+    topologicalSortCache.set(
+        startNode.id,
+        result.map((e) => ({ id: e.id, instance: new FallbackWeakRef(e) }))
+    );
     return result; // The order of the sorted array is the order of the dependency
 }
 
@@ -129,7 +133,7 @@ function _reactive<T>({ expression, initialValue, isSource }: reactiveParams<T>)
     let value: T;
     let _isDirty = false;
     const id = _reactiveSourceId++;
-    const changeHandlers = new Set<((value: ReactiveInstance<T>) => unknown)>;
+    const changeHandlers = new Set<(value: ReactiveInstance<T>) => unknown>();
 
     const instance: InternalReactiveInstance<T> = {
         id,
@@ -140,14 +144,14 @@ function _reactive<T>({ expression, initialValue, isSource }: reactiveParams<T>)
         },
         markDirty() {
             const sorted = topologicalSort(instance);
-            sorted.forEach(node => node._markDirty());
+            sorted.forEach((node) => node._markDirty());
         },
         _rippleChanged() {
-            changeHandlers.forEach(e => e(instance));
+            changeHandlers.forEach((e) => e(instance));
         },
         rippleChanged() {
             const sorted = topologicalSort(instance);
-            sorted.forEach(node => node._rippleChanged());
+            sorted.forEach((node) => node._rippleChanged());
         },
         markClean() {
             _isDirty = false;
@@ -159,7 +163,7 @@ function _reactive<T>({ expression, initialValue, isSource }: reactiveParams<T>)
             if (context) {
                 if (!instance.dependants.has(context as InternalReactiveInstance<unknown>)) {
                     instance.dependants.add(context as InternalReactiveInstance<unknown>);
-                    resetTopologicalSortCacheFor([instance.id, (context).id]);
+                    resetTopologicalSortCacheFor([instance.id, context.id]);
                 }
             }
             if (_isDirty) {
@@ -196,7 +200,7 @@ function _reactive<T>({ expression, initialValue, isSource }: reactiveParams<T>)
         },
         offChanged(handler: ReactiveChangeHandler<T>) {
             changeHandlers.delete(handler);
-        }
+        },
     };
 
     value = initialize();

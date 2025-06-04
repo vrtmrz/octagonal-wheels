@@ -24,29 +24,30 @@ type ChunkProcessOptions = {
     interval?: number;
 };
 
-
 /**
  * async generator that yields chunks of items from the source.
  * @param source
  * @param {ChunkProcessOptions} options
  */
-export async function* asChunk<T>(source: Iterable<T> | AsyncIterable<T>, { unit, timeout, interval }: ChunkProcessOptions): AsyncIterable<T[]> {
+export async function* asChunk<T>(
+    source: Iterable<T> | AsyncIterable<T>,
+    { unit, timeout, interval }: ChunkProcessOptions
+): AsyncIterable<T[]> {
     const postBox = new InboxWithEvent<T>(unit * 10);
     const outgoingBox = new InboxWithEvent<T[]>(10);
     const completed = promiseWithResolver<void>();
     const pacemaker = interval ? new PaceMaker(interval) : undefined;
     let isCompleted = false;
 
-
-    const porter = new Porter(
-        {
-            from: postBox, to: outgoingBox,
-            timeout: timeout,
-            maxSize: unit,
-        },
-    );
+    const porter = new Porter({
+        from: postBox,
+        to: outgoingBox,
+        timeout: timeout,
+        maxSize: unit,
+    });
     const feeder = new Feeder({
-        source, target: postBox,
+        source,
+        target: postBox,
     });
     const checkStates = () => {
         if (porter.stateDetail.isBusy) return;
@@ -84,7 +85,6 @@ export async function* asChunk<T>(source: Iterable<T> | AsyncIterable<T>, { unit
 
         yield chunk;
         pacemaker?.mark();
-
     } while (!isCompleted);
     porter.dispose();
 }
@@ -92,7 +92,7 @@ export async function* asChunk<T>(source: Iterable<T> | AsyncIterable<T>, { unit
 /**
  * Flattens nested async or sync iterables.
  * The counterpart to `asChunk`.
- * @param source 
+ * @param source
  */
 export async function* asFlat<T>(source: AsyncIterable<AsyncIterable<T> | Iterable<T>>): AsyncIterable<T> {
     for await (const chunk of source) {

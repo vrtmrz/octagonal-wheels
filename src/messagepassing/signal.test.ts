@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { RESULT_TIMED_OUT } from "../common/const.ts";
 import { sendSignal, sendValue, waitForSignal, waitForValue } from "./signal.ts";
 
-describe('waitForSignal', () => {
+describe("waitForSignal", () => {
     beforeEach(() => {
         vi.clearAllTimers();
         vi.useFakeTimers();
@@ -10,8 +10,8 @@ describe('waitForSignal', () => {
     afterEach(() => {
         vi.useRealTimers();
     });
-    it('should resolve with true when signal is received', async () => {
-        const id = 'testSignal';
+    it("should resolve with true when signal is received", async () => {
+        const id = "testSignal";
         const timeout = 1000;
         const promise = waitForSignal(id, timeout);
         sendSignal(id);
@@ -19,8 +19,8 @@ describe('waitForSignal', () => {
         expect(result).toBe(true);
     });
 
-    it('should resolve with RESULT_TIMED_OUT when timeout is reached', async () => {
-        const id = 'testSignal';
+    it("should resolve with RESULT_TIMED_OUT when timeout is reached", async () => {
+        const id = "testSignal";
         const timeout = 1000;
         const promise = waitForSignal(id, timeout);
         vi.advanceTimersByTime(timeout + 100);
@@ -28,7 +28,7 @@ describe('waitForSignal', () => {
         expect(result).toBe(false);
     });
 });
-describe('waitForValue', () => {
+describe("waitForValue", () => {
     beforeEach(() => {
         vi.clearAllTimers();
         vi.useFakeTimers();
@@ -36,10 +36,10 @@ describe('waitForValue', () => {
     afterEach(() => {
         vi.useRealTimers();
     });
-    it('should resolve with the value when signal is received', async () => {
-        const id = 'testSignal';
+    it("should resolve with the value when signal is received", async () => {
+        const id = "testSignal";
         const timeout = 1000;
-        const value = 'testValue';
+        const value = "testValue";
         const promise = waitForValue<string>(id, timeout);
         sendValue(id, value);
         const result = await promise;
@@ -47,8 +47,8 @@ describe('waitForValue', () => {
         expect(result).toBe(value);
     });
 
-    it('should resolve with RESULT_TIMED_OUT when timeout is reached', async () => {
-        const id = 'testSignal';
+    it("should resolve with RESULT_TIMED_OUT when timeout is reached", async () => {
+        const id = "testSignal";
         const timeout = 1000;
         const promise = waitForValue<string>(id, timeout);
         vi.advanceTimersByTime(timeout + 100);

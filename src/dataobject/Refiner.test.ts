@@ -20,21 +20,19 @@ test("Refiner does not recompute if the source is the same", async () => {
     expect(evaluation).toHaveBeenCalledTimes(1);
 });
 
-
 test("Refiner recomputes if the source is different", async () => {
     type TestData = {
-        a: number,
-        b: number,
+        a: number;
+        b: number;
         c: {
-            d: string,
-            e: string[],
-        },
+            d: string;
+            e: string[];
+        };
         g?: {
-            h: string,
-            i: string[],
-        }
-
-    }
+            h: string;
+            i: string[];
+        };
+    };
     const test1: TestData = {
         a: 1,
         b: 2,
@@ -42,13 +40,12 @@ test("Refiner recomputes if the source is different", async () => {
             d: "test",
             e: ["test1", "test2"],
         },
-    }
+    };
     const evaluation = (obj: TestData) => JSON.stringify(obj);
     const evalInstance = new Refiner({
         initialSource: test1,
         evaluation,
-    }
-    );
+    });
     const result = await evalInstance.value;
     expect(result).toBe(JSON.stringify(test1));
     const test2: TestData = {
@@ -61,29 +58,27 @@ test("Refiner recomputes if the source is different", async () => {
         g: {
             h: "test",
             i: ["test1", "test2"],
-        }
-    }
+        },
+    };
     evalInstance.update(test2);
     const result2 = await evalInstance.value;
     expect(result2).toBe(JSON.stringify(test2));
     expect(isObjectDifferent(test1, test2)).toBe(true);
-
-
-
-})
+});
 
 test("Refiner recomputes with conditionally decision", async () => {
-
     type Environment = {
-        source: number,
-        timestamp: number,
-    }
+        source: number;
+        timestamp: number;
+    };
 
     async function evaluation(source: Environment, prev?: Environment) {
         return { ...source, source: source.source * 2 };
     }
     const evalInstance = new Refiner({
-        initialSource: { source: 10, timestamp: 100 }, evaluation, shouldUpdate: (isDifferent, source, prev) => {
+        initialSource: { source: 10, timestamp: 100 },
+        evaluation,
+        shouldUpdate: (isDifferent, source, prev) => {
             // if (!isDifferent) {
             //     return false;
             // }
@@ -92,7 +87,7 @@ test("Refiner recomputes with conditionally decision", async () => {
             }
             return true;
         },
-        isDifferent: (a, b) => false
+        isDifferent: (a, b) => false,
     });
     const result = await evalInstance.value;
     expect(result).toEqual({ source: 20, timestamp: 100 });
@@ -104,7 +99,6 @@ test("Refiner recomputes with conditionally decision", async () => {
     evalInstance.update({ source: 120, timestamp: 150 });
     const result3 = await evalInstance.value;
     expect(result3).toEqual({ source: 80, timestamp: 200 });
-
 });
 
 test("Refiner handles errors in evaluation", async () => {
@@ -125,8 +119,7 @@ test("Refiner handles lazy evaluation", async () => {
                 resolve(source * 2);
             }, 20);
         });
-    }
-    );
+    });
     const evalInstance = new Refiner({ evaluation });
     const result = evalInstance.value;
     expect(evaluation).toHaveBeenCalledTimes(0);
@@ -143,8 +136,7 @@ test("Refiner longer evaluation", async () => {
                 resolve(source * 2);
             }, 100);
         });
-    }
-    );
+    });
     const evalInstance = new Refiner({ evaluation });
     const result = evalInstance.value;
     expect(evaluation).toHaveBeenCalledTimes(0);
@@ -154,7 +146,6 @@ test("Refiner longer evaluation", async () => {
     await delay(150);
     evalInstance.update(13);
     const result2 = evalInstance.update(14).value;
-
 
     expect(result).toBeInstanceOf(Promise);
     expect(result2).toBeInstanceOf(Promise);
@@ -170,23 +161,22 @@ test("Refiner longer evaluation And correctly scheduled", async () => {
                 resolve(source * 2);
             }, 100);
         });
-    }
-    );
+    });
     const evalInstance = new Refiner({ evaluation });
     expect(evaluation).toHaveBeenCalledTimes(0);
     evalInstance.update(10);
     expect(evaluation).toHaveBeenCalledTimes(0);
     evalInstance.update(11);
     expect(evaluation).toHaveBeenCalledTimes(0);
-    await delay(10); +0
+    await delay(10);
+    +0;
     expect(evaluation).toHaveBeenCalledTimes(1);
-    const result = await (evalInstance.update(12).value);
+    const result = await evalInstance.update(12).value;
     expect(evaluation).toHaveBeenCalledTimes(2);
     await delay(150);
     evalInstance.update(13);
     expect(evaluation).toHaveBeenCalledTimes(2);
     const result2 = evalInstance.update(14).value;
-
 
     expect(result2).toBeInstanceOf(Promise);
     expect(result).toBe(24);
@@ -232,21 +222,23 @@ test("RefinerSync handles errors in evaluation", () => {
 
 test("RefinerSync recomputes with conditionally decision", () => {
     type Environment = {
-        source: number,
-        timestamp: number,
-    }
+        source: number;
+        timestamp: number;
+    };
 
     function evaluation(source: Environment, prev?: Environment) {
         return { ...source, source: source.source * 2 };
     }
     const evalInstance = new RefinerSync({
-        initialSource: { source: 10, timestamp: 100 }, evaluation, shouldUpdate: (isDifferent, source, prev) => {
+        initialSource: { source: 10, timestamp: 100 },
+        evaluation,
+        shouldUpdate: (isDifferent, source, prev) => {
             if (prev && prev.timestamp > source.timestamp) {
                 return false;
             }
             return true;
         },
-        isDifferent: (a, b) => false
+        isDifferent: (a, b) => false,
     });
     const result = evalInstance.value;
     expect(result).toEqual({ source: 20, timestamp: 100 });
@@ -258,7 +250,6 @@ test("RefinerSync recomputes with conditionally decision", () => {
     evalInstance.update({ source: 120, timestamp: 150 });
     const result3 = evalInstance.value;
     expect(result3).toEqual({ source: 80, timestamp: 200 });
-
 });
 
 test("RefinerSync handles errors in evaluation", () => {

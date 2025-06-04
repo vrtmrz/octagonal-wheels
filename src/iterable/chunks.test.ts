@@ -1,19 +1,22 @@
-import { describe, it, expect } from 'vitest';
-import { asChunk, asFlat } from './chunks';
-import { GeneratorSource } from './source';
-describe('asChunk', () => {
-
-    it('should yield chunks of the specified unit size', async () => {
+import { describe, it, expect } from "vitest";
+import { asChunk, asFlat } from "./chunks";
+import { GeneratorSource } from "./source";
+describe("asChunk", () => {
+    it("should yield chunks of the specified unit size", async () => {
         const source = [1, 2, 3, 4, 5, 6];
         const unit = 2;
         const result: number[][] = [];
         for await (const chunk of asChunk(source, { unit })) {
             result.push([...chunk]);
         }
-        expect(result).toEqual([[1, 2], [3, 4], [5, 6]]);
+        expect(result).toEqual([
+            [1, 2],
+            [3, 4],
+            [5, 6],
+        ]);
     });
 
-    it('should yield remaining items if they do not fill the unit size', async () => {
+    it("should yield remaining items if they do not fill the unit size", async () => {
         const source = [1, 2, 3, 4, 5];
         const unit = 2;
         const result: number[][] = [];
@@ -23,7 +26,7 @@ describe('asChunk', () => {
         expect(result).toEqual([[1, 2], [3, 4], [5]]);
     });
 
-    it('should yield chunks based to unit if timeout is not specified', async () => {
+    it("should yield chunks based to unit if timeout is not specified", async () => {
         const source = new GeneratorSource<number>();
         let cnt = 0;
         let i = setInterval(() => {
@@ -39,10 +42,14 @@ describe('asChunk', () => {
         for await (const chunk of asChunk(source, { unit })) {
             result.push([...chunk]);
         }
-        expect(result).toEqual([[1, 2], [3, 4], [5, 6]]);
+        expect(result).toEqual([
+            [1, 2],
+            [3, 4],
+            [5, 6],
+        ]);
     });
 
-    it('should yield chunks are based on unit if having enough items before timeout', async () => {
+    it("should yield chunks are based on unit if having enough items before timeout", async () => {
         const source = new GeneratorSource<number>();
         let cnt = 0;
         let i = setInterval(() => {
@@ -59,10 +66,14 @@ describe('asChunk', () => {
             result.push([...chunk]);
         }
         source.dispose();
-        expect(result).toEqual([[1, 2], [3, 4], [5, 6]]);
+        expect(result).toEqual([
+            [1, 2],
+            [3, 4],
+            [5, 6],
+        ]);
     });
 
-    it('Should chunks are smaller than the unit if timed out', async () => {
+    it("Should chunks are smaller than the unit if timed out", async () => {
         const source = new GeneratorSource<number>();
         let cnt = 0;
         let i = setInterval(() => {
@@ -82,9 +93,8 @@ describe('asChunk', () => {
         result.forEach((chunk, i) => {
             expect(chunk.length).toBeLessThanOrEqual(unit);
         });
-
     });
-    it('Should keeping interval between chunks', async () => {
+    it("Should keeping interval between chunks", async () => {
         const source = new GeneratorSource<number>();
         // const source = generativeBuffer<number>();
         let cnt = 0;
@@ -112,9 +122,8 @@ describe('asChunk', () => {
                 expect(chunk[1]).toBeGreaterThanOrEqual(interval);
             }
         });
-
     });
-    it('should handle empty source', async () => {
+    it("should handle empty source", async () => {
         const source: number[] = [];
         const unit = 2;
         const result: number[][] = [];
@@ -123,10 +132,9 @@ describe('asChunk', () => {
         }
         expect(result).toEqual([]);
     });
-
 });
-describe('asFlat', () => {
-    it('should flatten nested async iterables', async () => {
+describe("asFlat", () => {
+    it("should flatten nested async iterables", async () => {
         async function* generateNested() {
             yield [1, 2];
             yield [3, 4];
@@ -140,7 +148,7 @@ describe('asFlat', () => {
         expect(result).toEqual([1, 2, 3, 4, 5, 6]);
     });
 
-    it('should flatten nested sync iterables', async () => {
+    it("should flatten nested sync iterables", async () => {
         async function* generateNested() {
             yield [1, 2];
             yield [3, 4];
@@ -154,7 +162,7 @@ describe('asFlat', () => {
         expect(result).toEqual([1, 2, 3, 4, 5, 6]);
     });
 
-    it('should handle mixed nested iterables', async () => {
+    it("should handle mixed nested iterables", async () => {
         async function* generateNested() {
             yield [1, 2];
             yield (async function* () {
@@ -171,7 +179,7 @@ describe('asFlat', () => {
         expect(result).toEqual([1, 2, 3, 4, 5, 6]);
     });
 
-    it('should handle empty source', async () => {
+    it("should handle empty source", async () => {
         async function* generateNested() {
             // Empty generator
         }
@@ -183,4 +191,3 @@ describe('asFlat', () => {
         expect(result).toEqual([]);
     });
 });
-

@@ -53,7 +53,6 @@ export function mixedHash(str: string, seed: number, fnv1aHash_ = epochFNV1a): [
     return [h1 >>> 0, fnv1aHash];
 }
 
-
 export function fallbackMixedHashEach(src: string): string {
     let m = 1;
     let f = epochFNV1a;
@@ -63,7 +62,6 @@ export function fallbackMixedHashEach(src: string): string {
     // This is not a secure hash, but it's good enough for our purposes.
     return `${m.toString(36)}${f.toString(36)}`;
 }
-
 
 /**
  * Computes a mixed hash from an array of strings using Murmur3 and FNV-1a hash algorithms.
@@ -88,7 +86,7 @@ export function fallbackMixedHash(src: string[]): string {
 /**
  * Calculates the base-64 encoded SHA-1 hash of the given string.
  * Note: Very slow, use only when necessary. Prefer fallbackMixedHashEach for faster hashing.
- * 
+ *
  * @param src - The string to calculate the hash for.
  * @returns A promise that resolves to the SHA-1 hash as a base64-encoded string.
  */
@@ -103,14 +101,14 @@ const te = new TextEncoder();
 /**
  * Calculates the hex encoded SHA-1 hash of the given string.
  * Note: Very slow, use only when necessary. Prefer fallbackMixedHashEach for faster hashing.
- * 
+ *
  * @param src - The string to calculate the hash for.
  * @returns A promise that resolves to the SHA-1 hash as a hex-encoded string.
  */
 export async function sha1Hash(str: string): Promise<string> {
     const buffer = te.encode(str);
-    const hashBuffer = await globalThis.crypto.subtle.digest('SHA-1', buffer);
+    const hashBuffer = await globalThis.crypto.subtle.digest("SHA-1", buffer);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hexHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const hexHash = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
     return hexHash;
 }

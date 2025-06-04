@@ -3,8 +3,7 @@ import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary/hex.ts";
 
 const webcrypto = globalThis.crypto;
 const SALT_STR = "fancySyncForYou!";
-const SALT = new TextEncoder().encode(SALT_STR)
-
+const SALT = new TextEncoder().encode(SALT_STR);
 
 let previousPassphrase = "";
 let encryptionKey: CryptoKey;
@@ -25,7 +24,7 @@ const _nonceV3 = new Uint32Array(1);
 const bufV3 = new Uint8Array(12);
 /**
  * Increments the initialization vector (IV) used for encryption.
- * 
+ *
  * @returns {Buffer} The updated IV buffer.
  */
 function incIV() {
@@ -40,27 +39,24 @@ function incIV() {
 
 /**
  * Generates a key using the passphrase.
- * 
+ *
  * @param passphrase - The passphrase used for generating the key.
  * @returns The derived key.
  */
 export async function generateKey(passphrase: string): Promise<CryptoKey> {
     const passphraseBin = new TextEncoder().encode(passphrase);
-    const digestOfPassphrase = await webcrypto.subtle.digest('SHA-256', new Uint8Array([...passphraseBin, ...SALT]));
+    const digestOfPassphrase = await webcrypto.subtle.digest("SHA-256", new Uint8Array([...passphraseBin, ...SALT]));
     const salt = digestOfPassphrase.slice(0, 16);
-    const baseKey = await webcrypto.subtle.importKey(
-        'raw',
-        passphraseBin,
-        'PBKDF2',
-        false,
-        ['deriveBits', 'deriveKey']
-    );
+    const baseKey = await webcrypto.subtle.importKey("raw", passphraseBin, "PBKDF2", false, [
+        "deriveBits",
+        "deriveKey",
+    ]);
 
     const pbkdf2Params = {
-        name: 'PBKDF2',
-        hash: 'SHA-256',
+        name: "PBKDF2",
+        hash: "SHA-256",
         salt: salt,
-        iterations: 100000 // Increased iterations for better security
+        iterations: 100000, // Increased iterations for better security
     };
 
     const derivedKey = await webcrypto.subtle.deriveKey(
@@ -68,14 +64,14 @@ export async function generateKey(passphrase: string): Promise<CryptoKey> {
         baseKey,
         { name: "AES-GCM", length: 256 },
         false,
-        ['decrypt', 'encrypt']
+        ["decrypt", "encrypt"]
     );
     return derivedKey;
 }
 
 /**
  * Encrypts the input string using AES-GCM encryption algorithm with the provided passphrase.
- * 
+ *
  * @param input - The string to be encrypted.
  * @param passphrase - The passphrase used for encryption.
  * @returns The encrypted string with the initialization vector (IV) prepended.
@@ -91,12 +87,12 @@ export async function encryptV3(input: string, passphrase: string) {
     }
 
     const iv = incIV();
-    const dataBuf = writeString(input)
+    const dataBuf = writeString(input);
 
     const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, encryptionKey, dataBuf);
-    const encryptedData2 = "" + await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer));
+    const encryptedData2 = "" + (await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer)));
     // return data with iv.
-    // |%~| iv(12) | data ....  
+    // |%~| iv(12) | data ....
     const ret = `%~${uint8ArrayToHexString(iv)}${encryptedData2}`;
     return ret;
 }
@@ -104,10 +100,9 @@ export async function encryptV3(input: string, passphrase: string) {
 let previousDecryptionPassphrase = "";
 let decryptionKey: CryptoKey;
 
-
 /**
  * Decrypts the encrypted result using the provided passphrase.
- * 
+ *
  * @param encryptedResult - The encrypted result to be decrypted.
  * @param passphrase - The passphrase used for decryption.
  * @returns The decrypted plain text.
@@ -123,7 +118,7 @@ export async function decryptV3(encryptedResult: string, passphrase: string) {
     const ivStr = encryptedResult.substring(2, 26);
     const encryptedData = encryptedResult.substring(26);
     const iv = hexStringToUint8Array(ivStr);
-    const encryptedDataArrayBuffer = base64ToArrayBuffer(encryptedData)
+    const encryptedDataArrayBuffer = base64ToArrayBuffer(encryptedData);
     const dataBuffer = await webcrypto.subtle.decrypt({ name: "AES-GCM", iv }, decryptionKey, encryptedDataArrayBuffer);
     const plain = readString(new Uint8Array(dataBuffer));
     return plain;

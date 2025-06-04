@@ -2,7 +2,7 @@ const LogActorName = "LogActor";
 export type ActorLogMessage = {
     level?: "info" | "warn" | "error" | "verbose";
     message: string;
-}
+};
 
 /**
  * Represents a hub for managing actors.
@@ -27,8 +27,6 @@ class ActorHub<T> {
      */
     _actorRRIndex: Map<string, number> = new Map();
 
-
-
     /**
      * Adds an actor to be managed by the hub.
      * This method is used internally by the Actor class, but it can be used if you are sure and want to make an original and custom actor.
@@ -42,7 +40,10 @@ class ActorHub<T> {
         } else {
             if (actors.length > 0) {
                 actors[0].destroy();
-                this.dispatch(LogActorName, { level: "warn", message: `The instance of Actor ${name} has been replaced` } as unknown as T);
+                this.dispatch(LogActorName, {
+                    level: "warn",
+                    message: `The instance of Actor ${name} has been replaced`,
+                } as unknown as T);
             }
             actors.length = 0;
             actors[0] = actor;
@@ -74,7 +75,10 @@ class ActorHub<T> {
         } else {
             console.warn(`${actorName} -${LogActorName}`);
             if (actorName !== LogActorName) {
-                this.dispatch(LogActorName, { level: "error", message: `The instance of Actor ${actorName} is not assigned to the hub` } as unknown as T);
+                this.dispatch(LogActorName, {
+                    level: "error",
+                    message: `The instance of Actor ${actorName} is not assigned to the hub`,
+                } as unknown as T);
             } else {
                 // Prevent infinite loop, but it should not happen. This will not be tested deeply.
                 console.error(`${LogActorName} is not assigned but dispatched to itself`);
@@ -107,13 +111,11 @@ export abstract class Actor<T> {
      * @param name - The name of the actor. It will be the class name if not provided.
      * @param multiInstance - Indicates whether the actor is a multi-instance. The default value is false. If true, the actor can have multiple instances to process each message concurrently.
      */
-    constructor({ name, multiInstance }: { name?: string, multiInstance?: boolean } = {}) {
+    constructor({ name, multiInstance }: { name?: string; multiInstance?: boolean } = {}) {
         this.name = name || this.constructor.name;
         this.multiInstance = multiInstance ?? false;
         Actor.hub.add(this);
     }
-
-
 
     _busy: boolean = false;
     async _process(message: T) {
@@ -148,7 +150,7 @@ export abstract class Actor<T> {
      */
     abstract process(message: T): Promise<void> | void;
 
-    /** 
+    /**
      * Dispatches a message to the actor.
      * Note: Even if we posted messages to the specific actor, the message will be processed by some actor instances if the actor is a multi-instance.
      * @param message - The message to be dispatched.
@@ -157,10 +159,9 @@ export abstract class Actor<T> {
         Actor.hub.dispatch(this.name, message);
     }
 
-
     /**
      * Posts a message to this actor instance.
-     * 
+     *
      * @param message - The message to be posted.
      */
     postToThisInstance(message: T) {
@@ -180,15 +181,12 @@ export abstract class Actor<T> {
         Actor.hub.dispatch(actor.name, message);
     }
 
-
     /**
      * Destroys the actor instance.
      */
     destroy() {
         if (this.__process) {
-            this.__process.finally(
-                () => this.__process = undefined as any
-            )
+            void this.__process.finally(() => (this.__process = undefined as any));
             this.__process = undefined;
         }
         Actor.hub.remove(this);

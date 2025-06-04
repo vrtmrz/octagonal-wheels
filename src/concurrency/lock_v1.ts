@@ -1,3 +1,5 @@
+/* eslint-disable */
+// Obsolete file, use lock_v2.ts instead
 /**
  * @deprecated This module is deprecated and will be removed in the future.
  * use lock_v2.ts instead.
@@ -6,15 +8,14 @@ import { fireAndForget, promiseWithResolver, yieldNextMicrotask } from "../promi
 
 type Task<T> = () => Promise<T> | T;
 type Queue<T> = {
-    key: string | symbol,
-    task: Task<T>,
-    resolver: (result: T) => void,
-    rejector: (reason?: any) => void
-    next?: Queue<T>,
-    isRunning?: boolean
-    isFinished?: boolean
-}
-
+    key: string | symbol;
+    task: Task<T>;
+    resolver: (result: T) => void;
+    rejector: (reason?: any) => void;
+    next?: Queue<T>;
+    isRunning?: boolean;
+    isFinished?: boolean;
+};
 
 const queueTails = new Map<string | symbol, Queue<any> | undefined>();
 /**
@@ -35,23 +36,24 @@ async function performTask<T>(queue: Queue<T>) {
     } finally {
         const next = queue.next;
         queue.isFinished = true;
-        // This makes non-sense, we have make the latest queue while enqueuing. 
+        // This makes non-sense, we have make the latest queue while enqueuing.
         if (next) {
-            fireAndForget(async () => { await yieldNextMicrotask(), performTask(next) });
+            fireAndForget(async () => {
+                await yieldNextMicrotask(), performTask(next);
+            });
         } else {
             queueTails.delete(queue.key);
         }
     }
     return;
-
 }
 
 // --- asynchronous execution / locking utilities
 
 type QueueOptions = {
-    swapIfExist?: boolean
-    shareResult?: boolean
-}
+    swapIfExist?: boolean;
+    shareResult?: boolean;
+};
 
 function _enqueue<T>(key: string | symbol, task: Task<T>, { swapIfExist, shareResult }: QueueOptions = {}): Promise<T> {
     const t = promiseWithResolver<T>();
@@ -62,15 +64,15 @@ function _enqueue<T>(key: string | symbol, task: Task<T>, { swapIfExist, shareRe
         task,
         resolver,
         rejector,
-        key
-    }
+        key,
+    };
 
     const prev = queueTails.get(key);
     if (prev === undefined) {
         queueTails.set(key, newQueue);
     } else {
         const current = prev as Queue<T>;
-        queueTails.set(key, newQueue)
+        queueTails.set(key, newQueue);
         current.next = newQueue;
         if (swapIfExist) {
             // Force cancel previous one
@@ -115,21 +117,21 @@ export function shareRunningResult<T>(key: string | symbol, proc: Task<T>): Prom
     current.resolver = (result) => {
         oldResolver?.(result);
         resultP.resolve(result);
-    }
+    };
     current.rejector = (result) => {
         oldRejector?.(result);
         resultP.reject(result);
-    }
+    };
     resultP.promise.finally(() => {
         oldResolver = undefined!;
         oldRejector = undefined!;
-    })
+    });
     return resultP.promise;
 }
 
 /**
  * Skips the execution of a task if it is already duplicated.
- * 
+ *
  * @param key - The key to identify the task.
  * @param proc - The task to be executed.
  * @returns A promise that resolves to the result of the task, or `null` if the task is duplicated.
@@ -175,4 +177,3 @@ export async function scheduleOnceIfDuplicated<T>(key: string, proc: () => Promi
 export function isLockAcquired(key: string): boolean {
     return queueTails.get(key) !== undefined;
 }
-

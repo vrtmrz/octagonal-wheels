@@ -5,17 +5,12 @@ import { delay } from "../promises.ts";
 describe("Regulator", () => {
     it("should process items with default concurrency (1)", async () => {
         const processed: number[] = [];
-        const reg = Regulator.of<[number], number>("test1")
-            .onProcess(async (n) => {
-                processed.push(n);
-                return n * 2;
-            });
+        const reg = Regulator.of<[number], number>("test1").onProcess(async (n) => {
+            processed.push(n);
+            return n * 2;
+        });
 
-        const results = await Promise.all([
-            reg.invoke(1),
-            reg.invoke(2),
-            reg.invoke(3)
-        ]);
+        const results = await Promise.all([reg.invoke(1), reg.invoke(2), reg.invoke(3)]);
         expect(results).toEqual([2, 4, 6]);
         expect(processed).toEqual([1, 2, 3]);
     });
@@ -31,19 +26,14 @@ describe("Regulator", () => {
                     concurrency++;
                     maxConcurrency = Math.max(maxConcurrency, concurrency);
                     order.push(n);
-                    await new Promise(res => setTimeout(res, 10));
+                    await new Promise((res) => setTimeout(res, 10));
                     return n * 3;
                 } finally {
                     concurrency--;
                 }
             });
 
-        const promises = [
-            reg.invoke(1),
-            reg.invoke(2),
-            reg.invoke(3),
-            reg.invoke(4)
-        ];
+        const promises = [reg.invoke(1), reg.invoke(2), reg.invoke(3), reg.invoke(4)];
         const results = await Promise.all(promises);
         expect(results).toEqual([3, 6, 9, 12]);
         expect(order).toEqual([1, 2, 3, 4]);
@@ -55,7 +45,7 @@ describe("Regulator", () => {
             .maxConcurrency(0)
             .onProcess(async (n) => n);
         const p = reg.invoke(1);
-        const x = Promise.race([p, new Promise<number>(res => setTimeout(() => res(Number.MAX_SAFE_INTEGER), 100))]);
+        const x = Promise.race([p, new Promise<number>((res) => setTimeout(() => res(Number.MAX_SAFE_INTEGER), 100))]);
         expect(await x).toBe(Number.MAX_SAFE_INTEGER);
         reg.maxConcurrency(1);
 
@@ -63,10 +53,9 @@ describe("Regulator", () => {
     });
 
     it("should reject if onProcess throws", async () => {
-        const reg = Regulator.of<[number], number>("test4")
-            .onProcess(async () => {
-                throw new Error("fail");
-            });
+        const reg = Regulator.of<[number], number>("test4").onProcess(async () => {
+            throw new Error("fail");
+        });
 
         await expect(reg.invoke(42)).rejects.toThrow("fail");
     });
@@ -101,7 +90,7 @@ describe("Regulator", () => {
                     concurrency++;
                     maxConcurrency = Math.max(maxConcurrency, concurrency);
                     const timeout = Math.floor(Math.random() * 100) + 20;
-                    await new Promise(res => setTimeout(res, timeout));
+                    await new Promise((res) => setTimeout(res, timeout));
                     return n * 3;
                 } finally {
                     concurrency--;
@@ -114,11 +103,10 @@ describe("Regulator", () => {
     });
     it("should allow invoke by array items", async () => {
         const results: number[] = [];
-        const reg = Regulator.of<[number], number>("test6")
-            .onProcess(async (n) => {
-                results.push(n);
-                return n * 4;
-            });
+        const reg = Regulator.of<[number], number>("test6").onProcess(async (n) => {
+            results.push(n);
+            return n * 4;
+        });
 
         const promises = reg.invokeAll([[1], [2], [3]]);
         const finalResults = await Promise.all(promises);
@@ -128,7 +116,7 @@ describe("Regulator", () => {
     it("should handle edge cases", async () => {
         const reg = Regulator.of<[number], number>("test7")
             .onProcess(async (n) => n)
-            .onProcess(async (n) => new Promise(res => setTimeout(() => res(n * 2), 100)))
+            .onProcess(async (n) => new Promise((res) => setTimeout(() => res(n * 2), 100)))
             .maxConcurrency(1);
 
         const p = reg.invokeAll([[1], [2], [3]]);
@@ -139,6 +127,5 @@ describe("Regulator", () => {
         const result = await Promise.all(p);
         expect(result).toEqual([2, 4, 6]);
         reg.onProcess(async (n) => n);
-
     });
 });

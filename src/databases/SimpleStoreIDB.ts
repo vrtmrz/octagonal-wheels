@@ -7,7 +7,6 @@ import { fireAndForget } from "../promises.ts";
  * @template T - The type of the values stored in the store.
  */
 export class SimpleStoreIDB<T> extends SimpleStoreBase<T> {
-
     name: string;
     constructor(name: string) {
         super();
@@ -40,7 +39,14 @@ export class SimpleStoreIDB<T> extends SimpleStoreBase<T> {
     }
     async keys(from?: string | undefined, to?: string | undefined, count?: number | undefined): Promise<string[]> {
         if (this.db == undefined) throw new Error("Database not initialized or already destroyed");
-        const range = from && to ? IDBKeyRange.bound(from, to) : from ? IDBKeyRange.lowerBound(from) : to ? IDBKeyRange.upperBound(to) : undefined;
+        const range =
+            from && to
+                ? IDBKeyRange.bound(from, to)
+                : from
+                  ? IDBKeyRange.lowerBound(from)
+                  : to
+                    ? IDBKeyRange.upperBound(to)
+                    : undefined;
         return await (await this.db).getAllKeys(this.name, range, count);
     }
     async keysIDB(query?: IDBValidKey | IDBKeyRange, count?: number): Promise<IDBValidKey[]> {
@@ -56,15 +62,14 @@ export class SimpleStoreIDB<T> extends SimpleStoreBase<T> {
     close(): void {
         fireAndForget(async () => {
             if (this.db == undefined) throw new Error("Database not initialized or already destroyed");
-            (await this.db).close()
+            (await this.db).close();
             this.db = undefined!;
         });
     }
 
-
     async destroy(): Promise<void> {
         if (this.db == undefined) throw new Error("Database not initialized or already destroyed");
-        (await this.db).close()
+        (await this.db).close();
         this.db = undefined!;
         return await deleteDB(this.name);
     }

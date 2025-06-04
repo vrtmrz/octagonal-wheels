@@ -1,4 +1,11 @@
-import { cancelableDelay, TIMED_OUT_SIGNAL, fireAndForget, promiseWithResolver, yieldMicrotask, type PromiseWithResolvers } from "../promises.ts";
+import {
+    cancelableDelay,
+    TIMED_OUT_SIGNAL,
+    fireAndForget,
+    promiseWithResolver,
+    yieldMicrotask,
+    type PromiseWithResolvers,
+} from "../promises.ts";
 export type SemaphoreReleaser = () => void;
 export type SemaphoreObject = {
     acquire(quantity?: number): Promise<SemaphoreReleaser>;
@@ -16,7 +23,6 @@ export function Semaphore(limit: number): SemaphoreObject {
             return queue.length;
         },
         async tryAcquire(quantity: number = 1, timeout: number) {
-
             if (counter < _limit) {
                 counter += quantity;
                 return () => {
@@ -25,13 +31,10 @@ export function Semaphore(limit: number): SemaphoreObject {
             }
             const d = cancelableDelay(timeout, TIMED_OUT_SIGNAL);
             const aq = this.acquire(quantity);
-            const p = await Promise.race([
-                d.promise,
-                aq,
-            ]);
+            const p = await Promise.race([d.promise, aq]);
             if (p === TIMED_OUT_SIGNAL) {
                 // Cancel after acquired
-                fireAndForget(() => aq.then(release => release()));
+                fireAndForget(() => aq.then((release) => release()));
                 return false;
             }
             return p;
@@ -47,8 +50,6 @@ export function Semaphore(limit: number): SemaphoreObject {
             return () => {
                 this.release(quantity);
             };
-
-
         },
         release(quantity: number = 1) {
             if (queue.length > 0) {
@@ -61,7 +62,7 @@ export function Semaphore(limit: number): SemaphoreObject {
                     counter -= quantity;
                 }
             }
-        }
+        },
     };
     return semaphore as SemaphoreObject;
 }

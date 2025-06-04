@@ -16,7 +16,7 @@ export interface RefinerOptions<T, U> {
     /**
      * The initial source value to start with.
      */
-    initialSource?: T,
+    initialSource?: T;
     /**
      * A function to determine if the result should be updated based on the source and previous result.
      * @param isDifferent - A boolean indicating if the source is different from the cached source. Derived from isDifferent function.
@@ -98,7 +98,7 @@ export class Refiner<T, U> {
                     previous.reject(SHOULD_READ_NEW);
                     return;
                 }
-            })
+            });
         });
         return newPromise;
     }
@@ -158,18 +158,17 @@ export class Refiner<T, U> {
                     // However, some `await` may be waiting for the result, so we need to resolve it
                 }
                 evaluationPromise.resolve(r);
-            }
-            catch (error) {
+            } catch (error) {
                 evaluationPromise.reject(error);
             }
-        }
-        // Queue evaluation 
+        };
+        // Queue evaluation
         this._evaluations = this._evaluations.then(async () => {
             await proc();
         });
     }
     update(source: T) {
-        const isDifferent = (this._cachedBy !== undefined) ? this.__isDifferent(this._cachedBy, source) : true;
+        const isDifferent = this._cachedBy !== undefined ? this.__isDifferent(this._cachedBy, source) : true;
         if (!this.__shouldUpdate(isDifferent, source, this._cachedResult)) {
             // No change, no need to recompute
             return this;
@@ -200,10 +199,9 @@ export class Refiner<T, U> {
     }
 }
 
-
 export interface RefinerSyncOptions<T, U> {
     evaluation: (source: T, previous?: U) => U;
-    initialSource?: T,
+    initialSource?: T;
     shouldUpdate?: (isDifferent: boolean, source: T, previous?: U) => boolean;
     isDifferent?: (a: T, b: T) => boolean;
 }
@@ -236,7 +234,7 @@ export class RefinerSync<T, U> {
         }
     }
     update(source: T) {
-        const isDifferent = (this._cachedBy !== undefined) ? this._isDifferent(this._cachedBy, source) : true;
+        const isDifferent = this._cachedBy !== undefined ? this._isDifferent(this._cachedBy, source) : true;
         const buff = this._buffedResult instanceof Error ? undefined : this._buffedResult;
         if (!this._shouldUpdate(isDifferent, source, buff)) {
             return this;

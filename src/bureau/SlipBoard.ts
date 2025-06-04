@@ -1,4 +1,11 @@
-import { cancelableDelay, fireAndForget, promiseWithResolver, TIMED_OUT_SIGNAL, yieldMicrotask, type PromiseWithResolvers } from "../promises.ts";
+import {
+    cancelableDelay,
+    fireAndForget,
+    promiseWithResolver,
+    TIMED_OUT_SIGNAL,
+    yieldMicrotask,
+    type PromiseWithResolvers,
+} from "../promises.ts";
 import { RESULT_TIMED_OUT } from "../common/const.ts";
 
 export type WithTimeout<T> = T | typeof RESULT_TIMED_OUT;
@@ -17,34 +24,43 @@ declare global {
     }
 }
 
-type SlipWithData<ET, K> = K extends keyof ET ? (ET[K] extends undefined ? never : K extends string ? K : never) : never;
-type SlipWithoutData<ET, K> = K extends keyof ET ? (ET[K] extends undefined ? K extends string ? K : never : never) : never;
+type SlipWithData<ET, K> = K extends keyof ET
+    ? ET[K] extends undefined
+        ? never
+        : K extends string
+          ? K
+          : never
+    : never;
+type SlipWithoutData<ET, K> = K extends keyof ET
+    ? ET[K] extends undefined
+        ? K extends string
+            ? K
+            : never
+        : never
+    : never;
 type SlipType<ET, K> = SlipWithoutData<ET, K> | SlipWithData<ET, K> | K extends string ? K : never;
-
 
 type SlipDataType<ET extends Record<string, any>, K extends keyof ET> = ET[K] extends undefined ? undefined : ET[K];
 type ResultType<ET extends Record<string, any>, K extends keyof ET> = ET[K] extends undefined ? void : ET[K];
 
-
 export type SlipProcessOptions<T> = {
     callback: () => Promise<T> | T;
 } & (
-        { submitAsSuccess?: false, dropSlipWithRisks?: boolean; } |
-        { submitAsSuccess: true, transformError?: (error: any) => any; }
-    );
+    | { submitAsSuccess?: false; dropSlipWithRisks?: boolean }
+    | { submitAsSuccess: true; transformError?: (error: any) => any }
+);
 /**
- * A Class for wait 
+ * A Class for wait
  */
 
 export type AwaitOptionBase = {
     onNotAwaited?: () => void;
 };
-export type AwaitOptionWithoutTimeout = (AwaitOptionBase & { timeout?: undefined | false; });
-export type AwaitOptionWithTimeout = AwaitOptionBase & { timeout?: number; };
+export type AwaitOptionWithoutTimeout = AwaitOptionBase & { timeout?: undefined | false };
+export type AwaitOptionWithTimeout = AwaitOptionBase & { timeout?: number };
 type AwaitOption = AwaitOptionWithoutTimeout | AwaitOptionWithTimeout;
 
 export class SlipBoard<Events extends LSSlips = LSSlips> {
-
     _clip = new Map<string | symbol | number, PromiseWithResolvers<any>>();
 
     /**
@@ -59,7 +75,6 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
     isAwaiting<ET extends Events, K extends keyof ET>(type: SlipType<ET, K>, key: string): boolean {
         return this._clip.has(`${String(type)}:${key}`);
     }
-
 
     /**
      * Issues a slip of process and proceeds with the provided options.
@@ -103,8 +118,16 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
         return this.awaitNext(type as any, key) as Promise<T>;
     }
 
-    awaitNext<ET extends Events, K extends keyof ET>(type: K, key: string, opt?: AwaitOptionWithoutTimeout): Promise<ResultType<ET, K>>;
-    awaitNext<ET extends Events, K extends keyof ET>(type: K, key: string, opt?: AwaitOptionWithTimeout): Promise<ResultType<ET, K> | TIMED_OUT_SIGNAL>;
+    awaitNext<ET extends Events, K extends keyof ET>(
+        type: K,
+        key: string,
+        opt?: AwaitOptionWithoutTimeout
+    ): Promise<ResultType<ET, K>>;
+    awaitNext<ET extends Events, K extends keyof ET>(
+        type: K,
+        key: string,
+        opt?: AwaitOptionWithTimeout
+    ): Promise<ResultType<ET, K> | TIMED_OUT_SIGNAL>;
     /**
      * Waits for the next event of the specified type and key, with an optional timeout.
      *
@@ -113,19 +136,25 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
      * @param {SlipType<ET, K>} type - The type of the event to wait for.
      * @param {string} [key=""] - The key associated with the event.
      * @param {number} [timeout] - The optional timeout in milliseconds.
-     * @returns {Promise<void | ET[K] | TIMED_OUT_SIGNAL>} A promise that resolves with the event data, 
+     * @returns {Promise<void | ET[K] | TIMED_OUT_SIGNAL>} A promise that resolves with the event data,
      * resolves with `TIMED_OUT_SIGNAL` if the timeout is reached, or resolves to void if no event is found.
      */
-    async awaitNext<ET extends Events, K extends keyof ET>(type: K, key: string = "", { timeout, onNotAwaited }: AwaitOption = { timeout: undefined, onNotAwaited: undefined }): Promise<ResultType<ET, K> | TIMED_OUT_SIGNAL> {
+    async awaitNext<ET extends Events, K extends keyof ET>(
+        type: K,
+        key: string = "",
+        { timeout, onNotAwaited }: AwaitOption = { timeout: undefined, onNotAwaited: undefined }
+    ): Promise<ResultType<ET, K> | TIMED_OUT_SIGNAL> {
         let taskPromise = this._clip.get(`${String(type)}:${key}`);
         if (!taskPromise) {
             taskPromise = promiseWithResolver<void | ET[K]>();
-            taskPromise.promise = taskPromise.promise.then((ret: unknown) => {
-                // this.clip.delete(key);
-                return ret;
-            }).finally(() => {
-                this._clip.delete(`${String(type)}:${key}`);
-            });
+            taskPromise.promise = taskPromise.promise
+                .then((ret: unknown) => {
+                    // this.clip.delete(key);
+                    return ret;
+                })
+                .finally(() => {
+                    this._clip.delete(`${String(type)}:${key}`);
+                });
             this._clip.set(`${String(type)}:${key}`, taskPromise);
             if (onNotAwaited) {
                 fireAndForget(async () => (await yieldMicrotask(), onNotAwaited()));
@@ -133,18 +162,16 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
         }
         if (timeout) {
             const cDelay = cancelableDelay(timeout);
-            return Promise.race([cDelay.promise, taskPromise.promise.then((ret: any) => ret).finally(() => cDelay.cancel())]);
+            return Promise.race([
+                cDelay.promise,
+                taskPromise.promise.then((ret: any) => ret).finally(() => cDelay.cancel()),
+            ]);
         }
         return await taskPromise.promise;
     }
 
-    submit<ET extends Events, K extends keyof ET>(
-        type: SlipWithoutData<ET, K>, key: string
-    ): void;
-    submit<ET extends Events, K extends keyof ET>(
-        type: SlipWithData<ET, K>, key: string,
-        data: ET[K]
-    ): void;
+    submit<ET extends Events, K extends keyof ET>(type: SlipWithoutData<ET, K>, key: string): void;
+    submit<ET extends Events, K extends keyof ET>(type: SlipWithData<ET, K>, key: string, data: ET[K]): void;
     /**
      * Submits an event of a specified type with optional data.
      *
@@ -156,7 +183,8 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
      * @returns {void}
      */
     submit<ET extends Events, K extends keyof ET>(
-        type: SlipType<ET, K>, key: string,
+        type: SlipType<ET, K>,
+        key: string,
         data?: SlipDataType<ET, K>
     ): void {
         const taskPromise = this._clip.get(`${String(type)}:${key}`);
@@ -165,15 +193,8 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
         }
     }
 
-    submitToAll<ET extends Events, K extends keyof ET>(
-        type: SlipWithoutData<ET, K>,
-        prefix: string
-    ): void;
-    submitToAll<ET extends Events, K extends keyof ET>(
-        type: SlipWithData<ET, K>,
-        prefix: string,
-        data: ET[K]
-    ): void;
+    submitToAll<ET extends Events, K extends keyof ET>(type: SlipWithoutData<ET, K>, prefix: string): void;
+    submitToAll<ET extends Events, K extends keyof ET>(type: SlipWithData<ET, K>, prefix: string, data: ET[K]): void;
     /**
      * Submits an event of a specified type to all listeners.
      *
@@ -204,26 +225,18 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
      * @param {string} [key=""] - The key associated with the event. Defaults to an empty string.
      * @param {any} reason - The reason for rejecting the promise.
      */
-    reject<ET extends Events, K extends keyof ET>(
-        type: SlipType<ET, K>, key: string = "",
-        reason: any
-    ) {
+    reject<ET extends Events, K extends keyof ET>(type: SlipType<ET, K>, key: string = "", reason: any) {
         const taskPromise = this._clip.get(`${String(type)}:${key}`);
         if (taskPromise) {
             taskPromise.reject(reason);
         }
     }
-
-
 }
-
-
 
 export const globalSlipBoard = new SlipBoard();
 
-
 export async function waitForSignal(id: string, timeout?: number): Promise<boolean> {
-    return await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_SIGNAL, id, { timeout }) !== TIMED_OUT_SIGNAL;
+    return (await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_SIGNAL, id, { timeout })) !== TIMED_OUT_SIGNAL;
 }
 
 export async function waitForValue<T>(id: string, timeout?: number): Promise<WithTimeout<T>> {

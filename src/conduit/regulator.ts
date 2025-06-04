@@ -2,17 +2,18 @@
 Regulator 
 */
 import { promiseWithResolver, type PromiseWithResolvers } from "../promises.ts";
+import { NamedInstance } from "./NamedInstance.ts";
 /**
- * Regulator 
+ * Regulator
  * @description
  * Regulator allows you to regulate the number of concurrent processes.
- * 
+ *
  * @example
  * const reg = new Regulator(2);
  * reg.onProcess(async example(args) => {
  *     // do something with args
  * });
- * 
+ *
  * reg.invoke([1, 2, 3]); (all example will be called with [1, 2, 3] but only 2 at a time will be processed)
  */
 export interface RegulatorOf<T extends any[], U> {
@@ -20,21 +21,21 @@ export interface RegulatorOf<T extends any[], U> {
      * @description
      * Set the maximum number of concurrent processes.
      * Default is 1.
-     * @param n 
+     * @param n
      * @returns <RegulatorOf<T, U>>
      */
     maxConcurrency(n: number): RegulatorOf<T, U>;
     /**
      * @description
      * Set the function to be called when the regulator is invoked.
-     * @param func 
+     * @param func
      * @returns <RegulatorOf<T, U>>
      */
     onProcess(func: (...args: T) => Promise<U>): RegulatorOf<T, U>;
     /**
      * @description
      * Invoke the regulator with the given arguments.
-     * @param args 
+     * @param args
      * @returns <Promise<U>>
      */
     invoke(...args: T): Promise<U>;
@@ -51,12 +52,14 @@ export interface RegulatorOf<T extends any[], U> {
 /**
  * @description
  * Create a regulator
- * @param _name 
+ * @param _name
  * @returns return a regulator
  */
 function createRegulator<T extends any[], U>(_name: string): RegulatorOf<T, U> {
     let maxConcurrency = 1;
-    let onProcess: (...args: T) => Promise<U> = () => { throw new Error(`not function connected on Regulator:${_name}`) };
+    let onProcess: (...args: T) => Promise<U> = () => {
+        throw new Error(`not function connected on Regulator:${_name}`);
+    };
     const processing = new Set<Promise<U>>();
     const scheduled = [] as [T, PromiseWithResolvers<U>][];
     // let currentCount = 0;
@@ -102,7 +105,7 @@ function createRegulator<T extends any[], U>(_name: string): RegulatorOf<T, U> {
         } finally {
             pumping = false;
         }
-    }
+    };
     const startPumping = () => {
         if (pumping || scheduled.length === 0) {
             return;
@@ -115,8 +118,7 @@ function createRegulator<T extends any[], U>(_name: string): RegulatorOf<T, U> {
         scheduled.push([arg, pw]);
         startPumping();
         return pw.promise;
-
-    }
+    };
     const reg: RegulatorOf<T, U> = {
         maxConcurrency: (n: number) => {
             maxConcurrency = n;
@@ -133,28 +135,25 @@ function createRegulator<T extends any[], U>(_name: string): RegulatorOf<T, U> {
             return p;
         },
         invokeAll: (items: T[]) => {
-            return items.map(item => schedule(item));
-        }
-    }
+            return items.map((item) => schedule(item));
+        },
+    };
     return reg;
 }
-const regulators = new Map<string, RegulatorOf<any, any>>();
+const regulators = new NamedInstance<RegulatorOf<any, any>>("Regulator", (name) => createRegulator(name));
 /**
  * @description
  * Get a regulator that allows you to regulate the number of concurrent processes.
- * @param name 
+ * @param name
  * @returns <RegulatorOf<T, U>>
  */
 export const Regulator = {
     /**
      * Get a regulator
-     * @param name 
+     * @param name
      * @returns <RegulatorOf<T, U>>
      */
     of: <T extends any[], U>(name: string): RegulatorOf<T, U> => {
-        if (!regulators.has(name)) {
-            regulators.set(name, createRegulator<T, U>(name));
-        }
-        return regulators.get(name)!;
-    }
-}
+        return regulators.of(name);
+    },
+};

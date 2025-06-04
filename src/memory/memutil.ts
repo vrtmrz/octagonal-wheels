@@ -2,13 +2,13 @@
 
 import type { SimpleStore } from "../databases/SimpleStoreBase.ts";
 
-export const PREFIX_TRENCH = "trench"
-export const PREFIX_EPHEMERAL = "ephemeral"
-export const PREFIX_PERMANENT = "permanent"
+export const PREFIX_TRENCH = "trench";
+export const PREFIX_EPHEMERAL = "ephemeral";
+export const PREFIX_PERMANENT = "permanent";
 let idx = 0;
 let series = `${Date.now()}`;
 function generateId(prefix: string) {
-    idx++
+    idx++;
     if (idx > 10000) {
         series = `${Date.now()}`;
         idx = 0;
@@ -26,19 +26,22 @@ function createId(prefix: string, series: string, idx: number) {
 }
 
 const indexes = new Map<string, number>();
-export type Evacuated<T> = () => Promise<T>
+export type Evacuated<T> = () => Promise<T>;
 
 const inProgress = new Set<string>();
 const failed = new Map<string, number>();
 
-type CommittableDequeuedValue<T> = Promise<{
-    key: string;
-    value: T;
-    cancelCount: number;
-    pendingItems: number;
-    commit: () => Promise<void>;
-    cancel: () => void;
-} | undefined>
+type CommittableDequeuedValue<T> = Promise<
+    | {
+          key: string;
+          value: T;
+          cancelCount: number;
+          pendingItems: number;
+          commit: () => Promise<void>;
+          cancel: () => void;
+      }
+    | undefined
+>;
 /**
  * Represents a Trench, which is a memory utility class for managing data storage.
  */
@@ -54,11 +57,14 @@ export class Trench {
         this._db = db;
         if (flushExistItems) {
             this._flushTask = (async () => {
-                const keys = await db.keys(`${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}`, `${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}.`);
+                const keys = await db.keys(
+                    `${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}`,
+                    `${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}.`
+                );
                 for (const key of keys) {
                     await db.delete(key);
                 }
-            })()
+            })();
         }
     }
 
@@ -67,7 +73,10 @@ export class Trench {
      * @returns {Promise<void>} A promise that resolves when all ephemeral keys are deleted.
      */
     async eraseAllEphemerals() {
-        const keys = await this._db.keys(`${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}`, `${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}.`);
+        const keys = await this._db.keys(
+            `${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}`,
+            `${PREFIX_TRENCH}-${PREFIX_EPHEMERAL}.`
+        );
         for (const key of keys) {
             await this._db.delete(key);
         }
@@ -78,7 +87,10 @@ export class Trench {
      * @returns {Promise<void>} A promise that resolves when all permanences are deleted.
      */
     async eraseAllPermanences() {
-        const keys = await this._db.keys(`${PREFIX_TRENCH}-${PREFIX_PERMANENT}`, `${PREFIX_TRENCH}-${PREFIX_PERMANENT}.`);
+        const keys = await this._db.keys(
+            `${PREFIX_TRENCH}-${PREFIX_PERMANENT}`,
+            `${PREFIX_TRENCH}-${PREFIX_PERMANENT}.`
+        );
         for (const key of keys) {
             await this._db.delete(key);
         }
@@ -95,9 +107,9 @@ export class Trench {
         const key = generateId(PREFIX_EPHEMERAL);
         // Race conditions should only be addressed in advance.
         this.concealing.set(key, obj);
-        this._db.set(key, obj).then(async e => {
+        void this._db.set(key, obj).then(async (e) => {
             if (this.concealing.has(key)) {
-                this.concealing.delete(key)
+                this.concealing.delete(key);
             } else {
                 // If not in time
                 await this._db.delete(key);
@@ -129,7 +141,7 @@ export class Trench {
             this.concealing.delete(key);
             return value;
         }
-        const obj = await this._db.get(key) as T;
+        const obj = (await this._db.get(key)) as T;
         await this._db.delete(key);
         return obj;
     }
@@ -137,15 +149,14 @@ export class Trench {
         return async (): Promise<T> => {
             if (this._flushTask) {
                 await this._flushTask;
-                this._flushTask = undefined
+                this._flushTask = undefined;
             }
             await storeTask;
-            const item = await this._db.get(key) as T;
+            const item = (await this._db.get(key)) as T;
             await this._db.delete(key);
             return item;
-        }
+        };
     }
-
 
     /**
      * Evacuates a promise by storing its resolved value in the database and returning an `Evacuated` object.
@@ -184,19 +195,19 @@ export class Trench {
     }
     async _dequeue<T>(type: string, key: string): Promise<T | undefined> {
         const range = createRange(type, key);
-        const keys = (await this._db.keys(range[0], range[1])).filter(e => !inProgress.has(e));
+        const keys = (await this._db.keys(range[0], range[1])).filter((e) => !inProgress.has(e));
         if (keys.length === 0) return undefined;
         return await this.expose<T>(keys[0]);
     }
     async _dequeueWithCommit<T>(type: string, key: string): CommittableDequeuedValue<T> {
         const range = createRange(type, key);
-        const keysAll = (await this._db.keys(range[0], range[1]))
-        const keys = keysAll.filter(e => !inProgress.has(e));
+        const keysAll = await this._db.keys(range[0], range[1]);
+        const keys = keysAll.filter((e) => !inProgress.has(e));
         if (keys.length === 0) return undefined;
         const storeKey = keys[0];
         inProgress.add(storeKey);
         const previousFailed = failed.get(storeKey) || 0;
-        const value = await this._db.get(storeKey) as T;
+        const value = (await this._db.get(storeKey)) as T;
         return {
             key: storeKey,
             value,
@@ -210,13 +221,13 @@ export class Trench {
             cancel: () => {
                 failed.set(storeKey, (failed.get(storeKey) || 0) + 1);
                 inProgress.delete(storeKey);
-            }
-        }
+            },
+        };
     }
 
     /**
      * Queues an object with the specified key and optional index.
-     * 
+     *
      * @template T - The type of the object being queued.
      * @param {string} key - The key to associate with the object.
      * @param {T} obj - The object to be queued.
@@ -228,7 +239,7 @@ export class Trench {
     }
     /**
      * Removes and returns the first element from the queue associated with the specified key.
-     * 
+     *
      * @template T - The type of elements in the queue.
      * @param key - The key associated with the queue.
      * @returns The first element from the queue, or undefined if the queue is empty.
@@ -238,7 +249,7 @@ export class Trench {
     }
     /**
      * Dequeues an item. you can commit or cancel the dequeue operation.
-     * 
+     *
      * @template T - The type of the item being dequeued.
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
@@ -249,7 +260,7 @@ export class Trench {
 
     /**
      * Queues an object permanently in the SimpleStore.
-     * 
+     *
      * @template T - The type of the object being queued.
      * @param key - The key to associate with the object.
      * @param obj - The object to be queued.
@@ -261,7 +272,7 @@ export class Trench {
     }
     /**
      * Dequeues an permanent item from the SimpleStore with the specified key.
-     * 
+     *
      * @template T - The type of the item to dequeue.
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
@@ -271,7 +282,7 @@ export class Trench {
     }
     /**
      * Dequeues an permanent item from the SimpleStore. we can commit or cancel the dequeue operation.
-     * 
+     *
      * @template T - The type of the item being dequeued.
      * @param key - The key of the item to dequeue.
      * @returns The dequeued item.
@@ -279,6 +290,4 @@ export class Trench {
     dequeuePermanentWithCommit<T>(key: string): CommittableDequeuedValue<T> {
         return this._dequeueWithCommit<T>(PREFIX_PERMANENT, key);
     }
-
 }
-
