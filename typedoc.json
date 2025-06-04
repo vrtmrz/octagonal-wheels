@@ -12,5 +12,6 @@
     "typeAliasPropertiesFormat": "table",
     "enumMembersFormat": "table",
     "propertyMembersFormat": "table",
+    "router":"structure-dir"
     // "typeDeclarationFormat": "table",
 }
