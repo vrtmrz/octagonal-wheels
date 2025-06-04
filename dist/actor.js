@@ -43,7 +43,10 @@ class ActorHub {
         else {
             if (actors.length > 0) {
                 actors[0].destroy();
-                this.dispatch(LogActorName, { level: "warn", message: `The instance of Actor ${name} has been replaced` });
+                this.dispatch(LogActorName, {
+                    level: "warn",
+                    message: `The instance of Actor ${name} has been replaced`,
+                });
             }
             actors.length = 0;
             actors[0] = actor;
@@ -74,7 +77,10 @@ class ActorHub {
         else {
             console.warn(`${actorName} -${LogActorName}`);
             if (actorName !== LogActorName) {
-                this.dispatch(LogActorName, { level: "error", message: `The instance of Actor ${actorName} is not assigned to the hub` });
+                this.dispatch(LogActorName, {
+                    level: "error",
+                    message: `The instance of Actor ${actorName} is not assigned to the hub`,
+                });
             }
             else {
                 // Prevent infinite loop, but it should not happen. This will not be tested deeply.
@@ -184,7 +190,7 @@ class Actor {
      */
     destroy() {
         if (this.__process) {
-            this.__process.finally(() => this.__process = undefined);
+            void this.__process.finally(() => (this.__process = undefined));
             this.__process = undefined;
         }
         Actor.hub.remove(this);

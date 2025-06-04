@@ -17,7 +17,7 @@ async function* withConcurrency(iterable, callback, concurrency) {
     let serial = 0;
     const enqueue = (item) => {
         const idx = serial++;
-        const promise = (async () => [idx, await callback(item)])();
+        const promise = (async () => [idx, (await callback(item))])();
         processes.add(promise);
         mapTaskToPromise.set(idx, promise);
     };
@@ -82,7 +82,7 @@ async function* asyncMapWithConcurrency(iterable, callback, concurrency) {
         head++;
     }
     if (buffer.size > 0) {
-        throw new Error('Buffer not empty');
+        throw new Error("Buffer not empty");
     }
 }
 

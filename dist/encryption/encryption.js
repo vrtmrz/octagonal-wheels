@@ -28,7 +28,9 @@ async function getKeyForEncrypt(passphrase, autoCalculateIterations) {
         f.count--;
     }
     const passphraseLen = 15 - passphrase.length;
-    const iteration = autoCalculateIterations ? ((passphraseLen > 0 ? passphraseLen : 0) * 1000) + 121 - passphraseLen : 100000;
+    const iteration = autoCalculateIterations
+        ? (passphraseLen > 0 ? passphraseLen : 0) * 1000 + 121 - passphraseLen
+        : 100000;
     const passphraseBin = new TextEncoder().encode(passphrase);
     const digest = await webcrypto.subtle.digest({ name: "SHA-256" }, passphraseBin);
     const keyMaterial = await webcrypto.subtle.importKey("raw", digest, { name: "PBKDF2" }, false, ["deriveKey"]);
@@ -78,7 +80,9 @@ async function getKeyForDecryption(passphrase, salt, autoCalculateIterations) {
         return [f.key, f.salt];
     }
     const passphraseLen = 15 - passphrase.length;
-    const iteration = autoCalculateIterations ? ((passphraseLen > 0 ? passphraseLen : 0) * 1000) + 121 - passphraseLen : 100000;
+    const iteration = autoCalculateIterations
+        ? (passphraseLen > 0 ? passphraseLen : 0) * 1000 + 121 - passphraseLen
+        : 100000;
     const passphraseBin = new TextEncoder().encode(passphrase);
     const digest = await webcrypto.subtle.digest({ name: "SHA-256" }, passphraseBin);
     const keyMaterial = await webcrypto.subtle.importKey("raw", digest, { name: "PBKDF2" }, false, ["deriveKey"]);
@@ -140,7 +144,7 @@ async function encryptV1(input, passphrase, autoCalculateIterations) {
     const plainStringified = JSON.stringify(input);
     const plainStringBuffer = writeString(plainStringified);
     const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plainStringBuffer);
-    const encryptedData2 = (await arrayBufferToBase64Single(encryptedDataArrayBuffer));
+    const encryptedData2 = await arrayBufferToBase64Single(encryptedDataArrayBuffer);
     const ret = `["${encryptedData2}","${uint8ArrayToHexString(iv)}","${uint8ArrayToHexString(salt)}"]`;
     return ret;
 }
@@ -161,9 +165,9 @@ async function encrypt(input, passphrase, autoCalculateIterations) {
     const iv = new Uint8Array([...fixedPart, ...new Uint8Array(invocationPart.buffer)]);
     const dataBuf = writeString(input);
     const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, key, dataBuf);
-    const encryptedData2 = "" + await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer));
+    const encryptedData2 = "" + (await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer)));
     // return data with iv and salt.
-    // |%| iv(32) | salt(32) | data ....  
+    // |%| iv(32) | salt(32) | data ....
     const ret = `%${uint8ArrayToHexString(iv)}${uint8ArrayToHexString(salt)}${encryptedData2}`;
     return ret;
 }
@@ -176,7 +180,9 @@ async function encrypt(input, passphrase, autoCalculateIterations) {
  */
 async function getKeyForObfuscatePath(passphrase, dataBuf, autoCalculateIterations) {
     const passphraseLen = 15 - passphrase.length;
-    const iteration = autoCalculateIterations ? ((passphraseLen > 0 ? passphraseLen : 0) * 1000) + 121 - passphraseLen : 100000;
+    const iteration = autoCalculateIterations
+        ? (passphraseLen > 0 ? passphraseLen : 0) * 1000 + 121 - passphraseLen
+        : 100000;
     const passphraseBin = new TextEncoder().encode(passphrase);
     const digest = await webcrypto.subtle.digest({ name: "SHA-256" }, passphraseBin);
     const buf2 = new Uint8Array(await webcrypto.subtle.digest({ name: "SHA-256" }, new Uint8Array([...dataBuf, ...passphraseBin])));
@@ -207,7 +213,7 @@ async function obfuscatePath(path, passphrase, autoCalculateIterations) {
     }, key, dataBuf);
     const encryptedData2 = await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer));
     // return data with iv and salt.
-    // |%| iv(32) | salt(32) | data ....  
+    // |%| iv(32) | salt(32) | data ....
     const ret = `%${uint8ArrayToHexString(iv)}${uint8ArrayToHexString(salt)}${encryptedData2}`;
     return ret;
 }
@@ -265,7 +271,10 @@ async function decrypt(encryptedResult, passphrase, autoCalculateIterations) {
         if (!encryptedResult.startsWith("[") || !encryptedResult.endsWith("]")) {
             throw new Error("Encrypted data corrupted!");
         }
-        const w = encryptedResult.substring(1, encryptedResult.length - 1).split(",").map(e => e[0] == '"' ? e.substring(1, e.length - 1) : e);
+        const w = encryptedResult
+            .substring(1, encryptedResult.length - 1)
+            .split(",")
+            .map((e) => (e[0] == '"' ? e.substring(1, e.length - 1) : e));
         const [encryptedData, ivString, salt] = w;
         const [key] = await getKeyForDecryption(passphrase, hexStringToUint8Array(salt), autoCalculateIterations);
         const iv = hexStringToUint8Array(ivString);
@@ -302,7 +311,7 @@ async function tryDecrypt(encryptedResult, passphrase, autoCalculateIterations) 
     try {
         return await decrypt(encryptedResult, passphrase, autoCalculateIterations);
     }
-    catch (ex) {
+    catch {
         return false;
     }
 }

@@ -17,13 +17,10 @@ function Semaphore(limit) {
             }
             const d = cancelableDelay(timeout, TIMED_OUT_SIGNAL);
             const aq = this.acquire(quantity);
-            const p = await Promise.race([
-                d.promise,
-                aq,
-            ]);
+            const p = await Promise.race([d.promise, aq]);
             if (p === TIMED_OUT_SIGNAL) {
                 // Cancel after acquired
-                fireAndForget(() => aq.then(release => release()));
+                fireAndForget(() => aq.then((release) => release()));
                 return false;
             }
             return p;
@@ -52,7 +49,7 @@ function Semaphore(limit) {
                     counter -= quantity;
                 }
             }
-        }
+        },
     };
     return semaphore;
 }

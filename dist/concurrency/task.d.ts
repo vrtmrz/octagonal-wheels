@@ -20,7 +20,7 @@ export declare function unwrapTaskResult<T, U extends Error>(result: TaskResult<
  */
 export declare function processAllGeneratorTasksWithConcurrencyLimit<T>(limit: number, tasks: AsyncGenerator<Task<T>, undefined, unknown>): AsyncGenerator<TaskResultWithKey<T, Error>, void, unknown>;
 export declare function pipeGeneratorToGenerator<T, U>(generator: AsyncGenerator<T>, callback: (obj: T) => Promise<U>): AsyncGenerator<TaskWaiting<U>>;
-export declare function pipeArrayToGenerator<T, U>(array: T[], callback: (obj: T) => Promise<U>): AsyncGenerator<TaskWaiting<U>>;
+export declare function pipeArrayToGenerator<T, U>(array: T[], callback: (obj: T) => Promise<U>): Generator<TaskWaiting<U>>;
 /**
  * Perform all tasks within given concurrency.
  * @param limit Concurrency limit
@@ -35,10 +35,10 @@ export declare function processAllTasksWithConcurrencyLimit<T>(limit: number, ta
  * @returns
  */
 export declare function mapAllTasksWithConcurrencyLimit<T>(limit: number, tasks: Task<T>[]): Promise<TaskResultWithKey<T, Error>[]>;
-export declare function scheduleTask(key: string, timeout: number, proc: (() => Promise<any> | void), skipIfTaskExist?: boolean): void;
+export declare function scheduleTask(key: string, timeout: number, proc: () => Promise<any> | void, skipIfTaskExist?: boolean): void;
 export declare function cancelTask(key: string): void;
 export declare function cancelAllTasks(): void;
-export declare function setPeriodicTask(key: string, timeout: number, proc: (() => Promise<any> | void)): void;
+export declare function setPeriodicTask(key: string, timeout: number, proc: () => Promise<any> | void): void;
 export declare function cancelPeriodicTask(key: string): void;
 export declare function cancelAllPeriodicTask(): void;
 export declare function waitForTimeout(key: string, timeout: number): Promise<boolean>;

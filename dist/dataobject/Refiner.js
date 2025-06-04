@@ -162,13 +162,13 @@ class Refiner {
                 evaluationPromise.reject(error);
             }
         };
-        // Queue evaluation 
+        // Queue evaluation
         this._evaluations = this._evaluations.then(async () => {
             await proc();
         });
     }
     update(source) {
-        const isDifferent = (this._cachedBy !== undefined) ? this.__isDifferent(this._cachedBy, source) : true;
+        const isDifferent = this._cachedBy !== undefined ? this.__isDifferent(this._cachedBy, source) : true;
         if (!this.__shouldUpdate(isDifferent, source, this._cachedResult)) {
             // No change, no need to recompute
             return this;
@@ -252,7 +252,7 @@ class RefinerSync {
         }
     }
     update(source) {
-        const isDifferent = (this._cachedBy !== undefined) ? this._isDifferent(this._cachedBy, source) : true;
+        const isDifferent = this._cachedBy !== undefined ? this._isDifferent(this._cachedBy, source) : true;
         const buff = this._buffedResult instanceof Error ? undefined : this._buffedResult;
         if (!this._shouldUpdate(isDifferent, source, buff)) {
             return this;

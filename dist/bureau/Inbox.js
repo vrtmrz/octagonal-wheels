@@ -87,8 +87,8 @@ class SyncInbox {
         return this._writeIdx == this._readIdx;
     }
     /**
-   * Whether the buffer is full.
-   */
+     * Whether the buffer is full.
+     */
     get isFull() {
         return this.free == 0;
     }
@@ -121,7 +121,7 @@ class SyncInbox {
             free: this.free,
             isFull: this.isFull,
             isRunningOut: this.isRunningOut,
-            isReady: this.isReady
+            isReady: this.isReady,
         };
     }
     dispose() {
@@ -270,7 +270,7 @@ class Inbox extends SyncInbox {
             // If cancellation is provided, check if it is resolved.
             // And if it is resolved, return false before actually posting item
             // Possibly we can accept an item and move this check to after tryPost for performance.
-            if (cancellation && cancellation.length > 0 && await (isSomeResolved(cancellation))) {
+            if (cancellation && cancellation.length > 0 && (await isSomeResolved(cancellation))) {
                 return false;
             }
             const result = this.tryPost(item);
@@ -282,7 +282,7 @@ class Inbox extends SyncInbox {
             const tasks = [
                 this._waitForFree(),
                 ...(timeout ? [(p = cancelableDelay(timeout)).promise] : []),
-                ...(cancellation ? cancellation : [])
+                ...(cancellation ? cancellation : []),
             ];
             const r = await Promise.race(tasks);
             p?.cancel();
@@ -299,12 +299,12 @@ class Inbox extends SyncInbox {
         return false;
     }
     /**
-       * Picks an item from the buffer.
-       * Waits until an item is available.
-       * @param timeout The timeout in milliseconds.
-       * @param cancellation The promise that cancels the operation.
-       * @returns The item picked.
-       */
+     * Picks an item from the buffer.
+     * Waits until an item is available.
+     * @param timeout The timeout in milliseconds.
+     * @param cancellation The promise that cancels the operation.
+     * @returns The item picked.
+     */
     async pick(timeout, cancellation) {
         // console.log(`blocking: ${nonBlocking} timeout: ${timeout} cancellation: ${cancellation}`);
         // console.log(`Picking ${this._readIdx} -> ${this._writeIdx} `);
@@ -316,7 +316,7 @@ class Inbox extends SyncInbox {
             // If cancellation is provided, check if it is resolved.
             // And if it is resolved, return NOT_AVAILABLE before actually picking item.
             // Possibly we can accept an item and move this check to after tryPick for performance.
-            if (cancellation && cancellation.length > 0 && await (isSomeResolved(cancellation))) {
+            if (cancellation && cancellation.length > 0 && (await isSomeResolved(cancellation))) {
                 return NOT_AVAILABLE;
             }
             const item = this.tryPick();
@@ -328,7 +328,7 @@ class Inbox extends SyncInbox {
             const tasks = [
                 this._waitForReady(),
                 ...(timeout ? [(p = cancelableDelay(timeout)).promise] : []),
-                ...(cancellation ? cancellation : [])
+                ...(cancellation ? cancellation : []),
             ];
             // console.log(tasks);
             const r = await Promise.race(tasks);
@@ -368,7 +368,7 @@ class InboxWithEvent extends Inbox {
     __onProgress() {
         this._processed++;
         const event = new CustomEvent(EVENT_PROGRESS, {
-            detail: this.state
+            detail: this.state,
         });
         this._callback?.(event.detail);
     }

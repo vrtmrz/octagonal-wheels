@@ -94,7 +94,7 @@ class ClerkBase {
             totalProcessed: this._totalProcessed,
             state: this._state,
             hasStarted: hasStarted,
-            isBusy: isBusy
+            isBusy: isBusy,
         };
     }
     onProgress() {
@@ -237,7 +237,7 @@ class ClerkGroup {
         const clerk = this._instantiate({
             name,
             assigned: params.assigned,
-            job: params.job
+            job: params.job,
         });
         this._clerks.push(clerk);
     }
@@ -259,11 +259,11 @@ class ClerkGroup {
         }
     }
     get stateDetail() {
-        const states = this._clerks.map(clerk => clerk.stateDetail);
+        const states = this._clerks.map((clerk) => clerk.stateDetail);
         const totalFetched = states.reduce((acc, state) => acc + state.totalFetched, 0);
         const totalProcessed = states.reduce((acc, state) => acc + state.totalProcessed, 0);
-        const isBusy = states.some(state => state.isBusy);
-        const hasStarted = states.some(state => state.hasStarted);
+        const isBusy = states.some((state) => state.isBusy);
+        const hasStarted = states.some((state) => state.hasStarted);
         const inboxDetail = this._assigned.state;
         return {
             totalFetched,
@@ -271,14 +271,14 @@ class ClerkGroup {
             inboxDetail,
             isBusy,
             hasStarted,
-            state: ClerkState.IDLE
+            state: ClerkState.IDLE,
         };
     }
     get freeMembers() {
-        return this._clerks.filter(clerk => clerk.state === ClerkState.IDLE).length;
+        return this._clerks.filter((clerk) => clerk.state === ClerkState.IDLE).length;
     }
     dispose() {
-        this._clerks.forEach(clerk => clerk.dispose());
+        this._clerks.forEach((clerk) => clerk.dispose());
     }
 }
 /**

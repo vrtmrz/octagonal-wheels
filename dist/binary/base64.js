@@ -6,13 +6,13 @@ import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
  * @returns The converted ArrayBuffer.
  */
 function base64ToArrayBuffer(base64) {
-    if (typeof (base64) == "string")
+    if (typeof base64 == "string")
         return base64ToArrayBufferInternalBrowser(base64);
-    const bufItems = base64.map(e => base64ToArrayBufferInternalBrowser(e));
+    const bufItems = base64.map((e) => base64ToArrayBufferInternalBrowser(e));
     const len = bufItems.reduce((p, c) => p + c.byteLength, 0);
     const joinedArray = new Uint8Array(len);
     let offset = 0;
-    bufItems.forEach(e => {
+    bufItems.forEach((e) => {
         joinedArray.set(new Uint8Array(e), offset);
         offset += e.byteLength;
     });
@@ -126,22 +126,22 @@ function writeString(string) {
         }
         else if (chr < 0x800) {
             // 2 bytes
-            buffer[index++] = 0xC0 | (chr >>> 6);
-            buffer[index++] = 0x80 | (chr & 0x3F);
+            buffer[index++] = 0xc0 | (chr >>> 6);
+            buffer[index++] = 0x80 | (chr & 0x3f);
         }
-        else if (chr < 0xD800 || chr > 0xDFFF) {
+        else if (chr < 0xd800 || chr > 0xdfff) {
             // 3 bytes
-            buffer[index++] = 0xE0 | (chr >>> 12);
-            buffer[index++] = 0x80 | ((chr >>> 6) & 0x3F);
-            buffer[index++] = 0x80 | (chr & 0x3F);
+            buffer[index++] = 0xe0 | (chr >>> 12);
+            buffer[index++] = 0x80 | ((chr >>> 6) & 0x3f);
+            buffer[index++] = 0x80 | (chr & 0x3f);
         }
         else {
             // 4 bytes - surrogate pair
-            chr = (((chr - 0xD800) << 10) | (string.charCodeAt(idx++) - 0xDC00)) + 0x10000;
-            buffer[index++] = 0xF0 | (chr >>> 18);
-            buffer[index++] = 0x80 | ((chr >>> 12) & 0x3F);
-            buffer[index++] = 0x80 | ((chr >>> 6) & 0x3F);
-            buffer[index++] = 0x80 | (chr & 0x3F);
+            chr = (((chr - 0xd800) << 10) | (string.charCodeAt(idx++) - 0xdc00)) + 0x10000;
+            buffer[index++] = 0xf0 | (chr >>> 18);
+            buffer[index++] = 0x80 | ((chr >>> 12) & 0x3f);
+            buffer[index++] = 0x80 | ((chr >>> 6) & 0x3f);
+            buffer[index++] = 0x80 | (chr & 0x3f);
         }
     }
     return buffer.slice(0, index);
@@ -164,29 +164,31 @@ function readString(buffer) {
         const cEnd = Math.min(index + QUANTUM, end);
         while (index < cEnd) {
             const chr = buffer[index++];
-            if (chr < 128) { // 1 byte
+            if (chr < 128) {
+                // 1 byte
                 chunk.push(chr);
             }
-            else if ((chr & 0xE0) === 0xC0) { // 2 bytes
-                chunk.push((chr & 0x1F) << 6 |
-                    (buffer[index++] & 0x3F));
+            else if ((chr & 0xe0) === 0xc0) {
+                // 2 bytes
+                chunk.push(((chr & 0x1f) << 6) | (buffer[index++] & 0x3f));
             }
-            else if ((chr & 0xF0) === 0xE0) { // 3 bytes
-                chunk.push((chr & 0x0F) << 12 |
-                    (buffer[index++] & 0x3F) << 6 |
-                    (buffer[index++] & 0x3F));
+            else if ((chr & 0xf0) === 0xe0) {
+                // 3 bytes
+                chunk.push(((chr & 0x0f) << 12) | ((buffer[index++] & 0x3f) << 6) | (buffer[index++] & 0x3f));
             }
-            else if ((chr & 0xF8) === 0xF0) { // 4 bytes
-                let code = (chr & 0x07) << 18 |
-                    (buffer[index++] & 0x3F) << 12 |
-                    (buffer[index++] & 0x3F) << 6 |
-                    (buffer[index++] & 0x3F);
+            else if ((chr & 0xf8) === 0xf0) {
+                // 4 bytes
+                let code = ((chr & 0x07) << 18) |
+                    ((buffer[index++] & 0x3f) << 12) |
+                    ((buffer[index++] & 0x3f) << 6) |
+                    (buffer[index++] & 0x3f);
                 if (code < 0x010000) {
                     chunk.push(code);
                 }
-                else { // surrogate pair
+                else {
+                    // surrogate pair
                     code -= 0x010000;
-                    chunk.push((code >>> 10) + 0xD800, (code & 0x3FF) + 0xDC00);
+                    chunk.push((code >>> 10) + 0xd800, (code & 0x3ff) + 0xdc00);
                 }
             }
         }
@@ -203,7 +205,7 @@ function readString(buffer) {
 function base64ToString(base64) {
     try {
         if (typeof base64 != "string")
-            return base64.map(e => base64ToString(e)).join("");
+            return base64.map((e) => base64ToString(e)).join("");
         const binary_string = atob(base64);
         const len = binary_string.length;
         const bytes = new Uint8Array(len);
@@ -244,7 +246,7 @@ function tryConvertBase64ToArrayBuffer(base64) {
         }
         return bytes.buffer;
     }
-    catch (ex) {
+    catch {
         return false;
     }
 }

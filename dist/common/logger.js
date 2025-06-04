@@ -14,7 +14,7 @@ const LEVEL_NOTICE = LOG_LEVEL_NOTICE;
 const LEVEL_URGENT = LOG_LEVEL_URGENT;
 const LEVEL_VERBOSE = LOG_LEVEL_VERBOSE;
 const defaultLoggerEnv = {
-    minLogLevel: LOG_LEVEL_INFO
+    minLogLevel: LOG_LEVEL_INFO,
 };
 const defaultLogger = function defaultLogger(message, level = LEVEL_INFO, key) {
     if (level < defaultLoggerEnv.minLogLevel) {
@@ -22,7 +22,11 @@ const defaultLogger = function defaultLogger(message, level = LEVEL_INFO, key) {
     }
     const now = new Date();
     const timestamp = now.toLocaleString();
-    const messageContent = typeof message == "string" ? message : message instanceof Error ? `${message.name}:${message.message}` : JSON.stringify(message, null, 2);
+    const messageContent = typeof message == "string"
+        ? message
+        : message instanceof Error
+            ? `${message.name}:${message.message}`
+            : JSON.stringify(message, null, 2);
     const newMessage = `${timestamp}\t${level}\t${messageContent}`;
     if (level & LOG_KIND_DEBUG) {
         console.debug(newMessage);
@@ -86,5 +90,5 @@ function notice(message, flagsOrKey, key) {
     __logger(message, LEVEL_INFO, flagsOrKey, key);
 }
 
-export { LEVEL_DEBUG, LEVEL_INFO, LEVEL_NOTICE, LEVEL_URGENT, LEVEL_VERBOSE, LOG_KIND_DEBUG, LOG_KIND_ERROR, LOG_KIND_INFO, LOG_KIND_VERBOSE, LOG_KIND_WARNING, LOG_LEVEL_DEBUG, LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_URGENT, LOG_LEVEL_VERBOSE, Logger, debug, defaultLoggerEnv, info, notice, setGlobalLogFunction, verbose };
+export { LEVEL_DEBUG, LEVEL_INFO, LEVEL_NOTICE, LEVEL_URGENT, LEVEL_VERBOSE, LOG_KIND_DEBUG, LOG_KIND_ERROR, LOG_KIND_INFO, LOG_KIND_VERBOSE, LOG_KIND_WARNING, LOG_LEVEL_DEBUG, LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_URGENT, LOG_LEVEL_VERBOSE, Logger, debug, defaultLogger, defaultLoggerEnv, info, notice, setGlobalLogFunction, verbose };
 //# sourceMappingURL=logger.js.map

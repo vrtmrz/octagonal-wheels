@@ -52,7 +52,7 @@ function generativeBuffer() {
                 }
             }
             try {
-                next.forEach(p => p.reject(GENERATOR_CLOSED));
+                next.forEach((p) => p.reject(GENERATOR_CLOSED));
                 next.length = 0;
             }
             catch (e) {
@@ -61,7 +61,7 @@ function generativeBuffer() {
         },
         get size() {
             return next.length - 1;
-        }
+        },
     };
 }
 class GeneratorSource {
@@ -70,7 +70,9 @@ class GeneratorSource {
             try {
                 this._onSizeUpdated(this.size);
             }
-            catch (_) { /* NO OP*/ }
+            catch {
+                /* NO OP*/
+            }
         }
     }
     get size() {
@@ -161,7 +163,7 @@ class GeneratorSource {
             }
         }
         try {
-            this._next.forEach(p => {
+            this._next.forEach((p) => {
                 p.reject();
             });
             this._next.length = 0;

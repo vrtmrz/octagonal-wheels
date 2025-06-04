@@ -1,5 +1,7 @@
 import { promiseWithResolver, fireAndForget, yieldNextMicrotask } from '../promises.js';
 
+/* eslint-disable */
+// Obsolete file, use lock_v2.ts instead
 /**
  * @deprecated This module is deprecated and will be removed in the future.
  * use lock_v2.ts instead.
@@ -25,9 +27,11 @@ async function performTask(queue) {
     finally {
         const next = queue.next;
         queue.isFinished = true;
-        // This makes non-sense, we have make the latest queue while enqueuing. 
+        // This makes non-sense, we have make the latest queue while enqueuing.
         if (next) {
-            fireAndForget(async () => { await yieldNextMicrotask(), performTask(next); });
+            fireAndForget(async () => {
+                await yieldNextMicrotask(), performTask(next);
+            });
         }
         else {
             queueTails.delete(queue.key);
@@ -43,7 +47,7 @@ function _enqueue(key, task, { swapIfExist, shareResult } = {}) {
         task,
         resolver,
         rejector,
-        key
+        key,
     };
     const prev = queueTails.get(key);
     if (prev === undefined) {

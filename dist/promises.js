@@ -11,14 +11,14 @@ const delay = (ms, result) => {
         }, ms);
     });
 };
-const UNRESOLVED = Symbol('UNRESOLVED');
+const UNRESOLVED = Symbol("UNRESOLVED");
 /**
  * Checking whether a promise has been resolved.
  * @param promise a checking promise
  * @returns true if resolved, false if not.
  */
 async function isResolved(promise) {
-    return await Promise.race([promise, Promise.resolve(UNRESOLVED)]) !== UNRESOLVED;
+    return (await Promise.race([promise, Promise.resolve(UNRESOLVED)])) !== UNRESOLVED;
 }
 /**
  * Checking whether some promises have been resolved.
@@ -28,7 +28,7 @@ async function isResolved(promise) {
 async function isSomeResolved(promises) {
     if (promises.length == 0)
         return false;
-    return await Promise.race([...promises, Promise.resolve(UNRESOLVED)]) !== UNRESOLVED;
+    return (await Promise.race([...promises, Promise.resolve(UNRESOLVED)])) !== UNRESOLVED;
 }
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
@@ -60,11 +60,13 @@ function nativePromiseWithResolvers() {
  * @param {Function} polyfillPromiseWithResolvers - The function that polyfills the promise with resolvers.
  * @returns {Promise} - The promise with custom resolvers.
  */
-const promiseWithResolver = ("withResolvers" in Promise) ? nativePromiseWithResolvers : polyfillPromiseWithResolvers;
+const promiseWithResolver = "withResolvers" in Promise ? nativePromiseWithResolvers : polyfillPromiseWithResolvers;
 /**
  * A no-operation function.
  */
-const noop = () => { };
+const noop = () => {
+    /* NO OP */
+};
 /**
  * Executes a promise or a function that returns a promise and ignores any errors or results.
  * @param p - The promise or function that returns a promise to be executed.
@@ -80,7 +82,7 @@ function fireAndForget(p) {
  * @returns A promise that resolves when the microtask is completed.
  */
 function yieldMicrotask() {
-    return new Promise(res => queueMicrotask(res));
+    return new Promise((res) => queueMicrotask(res));
 }
 /**
  * A utility function that wraps the `requestIdleCallback` function and returns a promise.
@@ -92,7 +94,7 @@ function yieldMicrotask() {
 function yieldRequestIdleCallback(options) {
     if (!("requestIdleCallback" in globalThis))
         return yieldMicrotask();
-    return new Promise(res => requestIdleCallback(() => res(), options));
+    return new Promise((res) => requestIdleCallback(() => res(), options));
 }
 /**
  * Yields the next animation frame.
@@ -100,7 +102,7 @@ function yieldRequestIdleCallback(options) {
  * @returns A promise that resolves with the next animation frame.
  */
 function yieldAnimationFrame() {
-    return new Promise(res => requestAnimationFrame(res));
+    return new Promise((res) => requestAnimationFrame(res));
 }
 /**
  * Yields the next batched animation frame.
@@ -202,9 +204,11 @@ function extendableDelay(timeout, cancel) {
     };
     timer = setTimer(timeout);
     return {
-        get promise() { return promise.promise; },
+        get promise() {
+            return promise.promise;
+        },
         cancel: canceller,
-        extend: extendTimer
+        extend: extendTimer,
     };
 }
 

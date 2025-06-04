@@ -45,7 +45,7 @@ class PaceMaker {
         if (prevMinimum !== undefined) {
             const shouldWait = prevMinimum - now;
             if (shouldWait > 0) {
-                return new Promise(resolve => setTimeout(() => {
+                return new Promise((resolve) => setTimeout(() => {
                     resolve();
                 }, shouldWait));
             }

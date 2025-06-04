@@ -41,16 +41,19 @@ function incIV() {
  */
 async function generateKey(passphrase) {
     const passphraseBin = new TextEncoder().encode(passphrase);
-    const digestOfPassphrase = await webcrypto.subtle.digest('SHA-256', new Uint8Array([...passphraseBin, ...SALT]));
+    const digestOfPassphrase = await webcrypto.subtle.digest("SHA-256", new Uint8Array([...passphraseBin, ...SALT]));
     const salt = digestOfPassphrase.slice(0, 16);
-    const baseKey = await webcrypto.subtle.importKey('raw', passphraseBin, 'PBKDF2', false, ['deriveBits', 'deriveKey']);
+    const baseKey = await webcrypto.subtle.importKey("raw", passphraseBin, "PBKDF2", false, [
+        "deriveBits",
+        "deriveKey",
+    ]);
     const pbkdf2Params = {
-        name: 'PBKDF2',
-        hash: 'SHA-256',
+        name: "PBKDF2",
+        hash: "SHA-256",
         salt: salt,
-        iterations: 100000 // Increased iterations for better security
+        iterations: 100000, // Increased iterations for better security
     };
-    const derivedKey = await webcrypto.subtle.deriveKey(pbkdf2Params, baseKey, { name: "AES-GCM", length: 256 }, false, ['decrypt', 'encrypt']);
+    const derivedKey = await webcrypto.subtle.deriveKey(pbkdf2Params, baseKey, { name: "AES-GCM", length: 256 }, false, ["decrypt", "encrypt"]);
     return derivedKey;
 }
 /**
@@ -72,9 +75,9 @@ async function encryptV3(input, passphrase) {
     const iv = incIV();
     const dataBuf = writeString(input);
     const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, encryptionKey, dataBuf);
-    const encryptedData2 = "" + await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer));
+    const encryptedData2 = "" + (await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer)));
     // return data with iv.
-    // |%~| iv(12) | data ....  
+    // |%~| iv(12) | data ....
     const ret = `%~${uint8ArrayToHexString(iv)}${encryptedData2}`;
     return ret;
 }

@@ -1,3 +1,4 @@
+import { NamedInstance } from "./NamedInstance.ts";
 type ManifoldFunc<T extends any[]> = (...args: T) => Promise<boolean | void | undefined>;
 /**
  * Manifold
@@ -57,6 +58,7 @@ interface Manifold<T extends any[]> {
      */
     all: (...args: T) => Promise<boolean>;
 }
+export declare const manifold: NamedInstance<Manifold<any>, Manifold<any>>;
 export declare const Manifold: {
     of: <T extends any[]>(name: string) => Manifold<T>;
 };

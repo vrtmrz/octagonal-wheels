@@ -95,12 +95,12 @@ export interface ConnectorInstanceOf<T> {
     readonly isConnected: boolean;
 }
 /**
-* Get a function connector
-* @description
-* This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
-* @param func A function to connect
-* @returns <ConnectorFuncOf<T, U>>
-*/
+ * Get a function connector
+ * @description
+ * This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
+ * @param func A function to connect
+ * @returns <ConnectorFuncOf<T, U>>
+ */
 declare function funcOf<T extends any[], U>(param: string | ConnectorFunc<T, U>): ConnectorFuncOf<T, U>;
 type _classType<T> = new (...args: any[]) => T;
 /**

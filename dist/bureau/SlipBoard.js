@@ -83,10 +83,12 @@ class SlipBoard {
         let taskPromise = this._clip.get(`${String(type)}:${key}`);
         if (!taskPromise) {
             taskPromise = promiseWithResolver();
-            taskPromise.promise = taskPromise.promise.then((ret) => {
+            taskPromise.promise = taskPromise.promise
+                .then((ret) => {
                 // this.clip.delete(key);
                 return ret;
-            }).finally(() => {
+            })
+                .finally(() => {
                 this._clip.delete(`${String(type)}:${key}`);
             });
             this._clip.set(`${String(type)}:${key}`, taskPromise);
@@ -96,7 +98,10 @@ class SlipBoard {
         }
         if (timeout) {
             const cDelay = cancelableDelay(timeout);
-            return Promise.race([cDelay.promise, taskPromise.promise.then((ret) => ret).finally(() => cDelay.cancel())]);
+            return Promise.race([
+                cDelay.promise,
+                taskPromise.promise.then((ret) => ret).finally(() => cDelay.cancel()),
+            ]);
         }
         return await taskPromise.promise;
     }
@@ -151,7 +156,7 @@ class SlipBoard {
 }
 const globalSlipBoard = new SlipBoard();
 async function waitForSignal(id, timeout) {
-    return await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_SIGNAL, id, { timeout }) !== TIMED_OUT_SIGNAL;
+    return (await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_SIGNAL, id, { timeout })) !== TIMED_OUT_SIGNAL;
 }
 async function waitForValue(id, timeout) {
     const ret = await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_VALUE, id, { timeout });

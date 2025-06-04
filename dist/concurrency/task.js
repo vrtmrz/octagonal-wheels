@@ -65,7 +65,7 @@ async function* pipeGeneratorToGenerator(generator, callback) {
         yield closure;
     }
 }
-async function* pipeArrayToGenerator(array, callback) {
+function* pipeArrayToGenerator(array, callback) {
     for (const e of array) {
         const closure = () => callback(e);
         yield closure;
@@ -108,7 +108,7 @@ async function mapAllTasksWithConcurrencyLimit(limit, tasks) {
     for await (const v of processAllTasksWithConcurrencyLimit(limit, tasks)) {
         results.set(v.key, v);
     }
-    const ret = [...results.entries()].sort((a, b) => a[0] - b[0]).map(e => e[1]);
+    const ret = [...results.entries()].sort((a, b) => a[0] - b[0]).map((e) => e[1]);
     return ret;
 }
 const tasks = new Map();
@@ -190,7 +190,7 @@ function sharedTask(key, proc) {
 }
 function wrapFunctionAsShared(proc) {
     return async (...p) => {
-        const key = proc.name + "-" + p.map(e => typeof e === "object" ? JSON.stringify(e) : `${e}`).join(",");
+        const key = proc.name + "-" + p.map((e) => (typeof e === "object" ? JSON.stringify(e) : `${e}`)).join(",");
         return await shareRunningResult(key, () => proc(...p));
     };
 }

@@ -28,7 +28,7 @@ function unique(arr) {
  * @param {number} from - The starting number of the sequence.
  * @param {number} to - The ending number of the sequence.
  * @yields {number} The next number in the sequence.
-  */
+ */
 function* range(from, to) {
     for (let i = from; i <= to; i++) {
         yield i;

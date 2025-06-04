@@ -19,4 +19,4 @@ Mainly targeted to browsers, Electron Apps, and, Chrome Extensions.
 
 Please keep in mind that all things do not have a generic purpose.
 
-TypeDoc Documentation is [here](_media/globals.md)
+TypeDoc Documentation is [here](./docs/globals.md)

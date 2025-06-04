@@ -1,8 +1,8 @@
 const revMap = {};
 const numMap = {};
 for (let i = 0; i < 256; i++) {
-    revMap[(`00${i.toString(16)}`.slice(-2))] = i;
-    numMap[i] = (`00${i.toString(16)}`.slice(-2));
+    revMap[`00${i.toString(16)}`.slice(-2)] = i;
+    numMap[i] = `00${i.toString(16)}`.slice(-2);
 }
 /**
  * Converts a hexadecimal string to a Uint8Array.
@@ -26,7 +26,7 @@ function hexStringToUint8Array(src) {
  * @returns The hexadecimal string representation of the Uint8Array.
  */
 function uint8ArrayToHexString(src) {
-    return [...src].map(e => numMap[e]).join("");
+    return [...src].map((e) => numMap[e]).join("");
 }
 
 export { hexStringToUint8Array, uint8ArrayToHexString };

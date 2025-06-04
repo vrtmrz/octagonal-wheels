@@ -20,7 +20,7 @@ class PersistentMap {
     _load(suppliedEntries = []) {
         try {
             const savedSource = localStorage.getItem(this._key) ?? "";
-            const sourceToParse = (savedSource === "") ? "[]" : savedSource;
+            const sourceToParse = savedSource === "" ? "[]" : savedSource;
             const obj = JSON.parse(sourceToParse);
             this._map = new Map([...obj, ...suppliedEntries]);
         }
@@ -85,7 +85,7 @@ class PersistentMap {
         });
         this._key = key;
         this._map = new Map(entries ?? []);
-        this._load(entries);
+        void this._load(entries);
     }
 }
 

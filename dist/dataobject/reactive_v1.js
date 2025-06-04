@@ -27,7 +27,7 @@ function reactive(expression, initialValue) {
 function _reactive({ expression, initialValue }) {
     let value;
     let _isDirty = false;
-    const changeHandlers = new Set;
+    const changeHandlers = new Set();
     const instance = {
         myContext: new Set(),
         markDirty() {
@@ -35,14 +35,14 @@ function _reactive({ expression, initialValue }) {
             instance.markDependedDirty();
         },
         rippleChanged() {
-            changeHandlers.forEach(e => e(instance));
-            instance.myContext.forEach(e => e.rippleChanged());
+            changeHandlers.forEach((e) => e(instance));
+            instance.myContext.forEach((e) => e.rippleChanged());
         },
         markClean() {
             _isDirty = false;
         },
         markDependedDirty() {
-            instance.myContext.forEach(e => e.markDirty());
+            instance.myContext.forEach((e) => e.markDirty());
         },
         get isDirty() {
             return _isDirty;
@@ -79,7 +79,7 @@ function _reactive({ expression, initialValue }) {
         },
         offChanged(handler) {
             changeHandlers.delete(handler);
-        }
+        },
     };
     value = initialize();
     function initialize() {

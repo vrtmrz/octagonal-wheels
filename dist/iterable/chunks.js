@@ -15,12 +15,14 @@ async function* asChunk(source, { unit, timeout, interval }) {
     const pacemaker = interval ? new PaceMaker(interval) : undefined;
     let isCompleted = false;
     const porter = new Porter({
-        from: postBox, to: outgoingBox,
+        from: postBox,
+        to: outgoingBox,
         timeout: timeout,
         maxSize: unit,
     });
     const feeder = new Feeder({
-        source, target: postBox,
+        source,
+        target: postBox,
     });
     const checkStates = () => {
         if (porter.stateDetail.isBusy)

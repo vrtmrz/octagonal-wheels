@@ -61,15 +61,15 @@ type ProcessorParams<T> = {
 type ProcessorResult<T> = Promise<T[]> | T[] | undefined | void | Promise<void> | Promise<undefined>;
 type Processor<T, U> = (entity: T[]) => ProcessorResult<U>;
 interface ProcessorEvents {
-    "yielded": undefined;
-    "tickEmpty": undefined;
-    "tickImmediate": undefined;
-    "tick": undefined;
-    "tickDelayTimeout": undefined;
-    "tickSuspended": undefined;
-    "tickResumed": undefined;
-    "suspended": undefined;
-    "idle": undefined;
+    yielded: undefined;
+    tickEmpty: undefined;
+    tickImmediate: undefined;
+    tick: undefined;
+    tickDelayTimeout: undefined;
+    tickSuspended: undefined;
+    tickResumed: undefined;
+    suspended: undefined;
+    idle: undefined;
 }
 export declare class QueueProcessor<T, U> {
     _queue: T[];
@@ -164,8 +164,8 @@ export declare class QueueProcessor<T, U> {
     _runProcessor(items: T[]): Promise<void>;
     pump(): AsyncGenerator<T[], void, unknown>;
     _processingBatches: Set<number>;
-    addProcessingBatch: (typeof this._processingBatches.add);
-    deleteProcessingBatch: (typeof this._processingBatches.delete);
+    addProcessingBatch: typeof this._processingBatches.add;
+    deleteProcessingBatch: typeof this._processingBatches.delete;
     _processing: boolean;
     _collected: Inbox<T[]>;
     _clerks: ClerkGroup<T[], Clerk<T[]>>;

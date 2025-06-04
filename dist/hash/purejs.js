@@ -98,9 +98,9 @@ const te = new TextEncoder();
  */
 async function sha1Hash(str) {
     const buffer = te.encode(str);
-    const hashBuffer = await globalThis.crypto.subtle.digest('SHA-1', buffer);
+    const hashBuffer = await globalThis.crypto.subtle.digest("SHA-1", buffer);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hexHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    const hexHash = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
     return hexHash;
 }
 

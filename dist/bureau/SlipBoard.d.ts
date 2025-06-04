@@ -13,8 +13,8 @@ declare global {
         [GENERIC_COMPATIBILITY_SIGNAL]: undefined;
     }
 }
-type SlipWithData<ET, K> = K extends keyof ET ? (ET[K] extends undefined ? never : K extends string ? K : never) : never;
-type SlipWithoutData<ET, K> = K extends keyof ET ? (ET[K] extends undefined ? K extends string ? K : never : never) : never;
+type SlipWithData<ET, K> = K extends keyof ET ? ET[K] extends undefined ? never : K extends string ? K : never : never;
+type SlipWithoutData<ET, K> = K extends keyof ET ? ET[K] extends undefined ? K extends string ? K : never : never : never;
 type SlipType<ET, K> = SlipWithoutData<ET, K> | SlipWithData<ET, K> | K extends string ? K : never;
 type ResultType<ET extends Record<string, any>, K extends keyof ET> = ET[K] extends undefined ? void : ET[K];
 export type SlipProcessOptions<T> = {
@@ -32,9 +32,9 @@ export type SlipProcessOptions<T> = {
 export type AwaitOptionBase = {
     onNotAwaited?: () => void;
 };
-export type AwaitOptionWithoutTimeout = (AwaitOptionBase & {
+export type AwaitOptionWithoutTimeout = AwaitOptionBase & {
     timeout?: undefined | false;
-});
+};
 export type AwaitOptionWithTimeout = AwaitOptionBase & {
     timeout?: number;
 };

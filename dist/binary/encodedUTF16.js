@@ -4,7 +4,7 @@ const BINARY_CHUNK_MAX = 1024 * 1024 * 30;
 // Table for converting encoding binary
 const table = {};
 const revTable = {};
-const decoderStreamAvailable = (typeof TextDecoderStream !== "undefined");
+const decoderStreamAvailable = typeof TextDecoderStream !== "undefined";
 [...range(0xc0, 0x1bf)].forEach((e, i) => {
     table[i] = e;
     revTable[e] = i;
@@ -55,8 +55,8 @@ async function decodeAsync(buffer) {
         return await decodeAsyncReader(buffer);
     const decoderStream = new TextDecoderStream("utf-16");
     const writer = decoderStream.writable.getWriter();
-    writer.write(buffer);
-    writer.close();
+    await writer.write(buffer);
+    await writer.close();
     const reader = decoderStream.readable.getReader();
     const result = await reader.read();
     if (!result.value) {
@@ -80,11 +80,11 @@ function decodeAsyncReader(buffer) {
 function decodeToArrayBuffer(src) {
     if (src.length == 1)
         return _decodeToArrayBuffer(src[0]);
-    const bufItems = src.map(e => _decodeToArrayBuffer(e));
+    const bufItems = src.map((e) => _decodeToArrayBuffer(e));
     const len = bufItems.reduce((p, c) => p + c.byteLength, 0);
     const joinedArray = new Uint8Array(len);
     let offset = 0;
-    bufItems.forEach(e => {
+    bufItems.forEach((e) => {
         joinedArray.set(new Uint8Array(e), offset);
         offset += e.byteLength;
     });

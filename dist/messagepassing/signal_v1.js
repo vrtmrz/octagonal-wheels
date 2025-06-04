@@ -8,7 +8,7 @@ const traps = {};
  * @returns A promise that resolves to `true` if the signal is received within the timeout, or `false` otherwise.
  */
 async function waitForSignal(id, timeout) {
-    return await waitForValue(id, timeout) !== RESULT_TIMED_OUT;
+    return (await waitForValue(id, timeout)) !== RESULT_TIMED_OUT;
 }
 /**
  * Waits for a value with the specified ID to be resolved.
@@ -20,14 +20,16 @@ async function waitForSignal(id, timeout) {
 function waitForValue(id, timeout) {
     let resolveTrap;
     let trapJob;
-    const timer = timeout ? setTimeout(() => {
-        if (id in traps) {
-            traps[id] = traps[id].filter(e => e != trapJob);
-        }
-        if (resolveTrap)
-            resolveTrap(RESULT_TIMED_OUT);
-        resolveTrap = undefined;
-    }, timeout) : false;
+    const timer = timeout
+        ? setTimeout(() => {
+            if (id in traps) {
+                traps[id] = traps[id].filter((e) => e != trapJob);
+            }
+            if (resolveTrap)
+                resolveTrap(RESULT_TIMED_OUT);
+            resolveTrap = undefined;
+        }, timeout)
+        : false;
     return new Promise((res) => {
         if (!(id in traps))
             traps[id] = [];

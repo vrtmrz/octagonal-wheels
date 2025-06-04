@@ -30,7 +30,7 @@ const topologicalSortCache = new Map();
 //     topologicalSortCache.clear();
 // }
 function resetTopologicalSortCacheFor(ids) {
-    ids.forEach(id => topologicalSortCache.delete(id));
+    ids.forEach((id) => topologicalSortCache.delete(id));
     topologicalSortCache.forEach((value, key) => {
         if (!ids.includes(key)) {
             topologicalSortCache.delete(key);
@@ -41,7 +41,7 @@ function topologicalSort(startNode) {
     if (topologicalSortCache.has(startNode.id)) {
         const ref = topologicalSortCache.get(startNode.id);
         if (ref) {
-            const result = ref.map(e => e.instance.deref()).filter(e => e);
+            const result = ref.map((e) => e.instance.deref()).filter((e) => e);
             if (result.length === ref.length) {
                 return result;
             }
@@ -69,7 +69,7 @@ function topologicalSort(startNode) {
     }
     visit(startNode);
     const result = sorted.reverse();
-    topologicalSortCache.set(startNode.id, result.map(e => ({ id: e.id, instance: new FallbackWeakRef(e) })));
+    topologicalSortCache.set(startNode.id, result.map((e) => ({ id: e.id, instance: new FallbackWeakRef(e) })));
     return result; // The order of the sorted array is the order of the dependency
 }
 let _reactiveSourceId = 0;
@@ -77,7 +77,7 @@ function _reactive({ expression, initialValue, isSource }) {
     let value;
     let _isDirty = false;
     const id = _reactiveSourceId++;
-    const changeHandlers = new Set;
+    const changeHandlers = new Set();
     const instance = {
         id,
         dependants: new Set(),
@@ -88,14 +88,14 @@ function _reactive({ expression, initialValue, isSource }) {
         },
         markDirty() {
             const sorted = topologicalSort(instance);
-            sorted.forEach(node => node._markDirty());
+            sorted.forEach((node) => node._markDirty());
         },
         _rippleChanged() {
-            changeHandlers.forEach(e => e(instance));
+            changeHandlers.forEach((e) => e(instance));
         },
         rippleChanged() {
             const sorted = topologicalSort(instance);
-            sorted.forEach(node => node._rippleChanged());
+            sorted.forEach((node) => node._rippleChanged());
         },
         markClean() {
             _isDirty = false;
@@ -107,7 +107,7 @@ function _reactive({ expression, initialValue, isSource }) {
             if (context) {
                 if (!instance.dependants.has(context)) {
                     instance.dependants.add(context);
-                    resetTopologicalSortCacheFor([instance.id, (context).id]);
+                    resetTopologicalSortCacheFor([instance.id, context.id]);
                 }
             }
             if (_isDirty) {
@@ -145,7 +145,7 @@ function _reactive({ expression, initialValue, isSource }) {
         },
         offChanged(handler) {
             changeHandlers.delete(handler);
-        }
+        },
     };
     value = initialize();
     function initialize() {

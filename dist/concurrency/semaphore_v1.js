@@ -20,8 +20,8 @@ function Semaphore(limit, onRelease) {
      * Semaphore processing pump
      */
     function execProcess() {
-        //Delete already finished 
-        queue = queue.filter(e => e.state != "DONE");
+        //Delete already finished
+        queue = queue.filter((e) => e.state != "DONE");
         // acquiring semaphore by order
         for (const queueItem of queue) {
             if (queueItem.state != "NONE")
@@ -42,7 +42,7 @@ function Semaphore(limit, onRelease) {
      * @param key
      */
     function release(key) {
-        const finishedTask = queue.find(e => e.key == key);
+        const finishedTask = queue.find((e) => e.key == key);
         if (!finishedTask) {
             throw new Error("Missing locked semaphore!");
         }
@@ -51,7 +51,7 @@ function Semaphore(limit, onRelease) {
         }
         finishedTask.state = "DONE";
         if (onRelease)
-            onRelease(queue.filter(e => e.state != "DONE"));
+            void onRelease(queue.filter((e) => e.state != "DONE"));
         execProcess();
     }
     return {
@@ -67,10 +67,12 @@ function Semaphore(limit, onRelease) {
             // When we call this function, semaphore acquired by resolving promise.
             // (Or, notify acquiring is timed out.)
             let notify = (_) => { };
-            const semaphoreStopper = new Promise(res => {
+            const semaphoreStopper = new Promise((res) => {
                 notify = (result) => {
                     if (result) {
-                        res(() => { release(key); });
+                        res(() => {
+                            release(key);
+                        });
                     }
                     else {
                         res(false);
@@ -83,7 +85,7 @@ function Semaphore(limit, onRelease) {
                 semaphoreStopper,
                 quantity,
                 memo,
-                state: "NONE"
+                state: "NONE",
             };
             if (timeout)
                 notifier.timer = setTimeout(() => {
@@ -106,7 +108,7 @@ function Semaphore(limit, onRelease) {
         },
         peekQueues() {
             return queue;
-        }
+        },
     };
 }
 

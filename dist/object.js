@@ -14,8 +14,8 @@ function extractObject(template, obj) {
     }
     return ret;
 }
-const SYMBOL_A = Symbol('a');
-const SYMBOL_B = Symbol('b');
+const SYMBOL_A = Symbol("a");
+const SYMBOL_B = Symbol("b");
 /**
  * Checks if two objects are different.
  *
@@ -34,9 +34,13 @@ function isObjectDifferent(a, b, ignoreUndefined = false) {
         }
         const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
         if (ignoreUndefined) {
-            return keys.map(key => a?.[key] !== undefined && b?.[key] !== undefined && isObjectDifferent(a?.[key], b?.[key])).some(e => e == true);
+            return keys
+                .map((key) => a?.[key] !== undefined && b?.[key] !== undefined && isObjectDifferent(a?.[key], b?.[key]))
+                .some((e) => e == true);
         }
-        return keys.map(key => isObjectDifferent(key in a ? a[key] : SYMBOL_A, key in b ? b[key] : SYMBOL_B)).some(e => e == true);
+        return keys
+            .map((key) => isObjectDifferent(key in a ? a[key] : SYMBOL_A, key in b ? b[key] : SYMBOL_B))
+            .some((e) => e == true);
     }
     else {
         return a !== b;

@@ -34,7 +34,7 @@ function getFuncOf(name) {
         },
         get isConnected() {
             return connectedFunction !== undefined;
-        }
+        },
     };
     return inst;
 }
@@ -71,7 +71,7 @@ function getInstanceOf(name) {
         },
         get isConnected() {
             return instance !== undefined;
-        }
+        },
     };
     return inst;
 }
@@ -80,12 +80,12 @@ const connectedInstancesOf = new Map();
 const weakFuncMap = new WeakMap();
 const weakInstanceMap = new WeakMap();
 /**
-* Get a function connector
-* @description
-* This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
-* @param func A function to connect
-* @returns <ConnectorFuncOf<T, U>>
-*/
+ * Get a function connector
+ * @description
+ * This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
+ * @param func A function to connect
+ * @returns <ConnectorFuncOf<T, U>>
+ */
 function funcOf(param) {
     let name;
     if (typeof param === "function") {
@@ -113,7 +113,7 @@ function funcOf(param) {
  * @param name The name of the instance (decided by each type of instance)
  * @description This function retrieves the connector instance associated with the given name.
  * @returns The connector instance associated with the name.
-     */
+ */
 function _instanceOf(name) {
     if (connectedInstancesOf.has(name)) {
         return connectedInstancesOf.get(name);
@@ -167,7 +167,7 @@ function instanceOf(param) {
 const Connector = {
     funcOf,
     instanceOf,
-    classInstanceOf
+    classInstanceOf,
 };
 
 export { Connector };

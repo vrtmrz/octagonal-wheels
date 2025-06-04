@@ -49,7 +49,13 @@ class SimpleStoreIDB extends SimpleStoreBase {
     async keys(from, to, count) {
         if (this.db == undefined)
             throw new Error("Database not initialized or already destroyed");
-        const range = from && to ? IDBKeyRange.bound(from, to) : from ? IDBKeyRange.lowerBound(from) : to ? IDBKeyRange.upperBound(to) : undefined;
+        const range = from && to
+            ? IDBKeyRange.bound(from, to)
+            : from
+                ? IDBKeyRange.lowerBound(from)
+                : to
+                    ? IDBKeyRange.upperBound(to)
+                    : undefined;
         return await (await this.db).getAllKeys(this.name, range, count);
     }
     async keysIDB(query, count) {

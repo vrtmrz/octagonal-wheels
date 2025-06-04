@@ -28,8 +28,8 @@ export declare class SyncInbox<T> {
      */
     get isRunningOut(): boolean;
     /**
-   * Whether the buffer is full.
-   */
+     * Whether the buffer is full.
+     */
     get isFull(): boolean;
     /**
      * Whether the buffer is ready to be picked.
@@ -85,12 +85,12 @@ export declare class Inbox<T> extends SyncInbox<T> {
      */
     post(item: T, timeout?: number, cancellation?: Promise<any>[]): Promise<boolean>;
     /**
-       * Picks an item from the buffer.
-       * Waits until an item is available.
-       * @param timeout The timeout in milliseconds.
-       * @param cancellation The promise that cancels the operation.
-       * @returns The item picked.
-       */
+     * Picks an item from the buffer.
+     * Waits until an item is available.
+     * @param timeout The timeout in milliseconds.
+     * @param cancellation The promise that cancels the operation.
+     * @returns The item picked.
+     */
     pick(timeout?: number, cancellation?: Promise<any>[]): Promise<T | NOT_AVAILABLE>;
 }
 export declare const EVENT_PROGRESS = "progress";

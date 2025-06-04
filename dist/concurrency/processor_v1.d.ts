@@ -142,8 +142,8 @@ export declare class QueueProcessor<T, U> {
     _runProcessor(items: T[]): Promise<void>;
     pump(): AsyncGenerator<T[], void, unknown>;
     _processingBatches: Set<number>;
-    addProcessingBatch: (typeof this._processingBatches.add);
-    deleteProcessingBatch: (typeof this._processingBatches.delete);
+    addProcessingBatch: typeof this._processingBatches.add;
+    deleteProcessingBatch: typeof this._processingBatches.delete;
     _processing: boolean;
     delayUntilRequested(delayMs: number): Promise<void>;
     _process(): Promise<void>;

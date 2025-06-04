@@ -91,7 +91,7 @@ class Trench {
         const key = generateId(PREFIX_EPHEMERAL);
         // Race conditions should only be addressed in advance.
         this.concealing.set(key, obj);
-        this._db.set(key, obj).then(async (e) => {
+        void this._db.set(key, obj).then(async (e) => {
             if (this.concealing.has(key)) {
                 this.concealing.delete(key);
             }
@@ -125,7 +125,7 @@ class Trench {
             this.concealing.delete(key);
             return value;
         }
-        const obj = await this._db.get(key);
+        const obj = (await this._db.get(key));
         await this._db.delete(key);
         return obj;
     }
@@ -136,7 +136,7 @@ class Trench {
                 this._flushTask = undefined;
             }
             await storeTask;
-            const item = await this._db.get(key);
+            const item = (await this._db.get(key));
             await this._db.delete(key);
             return item;
         };
@@ -179,21 +179,21 @@ class Trench {
     }
     async _dequeue(type, key) {
         const range = createRange(type, key);
-        const keys = (await this._db.keys(range[0], range[1])).filter(e => !inProgress.has(e));
+        const keys = (await this._db.keys(range[0], range[1])).filter((e) => !inProgress.has(e));
         if (keys.length === 0)
             return undefined;
         return await this.expose(keys[0]);
     }
     async _dequeueWithCommit(type, key) {
         const range = createRange(type, key);
-        const keysAll = (await this._db.keys(range[0], range[1]));
-        const keys = keysAll.filter(e => !inProgress.has(e));
+        const keysAll = await this._db.keys(range[0], range[1]);
+        const keys = keysAll.filter((e) => !inProgress.has(e));
         if (keys.length === 0)
             return undefined;
         const storeKey = keys[0];
         inProgress.add(storeKey);
         const previousFailed = failed.get(storeKey) || 0;
-        const value = await this._db.get(storeKey);
+        const value = (await this._db.get(storeKey));
         return {
             key: storeKey,
             value,
@@ -207,7 +207,7 @@ class Trench {
             cancel: () => {
                 failed.set(storeKey, (failed.get(storeKey) || 0) + 1);
                 inProgress.delete(storeKey);
-            }
+            },
         };
     }
     /**

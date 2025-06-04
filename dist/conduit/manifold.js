@@ -1,4 +1,5 @@
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
+import { NamedInstance } from './NamedInstance.js';
 
 /**
  * Create a manifold (Internal)
@@ -103,20 +104,15 @@ function createManifold(name) {
         some,
         any,
         every,
-        all
+        all,
     };
 }
-const manifolds = new Map();
+const manifold = new NamedInstance(`Manifolds`, (e) => createManifold(e));
 const Manifold = {
     of: (name) => {
-        if (manifolds.has(name)) {
-            return manifolds.get(name);
-        }
-        const manifold = createManifold(name);
-        manifolds.set(name, manifold);
-        return manifold;
-    }
+        return manifold.of(name);
+    },
 };
 
-export { Manifold };
+export { Manifold, manifold };
 //# sourceMappingURL=manifold.js.map

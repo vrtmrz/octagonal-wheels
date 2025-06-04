@@ -1,4 +1,5 @@
 import { promiseWithResolver } from '../promises.js';
+import { NamedInstance } from './NamedInstance.js';
 
 /*
 Regulator
@@ -11,7 +12,9 @@ Regulator
  */
 function createRegulator(_name) {
     let maxConcurrency = 1;
-    let onProcess = () => { throw new Error(`not function connected on Regulator:${_name}`); };
+    let onProcess = () => {
+        throw new Error(`not function connected on Regulator:${_name}`);
+    };
     const processing = new Set();
     const scheduled = [];
     // let currentCount = 0;
@@ -89,12 +92,12 @@ function createRegulator(_name) {
             return p;
         },
         invokeAll: (items) => {
-            return items.map(item => schedule(item));
-        }
+            return items.map((item) => schedule(item));
+        },
     };
     return reg;
 }
-const regulators = new Map();
+const regulators = new NamedInstance("Regulator", (name) => createRegulator(name));
 /**
  * @description
  * Get a regulator that allows you to regulate the number of concurrent processes.
@@ -108,11 +111,8 @@ const Regulator = {
      * @returns <RegulatorOf<T, U>>
      */
     of: (name) => {
-        if (!regulators.has(name)) {
-            regulators.set(name, createRegulator(name));
-        }
-        return regulators.get(name);
-    }
+        return regulators.of(name);
+    },
 };
 
 export { Regulator };

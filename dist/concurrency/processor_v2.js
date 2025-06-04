@@ -1,7 +1,8 @@
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { RESULT_TIMED_OUT } from '../common/const.js';
 import { promiseWithResolver, noop, cancelableDelay, delay, fireAndForget } from '../promises.js';
-import { EventHub } from '../events.js';
+import { EventHub } from '../events/EventHub.js';
+import '../events/CustomEventTargets.js';
 import { PaceMaker } from '../bureau/PaceMaker.js';
 import { ClerkGroup, Clerk } from '../bureau/Clerk.js';
 import { Inbox } from '../bureau/Inbox.js';
@@ -85,7 +86,7 @@ class QueueProcessor {
         this._hub.onEvent("tickResumed", () => this._run());
     }
     async _waitFor(keys, timeout) {
-        const items = keys.map(key => {
+        const items = keys.map((key) => {
             const p = promiseWithResolver();
             const releaser = this._hub.onEvent(key, () => {
                 p.resolve(key);
@@ -96,10 +97,10 @@ class QueueProcessor {
             return p;
         });
         const timer = timeout ? cancelableDelay(timeout) : undefined;
-        const tasks = [...items.map(i => i.promise), ...(timer ? [timer.promise] : [])];
+        const tasks = [...items.map((i) => i.promise), ...(timer ? [timer.promise] : [])];
         const ret = await Promise.race(tasks);
         // Release unhandled eventHandlers
-        items.forEach(i => i.resolve(undefined));
+        items.forEach((i) => i.resolve(undefined));
         return ret;
     }
     _triggerTickDelay() {
@@ -522,8 +523,7 @@ class QueueProcessor {
         this._onTick();
         // }
     }
-    async _waitForSuspended() {
-    }
+    async _waitForSuspended() { }
     flush() {
         if (this._isSuspended)
             return Promise.resolve(false);
@@ -571,7 +571,13 @@ class QueueProcessor {
     }
     async *pump() {
         do {
-            const ticked = await this._waitFor(["tickImmediate", "yielded", "tickSuspended", "tickDelayTimeout", "tickSuspended"]);
+            const ticked = await this._waitFor([
+                "tickImmediate",
+                "yielded",
+                "tickSuspended",
+                "tickDelayTimeout",
+                "tickSuspended",
+            ]);
             // console.log(`Ticked:${String(ticked)}`);
             L2: do {
                 const items = this._collectBatch();
@@ -617,7 +623,7 @@ class QueueProcessor {
                 }
             },
             initialMemberCount: this.concurrentLimit,
-            instantiate: (params) => new Clerk(params)
+            instantiate: (params) => new Clerk(params),
         });
     }
     async _process() {
