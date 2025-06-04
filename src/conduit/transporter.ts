@@ -3,9 +3,9 @@ import { promiseWithResolver, type PromiseWithResolvers } from "../promises.ts";
 import { NamedInstance } from "./NamedInstance.ts";
 import { PostMessageBackbone, type TransporterBackbone } from "./transporterAdapter.ts";
 
-type Callee<T extends any[], U> = (...args: T) => Promise<U>;
-type Proxied<T extends any[], U> = Callee<T, U>;
-type Caller<T extends any[], U> = (callee: Callee<T, U>) => () => void;
+export type Callee<T extends any[], U> = (...args: T) => Promise<U>;
+export type Proxied<T extends any[], U> = Callee<T, U>;
+export type Caller<T extends any[], U> = (callee: Callee<T, U>) => () => void;
 
 type TransportedEventData<T extends any[]> = {
     callback: string;
@@ -17,14 +17,14 @@ type TransportedEventResultData<T> = {
     result?: T;
     error?: Error;
 };
-interface TransportController {
+export interface TransportController {
     instanceName: string;
     activate: () => void;
     deactivate: () => void;
     dispatchCommand: (type: NotificationType, instanceName: string) => void;
 }
 
-type TransporterTuple<T extends any[], U> = [Proxied<T, U>, Caller<T, U>, TransportController];
+export type TransporterTuple<T extends any[], U> = [Proxied<T, U>, Caller<T, U>, TransportController];
 
 /**
  * Transporter is a utility for creating a communication channel between different parts of an application.
