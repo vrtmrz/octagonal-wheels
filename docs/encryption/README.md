@@ -6,6 +6,10 @@
 
 # encryption
 
+## Namespaces
+
+- [OpenSSLCompat](OpenSSLCompat/README.md)
+
 ## Type Aliases
 
 - [encodedData](encodedData/README.md)
