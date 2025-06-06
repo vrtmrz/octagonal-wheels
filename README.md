@@ -16,3 +16,4 @@ Mainly targeted to browsers, Electron Apps, and, Chrome Extensions.
 Please keep in mind that all things do not have a generic purpose.
 
 TypeDoc Documentation is [here](./docs/globals.md)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/vrtmrz/octagonal-wheels) also quite useful!
