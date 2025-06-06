@@ -1,6 +1,6 @@
 {
     "name": "octagonal-wheels",
-    "version": "0.1.29",
+    "version": "0.1.30",
     "description": "This module is a compilation of wheels that have been reinvented for a specific purpose",
     "type": "module",
     "scripts": {
@@ -19,7 +19,8 @@
         "pretty": "npm run prettyNoWrite -- --write --log-level error",
         "prettyCheck": "npm run prettyNoWrite -- --check",
         "prettyNoWrite": "prettier --config ./.prettierrc \"src/**/*.ts\" \"src/**/*.json\" ",
-        "check": "npm run lint && npm run tsc-check"
+        "check": "npm run lint && npm run tsc-check",
+        "serverTest:openSSLCompat": "cd ./serverTest && tsx openSSLCompat.ts"
     },
     "exports": {
         ".": "./dist/index.js",
@@ -209,6 +210,7 @@
         "rollup": "^4.25.0",
         "rollup-plugin-node-globals": "^1.4.0",
         "rollup-plugin-polyfill-node": "^0.13.0",
+        "tsx": "^4.19.4",
         "typedoc": "^0.28.4",
         "typedoc-plugin-markdown": "^4.6.3",
         "typescript": "^5.7.3",
@@ -218,6 +220,6 @@
         "xxhash-wasm-102": "npm:xxhash-wasm@^1.0.2"
     },
     "dependencies": {
-        "idb": "^8.0.2"
+        "idb": "^8.0.3"
     }
 }
