@@ -3,6 +3,7 @@
     "version": "0.1.30",
     "description": "This module is a compilation of wheels that have been reinvented for a specific purpose",
     "type": "module",
+    "types": "./dist/index.d.ts",
     "scripts": {
         "clean": "rimraf dist",
         "prebuild": "npm run clean",
@@ -23,162 +24,639 @@
         "serverTest:openSSLCompat": "cd ./serverTest && tsx openSSLCompat.ts"
     },
     "exports": {
-        ".": "./dist/index.js",
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        },
         "./package.json": "./package.json",
-        "./string": "./dist/string.js",
-        "./string.js": "./dist/string.js",
-        "./promises": "./dist/promises.js",
-        "./promises.js": "./dist/promises.js",
-        "./object": "./dist/object.js",
-        "./object.js": "./dist/object.js",
-        "./number": "./dist/number.js",
-        "./number.js": "./dist/number.js",
-        "./function": "./dist/function.js",
-        "./function.js": "./dist/function.js",
-        "./events": "./dist/events.js",
-        "./events.js": "./dist/events.js",
-        "./context": "./dist/context.js",
-        "./context.js": "./dist/context.js",
-        "./collection": "./dist/collection.js",
-        "./collection.js": "./dist/collection.js",
-        "./actor": "./dist/actor.js",
-        "./actor.js": "./dist/actor.js",
-        "./patched_xxhash_wasm/xxhash-wasm": "./dist/patched_xxhash_wasm/xxhash-wasm.js",
-        "./patched_xxhash_wasm/xxhash-wasm.js": "./dist/patched_xxhash_wasm/xxhash-wasm.js",
-        "./messagepassing/signal_v1": "./dist/messagepassing/signal_v1.js",
-        "./messagepassing/signal_v1.js": "./dist/messagepassing/signal_v1.js",
-        "./messagepassing/signal": "./dist/messagepassing/signal.js",
-        "./messagepassing/signal.js": "./dist/messagepassing/signal.js",
-        "./messagepassing.js": "./dist/messagepassing/index.js",
-        "./messagepassing": "./dist/messagepassing/index.js",
-        "./messagepassing/index.js": "./dist/messagepassing/index.js",
-        "./memory/memutil": "./dist/memory/memutil.js",
-        "./memory/memutil.js": "./dist/memory/memutil.js",
-        "./memory/LRUCache": "./dist/memory/LRUCache.js",
-        "./memory/LRUCache.js": "./dist/memory/LRUCache.js",
-        "./memory.js": "./dist/memory/index.js",
-        "./memory": "./dist/memory/index.js",
-        "./memory/index.js": "./dist/memory/index.js",
-        "./iterable/source": "./dist/iterable/source.js",
-        "./iterable/source.js": "./dist/iterable/source.js",
-        "./iterable/map": "./dist/iterable/map.js",
-        "./iterable/map.js": "./dist/iterable/map.js",
-        "./iterable.js": "./dist/iterable/index.js",
-        "./iterable": "./dist/iterable/index.js",
-        "./iterable/index.js": "./dist/iterable/index.js",
-        "./iterable/chunks": "./dist/iterable/chunks.js",
-        "./iterable/chunks.js": "./dist/iterable/chunks.js",
-        "./hash/xxhash": "./dist/hash/xxhash.js",
-        "./hash/xxhash.js": "./dist/hash/xxhash.js",
-        "./hash/purejs": "./dist/hash/purejs.js",
-        "./hash/purejs.js": "./dist/hash/purejs.js",
-        "./hash.js": "./dist/hash/index.js",
-        "./hash": "./dist/hash/index.js",
-        "./hash/index.js": "./dist/hash/index.js",
-        "./hash/crc32": "./dist/hash/crc32.js",
-        "./hash/crc32.js": "./dist/hash/crc32.js",
-        "./events/EventHub": "./dist/events/EventHub.js",
-        "./events/EventHub.js": "./dist/events/EventHub.js",
-        "./events/CustomEventTargets": "./dist/events/CustomEventTargets.js",
-        "./events/CustomEventTargets.js": "./dist/events/CustomEventTargets.js",
-        "./encryption.js": "./dist/encryption/index.js",
-        "./encryption": "./dist/encryption/index.js",
-        "./encryption/index.js": "./dist/encryption/index.js",
-        "./encryption/encryptionv3": "./dist/encryption/encryptionv3.js",
-        "./encryption/encryptionv3.js": "./dist/encryption/encryptionv3.js",
-        "./encryption/encryption": "./dist/encryption/encryption.js",
-        "./encryption/encryption.js": "./dist/encryption/encryption.js",
-        "./dataobject/Refiner": "./dist/dataobject/Refiner.js",
-        "./dataobject/Refiner.js": "./dist/dataobject/Refiner.js",
-        "./dataobject/reactive_v2": "./dist/dataobject/reactive_v2.js",
-        "./dataobject/reactive_v2.js": "./dist/dataobject/reactive_v2.js",
-        "./dataobject/reactive_v1": "./dist/dataobject/reactive_v1.js",
-        "./dataobject/reactive_v1.js": "./dist/dataobject/reactive_v1.js",
-        "./dataobject/reactive": "./dist/dataobject/reactive.js",
-        "./dataobject/reactive.js": "./dist/dataobject/reactive.js",
-        "./dataobject/PersistentMap": "./dist/dataobject/PersistentMap.js",
-        "./dataobject/PersistentMap.js": "./dist/dataobject/PersistentMap.js",
-        "./dataobject.js": "./dist/dataobject/index.js",
-        "./dataobject": "./dist/dataobject/index.js",
-        "./dataobject/index.js": "./dist/dataobject/index.js",
-        "./databases/SimpleStoreIDB": "./dist/databases/SimpleStoreIDB.js",
-        "./databases/SimpleStoreIDB.js": "./dist/databases/SimpleStoreIDB.js",
-        "./databases/SimpleStoreBase": "./dist/databases/SimpleStoreBase.js",
-        "./databases/SimpleStoreBase.js": "./dist/databases/SimpleStoreBase.js",
-        "./databases/KeyValueDB": "./dist/databases/KeyValueDB.js",
-        "./databases/KeyValueDB.js": "./dist/databases/KeyValueDB.js",
-        "./databases.js": "./dist/databases/index.js",
-        "./databases": "./dist/databases/index.js",
-        "./databases/index.js": "./dist/databases/index.js",
-        "./conduit/transporterAdapter": "./dist/conduit/transporterAdapter.js",
-        "./conduit/transporterAdapter.js": "./dist/conduit/transporterAdapter.js",
-        "./conduit/transporter": "./dist/conduit/transporter.js",
-        "./conduit/transporter.js": "./dist/conduit/transporter.js",
-        "./conduit/regulator": "./dist/conduit/regulator.js",
-        "./conduit/regulator.js": "./dist/conduit/regulator.js",
-        "./conduit/NamedInstance": "./dist/conduit/NamedInstance.js",
-        "./conduit/NamedInstance.js": "./dist/conduit/NamedInstance.js",
-        "./conduit/manifold": "./dist/conduit/manifold.js",
-        "./conduit/manifold.js": "./dist/conduit/manifold.js",
-        "./conduit.js": "./dist/conduit/index.js",
-        "./conduit": "./dist/conduit/index.js",
-        "./conduit/index.js": "./dist/conduit/index.js",
-        "./conduit/connector": "./dist/conduit/connector.js",
-        "./conduit/connector.js": "./dist/conduit/connector.js",
-        "./concurrency/task": "./dist/concurrency/task.js",
-        "./concurrency/task.js": "./dist/concurrency/task.js",
-        "./concurrency/semaphore_v2": "./dist/concurrency/semaphore_v2.js",
-        "./concurrency/semaphore_v2.js": "./dist/concurrency/semaphore_v2.js",
-        "./concurrency/semaphore_v1": "./dist/concurrency/semaphore_v1.js",
-        "./concurrency/semaphore_v1.js": "./dist/concurrency/semaphore_v1.js",
-        "./concurrency/semaphore": "./dist/concurrency/semaphore.js",
-        "./concurrency/semaphore.js": "./dist/concurrency/semaphore.js",
-        "./concurrency/processor_v2": "./dist/concurrency/processor_v2.js",
-        "./concurrency/processor_v2.js": "./dist/concurrency/processor_v2.js",
-        "./concurrency/processor_v1": "./dist/concurrency/processor_v1.js",
-        "./concurrency/processor_v1.js": "./dist/concurrency/processor_v1.js",
-        "./concurrency/processor": "./dist/concurrency/processor.js",
-        "./concurrency/processor.js": "./dist/concurrency/processor.js",
-        "./concurrency/lock_v2": "./dist/concurrency/lock_v2.js",
-        "./concurrency/lock_v2.js": "./dist/concurrency/lock_v2.js",
-        "./concurrency/lock_v1": "./dist/concurrency/lock_v1.js",
-        "./concurrency/lock_v1.js": "./dist/concurrency/lock_v1.js",
-        "./concurrency/lock": "./dist/concurrency/lock.js",
-        "./concurrency/lock.js": "./dist/concurrency/lock.js",
-        "./concurrency.js": "./dist/concurrency/index.js",
-        "./concurrency": "./dist/concurrency/index.js",
-        "./concurrency/index.js": "./dist/concurrency/index.js",
-        "./common/types": "./dist/common/types.js",
-        "./common/types.js": "./dist/common/types.js",
-        "./common/polyfill": "./dist/common/polyfill.js",
-        "./common/polyfill.js": "./dist/common/polyfill.js",
-        "./common/logger": "./dist/common/logger.js",
-        "./common/logger.js": "./dist/common/logger.js",
-        "./common.js": "./dist/common/index.js",
-        "./common": "./dist/common/index.js",
-        "./common/index.js": "./dist/common/index.js",
-        "./common/const": "./dist/common/const.js",
-        "./common/const.js": "./dist/common/const.js",
-        "./bureau/SlipBoard": "./dist/bureau/SlipBoard.js",
-        "./bureau/SlipBoard.js": "./dist/bureau/SlipBoard.js",
-        "./bureau/PaceMaker": "./dist/bureau/PaceMaker.js",
-        "./bureau/PaceMaker.js": "./dist/bureau/PaceMaker.js",
-        "./bureau.js": "./dist/bureau/index.js",
-        "./bureau": "./dist/bureau/index.js",
-        "./bureau/index.js": "./dist/bureau/index.js",
-        "./bureau/Inbox": "./dist/bureau/Inbox.js",
-        "./bureau/Inbox.js": "./dist/bureau/Inbox.js",
-        "./bureau/Clerk": "./dist/bureau/Clerk.js",
-        "./bureau/Clerk.js": "./dist/bureau/Clerk.js",
-        "./binary.js": "./dist/binary/index.js",
-        "./binary": "./dist/binary/index.js",
-        "./binary/index.js": "./dist/binary/index.js",
-        "./binary/hex": "./dist/binary/hex.js",
-        "./binary/hex.js": "./dist/binary/hex.js",
-        "./binary/encodedUTF16": "./dist/binary/encodedUTF16.js",
-        "./binary/encodedUTF16.js": "./dist/binary/encodedUTF16.js",
-        "./binary/base64": "./dist/binary/base64.js",
-        "./binary/base64.js": "./dist/binary/base64.js"
+        "./actor": {
+            "import": "./dist/actor.js",
+            "types": "./dist/actor.d.ts"
+        },
+        "./actor.js": {
+            "import": "./dist/actor.js",
+            "types": "./dist/actor.d.ts"
+        },
+        "./binary": {
+            "import": "./dist/binary/index.js",
+            "types": "./dist/binary/index.d.ts"
+        },
+        "./binary.js": {
+            "import": "./dist/binary/index.js",
+            "types": "./dist/binary/index.d.ts"
+        },
+        "./binary/base64": {
+            "import": "./dist/binary/base64.js",
+            "types": "./dist/binary/base64.d.ts"
+        },
+        "./binary/base64.js": {
+            "import": "./dist/binary/base64.js",
+            "types": "./dist/binary/base64.d.ts"
+        },
+        "./binary/encodedUTF16": {
+            "import": "./dist/binary/encodedUTF16.js",
+            "types": "./dist/binary/encodedUTF16.d.ts"
+        },
+        "./binary/encodedUTF16.js": {
+            "import": "./dist/binary/encodedUTF16.js",
+            "types": "./dist/binary/encodedUTF16.d.ts"
+        },
+        "./binary/hex": {
+            "import": "./dist/binary/hex.js",
+            "types": "./dist/binary/hex.d.ts"
+        },
+        "./binary/hex.js": {
+            "import": "./dist/binary/hex.js",
+            "types": "./dist/binary/hex.d.ts"
+        },
+        "./binary/index.js": {
+            "import": "./dist/binary/index.js",
+            "types": "./dist/binary/index.d.ts"
+        },
+        "./bureau": {
+            "import": "./dist/bureau/index.js",
+            "types": "./dist/bureau/index.d.ts"
+        },
+        "./bureau.js": {
+            "import": "./dist/bureau/index.js",
+            "types": "./dist/bureau/index.d.ts"
+        },
+        "./bureau/Clerk": {
+            "import": "./dist/bureau/Clerk.js",
+            "types": "./dist/bureau/Clerk.d.ts"
+        },
+        "./bureau/Clerk.js": {
+            "import": "./dist/bureau/Clerk.js",
+            "types": "./dist/bureau/Clerk.d.ts"
+        },
+        "./bureau/Inbox": {
+            "import": "./dist/bureau/Inbox.js",
+            "types": "./dist/bureau/Inbox.d.ts"
+        },
+        "./bureau/Inbox.js": {
+            "import": "./dist/bureau/Inbox.js",
+            "types": "./dist/bureau/Inbox.d.ts"
+        },
+        "./bureau/index.js": {
+            "import": "./dist/bureau/index.js",
+            "types": "./dist/bureau/index.d.ts"
+        },
+        "./bureau/PaceMaker": {
+            "import": "./dist/bureau/PaceMaker.js",
+            "types": "./dist/bureau/PaceMaker.d.ts"
+        },
+        "./bureau/PaceMaker.js": {
+            "import": "./dist/bureau/PaceMaker.js",
+            "types": "./dist/bureau/PaceMaker.d.ts"
+        },
+        "./bureau/SlipBoard": {
+            "import": "./dist/bureau/SlipBoard.js",
+            "types": "./dist/bureau/SlipBoard.d.ts"
+        },
+        "./bureau/SlipBoard.js": {
+            "import": "./dist/bureau/SlipBoard.js",
+            "types": "./dist/bureau/SlipBoard.d.ts"
+        },
+        "./collection": {
+            "import": "./dist/collection.js",
+            "types": "./dist/collection.d.ts"
+        },
+        "./collection.js": {
+            "import": "./dist/collection.js",
+            "types": "./dist/collection.d.ts"
+        },
+        "./common": {
+            "import": "./dist/common/index.js",
+            "types": "./dist/common/index.d.ts"
+        },
+        "./common.js": {
+            "import": "./dist/common/index.js",
+            "types": "./dist/common/index.d.ts"
+        },
+        "./common/const": {
+            "import": "./dist/common/const.js",
+            "types": "./dist/common/const.d.ts"
+        },
+        "./common/const.js": {
+            "import": "./dist/common/const.js",
+            "types": "./dist/common/const.d.ts"
+        },
+        "./common/index.js": {
+            "import": "./dist/common/index.js",
+            "types": "./dist/common/index.d.ts"
+        },
+        "./common/logger": {
+            "import": "./dist/common/logger.js",
+            "types": "./dist/common/logger.d.ts"
+        },
+        "./common/logger.js": {
+            "import": "./dist/common/logger.js",
+            "types": "./dist/common/logger.d.ts"
+        },
+        "./common/polyfill": {
+            "import": "./dist/common/polyfill.js",
+            "types": "./dist/common/polyfill.d.ts"
+        },
+        "./common/polyfill.js": {
+            "import": "./dist/common/polyfill.js",
+            "types": "./dist/common/polyfill.d.ts"
+        },
+        "./common/types": {
+            "import": "./dist/common/types.js",
+            "types": "./dist/common/types.d.ts"
+        },
+        "./common/types.js": {
+            "import": "./dist/common/types.js",
+            "types": "./dist/common/types.d.ts"
+        },
+        "./concurrency": {
+            "import": "./dist/concurrency/index.js",
+            "types": "./dist/concurrency/index.d.ts"
+        },
+        "./concurrency.js": {
+            "import": "./dist/concurrency/index.js",
+            "types": "./dist/concurrency/index.d.ts"
+        },
+        "./concurrency/index.js": {
+            "import": "./dist/concurrency/index.js",
+            "types": "./dist/concurrency/index.d.ts"
+        },
+        "./concurrency/lock": {
+            "import": "./dist/concurrency/lock.js",
+            "types": "./dist/concurrency/lock.d.ts"
+        },
+        "./concurrency/lock_v1": {
+            "import": "./dist/concurrency/lock_v1.js",
+            "types": "./dist/concurrency/lock_v1.d.ts"
+        },
+        "./concurrency/lock_v1.js": {
+            "import": "./dist/concurrency/lock_v1.js",
+            "types": "./dist/concurrency/lock_v1.d.ts"
+        },
+        "./concurrency/lock_v2": {
+            "import": "./dist/concurrency/lock_v2.js",
+            "types": "./dist/concurrency/lock_v2.d.ts"
+        },
+        "./concurrency/lock_v2.js": {
+            "import": "./dist/concurrency/lock_v2.js",
+            "types": "./dist/concurrency/lock_v2.d.ts"
+        },
+        "./concurrency/lock.js": {
+            "import": "./dist/concurrency/lock.js",
+            "types": "./dist/concurrency/lock.d.ts"
+        },
+        "./concurrency/processor": {
+            "import": "./dist/concurrency/processor.js",
+            "types": "./dist/concurrency/processor.d.ts"
+        },
+        "./concurrency/processor_v1": {
+            "import": "./dist/concurrency/processor_v1.js",
+            "types": "./dist/concurrency/processor_v1.d.ts"
+        },
+        "./concurrency/processor_v1.js": {
+            "import": "./dist/concurrency/processor_v1.js",
+            "types": "./dist/concurrency/processor_v1.d.ts"
+        },
+        "./concurrency/processor_v2": {
+            "import": "./dist/concurrency/processor_v2.js",
+            "types": "./dist/concurrency/processor_v2.d.ts"
+        },
+        "./concurrency/processor_v2.js": {
+            "import": "./dist/concurrency/processor_v2.js",
+            "types": "./dist/concurrency/processor_v2.d.ts"
+        },
+        "./concurrency/processor.js": {
+            "import": "./dist/concurrency/processor.js",
+            "types": "./dist/concurrency/processor.d.ts"
+        },
+        "./concurrency/semaphore": {
+            "import": "./dist/concurrency/semaphore.js",
+            "types": "./dist/concurrency/semaphore.d.ts"
+        },
+        "./concurrency/semaphore_v1": {
+            "import": "./dist/concurrency/semaphore_v1.js",
+            "types": "./dist/concurrency/semaphore_v1.d.ts"
+        },
+        "./concurrency/semaphore_v1.js": {
+            "import": "./dist/concurrency/semaphore_v1.js",
+            "types": "./dist/concurrency/semaphore_v1.d.ts"
+        },
+        "./concurrency/semaphore_v2": {
+            "import": "./dist/concurrency/semaphore_v2.js",
+            "types": "./dist/concurrency/semaphore_v2.d.ts"
+        },
+        "./concurrency/semaphore_v2.js": {
+            "import": "./dist/concurrency/semaphore_v2.js",
+            "types": "./dist/concurrency/semaphore_v2.d.ts"
+        },
+        "./concurrency/semaphore.js": {
+            "import": "./dist/concurrency/semaphore.js",
+            "types": "./dist/concurrency/semaphore.d.ts"
+        },
+        "./concurrency/task": {
+            "import": "./dist/concurrency/task.js",
+            "types": "./dist/concurrency/task.d.ts"
+        },
+        "./concurrency/task.js": {
+            "import": "./dist/concurrency/task.js",
+            "types": "./dist/concurrency/task.d.ts"
+        },
+        "./conduit": {
+            "import": "./dist/conduit/index.js",
+            "types": "./dist/conduit/index.d.ts"
+        },
+        "./conduit.js": {
+            "import": "./dist/conduit/index.js",
+            "types": "./dist/conduit/index.d.ts"
+        },
+        "./conduit/connector": {
+            "import": "./dist/conduit/connector.js",
+            "types": "./dist/conduit/connector.d.ts"
+        },
+        "./conduit/connector.js": {
+            "import": "./dist/conduit/connector.js",
+            "types": "./dist/conduit/connector.d.ts"
+        },
+        "./conduit/index.js": {
+            "import": "./dist/conduit/index.js",
+            "types": "./dist/conduit/index.d.ts"
+        },
+        "./conduit/manifold": {
+            "import": "./dist/conduit/manifold.js",
+            "types": "./dist/conduit/manifold.d.ts"
+        },
+        "./conduit/manifold.js": {
+            "import": "./dist/conduit/manifold.js",
+            "types": "./dist/conduit/manifold.d.ts"
+        },
+        "./conduit/NamedInstance": {
+            "import": "./dist/conduit/NamedInstance.js",
+            "types": "./dist/conduit/NamedInstance.d.ts"
+        },
+        "./conduit/NamedInstance.js": {
+            "import": "./dist/conduit/NamedInstance.js",
+            "types": "./dist/conduit/NamedInstance.d.ts"
+        },
+        "./conduit/regulator": {
+            "import": "./dist/conduit/regulator.js",
+            "types": "./dist/conduit/regulator.d.ts"
+        },
+        "./conduit/regulator.js": {
+            "import": "./dist/conduit/regulator.js",
+            "types": "./dist/conduit/regulator.d.ts"
+        },
+        "./conduit/transporter": {
+            "import": "./dist/conduit/transporter.js",
+            "types": "./dist/conduit/transporter.d.ts"
+        },
+        "./conduit/transporter.js": {
+            "import": "./dist/conduit/transporter.js",
+            "types": "./dist/conduit/transporter.d.ts"
+        },
+        "./conduit/transporterAdapter": {
+            "import": "./dist/conduit/transporterAdapter.js",
+            "types": "./dist/conduit/transporterAdapter.d.ts"
+        },
+        "./conduit/transporterAdapter.js": {
+            "import": "./dist/conduit/transporterAdapter.js",
+            "types": "./dist/conduit/transporterAdapter.d.ts"
+        },
+        "./context": {
+            "import": "./dist/context.js",
+            "types": "./dist/context.d.ts"
+        },
+        "./context.js": {
+            "import": "./dist/context.js",
+            "types": "./dist/context.d.ts"
+        },
+        "./databases": {
+            "import": "./dist/databases/index.js",
+            "types": "./dist/databases/index.d.ts"
+        },
+        "./databases.js": {
+            "import": "./dist/databases/index.js",
+            "types": "./dist/databases/index.d.ts"
+        },
+        "./databases/index.js": {
+            "import": "./dist/databases/index.js",
+            "types": "./dist/databases/index.d.ts"
+        },
+        "./databases/KeyValueDB": {
+            "import": "./dist/databases/KeyValueDB.js",
+            "types": "./dist/databases/KeyValueDB.d.ts"
+        },
+        "./databases/KeyValueDB.js": {
+            "import": "./dist/databases/KeyValueDB.js",
+            "types": "./dist/databases/KeyValueDB.d.ts"
+        },
+        "./databases/SimpleStoreBase": {
+            "import": "./dist/databases/SimpleStoreBase.js",
+            "types": "./dist/databases/SimpleStoreBase.d.ts"
+        },
+        "./databases/SimpleStoreBase.js": {
+            "import": "./dist/databases/SimpleStoreBase.js",
+            "types": "./dist/databases/SimpleStoreBase.d.ts"
+        },
+        "./databases/SimpleStoreIDB": {
+            "import": "./dist/databases/SimpleStoreIDB.js",
+            "types": "./dist/databases/SimpleStoreIDB.d.ts"
+        },
+        "./databases/SimpleStoreIDB.js": {
+            "import": "./dist/databases/SimpleStoreIDB.js",
+            "types": "./dist/databases/SimpleStoreIDB.d.ts"
+        },
+        "./dataobject": {
+            "import": "./dist/dataobject/index.js",
+            "types": "./dist/dataobject/index.d.ts"
+        },
+        "./dataobject.js": {
+            "import": "./dist/dataobject/index.js",
+            "types": "./dist/dataobject/index.d.ts"
+        },
+        "./dataobject/index.js": {
+            "import": "./dist/dataobject/index.js",
+            "types": "./dist/dataobject/index.d.ts"
+        },
+        "./dataobject/PersistentMap": {
+            "import": "./dist/dataobject/PersistentMap.js",
+            "types": "./dist/dataobject/PersistentMap.d.ts"
+        },
+        "./dataobject/PersistentMap.js": {
+            "import": "./dist/dataobject/PersistentMap.js",
+            "types": "./dist/dataobject/PersistentMap.d.ts"
+        },
+        "./dataobject/reactive": {
+            "import": "./dist/dataobject/reactive.js",
+            "types": "./dist/dataobject/reactive.d.ts"
+        },
+        "./dataobject/reactive_v1": {
+            "import": "./dist/dataobject/reactive_v1.js",
+            "types": "./dist/dataobject/reactive_v1.d.ts"
+        },
+        "./dataobject/reactive_v1.js": {
+            "import": "./dist/dataobject/reactive_v1.js",
+            "types": "./dist/dataobject/reactive_v1.d.ts"
+        },
+        "./dataobject/reactive_v2": {
+            "import": "./dist/dataobject/reactive_v2.js",
+            "types": "./dist/dataobject/reactive_v2.d.ts"
+        },
+        "./dataobject/reactive_v2.js": {
+            "import": "./dist/dataobject/reactive_v2.js",
+            "types": "./dist/dataobject/reactive_v2.d.ts"
+        },
+        "./dataobject/reactive.js": {
+            "import": "./dist/dataobject/reactive.js",
+            "types": "./dist/dataobject/reactive.d.ts"
+        },
+        "./dataobject/Refiner": {
+            "import": "./dist/dataobject/Refiner.js",
+            "types": "./dist/dataobject/Refiner.d.ts"
+        },
+        "./dataobject/Refiner.js": {
+            "import": "./dist/dataobject/Refiner.js",
+            "types": "./dist/dataobject/Refiner.d.ts"
+        },
+        "./encryption": {
+            "import": "./dist/encryption/index.js",
+            "types": "./dist/encryption/index.d.ts"
+        },
+        "./encryption.js": {
+            "import": "./dist/encryption/index.js",
+            "types": "./dist/encryption/index.d.ts"
+        },
+        "./encryption/encryption": {
+            "import": "./dist/encryption/encryption.js",
+            "types": "./dist/encryption/encryption.d.ts"
+        },
+        "./encryption/encryption.js": {
+            "import": "./dist/encryption/encryption.js",
+            "types": "./dist/encryption/encryption.d.ts"
+        },
+        "./encryption/encryptionv3": {
+            "import": "./dist/encryption/encryptionv3.js",
+            "types": "./dist/encryption/encryptionv3.d.ts"
+        },
+        "./encryption/encryptionv3.js": {
+            "import": "./dist/encryption/encryptionv3.js",
+            "types": "./dist/encryption/encryptionv3.d.ts"
+        },
+        "./encryption/index.js": {
+            "import": "./dist/encryption/index.js",
+            "types": "./dist/encryption/index.d.ts"
+        },
+        "./encryption/openSSLCompat": {
+            "import": "./dist/encryption/openSSLCompat/index.js",
+            "types": "./dist/encryption/openSSLCompat/index.d.ts"
+        },
+        "./encryption/openSSLCompat.js": {
+            "import": "./dist/encryption/openSSLCompat/index.js",
+            "types": "./dist/encryption/openSSLCompat/index.d.ts"
+        },
+        "./encryption/openSSLCompat/CBC": {
+            "import": "./dist/encryption/openSSLCompat/CBC.js",
+            "types": "./dist/encryption/openSSLCompat/CBC.d.ts"
+        },
+        "./encryption/openSSLCompat/CBC.js": {
+            "import": "./dist/encryption/openSSLCompat/CBC.js",
+            "types": "./dist/encryption/openSSLCompat/CBC.d.ts"
+        },
+        "./encryption/openSSLCompat/index.js": {
+            "import": "./dist/encryption/openSSLCompat/index.js",
+            "types": "./dist/encryption/openSSLCompat/index.d.ts"
+        },
+        "./events": {
+            "import": "./dist/events.js",
+            "types": "./dist/events.d.ts"
+        },
+        "./events.js": {
+            "import": "./dist/events.js",
+            "types": "./dist/events.d.ts"
+        },
+        "./events/CustomEventTargets": {
+            "import": "./dist/events/CustomEventTargets.js",
+            "types": "./dist/events/CustomEventTargets.d.ts"
+        },
+        "./events/CustomEventTargets.js": {
+            "import": "./dist/events/CustomEventTargets.js",
+            "types": "./dist/events/CustomEventTargets.d.ts"
+        },
+        "./events/EventHub": {
+            "import": "./dist/events/EventHub.js",
+            "types": "./dist/events/EventHub.d.ts"
+        },
+        "./events/EventHub.js": {
+            "import": "./dist/events/EventHub.js",
+            "types": "./dist/events/EventHub.d.ts"
+        },
+        "./function": {
+            "import": "./dist/function.js",
+            "types": "./dist/function.d.ts"
+        },
+        "./function.js": {
+            "import": "./dist/function.js",
+            "types": "./dist/function.d.ts"
+        },
+        "./hash": {
+            "import": "./dist/hash/index.js",
+            "types": "./dist/hash/index.d.ts"
+        },
+        "./hash.js": {
+            "import": "./dist/hash/index.js",
+            "types": "./dist/hash/index.d.ts"
+        },
+        "./hash/crc32": {
+            "import": "./dist/hash/crc32.js",
+            "types": "./dist/hash/crc32.d.ts"
+        },
+        "./hash/crc32.js": {
+            "import": "./dist/hash/crc32.js",
+            "types": "./dist/hash/crc32.d.ts"
+        },
+        "./hash/index.js": {
+            "import": "./dist/hash/index.js",
+            "types": "./dist/hash/index.d.ts"
+        },
+        "./hash/purejs": {
+            "import": "./dist/hash/purejs.js",
+            "types": "./dist/hash/purejs.d.ts"
+        },
+        "./hash/purejs.js": {
+            "import": "./dist/hash/purejs.js",
+            "types": "./dist/hash/purejs.d.ts"
+        },
+        "./hash/xxhash": {
+            "import": "./dist/hash/xxhash.js",
+            "types": "./dist/hash/xxhash.d.ts"
+        },
+        "./hash/xxhash.js": {
+            "import": "./dist/hash/xxhash.js",
+            "types": "./dist/hash/xxhash.d.ts"
+        },
+        "./iterable": {
+            "import": "./dist/iterable/index.js",
+            "types": "./dist/iterable/index.d.ts"
+        },
+        "./iterable.js": {
+            "import": "./dist/iterable/index.js",
+            "types": "./dist/iterable/index.d.ts"
+        },
+        "./iterable/chunks": {
+            "import": "./dist/iterable/chunks.js",
+            "types": "./dist/iterable/chunks.d.ts"
+        },
+        "./iterable/chunks.js": {
+            "import": "./dist/iterable/chunks.js",
+            "types": "./dist/iterable/chunks.d.ts"
+        },
+        "./iterable/index.js": {
+            "import": "./dist/iterable/index.js",
+            "types": "./dist/iterable/index.d.ts"
+        },
+        "./iterable/map": {
+            "import": "./dist/iterable/map.js",
+            "types": "./dist/iterable/map.d.ts"
+        },
+        "./iterable/map.js": {
+            "import": "./dist/iterable/map.js",
+            "types": "./dist/iterable/map.d.ts"
+        },
+        "./iterable/source": {
+            "import": "./dist/iterable/source.js",
+            "types": "./dist/iterable/source.d.ts"
+        },
+        "./iterable/source.js": {
+            "import": "./dist/iterable/source.js",
+            "types": "./dist/iterable/source.d.ts"
+        },
+        "./memory": {
+            "import": "./dist/memory/index.js",
+            "types": "./dist/memory/index.d.ts"
+        },
+        "./memory.js": {
+            "import": "./dist/memory/index.js",
+            "types": "./dist/memory/index.d.ts"
+        },
+        "./memory/index.js": {
+            "import": "./dist/memory/index.js",
+            "types": "./dist/memory/index.d.ts"
+        },
+        "./memory/LRUCache": {
+            "import": "./dist/memory/LRUCache.js",
+            "types": "./dist/memory/LRUCache.d.ts"
+        },
+        "./memory/LRUCache.js": {
+            "import": "./dist/memory/LRUCache.js",
+            "types": "./dist/memory/LRUCache.d.ts"
+        },
+        "./memory/memutil": {
+            "import": "./dist/memory/memutil.js",
+            "types": "./dist/memory/memutil.d.ts"
+        },
+        "./memory/memutil.js": {
+            "import": "./dist/memory/memutil.js",
+            "types": "./dist/memory/memutil.d.ts"
+        },
+        "./messagepassing": {
+            "import": "./dist/messagepassing/index.js",
+            "types": "./dist/messagepassing/index.d.ts"
+        },
+        "./messagepassing.js": {
+            "import": "./dist/messagepassing/index.js",
+            "types": "./dist/messagepassing/index.d.ts"
+        },
+        "./messagepassing/index.js": {
+            "import": "./dist/messagepassing/index.js",
+            "types": "./dist/messagepassing/index.d.ts"
+        },
+        "./messagepassing/signal": {
+            "import": "./dist/messagepassing/signal.js",
+            "types": "./dist/messagepassing/signal.d.ts"
+        },
+        "./messagepassing/signal_v1": {
+            "import": "./dist/messagepassing/signal_v1.js",
+            "types": "./dist/messagepassing/signal_v1.d.ts"
+        },
+        "./messagepassing/signal_v1.js": {
+            "import": "./dist/messagepassing/signal_v1.js",
+            "types": "./dist/messagepassing/signal_v1.d.ts"
+        },
+        "./messagepassing/signal.js": {
+            "import": "./dist/messagepassing/signal.js",
+            "types": "./dist/messagepassing/signal.d.ts"
+        },
+        "./number": {
+            "import": "./dist/number.js",
+            "types": "./dist/number.d.ts"
+        },
+        "./number.js": {
+            "import": "./dist/number.js",
+            "types": "./dist/number.d.ts"
+        },
+        "./object": {
+            "import": "./dist/object.js",
+            "types": "./dist/object.d.ts"
+        },
+        "./object.js": {
+            "import": "./dist/object.js",
+            "types": "./dist/object.d.ts"
+        },
+        "./promises": {
+            "import": "./dist/promises.js",
+            "types": "./dist/promises.d.ts"
+        },
+        "./promises.js": {
+            "import": "./dist/promises.js",
+            "types": "./dist/promises.d.ts"
+        },
+        "./string": {
+            "import": "./dist/string.js",
+            "types": "./dist/string.d.ts"
+        },
+        "./string.js": {
+            "import": "./dist/string.js",
+            "types": "./dist/string.d.ts"
+        }
     },
     "files": [
         "dist/**",
