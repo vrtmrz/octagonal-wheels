@@ -62,7 +62,7 @@ function arrayBufferToBase64internalBrowser(buffer) {
     });
 }
 /**
- * Converts an ArrayBuffer to a base64 string.
+ * Converts an ArrayBuffer or UInt8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
@@ -74,7 +74,7 @@ async function arrayBufferToBase64Single(buffer) {
     return await arrayBufferToBase64internalBrowser(buf);
 }
 /**
- * Converts an ArrayBuffer to a base64 string.
+ * Converts an ArrayBuffer or UInt8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to an array of base64 strings.

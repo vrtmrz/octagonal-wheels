@@ -48,7 +48,7 @@ export { conduit_index as conduit };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.31";
+    return "octagonal-wheels-0.1.32";
 }
 
 export { libVersion };

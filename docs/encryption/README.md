@@ -8,6 +8,7 @@
 
 ## Namespaces
 
+- [Asymmetric](Asymmetric/README.md)
 - [OpenSSLCompat](OpenSSLCompat/README.md)
 
 ## Type Aliases

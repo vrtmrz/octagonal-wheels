@@ -12,19 +12,19 @@ export declare function base64ToArrayBuffer(base64: string | string[]): ArrayBuf
  */
 export declare function base64ToArrayBufferInternalBrowser(base64: string): ArrayBuffer;
 /**
- * Converts an ArrayBuffer to a base64 string.
+ * Converts an ArrayBuffer or UInt8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
  */
-export declare function arrayBufferToBase64Single(buffer: ArrayBuffer): Promise<string>;
+export declare function arrayBufferToBase64Single(buffer: ArrayBuffer | Uint8Array): Promise<string>;
 /**
- * Converts an ArrayBuffer to a base64 string.
+ * Converts an ArrayBuffer or UInt8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to an array of base64 strings.
  */
-export declare function arrayBufferToBase64(buffer: ArrayBuffer): Promise<string[]>;
+export declare function arrayBufferToBase64(buffer: ArrayBuffer | Uint8Array): Promise<string[]>;
 export declare function writeString(string: string): Uint8Array;
 /**
  * Converts a Uint8Array buffer to a string.

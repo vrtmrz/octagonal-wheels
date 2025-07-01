@@ -1,6 +1,6 @@
 {
     "name": "octagonal-wheels",
-    "version": "0.1.31",
+    "version": "0.1.32",
     "description": "This module is a compilation of wheels that have been reinvented for a specific purpose",
     "type": "module",
     "types": "./dist/index.d.ts",
@@ -424,6 +424,50 @@
         "./encryption.js": {
             "import": "./dist/encryption/index.js",
             "types": "./dist/encryption/index.d.ts"
+        },
+        "./encryption/asymmetric": {
+            "import": "./dist/encryption/asymmetric/index.js",
+            "types": "./dist/encryption/asymmetric/index.d.ts"
+        },
+        "./encryption/asymmetric.js": {
+            "import": "./dist/encryption/asymmetric/index.js",
+            "types": "./dist/encryption/asymmetric/index.d.ts"
+        },
+        "./encryption/asymmetric/asymmetric": {
+            "import": "./dist/encryption/asymmetric/asymmetric.js",
+            "types": "./dist/encryption/asymmetric/asymmetric.d.ts"
+        },
+        "./encryption/asymmetric/asymmetric.js": {
+            "import": "./dist/encryption/asymmetric/asymmetric.js",
+            "types": "./dist/encryption/asymmetric/asymmetric.d.ts"
+        },
+        "./encryption/asymmetric/asymmetricHelper": {
+            "import": "./dist/encryption/asymmetric/asymmetricHelper.js",
+            "types": "./dist/encryption/asymmetric/asymmetricHelper.d.ts"
+        },
+        "./encryption/asymmetric/asymmetricHelper.js": {
+            "import": "./dist/encryption/asymmetric/asymmetricHelper.js",
+            "types": "./dist/encryption/asymmetric/asymmetricHelper.d.ts"
+        },
+        "./encryption/asymmetric/common": {
+            "import": "./dist/encryption/asymmetric/common.js",
+            "types": "./dist/encryption/asymmetric/common.d.ts"
+        },
+        "./encryption/asymmetric/common.js": {
+            "import": "./dist/encryption/asymmetric/common.js",
+            "types": "./dist/encryption/asymmetric/common.d.ts"
+        },
+        "./encryption/asymmetric/index.js": {
+            "import": "./dist/encryption/asymmetric/index.js",
+            "types": "./dist/encryption/asymmetric/index.d.ts"
+        },
+        "./encryption/asymmetric/keys": {
+            "import": "./dist/encryption/asymmetric/keys.js",
+            "types": "./dist/encryption/asymmetric/keys.d.ts"
+        },
+        "./encryption/asymmetric/keys.js": {
+            "import": "./dist/encryption/asymmetric/keys.js",
+            "types": "./dist/encryption/asymmetric/keys.d.ts"
         },
         "./encryption/encryption": {
             "import": "./dist/encryption/encryption.js",
