@@ -64,23 +64,23 @@ function arrayBufferToBase64internalBrowser(buffer: DataView | Uint8Array): Prom
 }
 
 /**
- * Converts an ArrayBuffer to a base64 string.
+ * Converts an ArrayBuffer or UInt8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
  */
-export async function arrayBufferToBase64Single(buffer: ArrayBuffer): Promise<string> {
+export async function arrayBufferToBase64Single(buffer: ArrayBuffer | Uint8Array): Promise<string> {
     const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     if (buf.byteLength < QUANTUM) return btoa(String.fromCharCode.apply(null, [...buf]));
     return await arrayBufferToBase64internalBrowser(buf);
 }
 /**
- * Converts an ArrayBuffer to a base64 string.
+ * Converts an ArrayBuffer or UInt8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to an array of base64 strings.
  */
-export async function arrayBufferToBase64(buffer: ArrayBuffer): Promise<string[]> {
+export async function arrayBufferToBase64(buffer: ArrayBuffer | Uint8Array): Promise<string[]> {
     const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     if (buf.byteLength < QUANTUM) return [btoa(String.fromCharCode.apply(null, [...buf]))];
     const bufLen = buf.byteLength;
