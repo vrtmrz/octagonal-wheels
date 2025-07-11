@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / encryptV1
 
-# Function: encryptV1()
+# Function: ~~encryptV1()~~
 
 ```ts
 function encryptV1(
@@ -13,7 +13,7 @@ function encryptV1(
 autoCalculateIterations: boolean): Promise<string>;
 ```
 
-Defined in: [src/encryption/encryption.ts:171](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L171)
+Defined in: [src/encryption/encryption.ts:173](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L173)
 
 Encrypts the input string using AES-GCM encryption algorithm.
 
@@ -30,3 +30,7 @@ Encrypts the input string using AES-GCM encryption algorithm.
 `Promise`\<`string`\>
 
 A string representing the encrypted data, initialization vector (IV), and salt in JSON format.
+
+## Deprecated
+
+Use `hkdf` instead.

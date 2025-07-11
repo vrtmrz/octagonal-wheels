@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / tryDecrypt
 
-# Function: tryDecrypt()
+# Function: ~~tryDecrypt()~~
 
 ```ts
 function tryDecrypt(
@@ -13,7 +13,7 @@ function tryDecrypt(
 autoCalculateIterations: boolean): Promise<string | false>;
 ```
 
-Defined in: [src/encryption/encryption.ts:373](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L373)
+Defined in: [src/encryption/encryption.ts:306](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L306)
 
 Tries to decrypt the encrypted result using the provided passphrase.
 
@@ -30,3 +30,7 @@ Tries to decrypt the encrypted result using the provided passphrase.
 `Promise`\<`string` \| `false`\>
 
 A promise that resolves to the decrypted result if successful, or `false` if decryption fails.
+
+## Deprecated
+
+Use `hkdf` instead.

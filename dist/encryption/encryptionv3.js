@@ -38,6 +38,7 @@ function incIV() {
  *
  * @param passphrase - The passphrase used for generating the key.
  * @returns The derived key.
+ * @deprecated Use `hkdf` instead.
  */
 async function generateKey(passphrase) {
     const passphraseBin = new TextEncoder().encode(passphrase);
@@ -63,7 +64,8 @@ async function generateKey(passphrase) {
  * @param passphrase - The passphrase used for encryption.
  * @returns The encrypted string with the initialization vector (IV) prepended.
  * @remarks The salt is fixed and is not changed for every encryption due to performance reasons.
- * This function is still experimental and not guaranteed to be safe
+ * ~~This function is still experimental and not guaranteed to be safe~~ Now deprecated. Not safe.
+ * @deprecated Use `hkdf` instead.
  */
 async function encryptV3(input, passphrase) {
     if (previousPassphrase !== passphrase) {
@@ -90,7 +92,8 @@ let decryptionKey;
  * @param passphrase - The passphrase used for decryption.
  * @returns The decrypted plain text.
  * @remarks The salt is fixed and is not changed for every encryption due to performance reasons.
- * This function is still experimental and not guaranteed to be safe
+ * ~~This function is still experimental and not guaranteed to be safe~~ Now deprecated.
+ * @deprecated Use `hkdf` instead. Only decryption will permitted in the future.
  */
 async function decryptV3(encryptedResult, passphrase) {
     if (previousDecryptionPassphrase !== passphrase) {

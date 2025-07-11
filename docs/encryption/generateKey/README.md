@@ -4,13 +4,13 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / generateKey
 
-# Function: generateKey()
+# Function: ~~generateKey()~~
 
 ```ts
 function generateKey(passphrase: string): Promise<CryptoKey>;
 ```
 
-Defined in: [src/encryption/encryptionv3.ts:46](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryptionv3.ts#L46)
+Defined in: [src/encryption/encryptionv3.ts:47](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryptionv3.ts#L47)
 
 Generates a key using the passphrase.
 
@@ -25,3 +25,7 @@ Generates a key using the passphrase.
 `Promise`\<`CryptoKey`\>
 
 The derived key.
+
+## Deprecated
+
+Use `hkdf` instead.

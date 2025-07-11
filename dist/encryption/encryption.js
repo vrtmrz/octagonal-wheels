@@ -3,6 +3,8 @@ import { writeString, arrayBufferToBase64Single, readString } from '../binary/ba
 import { uint8ArrayToHexString, hexStringToUint8Array } from '../binary/hex.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { decryptV3, encryptV3 } from './encryptionv3.js';
+import { testEncryptionFeature } from './hkdf.js';
+export { isPathProbablyObfuscated, obfuscatePath } from './obfuscatePath.js';
 
 const KeyBuffs = new Map();
 const decKeyBuffs = new Map();
@@ -133,6 +135,7 @@ function getNonce() {
  * @param passphrase - The passphrase used for encryption.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations for key derivation.
  * @returns A string representing the encrypted data, initialization vector (IV), and salt in JSON format.
+ * @deprecated Use `hkdf` instead.
  */
 async function encryptV1(input, passphrase, autoCalculateIterations) {
     const [key, salt] = await getKeyForEncrypt(passphrase, autoCalculateIterations);
@@ -155,6 +158,7 @@ async function encryptV1(input, passphrase, autoCalculateIterations) {
  * @param passphrase - The passphrase used for encryption.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations for key derivation.
  * @returns The encrypted data with initialization vector (iv) and salt. <br>  |%| iv(32) | salt(32) | data ....
+ * @deprecated Use `hkdf` instead.
  */
 async function encrypt(input, passphrase, autoCalculateIterations) {
     const [key, salt] = await getKeyForEncrypt(passphrase, autoCalculateIterations);
@@ -172,67 +176,13 @@ async function encrypt(input, passphrase, autoCalculateIterations) {
     return ret;
 }
 /**
- * Generates a key, salt, and IV for obfuscating a path using the provided passphrase.
- * @param passphrase - The passphrase used for key generation.
- * @param dataBuf - The data buffer to be used in key derivation.
- * @param autoCalculateIterations - A flag indicating whether to automatically calculate the number of iterations based on the passphrase length.
- * @returns A promise that resolves to an array containing the generated key, salt, and IV.
- */
-async function getKeyForObfuscatePath(passphrase, dataBuf, autoCalculateIterations) {
-    const passphraseLen = 15 - passphrase.length;
-    const iteration = autoCalculateIterations
-        ? (passphraseLen > 0 ? passphraseLen : 0) * 1000 + 121 - passphraseLen
-        : 100000;
-    const passphraseBin = new TextEncoder().encode(passphrase);
-    const digest = await webcrypto.subtle.digest({ name: "SHA-256" }, passphraseBin);
-    const buf2 = new Uint8Array(await webcrypto.subtle.digest({ name: "SHA-256" }, new Uint8Array([...dataBuf, ...passphraseBin])));
-    const salt = buf2.slice(0, 16);
-    const iv = buf2.slice(16, 32);
-    const keyMaterial = await webcrypto.subtle.importKey("raw", digest, { name: "PBKDF2" }, false, ["deriveKey"]);
-    const key = await webcrypto.subtle.deriveKey({
-        name: "PBKDF2",
-        salt,
-        iterations: iteration,
-        hash: "SHA-256",
-    }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["encrypt"]);
-    return [key, salt, iv];
-}
-/**
- * Obfuscates the given path using AES-GCM encryption. This obfuscation is deterministic.
- * @param path - The path to obfuscate.
- * @param passphrase - The passphrase used for encryption.
- * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations.
- * @returns The obfuscated path: |%| iv(32) | salt(32) | data ....
- */
-async function obfuscatePath(path, passphrase, autoCalculateIterations) {
-    const dataBuf = writeString(path);
-    const [key, salt, iv] = await getKeyForObfuscatePath(passphrase, dataBuf, autoCalculateIterations);
-    const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt({
-        name: "AES-GCM",
-        iv: iv,
-    }, key, dataBuf);
-    const encryptedData2 = await arrayBufferToBase64Single(new Uint8Array(encryptedDataArrayBuffer));
-    // return data with iv and salt.
-    // |%| iv(32) | salt(32) | data ....
-    const ret = `%${uint8ArrayToHexString(iv)}${uint8ArrayToHexString(salt)}${encryptedData2}`;
-    return ret;
-}
-/**
- * Checks if a given path is probably obfuscated.
- *
- * @param path - The path to check.
- * @returns `true` if the path is probably obfuscated, `false` otherwise.
- */
-function isPathProbablyObfuscated(path) {
-    return path.startsWith("%") && path.length > 64;
-}
-/**
  * Decrypts the encrypted result using the provided passphrase and returns the decrypted string.
  * @param encryptedResult - The encrypted result to decrypt.
  * @param passphrase - The passphrase used for decryption.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations for key derivation.
  * @returns A Promise that resolves to the decrypted string.
  * @throws If decryption fails or an error occurs during the decryption process.
+ * @deprecated Use `hkdf` instead.
  */
 async function decryptV2(encryptedResult, passphrase, autoCalculateIterations) {
     try {
@@ -259,6 +209,7 @@ async function decryptV2(encryptedResult, passphrase, autoCalculateIterations) {
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations.
  * @returns A Promise that resolves to the decrypted string.
  * @throws If the encrypted data is corrupted or if decryption fails.
+ * @deprecated Use `hkdf` instead.
  */
 async function decrypt(encryptedResult, passphrase, autoCalculateIterations) {
     try {
@@ -304,6 +255,7 @@ async function decrypt(encryptedResult, passphrase, autoCalculateIterations) {
  * @param passphrase - The passphrase used for decryption.
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the iterations.
  * @returns A promise that resolves to the decrypted result if successful, or `false` if decryption fails.
+ * @deprecated Use `hkdf` instead.
  */
 async function tryDecrypt(encryptedResult, passphrase, autoCalculateIterations) {
     if (!passphrase)
@@ -315,6 +267,9 @@ async function tryDecrypt(encryptedResult, passphrase, autoCalculateIterations) 
         return false;
     }
 }
+/**
+ * @deprecated Use `hkdf` instead.
+ */
 async function testCryptV3() {
     const src = "✨supercalifragilisticexpialidocious✨⛰️";
     const encoded = await encryptV3(src, "passwordTest");
@@ -330,6 +285,7 @@ async function testCryptV3() {
 }
 /**
  * Tests the encryption and decryption functionality.
+ * @deprecated Use `hkdf.testEncryptionFeature` instead.
  * @returns {Promise<boolean>} A promise that resolves to `true` if encryption and decryption are successful, and `false` otherwise.
  */
 async function testCrypt() {
@@ -352,7 +308,7 @@ async function testCrypt() {
         else {
             Logger("CRYPT LOGIC OK (Binary)", LOG_LEVEL_VERBOSE);
         }
-        return await testCryptV3();
+        return (await testCryptV3()) && (await testEncryptionFeature());
     }
 }
 /**
@@ -402,5 +358,5 @@ async function decryptBinary(encryptedResult, passphrase, autoCalculateIteration
     }
 }
 
-export { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, isPathProbablyObfuscated, obfuscatePath, testCrypt, testCryptV3, tryDecrypt };
+export { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, testCrypt, testCryptV3, tryDecrypt };
 //# sourceMappingURL=encryption.js.map

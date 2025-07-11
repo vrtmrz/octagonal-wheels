@@ -9,4 +9,5 @@
 ## Namespaces
 
 - [lrucache](lrucache/README.md)
+- [memo](memo/README.md)
 - [memutil](memutil/README.md)

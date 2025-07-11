@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / decrypt
 
-# Function: decrypt()
+# Function: ~~decrypt()~~
 
 ```ts
 function decrypt(
@@ -13,7 +13,7 @@ function decrypt(
 autoCalculateIterations: boolean): Promise<string>;
 ```
 
-Defined in: [src/encryption/encryption.ts:320](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L320)
+Defined in: [src/encryption/encryption.ts:252](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L252)
 
 Decrypts the encrypted result using the provided passphrase.
 
@@ -34,3 +34,7 @@ A Promise that resolves to the decrypted string.
 ## Throws
 
 If the encrypted data is corrupted or if decryption fails.
+
+## Deprecated
+
+Use `hkdf` instead.

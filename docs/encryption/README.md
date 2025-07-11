@@ -9,6 +9,9 @@
 ## Namespaces
 
 - [Asymmetric](Asymmetric/README.md)
+- [hkdf](hkdf/README.md)
+- [obfuscatePath](obfuscatePath/README.md)
+- [obfuscatePathV2](obfuscatePathV2/README.md)
 - [OpenSSLCompat](OpenSSLCompat/README.md)
 
 ## Type Aliases
@@ -18,16 +21,20 @@
 
 ## Functions
 
-- [decrypt](decrypt/README.md)
+- [~~decrypt~~](decrypt/README.md)
 - [decryptBinary](decryptBinary/README.md)
-- [decryptV3](decryptV3/README.md)
-- [encrypt](encrypt/README.md)
+- [~~decryptV3~~](decryptV3/README.md)
+- [~~encrypt~~](encrypt/README.md)
 - [encryptBinary](encryptBinary/README.md)
-- [encryptV1](encryptV1/README.md)
-- [encryptV3](encryptV3/README.md)
-- [generateKey](generateKey/README.md)
-- [isPathProbablyObfuscated](isPathProbablyObfuscated/README.md)
-- [obfuscatePath](obfuscatePath/README.md)
-- [testCrypt](testCrypt/README.md)
-- [testCryptV3](testCryptV3/README.md)
-- [tryDecrypt](tryDecrypt/README.md)
+- [~~encryptV1~~](encryptV1/README.md)
+- [~~encryptV3~~](encryptV3/README.md)
+- [~~generateKey~~](generateKey/README.md)
+- [~~testCrypt~~](testCrypt/README.md)
+- [~~testCryptV3~~](testCryptV3/README.md)
+- [~~tryDecrypt~~](tryDecrypt/README.md)
+
+## References
+
+### isPathProbablyObfuscated
+
+Re-exports [isPathProbablyObfuscated](obfuscatePath/isPathProbablyObfuscated/README.md)

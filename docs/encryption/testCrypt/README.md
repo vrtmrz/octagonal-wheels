@@ -4,13 +4,13 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / testCrypt
 
-# Function: testCrypt()
+# Function: ~~testCrypt()~~
 
 ```ts
 function testCrypt(): Promise<boolean>;
 ```
 
-Defined in: [src/encryption/encryption.ts:403](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L403)
+Defined in: [src/encryption/encryption.ts:340](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L340)
 
 Tests the encryption and decryption functionality.
 
@@ -19,3 +19,7 @@ Tests the encryption and decryption functionality.
 `Promise`\<`boolean`\>
 
 A promise that resolves to `true` if encryption and decryption are successful, and `false` otherwise.
+
+## Deprecated
+
+Use `hkdf.testEncryptionFeature` instead.

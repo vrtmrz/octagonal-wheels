@@ -485,9 +485,33 @@
             "import": "./dist/encryption/encryptionv3.js",
             "types": "./dist/encryption/encryptionv3.d.ts"
         },
+        "./encryption/hkdf": {
+            "import": "./dist/encryption/hkdf.js",
+            "types": "./dist/encryption/hkdf.d.ts"
+        },
+        "./encryption/hkdf.js": {
+            "import": "./dist/encryption/hkdf.js",
+            "types": "./dist/encryption/hkdf.d.ts"
+        },
         "./encryption/index.js": {
             "import": "./dist/encryption/index.js",
             "types": "./dist/encryption/index.d.ts"
+        },
+        "./encryption/obfuscatePath": {
+            "import": "./dist/encryption/obfuscatePath.js",
+            "types": "./dist/encryption/obfuscatePath.d.ts"
+        },
+        "./encryption/obfuscatePath.js": {
+            "import": "./dist/encryption/obfuscatePath.js",
+            "types": "./dist/encryption/obfuscatePath.d.ts"
+        },
+        "./encryption/obfuscatePathV2": {
+            "import": "./dist/encryption/obfuscatePathV2.js",
+            "types": "./dist/encryption/obfuscatePathV2.d.ts"
+        },
+        "./encryption/obfuscatePathV2.js": {
+            "import": "./dist/encryption/obfuscatePathV2.js",
+            "types": "./dist/encryption/obfuscatePathV2.d.ts"
         },
         "./encryption/openSSLCompat": {
             "import": "./dist/encryption/openSSLCompat/index.js",
@@ -632,6 +656,14 @@
         "./memory/LRUCache.js": {
             "import": "./dist/memory/LRUCache.js",
             "types": "./dist/memory/LRUCache.d.ts"
+        },
+        "./memory/memo": {
+            "import": "./dist/memory/memo.js",
+            "types": "./dist/memory/memo.d.ts"
+        },
+        "./memory/memo.js": {
+            "import": "./dist/memory/memo.js",
+            "types": "./dist/memory/memo.d.ts"
         },
         "./memory/memutil": {
             "import": "./dist/memory/memutil.js",
