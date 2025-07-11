@@ -9,9 +9,9 @@ import {
     obfuscatePath,
     testCrypt,
     tryDecrypt,
-} from "./encryption";
-import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary";
-import { encryptV3 } from "./encryptionv3";
+} from "./encryption.ts";
+import { hexStringToUint8Array } from "../binary/index.ts";
+import { encryptV3 } from "./encryptionv3.ts";
 
 test("should return true if encryption and decryption are successful", async () => {
     const result = await testCrypt();
