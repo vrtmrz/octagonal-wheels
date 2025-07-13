@@ -15,13 +15,16 @@
         "test": "vitest",
         "copy": "node release.js",
         "coverage": "vitest run --coverage",
+        "postcoverage": "npm run updateReadme",
         "lint": "eslint src",
         "tsc-check": "tsc --noEmit",
         "pretty": "npm run prettyNoWrite -- --write --log-level error",
         "prettyCheck": "npm run prettyNoWrite -- --check",
         "prettyNoWrite": "prettier --config ./.prettierrc \"src/**/*.ts\" ",
         "check": "npm run lint && npm run tsc-check",
-        "serverTest:openSSLCompat": "cd ./serverTest && tsx openSSLCompat.ts"
+        "serverTest:openSSLCompat": "cd ./serverTest && tsx openSSLCompat.ts",
+        "releasecheck": "npm run pretty && npm run check",
+        "updateReadme": "node updateReadme.js"
     },
     "exports": {
         ".": {

@@ -16,7 +16,9 @@ export default defineConfig({
         coverage: {
             include: ['src/**/*.ts'],
             provider: 'istanbul',
-            reporter: ['text', 'json', 'html'],
+            reporter: ['text', 'json', 'html',
+                ['text', { file: 'coverage-text.txt' }],
+            ],
             // ignoreEmptyLines: true,
         },
         browser: {
