@@ -145,12 +145,11 @@ async function encryptData(key: CryptoKey, iv: Uint8Array, data: Uint8Array) {
  * @param pbkdf2Salt The salt for PBKDF2.
  * @returns An array containing [IV, HKDF salt, encrypted data].
  */
-async function _encrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array) {
+async function _encrypt(input: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array) {
     const hkdfSalt = webcrypto.getRandomValues(new Uint8Array(HKDF_SALT_LENGTH));
     const key = await deriveKey(passphrase, pbkdf2Salt, hkdfSalt);
     const iv = webcrypto.getRandomValues(new Uint8Array(IV_LENGTH));
-    const dataBuf = writeString(input);
-    const encryptedDataArrayBuffer = await encryptData(key, iv, dataBuf);
+    const encryptedDataArrayBuffer = await encryptData(key, iv, input);
     const encryptedData = new Uint8Array(encryptedDataArrayBuffer);
     // Return data with iv and salt.
     // | iv(12) | salt(32) | data ....
@@ -164,7 +163,7 @@ async function _encrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Arra
  * @param pbkdf2Salt The salt for PBKDF2.
  * @returns The encrypted binary data.
  */
-export async function encryptBinary(input: string, passphrase: string, pbkdf2Salt: Uint8Array) {
+export async function encryptBinary(input: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array) {
     const [iv, hkdfSalt, encryptedData] = await _encrypt(input, passphrase, pbkdf2Salt);
     const totalLength = iv.length + hkdfSalt.length + encryptedData.length;
     const result = new Uint8Array(totalLength);
@@ -183,7 +182,8 @@ export async function encryptBinary(input: string, passphrase: string, pbkdf2Sal
  * @returns The encrypted string (Base64, beginning with '%=').
  */
 export async function encrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array) {
-    const encrypted = await encryptBinary(input, passphrase, pbkdf2Salt);
+    const inputBuffer = writeString(input);
+    const encrypted = await encryptBinary(inputBuffer, passphrase, pbkdf2Salt);
     const inBase64 = await arrayBufferToBase64Single(encrypted);
     return `%=${inBase64}`;
 }

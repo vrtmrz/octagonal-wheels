@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { encrypt, decrypt, encryptBinary, decryptBinary, createPBKDF2Salt } from "./hkdf.ts";
 
 const TEST_PASSPHRASE = "test-passphrase";
-const TEST_STRING = "秘密のメッセージ12affds33!";
+const TEST_STRING = "國破山河在城春草木深-raison d'être-🍔!";
 const pbkdf2Salt = createPBKDF2Salt();
 
 describe("safeEncryption", () => {
@@ -15,7 +15,8 @@ describe("safeEncryption", () => {
     });
 
     it("should return the original string after encryptBinary and decryptBinary", async () => {
-        const binary = await encryptBinary(TEST_STRING, TEST_PASSPHRASE, pbkdf2Salt);
+        const binaryTestString = new TextEncoder().encode(TEST_STRING);
+        const binary = await encryptBinary(binaryTestString, TEST_PASSPHRASE, pbkdf2Salt);
         expect(binary).toBeInstanceOf(Uint8Array);
 
         const decryptedBuf = await decryptBinary(binary, TEST_PASSPHRASE, pbkdf2Salt);
@@ -29,7 +30,8 @@ describe("safeEncryption", () => {
     });
 
     it("should throw when decryptBinary is called with a wrong passphrase", async () => {
-        const binary = await encryptBinary(TEST_STRING, TEST_PASSPHRASE, pbkdf2Salt);
+        const binaryTestString = new TextEncoder().encode(TEST_STRING);
+        const binary = await encryptBinary(binaryTestString, TEST_PASSPHRASE, pbkdf2Salt);
         await expect(decryptBinary(binary, "wrong-passphrase", pbkdf2Salt)).rejects.toThrow();
     });
     it("should throw when decrypt is called with invalid input", async () => {

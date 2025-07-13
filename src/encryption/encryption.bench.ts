@@ -13,6 +13,8 @@ import { obfuscatePathV2 } from "./obfuscatePathV2.ts";
 // Add the encrypt function to the suite
 const passphrase = "negative happy chainsaw edge";
 const testData = "test data".repeat(10);
+const binaryTestData = new TextEncoder().encode(testData);
+
 const pbkdf2Salt = createPBKDF2Salt();
 describe("Encryption Benchmarks", () => {
     bench(
@@ -41,12 +43,20 @@ describe("Encryption Benchmarks", () => {
         },
         { time: 1000 }
     );
+    bench(
+        "encryptHkdfBinary",
+        async () => {
+            // Call the encryptHkdfBinary function with your test data
+            await encryptHkdfBinary(binaryTestData, passphrase, pbkdf2Salt);
+        },
+        { time: 1000 }
+    );
 });
 describe("Decryption Benchmarks", async () => {
     const encrypted = await encrypt(testData, passphrase, false);
     const encryptedV3 = await encryptV3(testData, passphrase);
     const encryptedHkdf = await encryptHkdf(testData, passphrase, pbkdf2Salt);
-    const encryptedHkdfBinary = await encryptHkdfBinary(testData, passphrase, pbkdf2Salt);
+    const encryptedHkdfBinary = await encryptHkdfBinary(binaryTestData, passphrase, pbkdf2Salt);
     console.log("Encrypted data:", encrypted);
     console.log("Encrypted v3 data:", encryptedV3);
     console.log("Encrypted hkdf data:", encryptedHkdf);
@@ -84,6 +94,7 @@ describe("Decryption Benchmarks", async () => {
 });
 
 describe("Encryption-Decryption Benchmarks", () => {
+
     bench(
         "encrypt-decrypt",
         async () => {
@@ -111,7 +122,7 @@ describe("Encryption-Decryption Benchmarks", () => {
     bench(
         "encryptHkdf-decryptHkdf-binary",
         async () => {
-            const encrypted = await encryptHkdfBinary(testData, passphrase, pbkdf2Salt);
+            const encrypted = await encryptHkdfBinary(binaryTestData, passphrase, pbkdf2Salt);
             await decryptHkdfBinary(encrypted, passphrase, pbkdf2Salt);
         },
         { time: 1000 }
