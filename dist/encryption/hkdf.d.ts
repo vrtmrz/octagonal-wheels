@@ -27,7 +27,7 @@ export declare function encrypt(input: string, passphrase: string, pbkdf2Salt: U
  * @returns The decrypted string.
  * @throws An exception is thrown if the input data is invalid or decryption fails.
  */
-export declare function decryptBinary(binary: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array): Promise<string>;
+export declare function decryptBinary(binary: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Decrypts a Base64-encoded encrypted string (beginning with '%=') and returns the original string.
  * @param input The encrypted string (Base64, beginning with '%=').

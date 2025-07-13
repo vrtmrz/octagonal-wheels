@@ -10,7 +10,7 @@
 function decryptBinary(
    binary: Uint8Array, 
    passphrase: string, 
-pbkdf2Salt: Uint8Array): Promise<string>;
+pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
 ```
 
 Defined in: [src/encryption/hkdf.ts:228](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L228)
@@ -27,7 +27,7 @@ Decrypts binary encrypted data (Uint8Array) and returns the original string.
 
 ## Returns
 
-`Promise`\<`string`\>
+`Promise`\<`Uint8Array`\<`ArrayBuffer`\>\>
 
 The decrypted string.
 

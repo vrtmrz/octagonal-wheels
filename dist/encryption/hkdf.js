@@ -1,4 +1,4 @@
-import { writeString, arrayBufferToBase64Single, readString, base64ToArrayBuffer } from '../binary/base64.js';
+import { writeString, arrayBufferToBase64Single, base64ToArrayBuffer, readString } from '../binary/base64.js';
 import { uint8ArrayToHexString } from '../binary/hex.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { memoWithMap } from '../memory/memo.js';
@@ -191,7 +191,7 @@ async function decryptBinary(binary, passphrase, pbkdf2Salt) {
     const hkdfSalt = binary.slice(IV_LENGTH, IV_LENGTH + HKDF_SALT_LENGTH);
     const encryptedData = binary.slice(IV_LENGTH + HKDF_SALT_LENGTH);
     const decryptedData = await _decrypt(iv, pbkdf2Salt, hkdfSalt, encryptedData, passphrase);
-    return readString(decryptedData);
+    return decryptedData;
 }
 /**
  * Decrypts a Base64-encoded encrypted string (beginning with '%=') and returns the original string.
@@ -208,7 +208,7 @@ async function decrypt(input, passphrase, pbkdf2Salt) {
     const headerLength = 2;
     const encryptedData = base64ToArrayBuffer(input.slice(headerLength));
     const decrypted = await decryptBinary(new Uint8Array(encryptedData), passphrase, pbkdf2Salt);
-    return decrypted;
+    return readString(decrypted);
 }
 async function testEncryptionFeature() {
     const testValue = `Supercalifragilisticexpialidocious1234567890!@#$%^&*()_+[]{}|;':",.<>?✔️✔️⚡𠮷𠮷`;
