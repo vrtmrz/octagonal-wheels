@@ -13,7 +13,7 @@ function encrypt(
 pbkdf2Salt: Uint8Array): Promise<string>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:185](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L185)
+Defined in: [src/encryption/hkdf.ts:184](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L184)
 
 Encrypts a string using AES-GCM and returns a Base64-encoded string (beginning with '%=').
 

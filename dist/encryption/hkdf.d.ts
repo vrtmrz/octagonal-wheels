@@ -10,7 +10,7 @@ export declare function createPBKDF2Salt(): Uint8Array<ArrayBuffer>;
  * @param pbkdf2Salt The salt for PBKDF2.
  * @returns The encrypted binary data.
  */
-export declare function encryptBinary(input: string, passphrase: string, pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
+export declare function encryptBinary(input: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Encrypts a string using AES-GCM and returns a Base64-encoded string (beginning with '%=').
  * @param input The string to be encrypted.

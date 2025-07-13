@@ -8,12 +8,12 @@
 
 ```ts
 function encryptBinary(
-   input: string, 
+   input: Uint8Array, 
    passphrase: string, 
 pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:167](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L167)
+Defined in: [src/encryption/hkdf.ts:166](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L166)
 
 Encrypts a string using AES-GCM and returns the result as binary data (Uint8Array).
 
@@ -21,7 +21,7 @@ Encrypts a string using AES-GCM and returns the result as binary data (Uint8Arra
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `input` | `string` | The string to be encrypted. |
+| `input` | `Uint8Array` | The string to be encrypted. |
 | `passphrase` | `string` | The passphrase. |
 | `pbkdf2Salt` | `Uint8Array` | The salt for PBKDF2. |
 

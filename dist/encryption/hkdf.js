@@ -1,4 +1,4 @@
-import { arrayBufferToBase64Single, readString, base64ToArrayBuffer, writeString } from '../binary/base64.js';
+import { writeString, arrayBufferToBase64Single, readString, base64ToArrayBuffer } from '../binary/base64.js';
 import { uint8ArrayToHexString } from '../binary/hex.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { memoWithMap } from '../memory/memo.js';
@@ -122,8 +122,7 @@ async function _encrypt(input, passphrase, pbkdf2Salt) {
     const hkdfSalt = webcrypto.getRandomValues(new Uint8Array(HKDF_SALT_LENGTH));
     const key = await deriveKey(passphrase, pbkdf2Salt, hkdfSalt);
     const iv = webcrypto.getRandomValues(new Uint8Array(IV_LENGTH));
-    const dataBuf = writeString(input);
-    const encryptedDataArrayBuffer = await encryptData(key, iv, dataBuf);
+    const encryptedDataArrayBuffer = await encryptData(key, iv, input);
     const encryptedData = new Uint8Array(encryptedDataArrayBuffer);
     // Return data with iv and salt.
     // | iv(12) | salt(32) | data ....
@@ -153,7 +152,8 @@ async function encryptBinary(input, passphrase, pbkdf2Salt) {
  * @returns The encrypted string (Base64, beginning with '%=').
  */
 async function encrypt(input, passphrase, pbkdf2Salt) {
-    const encrypted = await encryptBinary(input, passphrase, pbkdf2Salt);
+    const inputBuffer = writeString(input);
+    const encrypted = await encryptBinary(inputBuffer, passphrase, pbkdf2Salt);
     const inBase64 = await arrayBufferToBase64Single(encrypted);
     return `%=${inBase64}`;
 }

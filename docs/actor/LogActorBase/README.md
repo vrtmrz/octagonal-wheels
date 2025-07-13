@@ -6,7 +6,7 @@
 
 # Class: `abstract` LogActorBase
 
-Defined in: [src/actor.ts:196](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L196)
+Defined in: [src/actor.ts:198](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L198)
 
 Represents an abstract class for an actor.
 
@@ -22,7 +22,7 @@ Represents an abstract class for an actor.
 new LogActorBase(): LogActorBase;
 ```
 
-Defined in: [src/actor.ts:197](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L197)
+Defined in: [src/actor.ts:199](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L199)
 
 #### Returns
 
@@ -98,7 +98,7 @@ Defined in: [src/actor.ts:121](https://github.com/vrtmrz/octagonal-wheels/blob/m
 destroy(): void;
 ```
 
-Defined in: [src/actor.ts:187](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L187)
+Defined in: [src/actor.ts:189](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L189)
 
 Destroys the actor instance.
 
@@ -125,7 +125,7 @@ dispatch<U, V>(actor: {
 }, message: U): void;
 ```
 
-Defined in: [src/actor.ts:180](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L180)
+Defined in: [src/actor.ts:182](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L182)
 
 Dispatches a message to the specified actor.
 Utility method to dispatch a message to the actor, which is the subsequent actor of the current actor.
@@ -163,7 +163,7 @@ Just for hiding the hub from the derived class.
 post(message: ActorLogMessage): void;
 ```
 
-Defined in: [src/actor.ts:158](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L158)
+Defined in: [src/actor.ts:160](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L160)
 
 Dispatches a message to the actor.
 Note: Even if we posted messages to the specific actor, the message will be processed by some actor instances if the actor is a multi-instance.
@@ -190,7 +190,7 @@ Note: Even if we posted messages to the specific actor, the message will be proc
 postToThisInstance(message: ActorLogMessage): void;
 ```
 
-Defined in: [src/actor.ts:167](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L167)
+Defined in: [src/actor.ts:169](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L169)
 
 Posts a message to this actor instance.
 
@@ -216,7 +216,7 @@ Posts a message to this actor instance.
 abstract process(message: ActorLogMessage): void | Promise<void>;
 ```
 
-Defined in: [src/actor.ts:151](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L151)
+Defined in: [src/actor.ts:153](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L153)
 
 Processes a message. This method should be overridden in the derived class. Automatically called when a message is dispatched to the actor.
 
