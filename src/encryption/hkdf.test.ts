@@ -21,7 +21,7 @@ describe("safeEncryption", () => {
 
         const decryptedBuf = await decryptBinary(binary, TEST_PASSPHRASE, pbkdf2Salt);
         // const decoder = new TextDecoder();
-        expect(decryptedBuf).toBe(TEST_STRING);
+        expect(decryptedBuf).toStrictEqual(binaryTestString);
     });
 
     it("should throw when decrypting with a wrong passphrase", async () => {

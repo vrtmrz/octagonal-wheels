@@ -233,7 +233,7 @@ export async function decryptBinary(binary: Uint8Array, passphrase: string, pbkd
     const hkdfSalt = binary.slice(IV_LENGTH, IV_LENGTH + HKDF_SALT_LENGTH);
     const encryptedData = binary.slice(IV_LENGTH + HKDF_SALT_LENGTH);
     const decryptedData = await _decrypt(iv, pbkdf2Salt, hkdfSalt, encryptedData, passphrase);
-    return readString(decryptedData);
+    return decryptedData;
 }
 
 /**
@@ -251,7 +251,7 @@ export async function decrypt(input: string, passphrase: string, pbkdf2Salt: Uin
     const headerLength = 2;
     const encryptedData = base64ToArrayBuffer(input.slice(headerLength));
     const decrypted = await decryptBinary(new Uint8Array(encryptedData), passphrase, pbkdf2Salt);
-    return decrypted;
+    return readString(decrypted);
 }
 
 export async function testEncryptionFeature() {
