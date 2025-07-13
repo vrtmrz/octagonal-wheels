@@ -94,7 +94,6 @@ describe("Decryption Benchmarks", async () => {
 });
 
 describe("Encryption-Decryption Benchmarks", () => {
-
     bench(
         "encrypt-decrypt",
         async () => {
