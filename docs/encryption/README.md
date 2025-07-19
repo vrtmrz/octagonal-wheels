@@ -19,6 +19,12 @@
 - [encodedData](encodedData/README.md)
 - [KeyBuffer](KeyBuffer/README.md)
 
+## Variables
+
+- [ENCRYPT\_V1\_PREFIX\_PROBABLY](ENCRYPT_V1_PREFIX_PROBABLY/README.md)
+- [ENCRYPT\_V2\_PREFIX](ENCRYPT_V2_PREFIX/README.md)
+- [ENCRYPT\_V3\_PREFIX](ENCRYPT_V3_PREFIX/README.md)
+
 ## Functions
 
 - [~~decrypt~~](decrypt/README.md)

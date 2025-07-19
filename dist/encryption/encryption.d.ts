@@ -1,3 +1,6 @@
+export declare const ENCRYPT_V1_PREFIX_PROBABLY = "[";
+export declare const ENCRYPT_V2_PREFIX = "%";
+export declare const ENCRYPT_V3_PREFIX = "%~";
 export type encodedData = [encryptedData: string, iv: string, salt: string];
 export type KeyBuffer = {
     key: CryptoKey;

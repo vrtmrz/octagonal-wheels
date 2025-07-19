@@ -14,12 +14,12 @@ type KeyBuffer = {
 };
 ```
 
-Defined in: [src/encryption/encryption.ts:9](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L9)
+Defined in: [src/encryption/encryption.ts:11](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L11)
 
 ## Properties
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="count"></a> `count` | `number` | [src/encryption/encryption.ts:12](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L12) |
-| <a id="key"></a> `key` | `CryptoKey` | [src/encryption/encryption.ts:10](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L10) |
-| <a id="salt"></a> `salt` | `Uint8Array` | [src/encryption/encryption.ts:11](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L11) |
+| <a id="count"></a> `count` | `number` | [src/encryption/encryption.ts:14](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L14) |
+| <a id="key"></a> `key` | `CryptoKey` | [src/encryption/encryption.ts:12](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L12) |
+| <a id="salt"></a> `salt` | `Uint8Array` | [src/encryption/encryption.ts:13](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L13) |

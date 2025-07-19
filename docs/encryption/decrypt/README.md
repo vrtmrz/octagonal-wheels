@@ -13,7 +13,7 @@ function decrypt(
 autoCalculateIterations: boolean): Promise<string>;
 ```
 
-Defined in: [src/encryption/encryption.ts:252](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L252)
+Defined in: [src/encryption/encryption.ts:254](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L254)
 
 Decrypts the encrypted result using the provided passphrase.
 

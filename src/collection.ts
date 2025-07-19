@@ -53,10 +53,14 @@ export type TypedArrayReader<T> = {
 };
 
 type TypedArrays =
-    Uint8Array | Int8Array |
-    Uint16Array | Int16Array |
-    Uint32Array | Int32Array |
-    Float32Array | Float64Array;
+    | Uint8Array
+    | Int8Array
+    | Uint16Array
+    | Int16Array
+    | Uint32Array
+    | Int32Array
+    | Float32Array
+    | Float64Array;
 
 /**
  * Creates a reader for a given typed array buffer, allowing sequential reading of slices.
@@ -85,7 +89,7 @@ export function createTypedArrayReader<T extends TypedArrays>(buffer: T): TypedA
             const result = buffer.slice(offset);
             offset = buffer.length; // Mark all as read
             return result as T;
-        }
+        },
     };
 }
 

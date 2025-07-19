@@ -6,6 +6,9 @@ import { decryptV3, encryptV3 } from './encryptionv3.js';
 import { testEncryptionFeature } from './hkdf.js';
 export { isPathProbablyObfuscated, obfuscatePath } from './obfuscatePath.js';
 
+const ENCRYPT_V1_PREFIX_PROBABLY = "[";
+const ENCRYPT_V2_PREFIX = "%";
+const ENCRYPT_V3_PREFIX = "%~";
 const KeyBuffs = new Map();
 const decKeyBuffs = new Map();
 const KEY_RECYCLE_COUNT = 100;
@@ -358,5 +361,5 @@ async function decryptBinary(encryptedResult, passphrase, autoCalculateIteration
     }
 }
 
-export { decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, testCrypt, testCryptV3, tryDecrypt };
+export { ENCRYPT_V1_PREFIX_PROBABLY, ENCRYPT_V2_PREFIX, ENCRYPT_V3_PREFIX, decrypt, decryptBinary, encrypt, encryptBinary, encryptV1, testCrypt, testCryptV3, tryDecrypt };
 //# sourceMappingURL=encryption.js.map

@@ -13,7 +13,7 @@ function encryptBinary(
 autoCalculateIterations: boolean): Promise<Uint8Array<ArrayBuffer>>;
 ```
 
-Defined in: [src/encryption/encryption.ts:372](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L372)
+Defined in: [src/encryption/encryption.ts:374](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L374)
 
 Encrypts binary data using AES-GCM encryption algorithm.
 

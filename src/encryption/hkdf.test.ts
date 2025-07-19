@@ -1,5 +1,17 @@
 import { describe, it, expect } from "vitest";
-import { encrypt, decrypt, encryptBinary, decryptBinary, createPBKDF2Salt, decryptWithEphemeralSalt, decryptWithEphemeralSaltBinary, encryptWithEphemeralSalt, encryptWithEphemeralSaltBinary, HKDF_SALTED_ENCRYPTED_PREFIX, testEncryptionFeature } from "./hkdf.ts";
+import {
+    encrypt,
+    decrypt,
+    encryptBinary,
+    decryptBinary,
+    createPBKDF2Salt,
+    decryptWithEphemeralSalt,
+    decryptWithEphemeralSaltBinary,
+    encryptWithEphemeralSalt,
+    encryptWithEphemeralSaltBinary,
+    HKDF_SALTED_ENCRYPTED_PREFIX,
+    testEncryptionFeature,
+} from "./hkdf.ts";
 
 const TEST_PASSPHRASE = "test-passphrase";
 const TEST_STRING = "國破山河在城春草木深-raison d'être-🍔!";

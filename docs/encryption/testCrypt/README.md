@@ -10,7 +10,7 @@
 function testCrypt(): Promise<boolean>;
 ```
 
-Defined in: [src/encryption/encryption.ts:340](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L340)
+Defined in: [src/encryption/encryption.ts:342](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L342)
 
 Tests the encryption and decryption functionality.
 

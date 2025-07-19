@@ -13,7 +13,7 @@ function encryptV1(
 autoCalculateIterations: boolean): Promise<string>;
 ```
 
-Defined in: [src/encryption/encryption.ts:173](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L173)
+Defined in: [src/encryption/encryption.ts:175](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L175)
 
 Encrypts the input string using AES-GCM encryption algorithm.
 

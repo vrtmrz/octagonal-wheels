@@ -38,7 +38,6 @@ const PBKDF2_SALT_LENGTH = 32;
  */
 const gcmTagLength = 128; // GCM tag length in bits
 
-
 export const HKDF_ENCRYPTED_PREFIX = "%=";
 export const HKDF_SALTED_ENCRYPTED_PREFIX = "%$";
 
@@ -268,17 +267,17 @@ export async function testEncryptionFeature() {
         const decrypted = await decrypt(encrypted, testPassphrase, pbkdf2Salt);
         /* istanbul ignore if -- @preserve */
         if (decrypted !== testValue) {
-           /* istanbul ignore if -- @preserve */
+            /* istanbul ignore if -- @preserve */
             throw new Error("Decryption did not return the original value.");
         }
         Logger("Encryption feature test passed.", LOG_LEVEL_VERBOSE);
         return true;
     } catch (error) {
-        /* istanbul ignore next -- @preserve */ 
+        /* istanbul ignore next -- @preserve */
         Logger("WARNING! Your device would not support encryption.", LOG_LEVEL_VERBOSE);
-        /* istanbul ignore next -- @preserve */ 
+        /* istanbul ignore next -- @preserve */
         Logger(error, LOG_LEVEL_VERBOSE);
-        /* istanbul ignore next -- @preserve */ 
+        /* istanbul ignore next -- @preserve */
         return false;
     }
 }
@@ -300,7 +299,7 @@ export async function testEncryptionFeature() {
 export async function encryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array> {
     const pbkdf2Salt = createPBKDF2Salt();
     const result = await _encrypt(input, passphrase, pbkdf2Salt);
-    const resultX = [pbkdf2Salt,...result];
+    const resultX = [pbkdf2Salt, ...result];
     const resultBuf = concatUInt8Array(resultX);
     return resultBuf;
 }

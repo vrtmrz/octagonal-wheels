@@ -13,7 +13,7 @@ function tryDecrypt(
 autoCalculateIterations: boolean): Promise<string | false>;
 ```
 
-Defined in: [src/encryption/encryption.ts:306](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L306)
+Defined in: [src/encryption/encryption.ts:308](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L308)
 
 Tries to decrypt the encrypted result using the provided passphrase.
 

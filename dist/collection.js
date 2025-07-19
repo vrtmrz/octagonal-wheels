@@ -35,6 +35,46 @@ function* range(from, to) {
     }
     return;
 }
+/**
+ * Creates a reader for a given typed array buffer, allowing sequential reading of slices.
+ *
+ * @template T - The type of the typed array (e.g., Uint8Array, Float32Array).
+ * @param buffer - The typed array buffer to read from.
+ * @returns An object with methods to read a specified number of elements or all remaining elements from the buffer.
+ *
+ * @example
+ * ```typescript
+ * const reader = createTypedArrayReader(new Uint8Array([1, 2, 3, 4]));
+ * const firstTwo = reader.read(2); // Uint8Array [1, 2]
+ * const rest = reader.readAll();   // Uint8Array [3, 4]
+ * ```
+ */
+function createTypedArrayReader(buffer) {
+    let offset = 0;
+    return {
+        read(length) {
+            // For performance, bounds are not checked here.
+            const result = buffer.slice(offset, offset + length);
+            offset += length;
+            return result;
+        },
+        readAll() {
+            const result = buffer.slice(offset);
+            offset = buffer.length; // Mark all as read
+            return result;
+        },
+    };
+}
+function concatUInt8Array(arrays) {
+    const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
+    const result = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const array of arrays) {
+        result.set(array, offset);
+        offset += array.length;
+    }
+    return result;
+}
 
-export { arrayToChunkedArray, range, unique };
+export { arrayToChunkedArray, concatUInt8Array, createTypedArrayReader, range, unique };
 //# sourceMappingURL=collection.js.map

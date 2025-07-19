@@ -10,7 +10,7 @@
 function createPBKDF2Salt(): Uint8Array<ArrayBuffer>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:44](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L44)
+Defined in: [src/encryption/hkdf.ts:48](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L48)
 
 Generates a random salt for PBKDF2.
 

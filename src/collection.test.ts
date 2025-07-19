@@ -60,13 +60,10 @@ describe("range function", () => {
         const result = [...range(from, to)];
         expect(result).to.deep.equal([1, 2, 3, 4, 5]);
     });
-
-
 });
 
-
-describe('createTypedArrayReader', () => {
-    it('reads specified length from Uint8Array', () => {
+describe("createTypedArrayReader", () => {
+    it("reads specified length from Uint8Array", () => {
         const arr = new Uint8Array([10, 20, 30, 40, 50]);
         const reader = createTypedArrayReader(arr);
         const first = reader.read(2);
@@ -75,7 +72,7 @@ describe('createTypedArrayReader', () => {
         expect(Array.from(second)).toEqual([30, 40]);
     });
 
-    it('reads all remaining elements', () => {
+    it("reads all remaining elements", () => {
         const arr = new Uint16Array([100, 200, 300, 400]);
         const reader = createTypedArrayReader(arr);
         reader.read(1);
@@ -83,7 +80,7 @@ describe('createTypedArrayReader', () => {
         expect(Array.from(all)).toEqual([200, 300, 400]);
     });
 
-    it('returns empty array if readAll is called after all elements read', () => {
+    it("returns empty array if readAll is called after all elements read", () => {
         const arr = new Int8Array([1, 2, 3]);
         const reader = createTypedArrayReader(arr);
         reader.read(3);
@@ -91,7 +88,7 @@ describe('createTypedArrayReader', () => {
         expect(Array.from(all)).toEqual([]);
     });
 
-    it('works with Float32Array', () => {
+    it("works with Float32Array", () => {
         const arr = new Float32Array([1.5, 2.5, 3.5]);
         const reader = createTypedArrayReader(arr);
         const first = reader.read(1);
@@ -100,14 +97,12 @@ describe('createTypedArrayReader', () => {
         expect(Array.from(all)).toEqual([2.5, 3.5]);
     });
 
-    it('does not check bounds, may return fewer elements if length exceeds', () => {
+    it("does not check bounds, may return fewer elements if length exceeds", () => {
         const arr = new Uint8Array([7, 8]);
         const reader = createTypedArrayReader(arr);
         const result = reader.read(5);
         expect(Array.from(result)).toEqual([7, 8]);
     });
-
-
 });
 describe("concatUInt8Array", () => {
     it("returns an empty Uint8Array when given an empty array", () => {

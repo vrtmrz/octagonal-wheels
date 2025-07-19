@@ -13,7 +13,7 @@ function decrypt(
 pbkdf2Salt: Uint8Array): Promise<string>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:247](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L247)
+Defined in: [src/encryption/hkdf.ts:251](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L251)
 
 Decrypts a Base64-encoded encrypted string (beginning with '%=') and returns the original string.
 

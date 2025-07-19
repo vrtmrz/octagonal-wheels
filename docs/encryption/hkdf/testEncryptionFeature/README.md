@@ -10,7 +10,7 @@
 function testEncryptionFeature(): Promise<boolean>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:257](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L257)
+Defined in: [src/encryption/hkdf.ts:261](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L261)
 
 ## Returns
 

@@ -1,3 +1,5 @@
+export declare const HKDF_ENCRYPTED_PREFIX = "%=";
+export declare const HKDF_SALTED_ENCRYPTED_PREFIX = "%$";
 /**
  * Generates a random salt for PBKDF2.
  * @returns A Uint8Array of PBKDF2_SALT_LENGTH bytes.
@@ -38,3 +40,57 @@ export declare function decryptBinary(binary: Uint8Array, passphrase: string, pb
  */
 export declare function decrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array): Promise<string>;
 export declare function testEncryptionFeature(): Promise<boolean>;
+/**
+ * Encrypts the provided binary input using a passphrase and an ephemeral salt.
+ *
+ * This function generates a new PBKDF2 salt for each encryption operation,
+ * encrypts the input data with the given passphrase and generated salt,
+ * and concatenates the encrypted result with the salt into a single
+ * Uint8Array buffer.
+ *
+ * @param input - The binary data to encrypt.
+ * @param passphrase - The passphrase used for encryption.
+ * @returns A promise that resolves to a Uint8Array containing the encrypted data
+ *          followed by the ephemeral salt.
+ */
+export declare function encryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array>;
+/**
+ * Encrypts a string using a passphrase and an ephemeral salt.
+ * The function internally converts the input string to binary, encrypts it,
+ * and returns the result as a base64-encoded string prefixed with a constant.
+ *
+ * @param input - The plaintext string to encrypt.
+ * @param passphrase - The passphrase used for encryption.
+ * @returns A promise that resolves to the encrypted string in base64 format with a prefix.
+ */
+export declare function encryptWithEphemeralSalt(input: string, passphrase: string): Promise<string>;
+/**
+ * Decrypts binary data that was encrypted with an ephemeral salt using a passphrase.
+ *
+ * The input binary data is expected to contain, in order:
+ * - Initialisation vector (IV)
+ * - HKDF salt
+ * - PBKDF2 salt
+ * - Encrypted payload
+ *
+ * The function extracts these components, then uses them along with the provided passphrase
+ * to decrypt the payload.
+ *
+ * @param input - The binary data to decrypt, containing IV, HKDF salt, PBKDF2 salt, and encrypted data.
+ * @param passphrase - The passphrase used for decryption.
+ * @returns A promise that resolves to the decrypted binary data.
+ * @throws If the input data length is invalid.
+ */
+export declare function decryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array>;
+/**
+ * Decrypts a base64-encoded string that was encrypted using an ephemeral salt and a passphrase.
+ * The input string must start with the expected prefix to indicate the encryption format.
+ * Internally, this function decodes the base64 input, decrypts the binary data using the provided passphrase,
+ * and returns the resulting plaintext string.
+ *
+ * @param input - The base64-encoded encrypted string, prefixed with `HKDF_SALTED_ENCRYPTED_PREFIX`.
+ * @param passphrase - The passphrase used for decryption.
+ * @returns A promise that resolves to the decrypted plaintext string.
+ * @throws If the input does not start with the expected prefix or decryption fails.
+ */
+export declare function decryptWithEphemeralSalt(input: string, passphrase: string): Promise<string>;

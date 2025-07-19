@@ -13,7 +13,7 @@ function encryptBinary(
 pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:166](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L166)
+Defined in: [src/encryption/hkdf.ts:170](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L170)
 
 Encrypts a string using AES-GCM and returns the result as binary data (Uint8Array).
 

@@ -10,7 +10,7 @@
 function testCryptV3(): Promise<boolean>;
 ```
 
-Defined in: [src/encryption/encryption.ts:322](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L322)
+Defined in: [src/encryption/encryption.ts:324](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L324)
 
 ## Returns
 

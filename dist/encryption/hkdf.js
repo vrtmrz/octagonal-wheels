@@ -1,5 +1,6 @@
 import { writeString, arrayBufferToBase64Single, base64ToArrayBuffer, readString } from '../binary/base64.js';
 import { uint8ArrayToHexString } from '../binary/hex.js';
+import { concatUInt8Array, createTypedArrayReader } from '../collection.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { memoWithMap } from '../memory/memo.js';
 
@@ -35,6 +36,8 @@ const PBKDF2_SALT_LENGTH = 32;
  * Tag length for AES-GCM (in bits).
  */
 const gcmTagLength = 128; // GCM tag length in bits
+const HKDF_ENCRYPTED_PREFIX = "%=";
+const HKDF_SALTED_ENCRYPTED_PREFIX = "%$";
 /**
  * Generates a random salt for PBKDF2.
  * @returns A Uint8Array of PBKDF2_SALT_LENGTH bytes.
@@ -155,7 +158,7 @@ async function encrypt(input, passphrase, pbkdf2Salt) {
     const inputBuffer = writeString(input);
     const encrypted = await encryptBinary(inputBuffer, passphrase, pbkdf2Salt);
     const inBase64 = await arrayBufferToBase64Single(encrypted);
-    return `%=${inBase64}`;
+    return `${HKDF_ENCRYPTED_PREFIX}${inBase64}`;
 }
 /**
  * Decrypts using the IV, PBKDF2 salt, HKDF salt, encrypted data, and passphrase, returning a Uint8Array.
@@ -202,10 +205,10 @@ async function decryptBinary(binary, passphrase, pbkdf2Salt) {
  * @throws An exception is thrown if the input format is invalid or decryption fails.
  */
 async function decrypt(input, passphrase, pbkdf2Salt) {
-    if (!input.startsWith("%=")) {
-        throw new Error("Invalid input format. Expected input to start with '%='. ");
+    if (!input.startsWith(HKDF_ENCRYPTED_PREFIX)) {
+        throw new Error(`Invalid input format. Expected input to start with '${HKDF_ENCRYPTED_PREFIX}'.`);
     }
-    const headerLength = 2;
+    const headerLength = HKDF_ENCRYPTED_PREFIX.length;
     const encryptedData = base64ToArrayBuffer(input.slice(headerLength));
     const decrypted = await decryptBinary(new Uint8Array(encryptedData), passphrase, pbkdf2Salt);
     return readString(decrypted);
@@ -217,19 +220,107 @@ async function testEncryptionFeature() {
     try {
         const encrypted = await encrypt(testValue, testPassphrase, pbkdf2Salt);
         const decrypted = await decrypt(encrypted, testPassphrase, pbkdf2Salt);
+        /* istanbul ignore if -- @preserve */
         if (decrypted !== testValue) {
+            /* istanbul ignore if -- @preserve */
             throw new Error("Decryption did not return the original value.");
         }
         Logger("Encryption feature test passed.", LOG_LEVEL_VERBOSE);
         return true;
     }
     catch (error) {
-        // coverage: ignore
+        /* istanbul ignore next -- @preserve */
         Logger("WARNING! Your device would not support encryption.", LOG_LEVEL_VERBOSE);
+        /* istanbul ignore next -- @preserve */
         Logger(error, LOG_LEVEL_VERBOSE);
+        /* istanbul ignore next -- @preserve */
         return false;
     }
 }
+// With ephemeral salt, a new salt is generated for each encryption operation.
+/**
+ * Encrypts the provided binary input using a passphrase and an ephemeral salt.
+ *
+ * This function generates a new PBKDF2 salt for each encryption operation,
+ * encrypts the input data with the given passphrase and generated salt,
+ * and concatenates the encrypted result with the salt into a single
+ * Uint8Array buffer.
+ *
+ * @param input - The binary data to encrypt.
+ * @param passphrase - The passphrase used for encryption.
+ * @returns A promise that resolves to a Uint8Array containing the encrypted data
+ *          followed by the ephemeral salt.
+ */
+async function encryptWithEphemeralSaltBinary(input, passphrase) {
+    const pbkdf2Salt = createPBKDF2Salt();
+    const result = await _encrypt(input, passphrase, pbkdf2Salt);
+    const resultX = [pbkdf2Salt, ...result];
+    const resultBuf = concatUInt8Array(resultX);
+    return resultBuf;
+}
+/**
+ * Encrypts a string using a passphrase and an ephemeral salt.
+ * The function internally converts the input string to binary, encrypts it,
+ * and returns the result as a base64-encoded string prefixed with a constant.
+ *
+ * @param input - The plaintext string to encrypt.
+ * @param passphrase - The passphrase used for encryption.
+ * @returns A promise that resolves to the encrypted string in base64 format with a prefix.
+ */
+async function encryptWithEphemeralSalt(input, passphrase) {
+    const encrypted = await encryptWithEphemeralSaltBinary(writeString(input), passphrase);
+    const inBase64 = await arrayBufferToBase64Single(encrypted);
+    return `${HKDF_SALTED_ENCRYPTED_PREFIX}${inBase64}`;
+}
+/**
+ * Decrypts binary data that was encrypted with an ephemeral salt using a passphrase.
+ *
+ * The input binary data is expected to contain, in order:
+ * - Initialisation vector (IV)
+ * - HKDF salt
+ * - PBKDF2 salt
+ * - Encrypted payload
+ *
+ * The function extracts these components, then uses them along with the provided passphrase
+ * to decrypt the payload.
+ *
+ * @param input - The binary data to decrypt, containing IV, HKDF salt, PBKDF2 salt, and encrypted data.
+ * @param passphrase - The passphrase used for decryption.
+ * @returns A promise that resolves to the decrypted binary data.
+ * @throws If the input data length is invalid.
+ */
+async function decryptWithEphemeralSaltBinary(input, passphrase) {
+    if (input.length < IV_LENGTH + HKDF_SALT_LENGTH + PBKDF2_SALT_LENGTH) {
+        throw new Error("Invalid binary data length.");
+    }
+    const r = createTypedArrayReader(input);
+    const pbkdf2Salt = r.read(PBKDF2_SALT_LENGTH);
+    const iv = r.read(IV_LENGTH);
+    const hkdfSalt = r.read(HKDF_SALT_LENGTH);
+    const encryptedData = r.readAll();
+    const decryptedData = await _decrypt(iv, pbkdf2Salt, hkdfSalt, encryptedData, passphrase);
+    return decryptedData;
+}
+/**
+ * Decrypts a base64-encoded string that was encrypted using an ephemeral salt and a passphrase.
+ * The input string must start with the expected prefix to indicate the encryption format.
+ * Internally, this function decodes the base64 input, decrypts the binary data using the provided passphrase,
+ * and returns the resulting plaintext string.
+ *
+ * @param input - The base64-encoded encrypted string, prefixed with `HKDF_SALTED_ENCRYPTED_PREFIX`.
+ * @param passphrase - The passphrase used for decryption.
+ * @returns A promise that resolves to the decrypted plaintext string.
+ * @throws If the input does not start with the expected prefix or decryption fails.
+ */
+async function decryptWithEphemeralSalt(input, passphrase) {
+    if (!input.startsWith(HKDF_SALTED_ENCRYPTED_PREFIX)) {
+        throw new Error(`Invalid input format. Expected input to start with '${HKDF_SALTED_ENCRYPTED_PREFIX}'.`);
+    }
+    const headerLength = HKDF_SALTED_ENCRYPTED_PREFIX.length;
+    const encryptedData = base64ToArrayBuffer(input.slice(headerLength));
+    const decrypted = await decryptWithEphemeralSaltBinary(new Uint8Array(encryptedData), passphrase);
+    return readString(decrypted);
+}
 
-export { createPBKDF2Salt, decrypt, decryptBinary, encrypt, encryptBinary, testEncryptionFeature };
+export { HKDF_ENCRYPTED_PREFIX, HKDF_SALTED_ENCRYPTED_PREFIX, createPBKDF2Salt, decrypt, decryptBinary, decryptWithEphemeralSalt, decryptWithEphemeralSaltBinary, encrypt, encryptBinary, encryptWithEphemeralSalt, encryptWithEphemeralSaltBinary, testEncryptionFeature };
 //# sourceMappingURL=hkdf.js.map

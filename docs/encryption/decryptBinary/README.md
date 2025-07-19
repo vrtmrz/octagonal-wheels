@@ -13,7 +13,7 @@ function decryptBinary(
 autoCalculateIterations: boolean): Promise<Uint8Array<ArrayBufferLike>>;
 ```
 
-Defined in: [src/encryption/encryption.ts:397](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L397)
+Defined in: [src/encryption/encryption.ts:399](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L399)
 
 Decrypts the encrypted binary data using the provided passphrase.
 

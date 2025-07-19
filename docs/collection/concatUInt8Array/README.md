@@ -1,0 +1,23 @@
+[**octagonal-wheels**](../../README.md)
+
+***
+
+[octagonal-wheels](../../modules.md) / [collection](../README.md) / concatUInt8Array
+
+# Function: concatUInt8Array()
+
+```ts
+function concatUInt8Array(arrays: Uint8Array<ArrayBufferLike>[]): Uint8Array;
+```
+
+Defined in: [src/collection.ts:96](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L96)
+
+## Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `arrays` | `Uint8Array`\<`ArrayBufferLike`\>[] |
+
+## Returns
+
+`Uint8Array`
