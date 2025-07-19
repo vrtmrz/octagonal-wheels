@@ -13,6 +13,7 @@
         "doc": "npx typedoc  --plugin typedoc-plugin-markdown  --out ./docs ./src",
         "dev": "rollup -c -w",
         "test": "vitest",
+        "bench": "vitest bench",
         "copy": "node release.js",
         "coverage": "vitest run --coverage",
         "postcoverage": "npm run updateReadme",

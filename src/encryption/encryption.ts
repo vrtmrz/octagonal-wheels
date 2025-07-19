@@ -4,7 +4,9 @@ import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary/hex.ts";
 import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
 import { decryptV3, encryptV3 } from "./encryptionv3.ts";
 import { testEncryptionFeature } from "./hkdf.ts";
-
+export const ENCRYPT_V1_PREFIX_PROBABLY = "[";
+export const ENCRYPT_V2_PREFIX = "%";
+export const ENCRYPT_V3_PREFIX = "%~";
 export type encodedData = [encryptedData: string, iv: string, salt: string];
 export type KeyBuffer = {
     key: CryptoKey;

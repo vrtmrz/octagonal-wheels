@@ -1,4 +1,4 @@
-import { decrypt, encrypt, obfuscatePath } from "./encryption.ts";
+import { decrypt, encrypt, encryptV1, obfuscatePath } from "./encryption.ts";
 import { bench, describe } from "vitest";
 import { decryptV3, encryptV3 } from "./encryptionv3.ts";
 import {
@@ -7,6 +7,8 @@ import {
     encryptBinary as encryptHkdfBinary,
     decryptBinary as decryptHkdfBinary,
     createPBKDF2Salt,
+    encryptWithEphemeralSalt,
+    decryptWithEphemeralSalt,
 } from "./hkdf.ts";
 import { obfuscatePathV2 } from "./obfuscatePathV2.ts";
 
@@ -21,11 +23,18 @@ describe("Encryption Benchmarks", () => {
         "encrypt",
         async () => {
             // Call the encrypt function with your test data
+            await encryptV1(testData, passphrase, false);
+        },
+        { time: 1000 }
+    );
+    bench(
+        "encryptV2",
+        async () => {
+            // Call the encrypt function with your test data
             await encrypt(testData, passphrase, false);
         },
         { time: 1000 }
     );
-
     // Add the encryptv3 function to the suite
     bench(
         "encryptv3",
@@ -51,22 +60,43 @@ describe("Encryption Benchmarks", () => {
         },
         { time: 1000 }
     );
+    bench(
+        "encryptWithEphemeralSalt",
+        async () => {
+            // Call the encryptWithEphemeralSalt function with your test data
+            await encryptWithEphemeralSalt(testData, passphrase);
+        },
+        { time: 1000 }
+    );
 });
 describe("Decryption Benchmarks", async () => {
-    const encrypted = await encrypt(testData, passphrase, false);
+    const encrypted = await encryptV1(testData, passphrase, false);
+    const encryptedV2 = await encrypt(testData, passphrase, false);
     const encryptedV3 = await encryptV3(testData, passphrase);
     const encryptedHkdf = await encryptHkdf(testData, passphrase, pbkdf2Salt);
+    const encryptedHKDFWithSalt = await encryptWithEphemeralSalt(testData, passphrase);
     const encryptedHkdfBinary = await encryptHkdfBinary(binaryTestData, passphrase, pbkdf2Salt);
     console.log("Encrypted data:", encrypted);
+    console.log("Encrypted v2 data:", encryptedV2);
     console.log("Encrypted v3 data:", encryptedV3);
     console.log("Encrypted hkdf data:", encryptedHkdf);
+    console.log("Encrypted hkdf with salt data:", encryptedHKDFWithSalt);
     console.log("Encrypted data length:", encrypted.length);
     console.log("Encrypted v3 data length:", encryptedV3.length);
     console.log("Encrypted hkdf data length:", encryptedHkdf.length);
+    console.log("Encrypted hkdf binary data length:", encryptedHkdfBinary.length);
+    console.log("Encrypted hkdf with salt data length:", encryptedHKDFWithSalt.length);
     bench(
         "decrypt",
         async () => {
             await decrypt(encrypted, passphrase, false);
+        },
+        { time: 1000 }
+    );
+    bench(
+        "decryptV2",
+        async () => {
+            await decrypt(encryptedV2, passphrase, false);
         },
         { time: 1000 }
     );
@@ -91,11 +121,26 @@ describe("Decryption Benchmarks", async () => {
         },
         { time: 1000 }
     );
+    bench(
+        "decryptHkdfWithSalt",
+        async () => {
+            await decryptWithEphemeralSalt(encryptedHKDFWithSalt, passphrase);
+        },
+        { time: 1000 }
+    );
 });
 
 describe("Encryption-Decryption Benchmarks", () => {
     bench(
         "encrypt-decrypt",
+        async () => {
+            const encrypted = await encryptV1(testData, passphrase, false);
+            await decrypt(encrypted, passphrase, false);
+        },
+        { time: 1000 }
+    );
+    bench(
+        "encrypt2-decrypt2",
         async () => {
             const encrypted = await encrypt(testData, passphrase, false);
             await decrypt(encrypted, passphrase, false);
@@ -123,6 +168,14 @@ describe("Encryption-Decryption Benchmarks", () => {
         async () => {
             const encrypted = await encryptHkdfBinary(binaryTestData, passphrase, pbkdf2Salt);
             await decryptHkdfBinary(encrypted, passphrase, pbkdf2Salt);
+        },
+        { time: 1000 }
+    );
+    bench(
+        "encryptHkdfWithSalt-decryptHkdfWithSalt",
+        async () => {
+            const encrypted = await encryptWithEphemeralSalt(testData, passphrase);
+            await decryptWithEphemeralSalt(encrypted, passphrase);
         },
         { time: 1000 }
     );
