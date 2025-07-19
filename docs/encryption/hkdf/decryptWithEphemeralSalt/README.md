@@ -10,7 +10,7 @@
 function decryptWithEphemeralSalt(input: string, passphrase: string): Promise<string>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:363](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L363)
+Defined in: [src/encryption/hkdf.ts:382](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L382)
 
 Decrypts a base64-encoded string that was encrypted using an ephemeral salt and a passphrase.
 The input string must start with the expected prefix to indicate the encryption format.

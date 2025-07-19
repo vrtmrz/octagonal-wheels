@@ -7,21 +7,26 @@
 # Function: encryptWithEphemeralSalt()
 
 ```ts
-function encryptWithEphemeralSalt(input: string, passphrase: string): Promise<string>;
+function encryptWithEphemeralSalt(
+   input: string, 
+   passphrase: string, 
+refresh: boolean): Promise<string>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:316](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L316)
+Defined in: [src/encryption/hkdf.ts:335](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L335)
 
 Encrypts a string using a passphrase and an ephemeral salt.
 The function internally converts the input string to binary, encrypts it,
 and returns the result as a base64-encoded string prefixed with a constant.
+Note that this function keeps the same PBKDF2 salt for the session unless `refresh` is set to true.
 
 ## Parameters
 
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| `input` | `string` | The plaintext string to encrypt. |
-| `passphrase` | `string` | The passphrase used for encryption. |
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `input` | `string` | `undefined` | The plaintext string to encrypt. |
+| `passphrase` | `string` | `undefined` | The passphrase used for encryption. |
+| `refresh` | `boolean` | `false` | If true, generates a new PBKDF2 salt for the session. |
 
 ## Returns
 

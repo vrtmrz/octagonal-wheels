@@ -47,23 +47,26 @@ export declare function testEncryptionFeature(): Promise<boolean>;
  * encrypts the input data with the given passphrase and generated salt,
  * and concatenates the encrypted result with the salt into a single
  * Uint8Array buffer.
+ * Note that this function keeps the same PBKDF2 salt for the session unless `refresh` is set to true.
  *
  * @param input - The binary data to encrypt.
  * @param passphrase - The passphrase used for encryption.
  * @returns A promise that resolves to a Uint8Array containing the encrypted data
  *          followed by the ephemeral salt.
  */
-export declare function encryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array>;
+export declare function encryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string, refresh?: boolean): Promise<Uint8Array>;
 /**
  * Encrypts a string using a passphrase and an ephemeral salt.
  * The function internally converts the input string to binary, encrypts it,
  * and returns the result as a base64-encoded string prefixed with a constant.
+ * Note that this function keeps the same PBKDF2 salt for the session unless `refresh` is set to true.
  *
  * @param input - The plaintext string to encrypt.
  * @param passphrase - The passphrase used for encryption.
+ * @param refresh - If true, generates a new PBKDF2 salt for the session.
  * @returns A promise that resolves to the encrypted string in base64 format with a prefix.
  */
-export declare function encryptWithEphemeralSalt(input: string, passphrase: string): Promise<string>;
+export declare function encryptWithEphemeralSalt(input: string, passphrase: string, refresh?: boolean): Promise<string>;
 /**
  * Decrypts binary data that was encrypted with an ephemeral salt using a passphrase.
  *

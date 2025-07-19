@@ -10,7 +10,7 @@
 function decryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array<ArrayBufferLike>>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:339](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L339)
+Defined in: [src/encryption/hkdf.ts:358](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L358)
 
 Decrypts binary data that was encrypted with an ephemeral salt using a passphrase.
 
