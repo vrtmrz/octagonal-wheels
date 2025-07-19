@@ -116,6 +116,20 @@ describe("ephemeralSaltEncryption", () => {
         const decrypted = await decryptWithEphemeralSalt(encrypted, TEST_PASSPHRASE);
         expect(decrypted).toBe("");
     });
+    it("should handle ephemeral salt with refresh", async () => {
+        const input = new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
+        const encrypted1 = await encryptWithEphemeralSaltBinary(input, TEST_PASSPHRASE);
+        const encrypted2 = await encryptWithEphemeralSaltBinary(input, TEST_PASSPHRASE);
+        const pbkdf2Salt1 = encrypted1.slice(0, 32);
+        const pbkdf2Salt2 = encrypted2.slice(0, 32);
+        expect(pbkdf2Salt1).toEqual(pbkdf2Salt2);
+        const encrypted3 = await encryptWithEphemeralSaltBinary(input, TEST_PASSPHRASE, true);
+        const encrypted4 = await encryptWithEphemeralSaltBinary(input, TEST_PASSPHRASE, true);
+        const pbkdf2Salt3 = encrypted3.slice(0, 32);
+        const pbkdf2Salt4 = encrypted4.slice(0, 32);
+        expect(pbkdf2Salt2).not.toEqual(pbkdf2Salt3);
+        expect(pbkdf2Salt3).not.toEqual(pbkdf2Salt4);
+    });
 });
 
 describe("createPBKDF2Salt", () => {

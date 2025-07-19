@@ -284,20 +284,37 @@ export async function testEncryptionFeature() {
 // With ephemeral salt, a new salt is generated for each encryption operation.
 
 /**
+ * Global variable to store the session salt. This is used to ensure that the same salt is used for the entire session.
+ */
+let _sessionPBKDFSalt: Uint8Array | undefined;
+
+function getSessionPBKDFSalt(refresh = false): Uint8Array {
+    if (_sessionPBKDFSalt === undefined || refresh) {
+        _sessionPBKDFSalt = createPBKDF2Salt();
+    }
+    return _sessionPBKDFSalt;
+}
+
+/**
  * Encrypts the provided binary input using a passphrase and an ephemeral salt.
  *
  * This function generates a new PBKDF2 salt for each encryption operation,
  * encrypts the input data with the given passphrase and generated salt,
  * and concatenates the encrypted result with the salt into a single
  * Uint8Array buffer.
+ * Note that this function keeps the same PBKDF2 salt for the session unless `refresh` is set to true.
  *
  * @param input - The binary data to encrypt.
  * @param passphrase - The passphrase used for encryption.
  * @returns A promise that resolves to a Uint8Array containing the encrypted data
  *          followed by the ephemeral salt.
  */
-export async function encryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array> {
-    const pbkdf2Salt = createPBKDF2Salt();
+export async function encryptWithEphemeralSaltBinary(
+    input: Uint8Array,
+    passphrase: string,
+    refresh = false
+): Promise<Uint8Array> {
+    const pbkdf2Salt = getSessionPBKDFSalt(refresh);
     const result = await _encrypt(input, passphrase, pbkdf2Salt);
     const resultX = [pbkdf2Salt, ...result];
     const resultBuf = concatUInt8Array(resultX);
@@ -308,13 +325,15 @@ export async function encryptWithEphemeralSaltBinary(input: Uint8Array, passphra
  * Encrypts a string using a passphrase and an ephemeral salt.
  * The function internally converts the input string to binary, encrypts it,
  * and returns the result as a base64-encoded string prefixed with a constant.
+ * Note that this function keeps the same PBKDF2 salt for the session unless `refresh` is set to true.
  *
  * @param input - The plaintext string to encrypt.
  * @param passphrase - The passphrase used for encryption.
+ * @param refresh - If true, generates a new PBKDF2 salt for the session.
  * @returns A promise that resolves to the encrypted string in base64 format with a prefix.
  */
-export async function encryptWithEphemeralSalt(input: string, passphrase: string): Promise<string> {
-    const encrypted = await encryptWithEphemeralSaltBinary(writeString(input), passphrase);
+export async function encryptWithEphemeralSalt(input: string, passphrase: string, refresh = false): Promise<string> {
+    const encrypted = await encryptWithEphemeralSaltBinary(writeString(input), passphrase, refresh);
     const inBase64 = await arrayBufferToBase64Single(encrypted);
     return `${HKDF_SALTED_ENCRYPTED_PREFIX}${inBase64}`;
 }

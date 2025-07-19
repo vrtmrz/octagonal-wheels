@@ -68,6 +68,14 @@ describe("Encryption Benchmarks", () => {
         },
         { time: 1000 }
     );
+    bench(
+        "encryptWithEphemeralSalt-Refresh",
+        async () => {
+            // Call the encryptWithEphemeralSalt function with your test data
+            await encryptWithEphemeralSalt(testData, passphrase, true);
+        },
+        { time: 1000 }
+    );
 });
 describe("Decryption Benchmarks", async () => {
     const encrypted = await encryptV1(testData, passphrase, false);
@@ -175,6 +183,14 @@ describe("Encryption-Decryption Benchmarks", () => {
         "encryptHkdfWithSalt-decryptHkdfWithSalt",
         async () => {
             const encrypted = await encryptWithEphemeralSalt(testData, passphrase);
+            await decryptWithEphemeralSalt(encrypted, passphrase);
+        },
+        { time: 1000 }
+    );
+    bench(
+        "encryptHkdfWithSalt-decryptHkdfWithSalt-Refresh",
+        async () => {
+            const encrypted = await encryptWithEphemeralSalt(testData, passphrase, true);
             await decryptWithEphemeralSalt(encrypted, passphrase);
         },
         { time: 1000 }
