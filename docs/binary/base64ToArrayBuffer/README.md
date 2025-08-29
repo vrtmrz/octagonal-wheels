@@ -10,7 +10,7 @@
 function base64ToArrayBuffer(base64: string | string[]): ArrayBuffer;
 ```
 
-Defined in: [src/binary/base64.ts:7](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L7)
+Defined in: [src/binary/base64.ts:12](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L12)
 
 Converts a base64 string or an array of base64 strings to an ArrayBuffer.
 

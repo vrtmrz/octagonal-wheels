@@ -1,4 +1,4 @@
-import { promiseWithResolver, fireAndForget } from '../promises.js';
+import { promiseWithResolvers, fireAndForget } from '../promises.js';
 
 // --- asynchronous execution / locking utilities
 /**
@@ -29,7 +29,7 @@ const skipDuplicatedMap = new Map();
  */
 function serialized(key, proc) {
     const prev = serializedMap.get(key);
-    const p = promiseWithResolver();
+    const p = promiseWithResolvers();
     queueCount.set(key, (queueCount.get(key) ?? 0) + 1);
     const nextTask = async () => {
         try {
@@ -61,7 +61,7 @@ function serialized(key, proc) {
 const latestProcessMap = new Map();
 const SYMBOL_SKIPPED = Symbol("SKIPPED");
 function onlyLatest(key, proc) {
-    const p = promiseWithResolver();
+    const p = promiseWithResolvers();
     latestProcessMap.set(key, p.promise);
     fireAndForget(async () => {
         try {
@@ -112,7 +112,7 @@ function shareRunningResult(key, proc) {
     const prev = shareSerializedMap.get(key);
     if (prev)
         return prev;
-    const p = promiseWithResolver();
+    const p = promiseWithResolvers();
     shareSerializedMap.set(key, p.promise);
     const task = async () => {
         try {
@@ -139,7 +139,7 @@ function skipIfDuplicated(key, proc) {
     const prev = skipDuplicatedMap.get(key);
     if (prev)
         return Promise.resolve(null);
-    const p = promiseWithResolver();
+    const p = promiseWithResolvers();
     skipDuplicatedMap.set(key, p.promise);
     const task = async () => {
         try {

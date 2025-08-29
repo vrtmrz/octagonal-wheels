@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / encryptV3
 
-# Function: ~~encryptV3()~~
+# ~~Function: encryptV3()~~
 
 ```ts
 function encryptV3(input: string, passphrase: string): Promise<string>;

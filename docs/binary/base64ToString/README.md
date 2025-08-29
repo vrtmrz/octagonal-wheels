@@ -10,7 +10,7 @@
 function base64ToString(base64: string | string[]): string;
 ```
 
-Defined in: [src/binary/base64.ts:203](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L203)
+Defined in: [src/binary/base64.ts:215](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L215)
 
 Converts a base64 string or an array of base64 strings to a regular string.
 

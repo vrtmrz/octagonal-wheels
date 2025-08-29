@@ -10,10 +10,10 @@
 function encrypt(
    input: string, 
    passphrase: string, 
-pbkdf2Salt: Uint8Array): Promise<string>;
+pbkdf2Salt: Uint8Array<ArrayBuffer>): Promise<string>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:188](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L188)
+Defined in: [src/encryption/hkdf.ts:192](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L192)
 
 Encrypts a string using AES-GCM and returns a Base64-encoded string (beginning with '%=').
 
@@ -23,7 +23,7 @@ Encrypts a string using AES-GCM and returns a Base64-encoded string (beginning w
 | ------ | ------ | ------ |
 | `input` | `string` | The string to be encrypted. |
 | `passphrase` | `string` | The passphrase. |
-| `pbkdf2Salt` | `Uint8Array` | The salt for PBKDF2. |
+| `pbkdf2Salt` | `Uint8Array`\<`ArrayBuffer`\> | The salt for PBKDF2. |
 
 ## Returns
 

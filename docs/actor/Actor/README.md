@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [actor](../README.md) / Actor
 
-# Class: `abstract` Actor\<T\>
+# Abstract Class: Actor\<T\>
 
 Defined in: [src/actor.ts:94](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L94)
 

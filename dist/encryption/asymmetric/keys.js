@@ -1,4 +1,4 @@
-import { arrayBufferToBase64Single, base64ToArrayBuffer, readString } from '../../binary/base64.js';
+import { writeString, arrayBufferToBase64Single, base64ToArrayBuffer, readString } from '../../binary/base64.js';
 import { DEFAULT_ECDH_CURVE, AES_GCM_IV_LENGTH, DEFAULT_RSA_MODULUS_LENGTH, DEFAULT_RSA_PUBLIC_EXPONENT, AsymmetricEncryptionArgumentError, webCrypto, AsymmetricKeyGenerationError, AES_KEY_LENGTH, AsymmetricKeyIOError, LENGTH_FIELD_SIZE } from './common.js';
 
 /**
@@ -177,7 +177,7 @@ async function exportPublicKey(publicKey) {
     try {
         const exported = await webCrypto.subtle.exportKey("jwk", publicKey);
         const exportedString = JSON.stringify(exported);
-        const arrayBuffer = new TextEncoder().encode(exportedString);
+        const arrayBuffer = writeString(exportedString);
         return arrayBufferToBase64Single(arrayBuffer); // Convert the string to a Base64-encoded string
     }
     catch (error) {
@@ -194,7 +194,7 @@ async function exportPrivateKey(privateKey) {
     try {
         const exported = await webCrypto.subtle.exportKey("jwk", privateKey);
         const exportedString = JSON.stringify(exported);
-        const arrayBuffer = new TextEncoder().encode(exportedString);
+        const arrayBuffer = writeString(exportedString);
         return arrayBufferToBase64Single(arrayBuffer); // Convert the string to a Base64-encoded string
     }
     catch (error) {

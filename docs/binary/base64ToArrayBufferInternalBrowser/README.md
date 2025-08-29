@@ -10,7 +10,7 @@
 function base64ToArrayBufferInternalBrowser(base64: string): ArrayBuffer;
 ```
 
-Defined in: [src/binary/base64.ts:26](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L26)
+Defined in: [src/binary/base64.ts:31](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L31)
 
 Converts a base64 string to an ArrayBuffer in a browser environment.
 

@@ -38,8 +38,11 @@ Defined in: [src/iterable/source.ts:93](https://github.com/vrtmrz/octagonal-whee
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="_current"></a> `_current` | [`PromiseWithResolvers`](../../../promises/PromiseWithResolvers/README.md)\<*typeof* `GENERATOR_CLOSED` \| `T`\> | [src/iterable/source.ts:77](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L77) |
-| <a id="_next"></a> `_next` | [`PromiseWithResolvers`](../../../promises/PromiseWithResolvers/README.md)\<*typeof* `GENERATOR_CLOSED` \| `T`\>[] | [src/iterable/source.ts:76](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L76) |
+| <a id="_current"></a> `_current` | \{ `promise`: `any`; `reject`: `any`; `resolve`: `any`; \} | [src/iterable/source.ts:77](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L77) |
+| `_current.promise` | `any` | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
+| `_current.reject` | `any` | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
+| `_current.resolve` | `any` | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
+| <a id="_next"></a> `_next` | \{ `promise`: `any`; `reject`: `any`; `resolve`: `any`; \}[] | [src/iterable/source.ts:76](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L76) |
 | <a id="_onsizeupdated"></a> `_onSizeUpdated?` | (`size`: `number`) => `void` | [src/iterable/source.ts:78](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L78) |
 | <a id="closed"></a> `closed` | `boolean` | [src/iterable/source.ts:91](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L91) |
 | <a id="finished"></a> `finished` | `boolean` | [src/iterable/source.ts:92](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L92) |
@@ -79,14 +82,14 @@ Defined in: [src/iterable/source.ts:79](https://github.com/vrtmrz/octagonal-whee
 ### \[asyncIterator\]()
 
 ```ts
-asyncIterator: AsyncGenerator<Awaited<T>, void, unknown>;
+asyncIterator: AsyncGenerator<any, void, unknown>;
 ```
 
 Defined in: [src/iterable/source.ts:120](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L120)
 
 #### Returns
 
-`AsyncGenerator`\<`Awaited`\<`T`\>, `void`, `unknown`\>
+`AsyncGenerator`\<`any`, `void`, `unknown`\>
 
 ***
 
@@ -155,11 +158,11 @@ Defined in: [src/iterable/source.ts:116](https://github.com/vrtmrz/octagonal-whe
 ### values()
 
 ```ts
-values(): AsyncGenerator<Awaited<T>, void, unknown>;
+values(): AsyncGenerator<any, void, unknown>;
 ```
 
 Defined in: [src/iterable/source.ts:127](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/iterable/source.ts#L127)
 
 #### Returns
 
-`AsyncGenerator`\<`Awaited`\<`T`\>, `void`, `unknown`\>
+`AsyncGenerator`\<`any`, `void`, `unknown`\>

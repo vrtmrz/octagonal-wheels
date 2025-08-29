@@ -1,7 +1,7 @@
 import { PaceMaker } from '../bureau/PaceMaker.js';
 import { InboxWithEvent, NOT_AVAILABLE } from '../bureau/Inbox.js';
 import { Porter, Feeder } from '../bureau/Clerk.js';
-import { promiseWithResolver } from '../promises.js';
+import { promiseWithResolvers } from '../promises.js';
 
 /**
  * async generator that yields chunks of items from the source.
@@ -11,7 +11,7 @@ import { promiseWithResolver } from '../promises.js';
 async function* asChunk(source, { unit, timeout, interval }) {
     const postBox = new InboxWithEvent(unit * 10);
     const outgoingBox = new InboxWithEvent(10);
-    const completed = promiseWithResolver();
+    const completed = promiseWithResolvers();
     const pacemaker = interval ? new PaceMaker(interval) : undefined;
     let isCompleted = false;
     const porter = new Porter({

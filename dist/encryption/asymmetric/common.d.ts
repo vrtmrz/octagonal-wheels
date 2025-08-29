@@ -26,14 +26,14 @@ export type CryptographicKeyConfig = {
     /** RSA modulus length in bits. Minimum 2048, recommended 3072+. */
     modulusLength?: number;
     /** RSA public exponent. Default is 65537 (0x010001). */
-    publicExponent?: Uint8Array;
+    publicExponent?: Uint8Array<ArrayBuffer>;
 };
 export type ReadableArray = {
-    read: (length: number) => Uint8Array;
+    read: (length: number) => Uint8Array<ArrayBuffer>;
 };
 export type SessionKey = {
     key: CryptoKey;
-    iv: Uint8Array;
+    iv: Uint8Array<ArrayBuffer>;
 };
 export declare class AsymmetricEncryptionErrorBase extends Error {
     name: string;

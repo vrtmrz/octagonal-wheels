@@ -14,7 +14,7 @@ const Regulator: {
 
 Defined in: [src/conduit/regulator.ts:150](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/regulator.ts#L150)
 
-## Type declaration
+## Type Declaration
 
 ### of()
 

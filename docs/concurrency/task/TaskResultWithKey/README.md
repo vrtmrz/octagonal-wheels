@@ -14,7 +14,7 @@ type TaskResultWithKey<T, U> = TaskResult<T, U> & {
 
 Defined in: [src/concurrency/task.ts:10](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/task.ts#L10)
 
-## Type declaration
+## Type Declaration
 
 ### key
 

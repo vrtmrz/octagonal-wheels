@@ -10,7 +10,7 @@
 function obfuscatePathV2<T>(
    path: T, 
    passphrase: string, 
-hkdfSalt: Uint8Array): Promise<string>;
+hkdfSalt: Uint8Array<ArrayBuffer>): Promise<string>;
 ```
 
 Defined in: [src/encryption/obfuscatePathV2.ts:74](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/obfuscatePathV2.ts#L74)
@@ -35,7 +35,7 @@ If the path is already obfuscated, it is returned as is.
 | ------ | ------ | ------ |
 | `path` | `T` | The path to be obfuscated |
 | `passphrase` | `string` | The passphrase |
-| `hkdfSalt` | `Uint8Array` | The salt for HKDF |
+| `hkdfSalt` | `Uint8Array`\<`ArrayBuffer`\> | The salt for HKDF |
 
 ## Returns
 

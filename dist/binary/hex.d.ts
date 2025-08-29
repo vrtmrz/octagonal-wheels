@@ -5,7 +5,7 @@
  * @param src - The hexadecimal string to convert.
  * @returns The Uint8Array representation of the input string.
  */
-export declare function hexStringToUint8Array(src: string): Uint8Array;
+export declare function hexStringToUint8Array(src: string): Uint8Array<ArrayBuffer>;
 /**
  * Converts a Uint8Array to a hexadecimal string representation.
  *

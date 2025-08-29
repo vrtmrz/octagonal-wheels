@@ -8,12 +8,12 @@
 
 ```ts
 function encryptBinary(
-   input: Uint8Array, 
+   input: Uint8Array<ArrayBuffer>, 
    passphrase: string, 
 autoCalculateIterations: boolean): Promise<Uint8Array<ArrayBuffer>>;
 ```
 
-Defined in: [src/encryption/encryption.ts:374](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L374)
+Defined in: [src/encryption/encryption.ts:375](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L375)
 
 Encrypts binary data using AES-GCM encryption algorithm.
 
@@ -21,7 +21,7 @@ Encrypts binary data using AES-GCM encryption algorithm.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `input` | `Uint8Array` | The binary data to be encrypted. |
+| `input` | `Uint8Array`\<`ArrayBuffer`\> | The binary data to be encrypted. |
 | `passphrase` | `string` | The passphrase used to derive the encryption key. |
 | `autoCalculateIterations` | `boolean` | A boolean indicating whether to automatically calculate the number of iterations for key derivation. |
 

@@ -10,4 +10,4 @@
 const ENCRYPT_V3_PREFIX: "%~" = "%~";
 ```
 
-Defined in: [src/encryption/encryption.ts:9](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L9)
+Defined in: [src/encryption/encryption.ts:10](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L10)

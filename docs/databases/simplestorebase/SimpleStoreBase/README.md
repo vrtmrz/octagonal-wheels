@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../../modules.md) / [databases](../../README.md) / [simplestorebase](../README.md) / SimpleStoreBase
 
-# Class: `abstract` SimpleStoreBase\<T\>
+# Abstract Class: SimpleStoreBase\<T\>
 
 Defined in: [src/databases/SimpleStoreBase.ts:5](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L5)
 

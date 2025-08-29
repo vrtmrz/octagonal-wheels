@@ -10,7 +10,7 @@
 function getKeyForObfuscatePath(
    passphrase: string, 
    dataBuf: Uint8Array, 
-autoCalculateIterations: boolean): Promise<[CryptoKey, Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>]>;
+autoCalculateIterations: boolean): Promise<[CryptoKey, Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>]>;
 ```
 
 Defined in: [src/encryption/obfuscatePath.ts:43](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/obfuscatePath.ts#L43)
@@ -27,6 +27,6 @@ Generates a key, salt, and IV for obfuscating a path using the provided passphra
 
 ## Returns
 
-`Promise`\<\[`CryptoKey`, `Uint8Array`\<`ArrayBufferLike`\>, `Uint8Array`\<`ArrayBufferLike`\>\]\>
+`Promise`\<\[`CryptoKey`, `Uint8Array`\<`ArrayBuffer`\>, `Uint8Array`\<`ArrayBuffer`\>\]\>
 
 A promise that resolves to an array containing the generated key, salt, and IV.

@@ -8,9 +8,9 @@
 
 ```ts
 function encryptUInt8ArrayWithSessionKey(
-   data: ArrayBuffer | Uint8Array<ArrayBufferLike>, 
+   data: ArrayBuffer | Uint8Array<ArrayBuffer>, 
    aesKey: CryptoKey, 
-iv: Uint8Array): Promise<ArrayBuffer>;
+iv: Uint8Array<ArrayBuffer>): Promise<ArrayBuffer>;
 ```
 
 Defined in: [src/encryption/asymmetric/asymmetric.ts:61](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/asymmetric/asymmetric.ts#L61)
@@ -22,9 +22,9 @@ AES-GCM provides authenticated encryption (AEAD).
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `data` | `ArrayBuffer` \| `Uint8Array`\<`ArrayBufferLike`\> | The data to be encrypted |
+| `data` | `ArrayBuffer` \| `Uint8Array`\<`ArrayBuffer`\> | The data to be encrypted |
 | `aesKey` | `CryptoKey` | The AES key to use for encryption |
-| `iv` | `Uint8Array` | The initialisation vector (IV) for encryption |
+| `iv` | `Uint8Array`\<`ArrayBuffer`\> | The initialisation vector (IV) for encryption |
 
 ## Returns
 

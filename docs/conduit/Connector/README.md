@@ -24,7 +24,7 @@ Defined in: [src/conduit/connector.ts:303](https://github.com/vrtmrz/octagonal-w
 
 Connector
 
-## Type declaration
+## Type Declaration
 
 ### classInstanceOf()
 

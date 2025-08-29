@@ -79,7 +79,11 @@ export declare class Refiner<T, U> {
      * An internal method to renew the promise with resolvers.
      * It is called when the evaluation is re-read.
      */
-    _refinePromise(): PromiseWithResolvers<U>;
+    _refinePromise(): {
+        promise: any;
+        resolve: any;
+        reject: any;
+    };
     /**
      * Constructor for the Refiner class.
      * @param options - The options for the Refiner instance.

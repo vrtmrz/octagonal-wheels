@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../../modules.md) / [concurrency](../../README.md) / [processor](../README.md) / Notifier
 
-# Class: ~~Notifier~~
+# ~~Class: Notifier~~
 
 Defined in: [src/concurrency/processor\_v2.ts:21](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L21)
 

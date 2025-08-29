@@ -301,7 +301,7 @@ async function testCrypt() {
     }
     else {
         Logger("CRYPT LOGIC OK", LOG_LEVEL_VERBOSE);
-        const w = new TextEncoder().encode(src);
+        const w = writeString(src);
         const encodedBinary = await encryptBinary(w, "passwordTest", false);
         const decryptedBinary = await decryptBinary(encodedBinary, "passwordTest", false);
         if (w.join("-") !== decryptedBinary.join("-")) {

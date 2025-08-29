@@ -13,7 +13,7 @@ function encryptWithEphemeralSalt(
 refresh: boolean): Promise<string>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:335](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L335)
+Defined in: [src/encryption/hkdf.ts:343](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L343)
 
 Encrypts a string using a passphrase and an ephemeral salt.
 The function internally converts the input string to binary, encrypts it,

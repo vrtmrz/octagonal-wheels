@@ -16,7 +16,7 @@ const ECDH_CURVE_INDEX: {
 
 Defined in: [src/encryption/asymmetric/common.ts:1](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/asymmetric/common.ts#L1)
 
-## Type declaration
+## Type Declaration
 
 ### P-256
 

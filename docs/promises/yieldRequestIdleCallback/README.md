@@ -10,7 +10,7 @@
 function yieldRequestIdleCallback(options?: IdleRequestOptions): Promise<void>;
 ```
 
-Defined in: [src/promises.ts:107](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L107)
+Defined in: [src/promises.ts:119](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L119)
 
 A utility function that wraps the `requestIdleCallback` function and returns a promise.
 If `requestIdleCallback` is not available in the global scope (iOS, Safari), it falls back to `yieldMicrotask`.

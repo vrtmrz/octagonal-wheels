@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / encrypt
 
-# Function: ~~encrypt()~~
+# ~~Function: encrypt()~~
 
 ```ts
 function encrypt(
@@ -13,7 +13,7 @@ function encrypt(
 autoCalculateIterations: boolean): Promise<string>;
 ```
 
-Defined in: [src/encryption/encryption.ts:199](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L199)
+Defined in: [src/encryption/encryption.ts:200](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L200)
 
 Encrypts the input string using AES-GCM encryption algorithm.
 

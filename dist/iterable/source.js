@@ -1,8 +1,8 @@
-import { promiseWithResolver } from '../promises.js';
+import { promiseWithResolvers } from '../promises.js';
 
 const GENERATOR_CLOSED = Symbol("closed");
 function generativeBuffer() {
-    let current = promiseWithResolver();
+    let current = promiseWithResolvers();
     let next = [current];
     let closed = false;
     let finished = false;
@@ -12,7 +12,7 @@ function generativeBuffer() {
                 throw new Error("Cannot enqueue to a closed or finished source");
             }
             const promise = current;
-            const newNext = promiseWithResolver();
+            const newNext = promiseWithResolvers();
             current = newNext;
             next.push(current);
             promise.resolve(item);
@@ -111,7 +111,7 @@ class GeneratorSource {
         });
         this.closed = false;
         this.finished = false;
-        this._current = promiseWithResolver();
+        this._current = promiseWithResolvers();
         this._next = [this._current];
         this._onSizeUpdated = onSizeUpdated;
     }
@@ -120,7 +120,7 @@ class GeneratorSource {
             throw new Error("Cannot enqueue to a closed or finished source");
         }
         const promise = this._current;
-        const next = promiseWithResolver();
+        const next = promiseWithResolvers();
         this._current = next;
         this._next.push(this._current);
         this._updateSize();

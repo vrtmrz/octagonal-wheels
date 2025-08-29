@@ -10,7 +10,7 @@
 function readString(buffer: Uint8Array): string;
 ```
 
-Defined in: [src/binary/base64.ts:156](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L156)
+Defined in: [src/binary/base64.ts:168](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L168)
 
 Converts a Uint8Array buffer to a string.
 

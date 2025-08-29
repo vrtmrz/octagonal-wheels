@@ -4,13 +4,13 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / testCrypt
 
-# Function: ~~testCrypt()~~
+# ~~Function: testCrypt()~~
 
 ```ts
 function testCrypt(): Promise<boolean>;
 ```
 
-Defined in: [src/encryption/encryption.ts:342](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L342)
+Defined in: [src/encryption/encryption.ts:343](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L343)
 
 Tests the encryption and decryption functionality.
 

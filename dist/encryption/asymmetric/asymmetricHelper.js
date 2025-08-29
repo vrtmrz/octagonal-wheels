@@ -1,4 +1,4 @@
-import { arrayBufferToBase64Single } from '../../binary/base64.js';
+import { writeString, arrayBufferToBase64Single } from '../../binary/base64.js';
 import { encryptUInt8Array, encryptUInt8ArrayWithPublicKey, decryptUInt8Array, decryptUInt8ArrayWithPrivateKey } from './asymmetric.js';
 import { AsymmetricEncryptionArgumentError, AsymmetricDecryptionError } from './common.js';
 
@@ -13,8 +13,7 @@ import { AsymmetricEncryptionArgumentError, AsymmetricDecryptionError } from './
  * @returns The encrypted data, encoded as a Base64 string.
  */
 async function encryptConfig(configData, publicKey) {
-    const encoder = new TextEncoder();
-    const dataBuffer = encoder.encode(JSON.stringify(configData)); // Convert configuration object to JSON string and then to UTF-8 byte array
+    const dataBuffer = writeString(JSON.stringify(configData)); // Convert configuration object to JSON string and then to UTF-8 byte array
     let encryptedResult;
     if (publicKey.algorithm.name === "RSA-OAEP") {
         encryptedResult = await encryptUInt8Array(dataBuffer, publicKey);

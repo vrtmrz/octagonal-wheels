@@ -1,4 +1,4 @@
-import { fireAndForget, promiseWithResolver, yieldMicrotask, cancelableDelay, TIMED_OUT_SIGNAL } from '../promises.js';
+import { fireAndForget, promiseWithResolvers, yieldMicrotask, cancelableDelay, TIMED_OUT_SIGNAL } from '../promises.js';
 import { RESULT_TIMED_OUT } from '../common/const.js';
 
 const GENERIC_COMPATIBILITY_VALUE = "x-compatibility-value";
@@ -82,7 +82,7 @@ class SlipBoard {
     async awaitNext(type, key = "", { timeout, onNotAwaited } = { timeout: undefined, onNotAwaited: undefined }) {
         let taskPromise = this._clip.get(`${String(type)}:${key}`);
         if (!taskPromise) {
-            taskPromise = promiseWithResolver();
+            taskPromise = promiseWithResolvers();
             taskPromise.promise = taskPromise.promise
                 .then((ret) => {
                 // this.clip.delete(key);

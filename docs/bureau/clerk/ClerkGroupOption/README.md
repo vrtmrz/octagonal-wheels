@@ -16,7 +16,7 @@ type ClerkGroupOption<T, U> = ClerkOptionBase<T> & {
 
 Defined in: [src/bureau/Clerk.ts:21](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L21)
 
-## Type declaration
+## Type Declaration
 
 ### initialMemberCount
 

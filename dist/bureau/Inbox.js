@@ -1,4 +1,4 @@
-import { promiseWithResolver, isSomeResolved, cancelableDelay } from '../promises.js';
+import { promiseWithResolvers, isSomeResolved, cancelableDelay } from '../promises.js';
 
 const NOT_AVAILABLE = Symbol("NotAvailable");
 const READY_PICK_SIGNAL = Symbol("lockReady");
@@ -47,7 +47,7 @@ class SyncInbox {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: promiseWithResolver()
+            value: promiseWithResolvers()
         });
         if (capacity <= 0) {
             throw new Error("Capacity must be greater than 0");
@@ -212,7 +212,7 @@ class Inbox extends SyncInbox {
     async _waitForFree() {
         while (this.free == 0) {
             if (!this._lockFull) {
-                this._lockFull = promiseWithResolver();
+                this._lockFull = promiseWithResolvers();
             }
             return await this._lockFull.promise;
         }
@@ -225,7 +225,7 @@ class Inbox extends SyncInbox {
     async _waitForReady() {
         while (this.isRunningOut) {
             if (!this._lockReady) {
-                this._lockReady = promiseWithResolver();
+                this._lockReady = promiseWithResolvers();
             }
             return await this._lockReady.promise;
         }

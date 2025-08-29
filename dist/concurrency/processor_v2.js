@@ -1,6 +1,6 @@
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { RESULT_TIMED_OUT } from '../common/const.js';
-import { promiseWithResolver, noop, cancelableDelay, delay, fireAndForget } from '../promises.js';
+import { promiseWithResolvers, noop, cancelableDelay, delay, fireAndForget } from '../promises.js';
 import { EventHub } from '../events/EventHub.js';
 import '../events/CustomEventTargets.js';
 import { PaceMaker } from '../bureau/PaceMaker.js';
@@ -16,7 +16,7 @@ class Notifier {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: promiseWithResolver()
+            value: promiseWithResolvers()
         });
         Object.defineProperty(this, "isUsed", {
             enumerable: true,
@@ -32,7 +32,7 @@ class Notifier {
         this.isUsed = false;
         void this._p.promise.finally(noop);
         this._p.resolve();
-        this._p = promiseWithResolver();
+        this._p = promiseWithResolvers();
     }
     get nextNotify() {
         this.isUsed = true;
@@ -87,7 +87,7 @@ class QueueProcessor {
     }
     async _waitFor(keys, timeout) {
         const items = keys.map((key) => {
-            const p = promiseWithResolver();
+            const p = promiseWithResolvers();
             const releaser = this._hub.onEvent(key, () => {
                 p.resolve(key);
             });

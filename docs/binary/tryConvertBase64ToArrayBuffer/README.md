@@ -10,7 +10,7 @@
 function tryConvertBase64ToArrayBuffer(base64: string): false | ArrayBuffer;
 ```
 
-Defined in: [src/binary/base64.ts:229](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L229)
+Defined in: [src/binary/base64.ts:241](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L241)
 
 Tries to convert a base64 string to an ArrayBuffer.
 

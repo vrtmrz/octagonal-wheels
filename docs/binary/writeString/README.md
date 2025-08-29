@@ -7,10 +7,10 @@
 # Function: writeString()
 
 ```ts
-function writeString(string: string): Uint8Array;
+function writeString(string: string): Uint8Array<ArrayBuffer>;
 ```
 
-Defined in: [src/binary/base64.ts:117](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L117)
+Defined in: [src/binary/base64.ts:122](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L122)
 
 ## Parameters
 
@@ -20,4 +20,4 @@ Defined in: [src/binary/base64.ts:117](https://github.com/vrtmrz/octagonal-wheel
 
 ## Returns
 
-`Uint8Array`
+`Uint8Array`\<`ArrayBuffer`\>

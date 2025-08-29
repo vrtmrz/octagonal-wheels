@@ -7,10 +7,10 @@
 # Function: decryptWithEphemeralSaltBinary()
 
 ```ts
-function decryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array<ArrayBufferLike>>;
+function decryptWithEphemeralSaltBinary(input: Uint8Array<ArrayBuffer>, passphrase: string): Promise<Uint8Array<ArrayBuffer>>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:358](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L358)
+Defined in: [src/encryption/hkdf.ts:366](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L366)
 
 Decrypts binary data that was encrypted with an ephemeral salt using a passphrase.
 
@@ -27,12 +27,12 @@ to decrypt the payload.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `input` | `Uint8Array` | The binary data to decrypt, containing IV, HKDF salt, PBKDF2 salt, and encrypted data. |
+| `input` | `Uint8Array`\<`ArrayBuffer`\> | The binary data to decrypt, containing IV, HKDF salt, PBKDF2 salt, and encrypted data. |
 | `passphrase` | `string` | The passphrase used for decryption. |
 
 ## Returns
 
-`Promise`\<`Uint8Array`\<`ArrayBufferLike`\>\>
+`Promise`\<`Uint8Array`\<`ArrayBuffer`\>\>
 
 A promise that resolves to the decrypted binary data.
 

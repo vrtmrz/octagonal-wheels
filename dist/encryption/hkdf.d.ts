@@ -12,7 +12,7 @@ export declare function createPBKDF2Salt(): Uint8Array<ArrayBuffer>;
  * @param pbkdf2Salt The salt for PBKDF2.
  * @returns The encrypted binary data.
  */
-export declare function encryptBinary(input: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
+export declare function encryptBinary(input: Uint8Array<ArrayBuffer>, passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Encrypts a string using AES-GCM and returns a Base64-encoded string (beginning with '%=').
  * @param input The string to be encrypted.
@@ -20,7 +20,7 @@ export declare function encryptBinary(input: Uint8Array, passphrase: string, pbk
  * @param pbkdf2Salt The salt for PBKDF2.
  * @returns The encrypted string (Base64, beginning with '%=').
  */
-export declare function encrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array): Promise<string>;
+export declare function encrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>): Promise<string>;
 /**
  * Decrypts binary encrypted data (Uint8Array) and returns the original string.
  * @param binary The encrypted binary data.
@@ -29,7 +29,7 @@ export declare function encrypt(input: string, passphrase: string, pbkdf2Salt: U
  * @returns The decrypted string.
  * @throws An exception is thrown if the input data is invalid or decryption fails.
  */
-export declare function decryptBinary(binary: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
+export declare function decryptBinary(binary: Uint8Array<ArrayBuffer>, passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Decrypts a Base64-encoded encrypted string (beginning with '%=') and returns the original string.
  * @param input The encrypted string (Base64, beginning with '%=').
@@ -38,7 +38,7 @@ export declare function decryptBinary(binary: Uint8Array, passphrase: string, pb
  * @returns The decrypted string.
  * @throws An exception is thrown if the input format is invalid or decryption fails.
  */
-export declare function decrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array): Promise<string>;
+export declare function decrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>): Promise<string>;
 export declare function testEncryptionFeature(): Promise<boolean>;
 /**
  * Encrypts the provided binary input using a passphrase and an ephemeral salt.
@@ -54,7 +54,7 @@ export declare function testEncryptionFeature(): Promise<boolean>;
  * @returns A promise that resolves to a Uint8Array containing the encrypted data
  *          followed by the ephemeral salt.
  */
-export declare function encryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string, refresh?: boolean): Promise<Uint8Array>;
+export declare function encryptWithEphemeralSaltBinary(input: Uint8Array<ArrayBuffer>, passphrase: string, refresh?: boolean): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Encrypts a string using a passphrase and an ephemeral salt.
  * The function internally converts the input string to binary, encrypts it,
@@ -84,7 +84,7 @@ export declare function encryptWithEphemeralSalt(input: string, passphrase: stri
  * @returns A promise that resolves to the decrypted binary data.
  * @throws If the input data length is invalid.
  */
-export declare function decryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array>;
+export declare function decryptWithEphemeralSaltBinary(input: Uint8Array<ArrayBuffer>, passphrase: string): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Decrypts a base64-encoded string that was encrypted using an ephemeral salt and a passphrase.
  * The input string must start with the expected prefix to indicate the encryption format.

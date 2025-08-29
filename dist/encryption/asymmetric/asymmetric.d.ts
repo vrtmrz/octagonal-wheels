@@ -32,7 +32,7 @@ import type { ECDH_CURVES } from "./common.ts";
  * @param iv The initialisation vector (IV) for encryption
  * @returns The encrypted data as an ArrayBuffer (includes authentication tag)
  */
-export declare function encryptUInt8ArrayWithSessionKey(data: ArrayBuffer | Uint8Array, aesKey: CryptoKey, iv: Uint8Array): Promise<ArrayBuffer>;
+export declare function encryptUInt8ArrayWithSessionKey(data: ArrayBuffer | Uint8Array<ArrayBuffer>, aesKey: CryptoKey, iv: Uint8Array<ArrayBuffer>): Promise<ArrayBuffer>;
 /**
  * Wraps (encrypts) an AES key using an RSA public key.
  * @param aesKey The AES key to wrap
@@ -46,14 +46,14 @@ export declare function wrapAesKeyWithPublicKey(aesKey: CryptoKey, publicKey: Cr
  * @param publicKey The RSA public key to use for encryption
  * @returns The encrypted data as a Uint8Array
  */
-export declare function encryptUInt8Array(data: Uint8Array, publicKey: CryptoKey): Promise<Uint8Array>;
+export declare function encryptUInt8Array(data: Uint8Array<ArrayBuffer>, publicKey: CryptoKey): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Decrypts data encrypted with the hybrid method of RSA-OAEP and AES-GCM.
  * @param encryptedInfo The encrypted data (Uint8Array)
  * @param privateKey The RSA private key to use for decryption
  * @returns The decrypted data (Uint8Array)
  */
-export declare function decryptUInt8Array(encryptedInfo: Uint8Array, privateKey: CryptoKey): Promise<Uint8Array>;
+export declare function decryptUInt8Array(encryptedInfo: Uint8Array, privateKey: CryptoKey): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Encrypts a Uint8Array using ECDH (Elliptic Curve Diffie-Hellman) and AES-GCM.
  * Generates an ephemeral ECDH key pair, derives a shared secret, and encrypts the data.
@@ -63,7 +63,7 @@ export declare function decryptUInt8Array(encryptedInfo: Uint8Array, privateKey:
  * @returns The encrypted data as a Uint8Array
  * @throws Error if the recipient public key is not ECDH
  */
-export declare function encryptUInt8ArrayWithPublicKey(data: Uint8Array, recipientPublicKey: CryptoKey, expectedCurve?: ECDH_CURVES): Promise<Uint8Array>;
+export declare function encryptUInt8ArrayWithPublicKey(data: Uint8Array<ArrayBuffer>, recipientPublicKey: CryptoKey, expectedCurve?: ECDH_CURVES): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Decrypts data encrypted with ECDH and AES-GCM using the private key.
  * Extracts the ephemeral public key, derives the shared secret, and decrypts the data.

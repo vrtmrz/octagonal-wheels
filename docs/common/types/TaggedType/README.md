@@ -16,7 +16,7 @@ Defined in: [src/common/types.ts:8](https://github.com/vrtmrz/octagonal-wheels/b
 
 Tagged Type: Wrapping type with a unique symbol to make types *INCOMPATIBLE* for the same type with different tags.
 
-## Type declaration
+## Type Declaration
 
 ### \[\_\_\_tag\]
 

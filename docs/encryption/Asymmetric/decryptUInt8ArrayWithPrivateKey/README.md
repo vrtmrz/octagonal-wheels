@@ -10,7 +10,7 @@
 function decryptUInt8ArrayWithPrivateKey(encryptedData: Uint8Array, privateKey: CryptoKey): Promise<Uint8Array<ArrayBufferLike>>;
 ```
 
-Defined in: [src/encryption/asymmetric/asymmetric.ts:253](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/asymmetric/asymmetric.ts#L253)
+Defined in: [src/encryption/asymmetric/asymmetric.ts:262](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/asymmetric/asymmetric.ts#L262)
 
 Decrypts data encrypted with ECDH and AES-GCM using the private key.
 Extracts the ephemeral public key, derives the shared secret, and decrypts the data.

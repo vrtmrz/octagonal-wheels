@@ -1,4 +1,4 @@
-import { promiseWithResolver } from "../promises.ts";
+import { promiseWithResolvers } from "../promises.ts";
 declare const GENERATOR_CLOSED: unique symbol;
 export declare function generativeBuffer<T>(): {
     enqueue(item: T): void;
@@ -10,8 +10,8 @@ export declare function generativeBuffer<T>(): {
     readonly size: number;
 };
 export declare class GeneratorSource<T> {
-    _next: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>[];
-    _current: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>;
+    _next: ReturnType<typeof promiseWithResolvers<T | typeof GENERATOR_CLOSED>>[];
+    _current: ReturnType<typeof promiseWithResolvers<T | typeof GENERATOR_CLOSED>>;
     _onSizeUpdated?: (size: number) => void;
     _updateSize(): void;
     get size(): number;
@@ -21,8 +21,8 @@ export declare class GeneratorSource<T> {
     enqueue(item: T): void;
     dispose(): void;
     finish(): void;
-    [Symbol.asyncIterator](): AsyncGenerator<Awaited<T>, void, unknown>;
+    [Symbol.asyncIterator](): AsyncGenerator<any, void, unknown>;
     [Symbol.dispose](): void;
-    values(): AsyncGenerator<Awaited<T>, void, unknown>;
+    values(): AsyncGenerator<any, void, unknown>;
 }
 export {};

@@ -14,7 +14,7 @@ type AwaitOptionWithoutTimeout = AwaitOptionBase & {
 
 Defined in: [src/bureau/SlipBoard.ts:59](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L59)
 
-## Type declaration
+## Type Declaration
 
 ### timeout?
 

@@ -10,4 +10,4 @@
 const ENCRYPT_V2_PREFIX: "%" = "%";
 ```
 
-Defined in: [src/encryption/encryption.ts:8](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L8)
+Defined in: [src/encryption/encryption.ts:9](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L9)

@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../../modules.md) / [bureau](../../README.md) / [clerk](../README.md) / ClerkBase
 
-# Class: `abstract` ClerkBase\<T\>
+# Abstract Class: ClerkBase\<T\>
 
 Defined in: [src/bureau/Clerk.ts:46](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L46)
 
@@ -45,7 +45,10 @@ Defined in: [src/bureau/Clerk.ts:62](https://github.com/vrtmrz/octagonal-wheels/
 | Property | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
 | <a id="_disposed"></a> `_disposed` | `boolean` | `false` | [src/bureau/Clerk.ts:57](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L57) |
-| <a id="_disposepromise"></a> `_disposePromise` | [`PromiseWithResolvers`](../../../promises/PromiseWithResolvers/README.md)\<`void`\> | `undefined` | [src/bureau/Clerk.ts:58](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L58) |
+| <a id="_disposepromise"></a> `_disposePromise` | \{ `promise`: `any`; `reject`: `any`; `resolve`: `any`; \} | `undefined` | [src/bureau/Clerk.ts:58](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L58) |
+| `_disposePromise.promise` | `any` | `undefined` | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
+| `_disposePromise.reject` | `any` | `undefined` | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
+| `_disposePromise.resolve` | `any` | `undefined` | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
 | <a id="_inbox"></a> `_inbox` | [`Inbox`](../../inbox/Inbox/README.md)\<`T`\> | `undefined` | [src/bureau/Clerk.ts:47](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L47) |
 | <a id="_name"></a> `_name` | `string` | `undefined` | [src/bureau/Clerk.ts:48](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L48) |
 | <a id="_onprogress"></a> `_onProgress?` | (`state`: `ClerkStateDetail`) => `void` | `undefined` | [src/bureau/Clerk.ts:85](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L85) |
@@ -62,14 +65,14 @@ Defined in: [src/bureau/Clerk.ts:62](https://github.com/vrtmrz/octagonal-wheels/
 #### Get Signature
 
 ```ts
-get onDisposed(): Promise<void>;
+get onDisposed(): any;
 ```
 
 Defined in: [src/bureau/Clerk.ts:152](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L152)
 
 ##### Returns
 
-`Promise`\<`void`\>
+`any`
 
 ***
 

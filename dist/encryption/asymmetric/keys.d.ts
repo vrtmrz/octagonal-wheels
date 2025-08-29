@@ -63,7 +63,7 @@ export declare function exportECDHPublicKey(publicKey: CryptoKey): Promise<Uint8
  * @returns The restored CryptoKey.
  * @throws Error if import fails.
  */
-export declare function importECDHPublicKey(ephemeralPublicKey: Uint8Array, curve?: ECDH_CURVES): Promise<CryptoKey>;
+export declare function importECDHPublicKey(ephemeralPublicKey: Uint8Array<ArrayBuffer>, curve?: ECDH_CURVES): Promise<CryptoKey>;
 /**
  * Generates an initialisation vector (IV) of the specified length.
  * @param length The IV length in bytes (default: 12).

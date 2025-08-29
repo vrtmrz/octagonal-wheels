@@ -1,8 +1,8 @@
-import { promiseWithResolver } from '../promises.js';
+import { promiseWithResolvers } from '../promises.js';
 
 function getFuncOf(name) {
     let connectedFunction;
-    let connectedFunctionTask = promiseWithResolver();
+    let connectedFunctionTask = promiseWithResolvers();
     let onDisconnect;
     const inst = {
         connect: (func, onDisconnectCallback) => {
@@ -28,7 +28,7 @@ function getFuncOf(name) {
         },
         disconnect: () => {
             connectedFunction = undefined;
-            connectedFunctionTask = promiseWithResolver();
+            connectedFunctionTask = promiseWithResolvers();
             onDisconnect?.();
             onDisconnect = undefined;
         },
@@ -39,7 +39,7 @@ function getFuncOf(name) {
     return inst;
 }
 function getInstanceOf(name) {
-    let connectedInstance = promiseWithResolver();
+    let connectedInstance = promiseWithResolvers();
     let instance = undefined;
     let onDisconnect;
     const inst = {
@@ -65,7 +65,7 @@ function getInstanceOf(name) {
         },
         disconnect: () => {
             instance = undefined;
-            connectedInstance = promiseWithResolver();
+            connectedInstance = promiseWithResolvers();
             onDisconnect?.();
             onDisconnect = undefined;
         },

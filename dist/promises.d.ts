@@ -17,6 +17,9 @@ export declare function isResolved(promise: Promise<unknown>): Promise<boolean>;
  * @returns true if some promises have been resolved, false if not.
  */
 export declare function isSomeResolved(promises: Promise<unknown>[]): Promise<boolean>;
+/**
+ * A promise with resolver functions.
+ */
 export type PromiseWithResolvers<T> = {
     promise: Promise<T>;
     resolve: (value: T | PromiseLike<T>) => void;
@@ -34,16 +37,21 @@ export declare function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<
  * @returns An object containing the promise, resolve function, and reject function.
  */
 export declare function nativePromiseWithResolvers<T>(): {
-    promise: Promise<T>;
-    resolve: (value: T | PromiseLike<T>) => void;
-    reject: (reason?: any) => void;
+    promise: any;
+    resolve: any;
+    reject: any;
 };
 /**
  * Creates a promise with custom resolvers.
  * @param {Function} polyfillPromiseWithResolvers - The function that polyfills the promise with resolvers.
  * @returns {Promise} - The promise with custom resolvers.
  */
-export declare const promiseWithResolver: <T>() => PromiseWithResolvers<T>;
+export declare const promiseWithResolvers: typeof nativePromiseWithResolvers;
+/**
+ * Creates a promise with custom resolvers. This is kept for compatibility with older code.
+ * @deprecated Use `promiseWithResolvers` instead. (Wrong name)
+ */
+export declare const promiseWithResolver: typeof nativePromiseWithResolvers;
 /**
  * A no-operation function.
  */
@@ -88,7 +96,7 @@ export type TIMED_OUT_SIGNAL = typeof TIMED_OUT_SIGNAL;
  * @returns {() => void} cancel - A function to cancel the delay.
  */
 export declare function cancelableDelay<T = TIMED_OUT_SIGNAL>(timeout: number, cancel?: T): {
-    promise: Promise<T>;
+    promise: any;
     cancel(): void;
 };
 type ExtendableDelay<T, U extends string | symbol | number> = {

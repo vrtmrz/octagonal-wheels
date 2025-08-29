@@ -1,5 +1,5 @@
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
-import { promiseWithResolver, yieldMicrotask } from '../promises.js';
+import { promiseWithResolvers, yieldMicrotask } from '../promises.js';
 import { NOT_AVAILABLE, DISPOSE_ERROR } from './Inbox.js';
 
 var ClerkState;
@@ -68,7 +68,7 @@ class ClerkBase {
             enumerable: true,
             configurable: true,
             writable: true,
-            value: promiseWithResolver()
+            value: promiseWithResolvers()
         });
         Object.defineProperty(this, "_onProgress", {
             enumerable: true,

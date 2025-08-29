@@ -4,7 +4,7 @@ export declare const ENCRYPT_V3_PREFIX = "%~";
 export type encodedData = [encryptedData: string, iv: string, salt: string];
 export type KeyBuffer = {
     key: CryptoKey;
-    salt: Uint8Array;
+    salt: Uint8Array<ArrayBuffer>;
     count: number;
 };
 /**
@@ -64,7 +64,7 @@ export declare function testCrypt(): Promise<boolean>;
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the number of iterations for key derivation.
  * @returns The encrypted binary data.
  */
-export declare function encryptBinary(input: Uint8Array, passphrase: string, autoCalculateIterations: boolean): Promise<Uint8Array<ArrayBuffer>>;
+export declare function encryptBinary(input: Uint8Array<ArrayBuffer>, passphrase: string, autoCalculateIterations: boolean): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Decrypts the encrypted binary data using the provided passphrase.
  * @param encryptedResult - The encrypted binary data as a Uint8Array.

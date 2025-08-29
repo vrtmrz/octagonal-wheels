@@ -10,7 +10,7 @@
 function decryptCBC(
    encryptedData: Uint8Array, 
    passphrase: string, 
-iterations: number): Promise<Uint8Array<ArrayBufferLike>>;
+iterations: number): Promise<Uint8Array<ArrayBuffer>>;
 ```
 
 Defined in: [src/encryption/openSSLCompat/CBC.ts:115](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/openSSLCompat/CBC.ts#L115)
@@ -27,6 +27,6 @@ Decrypts ciphertext using a password and a specified number of iterations.
 
 ## Returns
 
-`Promise`\<`Uint8Array`\<`ArrayBufferLike`\>\>
+`Promise`\<`Uint8Array`\<`ArrayBuffer`\>\>
 
 The decrypted plaintext.

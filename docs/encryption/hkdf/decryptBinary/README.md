@@ -8,12 +8,12 @@
 
 ```ts
 function decryptBinary(
-   binary: Uint8Array, 
+   binary: Uint8Array<ArrayBuffer>, 
    passphrase: string, 
-pbkdf2Salt: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
+pbkdf2Salt: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>>;
 ```
 
-Defined in: [src/encryption/hkdf.ts:232](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L232)
+Defined in: [src/encryption/hkdf.ts:236](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/hkdf.ts#L236)
 
 Decrypts binary encrypted data (Uint8Array) and returns the original string.
 
@@ -21,9 +21,9 @@ Decrypts binary encrypted data (Uint8Array) and returns the original string.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `binary` | `Uint8Array` | The encrypted binary data. |
+| `binary` | `Uint8Array`\<`ArrayBuffer`\> | The encrypted binary data. |
 | `passphrase` | `string` | The passphrase. |
-| `pbkdf2Salt` | `Uint8Array` | The salt for PBKDF2. |
+| `pbkdf2Salt` | `Uint8Array`\<`ArrayBuffer`\> | The salt for PBKDF2. |
 
 ## Returns
 

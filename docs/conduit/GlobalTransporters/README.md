@@ -14,7 +14,7 @@ const GlobalTransporters: {
 
 Defined in: [src/conduit/transporter.ts:281](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/transporter.ts#L281)
 
-## Type declaration
+## Type Declaration
 
 ### of()
 

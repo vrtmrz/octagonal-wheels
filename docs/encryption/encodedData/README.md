@@ -10,4 +10,4 @@
 type encodedData = [string, string, string];
 ```
 
-Defined in: [src/encryption/encryption.ts:10](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L10)
+Defined in: [src/encryption/encryption.ts:11](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/encryption.ts#L11)

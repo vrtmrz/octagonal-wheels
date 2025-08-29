@@ -27,6 +27,15 @@ const FallbackWeakRef = "WeakRef" in globalThis
             value: console.warn("WeakRef is not supported in this environment. Using a fallback implementation. This may cause memory leaks. Please consider upgrading your browser or Node.js version. If you are on Android, please consider changing your WebView engine to a newer version. It is on the Developer Settings.")
         }),
         _a);
+const FallbackFinalizationRegistry = "FinalizationRegistry" in globalThis
+    ? globalThis.FinalizationRegistry
+    : class PolyfillFinalizationRegistry {
+        constructor(callback) { }
+        register(target, heldValue, unregisterToken) { }
+        unregister(unregisterToken) {
+            return true;
+        }
+    };
 
-export { FallbackWeakRef };
+export { FallbackFinalizationRegistry, FallbackWeakRef };
 //# sourceMappingURL=polyfill.js.map

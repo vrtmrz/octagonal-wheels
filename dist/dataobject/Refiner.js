@@ -1,5 +1,5 @@
 import { isObjectDifferent } from '../object.js';
-import { promiseWithResolver, fireAndForget } from '../promises.js';
+import { promiseWithResolvers, fireAndForget } from '../promises.js';
 
 // * A special symbol used to indicate that the evaluation should be re-read.
 const SHOULD_READ_NEW = Symbol("SHOULD_READ_NEW");
@@ -19,7 +19,7 @@ class Refiner {
      */
     _refinePromise() {
         const previous = this._evaluationPromise;
-        const newPromise = promiseWithResolver();
+        const newPromise = promiseWithResolvers();
         this._evaluationPromise = newPromise;
         fireAndForget(async () => {
             await Promise.race([previous.promise, Promise.resolve(NOT_USED)]).then((r) => {

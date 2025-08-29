@@ -16,7 +16,7 @@ const ECDH_CURVE_NAMES: {
 
 Defined in: [src/encryption/asymmetric/common.ts:6](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/encryption/asymmetric/common.ts#L6)
 
-## Type declaration
+## Type Declaration
 
 ### 0
 

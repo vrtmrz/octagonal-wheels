@@ -19,4 +19,4 @@ export declare function isPathProbablyObfuscated(path: string): boolean;
  * @param autoCalculateIterations - A flag indicating whether to automatically calculate the number of iterations based on the passphrase length.
  * @returns A promise that resolves to an array containing the generated key, salt, and IV.
  */
-export declare function getKeyForObfuscatePath(passphrase: string, dataBuf: Uint8Array, autoCalculateIterations: boolean): Promise<[CryptoKey, Uint8Array, Uint8Array]>;
+export declare function getKeyForObfuscatePath(passphrase: string, dataBuf: Uint8Array, autoCalculateIterations: boolean): Promise<[CryptoKey, Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>]>;

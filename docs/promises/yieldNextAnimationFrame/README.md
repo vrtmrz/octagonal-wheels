@@ -10,7 +10,7 @@
 function yieldNextAnimationFrame(): Promise<number>;
 ```
 
-Defined in: [src/promises.ts:128](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L128)
+Defined in: [src/promises.ts:140](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L140)
 
 ## Returns
 

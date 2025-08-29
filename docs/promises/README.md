@@ -13,7 +13,8 @@
 
 ## Variables
 
-- [promiseWithResolver](promiseWithResolver/README.md)
+- [~~promiseWithResolver~~](promiseWithResolver/README.md)
+- [promiseWithResolvers](promiseWithResolvers-1/README.md)
 - [TIMED\_OUT\_SIGNAL](TIMED_OUT_SIGNAL-1/README.md)
 
 ## Functions

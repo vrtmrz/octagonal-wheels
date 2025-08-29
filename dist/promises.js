@@ -55,12 +55,18 @@ function nativePromiseWithResolvers() {
     const { promise, resolve, reject } = p;
     return { promise, resolve, reject };
 }
+const polyfilledFunc = "withResolvers" in Promise ? nativePromiseWithResolvers : polyfillPromiseWithResolvers;
 /**
  * Creates a promise with custom resolvers.
  * @param {Function} polyfillPromiseWithResolvers - The function that polyfills the promise with resolvers.
  * @returns {Promise} - The promise with custom resolvers.
  */
-const promiseWithResolver = "withResolvers" in Promise ? nativePromiseWithResolvers : polyfillPromiseWithResolvers;
+const promiseWithResolvers = polyfilledFunc;
+/**
+ * Creates a promise with custom resolvers. This is kept for compatibility with older code.
+ * @deprecated Use `promiseWithResolvers` instead. (Wrong name)
+ */
+const promiseWithResolver = polyfilledFunc;
 /**
  * A no-operation function.
  */
@@ -143,7 +149,7 @@ const TIMED_OUT_SIGNAL = Symbol("timed out");
  */
 function cancelableDelay(timeout, cancel = TIMED_OUT_SIGNAL) {
     let timer = undefined;
-    const promise = promiseWithResolver();
+    const promise = promiseWithResolvers();
     timer = setTimeout(() => {
         timer = undefined;
         promise.resolve(cancel);
@@ -174,7 +180,7 @@ function cancelableDelay(timeout, cancel = TIMED_OUT_SIGNAL) {
  */
 function extendableDelay(timeout, cancel) {
     let timer = undefined;
-    const promise = promiseWithResolver();
+    const promise = promiseWithResolvers();
     let resolved = false;
     const setTimer = (newTimeout) => {
         if (resolved)
@@ -212,5 +218,5 @@ function extendableDelay(timeout, cancel) {
     };
 }
 
-export { TIMED_OUT_SIGNAL, cancelableDelay, delay, extendableDelay, fireAndForget, isResolved, isSomeResolved, nativePromiseWithResolvers, noop, polyfillPromiseWithResolvers, promiseWithResolver, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback };
+export { TIMED_OUT_SIGNAL, cancelableDelay, delay, extendableDelay, fireAndForget, isResolved, isSomeResolved, nativePromiseWithResolvers, noop, polyfillPromiseWithResolvers, promiseWithResolver, promiseWithResolvers, yieldAnimationFrame, yieldMicrotask, yieldNextAnimationFrame, yieldNextMicrotask, yieldRequestIdleCallback };
 //# sourceMappingURL=promises.js.map

@@ -1,4 +1,4 @@
-import { promiseWithResolver, fireAndForget, yieldNextMicrotask } from '../promises.js';
+import { promiseWithResolvers, fireAndForget, yieldNextMicrotask } from '../promises.js';
 
 /* eslint-disable */
 // Obsolete file, use lock_v2.ts instead
@@ -40,7 +40,7 @@ async function performTask(queue) {
     return;
 }
 function _enqueue(key, task, { swapIfExist, shareResult } = {}) {
-    const t = promiseWithResolver();
+    const t = promiseWithResolvers();
     const resolver = t.resolve;
     const rejector = t.reject;
     const newQueue = {
@@ -92,7 +92,7 @@ function shareRunningResult(key, proc) {
         return _enqueue(key, proc);
     let oldResolver = current.resolver;
     let oldRejector = current.rejector;
-    const resultP = promiseWithResolver();
+    const resultP = promiseWithResolvers();
     // Inject hooked handler
     current.resolver = (result) => {
         oldResolver?.(result);

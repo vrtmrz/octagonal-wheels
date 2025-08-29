@@ -8,13 +8,13 @@
 
 ```ts
 function nativePromiseWithResolvers<T>(): {
-  promise: Promise<T>;
-  reject: (reason?: any) => void;
-  resolve: (value: T | PromiseLike<T>) => void;
+  promise: any;
+  reject: any;
+  resolve: any;
 };
 ```
 
-Defined in: [src/promises.ts:61](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L61)
+Defined in: [src/promises.ts:64](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L64)
 
 Creates a native promise with resolvers. This function is used when the `Promise.withResolvers` function is available.
 
@@ -28,9 +28,9 @@ Creates a native promise with resolvers. This function is used when the `Promise
 
 ```ts
 {
-  promise: Promise<T>;
-  reject: (reason?: any) => void;
-  resolve: (value: T | PromiseLike<T>) => void;
+  promise: any;
+  reject: any;
+  resolve: any;
 }
 ```
 
@@ -39,37 +39,17 @@ An object containing the promise, resolve function, and reject function.
 ### promise
 
 ```ts
-promise: Promise<T>;
+promise: any;
 ```
 
-### reject()
+### reject
 
 ```ts
-reject: (reason?: any) => void;
+reject: any;
 ```
 
-#### Parameters
-
-| Parameter | Type |
-| ------ | ------ |
-| `reason?` | `any` |
-
-#### Returns
-
-`void`
-
-### resolve()
+### resolve
 
 ```ts
-resolve: (value: T | PromiseLike<T>) => void;
+resolve: any;
 ```
-
-#### Parameters
-
-| Parameter | Type |
-| ------ | ------ |
-| `value` | `T` \| `PromiseLike`\<`T`\> |
-
-#### Returns
-
-`void`

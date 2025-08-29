@@ -10,7 +10,7 @@
 function fireAndForget(p: Promise<any> | () => Promise<any>): void;
 ```
 
-Defined in: [src/promises.ts:86](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L86)
+Defined in: [src/promises.ts:98](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L98)
 
 Executes a promise or a function that returns a promise and ignores any errors or results.
 

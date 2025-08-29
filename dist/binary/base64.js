@@ -1,5 +1,9 @@
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 
+// Future implementation
+// function isArrayBufferBased(buf: Uint8Array<ArrayBuffer | SharedArrayBuffer>): buf is Uint8Array<ArrayBuffer> {
+//     return buf.buffer instanceof ArrayBuffer;
+// }
 /**
  * Converts a base64 string or an array of base64 strings to an ArrayBuffer.
  * @param base64 - The base64 string or an array of base64 strings to convert.
@@ -62,7 +66,7 @@ function arrayBufferToBase64internalBrowser(buffer) {
     });
 }
 /**
- * Converts an ArrayBuffer or UInt8Array to a base64 string.
+ * Converts an ArrayBuffer or Uint8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
@@ -74,7 +78,7 @@ async function arrayBufferToBase64Single(buffer) {
     return await arrayBufferToBase64internalBrowser(buf);
 }
 /**
- * Converts an ArrayBuffer or UInt8Array to a base64 string.
+ * Converts an ArrayBuffer or Uint8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to an array of base64 strings.
@@ -111,9 +115,15 @@ const QUANTUM = 32768;
 const te = new TextEncoder();
 const td = new TextDecoder();
 function writeString(string) {
+    if (string.length > 128) {
+        const buf = te.encode(string);
+        // if (isArrayBufferBased(buf)) {
+        //     return buf;
+        // }
+        // return buf.slice();
+        return buf;
+    }
     // Prepare enough buffer.
-    if (string.length > 128)
-        return te.encode(string);
     const buffer = new Uint8Array(string.length * 4);
     const length = string.length;
     let index = 0;

@@ -1,5 +1,5 @@
 import { Logger, LOG_LEVEL_INFO, LOG_LEVEL_VERBOSE } from '../common/logger.js';
-import { promiseWithResolver } from '../promises.js';
+import { promiseWithResolvers } from '../promises.js';
 import { NamedInstance } from './NamedInstance.js';
 import { PostMessageBackbone } from './transporterAdapter.js';
 
@@ -59,7 +59,7 @@ function _createTransporter(emitter, name, forceTransportNo) {
     };
     const send = (...args) => {
         const callbackId = `${_name}.${transporterNo}.${++callbackCount}`;
-        const task = promiseWithResolver();
+        const task = promiseWithResolvers();
         messages.set(callbackId, task);
         const detail = {
             callback: callbackId,

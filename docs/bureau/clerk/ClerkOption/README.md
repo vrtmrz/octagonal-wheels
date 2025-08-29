@@ -14,7 +14,7 @@ type ClerkOption<T> = ClerkOptionBase<T> & {
 
 Defined in: [src/bureau/Clerk.ts:17](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L17)
 
-## Type declaration
+## Type Declaration
 
 ### job()
 

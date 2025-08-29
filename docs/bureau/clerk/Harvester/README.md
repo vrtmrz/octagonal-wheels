@@ -58,7 +58,10 @@ Defined in: [src/bureau/Clerk.ts:454](https://github.com/vrtmrz/octagonal-wheels
 | ------ | ------ | ------ | ------ | ------ |
 | <a id="_buffer"></a> `_buffer` | `T`[] | `[]` | - | [src/bureau/Clerk.ts:434](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L434) |
 | <a id="_disposed"></a> `_disposed` | `boolean` | `false` | [`ClerkBase`](../ClerkBase/README.md).[`_disposed`](../ClerkBase/README.md#_disposed) | [src/bureau/Clerk.ts:57](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L57) |
-| <a id="_disposepromise"></a> `_disposePromise` | [`PromiseWithResolvers`](../../../promises/PromiseWithResolvers/README.md)\<`void`\> | `undefined` | [`ClerkBase`](../ClerkBase/README.md).[`_disposePromise`](../ClerkBase/README.md#_disposepromise) | [src/bureau/Clerk.ts:58](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L58) |
+| <a id="_disposepromise"></a> `_disposePromise` | \{ `promise`: `any`; `reject`: `any`; `resolve`: `any`; \} | `undefined` | [`ClerkBase`](../ClerkBase/README.md).[`_disposePromise`](../ClerkBase/README.md#_disposepromise) | [src/bureau/Clerk.ts:58](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L58) |
+| `_disposePromise.promise` | `any` | `undefined` | - | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
+| `_disposePromise.reject` | `any` | `undefined` | - | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
+| `_disposePromise.resolve` | `any` | `undefined` | - | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
 | <a id="_inbox"></a> `_inbox` | [`Inbox`](../../inbox/Inbox/README.md)\<`T`\> | `undefined` | [`ClerkBase`](../ClerkBase/README.md).[`_inbox`](../ClerkBase/README.md#_inbox) | [src/bureau/Clerk.ts:47](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L47) |
 | <a id="_name"></a> `_name` | `string` | `undefined` | [`ClerkBase`](../ClerkBase/README.md).[`_name`](../ClerkBase/README.md#_name) | [src/bureau/Clerk.ts:48](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L48) |
 | <a id="_onprogress"></a> `_onProgress?` | (`state`: `ClerkStateDetail`) => `void` | `undefined` | [`ClerkBase`](../ClerkBase/README.md).[`_onProgress`](../ClerkBase/README.md#_onprogress) | [src/bureau/Clerk.ts:85](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L85) |
@@ -76,14 +79,14 @@ Defined in: [src/bureau/Clerk.ts:454](https://github.com/vrtmrz/octagonal-wheels
 #### Get Signature
 
 ```ts
-get onDisposed(): Promise<void>;
+get onDisposed(): any;
 ```
 
 Defined in: [src/bureau/Clerk.ts:152](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L152)
 
 ##### Returns
 
-`Promise`\<`void`\>
+`any`
 
 #### Inherited from
 

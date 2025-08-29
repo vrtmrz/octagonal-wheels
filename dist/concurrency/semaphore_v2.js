@@ -1,4 +1,4 @@
-import { fireAndForget, yieldMicrotask, promiseWithResolver, cancelableDelay, TIMED_OUT_SIGNAL } from '../promises.js';
+import { fireAndForget, yieldMicrotask, promiseWithResolvers, cancelableDelay, TIMED_OUT_SIGNAL } from '../promises.js';
 
 function Semaphore(limit) {
     let counter = 0;
@@ -30,7 +30,7 @@ function Semaphore(limit) {
                 counter += quantity;
                 return () => this.release();
             }
-            const n = promiseWithResolver();
+            const n = promiseWithResolvers();
             queue.push(n);
             await n.promise;
             return () => {

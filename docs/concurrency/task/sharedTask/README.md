@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../../modules.md) / [concurrency](../../README.md) / [task](../README.md) / sharedTask
 
-# Function: ~~sharedTask()~~
+# ~~Function: sharedTask()~~
 
 ```ts
 function sharedTask<T>(key: string, proc: () => Promise<T>): Promise<T>;

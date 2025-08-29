@@ -20,12 +20,12 @@
 export declare const SALT_PREFIX: Uint8Array<ArrayBuffer>;
 export declare const SALT_LENGTH = 8;
 export declare function passphraseToKeyMaterial(passphrase: string): Promise<CryptoKey>;
-export declare function generateIV(keyMaterial: CryptoKey, salt: Uint8Array, iterations?: number): Promise<ArrayBuffer>;
+export declare function generateIV(keyMaterial: CryptoKey, salt: Uint8Array<ArrayBuffer>, iterations?: number): Promise<ArrayBuffer>;
 type KeyIvPair = {
     key: CryptoKey;
     iv: ArrayBuffer;
 };
-export declare function generateOpenSSLCompatIvKey(passphrase: string, salt: Uint8Array, iterations?: number, usage?: "encrypt" | "decrypt"): Promise<KeyIvPair>;
+export declare function generateOpenSSLCompatIvKey(passphrase: string, salt: Uint8Array<ArrayBuffer>, iterations?: number, usage?: "encrypt" | "decrypt"): Promise<KeyIvPair>;
 /**
  * Encrypts plaintext using a password and a specified number of iterations.
  * @param plaintext The plaintext to encrypt.
@@ -33,7 +33,7 @@ export declare function generateOpenSSLCompatIvKey(passphrase: string, salt: Uin
  * @param iterations The number of iterations for key derivation.
  * @returns The encrypted ciphertext.
  */
-export declare function encryptCBC(plaintext: Uint8Array, passphrase: string, iterations?: number): Promise<Uint8Array>;
+export declare function encryptCBC(plaintext: Uint8Array<ArrayBuffer>, passphrase: string, iterations?: number): Promise<Uint8Array<ArrayBuffer>>;
 /**
  * Decrypts ciphertext using a password and a specified number of iterations.
  * @param encryptedData The encrypted data to decrypt.
@@ -41,5 +41,5 @@ export declare function encryptCBC(plaintext: Uint8Array, passphrase: string, it
  * @param iterations The number of iterations for key derivation.
  * @returns The decrypted plaintext.
  */
-export declare function decryptCBC(encryptedData: Uint8Array, passphrase: string, iterations?: number): Promise<Uint8Array>;
+export declare function decryptCBC(encryptedData: Uint8Array, passphrase: string, iterations?: number): Promise<Uint8Array<ArrayBuffer>>;
 export {};

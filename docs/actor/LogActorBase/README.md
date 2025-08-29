@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [actor](../README.md) / LogActorBase
 
-# Class: `abstract` LogActorBase
+# Abstract Class: LogActorBase
 
 Defined in: [src/actor.ts:198](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L198)
 

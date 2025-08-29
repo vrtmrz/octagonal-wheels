@@ -7,7 +7,7 @@
 # Function: concatUInt8Array()
 
 ```ts
-function concatUInt8Array(arrays: Uint8Array<ArrayBufferLike>[]): Uint8Array;
+function concatUInt8Array(arrays: Uint8Array<ArrayBufferLike>[]): Uint8Array<ArrayBuffer>;
 ```
 
 Defined in: [src/binary/index.ts:10](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/index.ts#L10)
@@ -22,6 +22,6 @@ Concatenates multiple Uint8Array arrays into a single Uint8Array.
 
 ## Returns
 
-`Uint8Array`
+`Uint8Array`\<`ArrayBuffer`\>
 
 A new Uint8Array containing the concatenated values.

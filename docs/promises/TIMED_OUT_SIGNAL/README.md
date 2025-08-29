@@ -10,4 +10,4 @@
 type TIMED_OUT_SIGNAL = typeof TIMED_OUT_SIGNAL;
 ```
 
-Defined in: [src/promises.ts:149](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L149)
+Defined in: [src/promises.ts:161](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L161)

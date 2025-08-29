@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [binary](../README.md) / encodeBinaryEach
 
-# Function: ~~encodeBinaryEach()~~
+# ~~Function: encodeBinaryEach()~~
 
 ```ts
 function encodeBinaryEach(buffer: Uint8Array): Promise<string>;

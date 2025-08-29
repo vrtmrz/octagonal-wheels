@@ -18,4 +18,4 @@ export declare function isPathProbablyObfuscatedV2(path: string): boolean;
  * @param hkdfSalt The salt for HKDF
  * @returns The obfuscated path (returned as a Promise)
  */
-export declare function obfuscatePathV2<T extends string>(path: T, passphrase: string, hkdfSalt: Uint8Array): Promise<string>;
+export declare function obfuscatePathV2<T extends string>(path: T, passphrase: string, hkdfSalt: Uint8Array<ArrayBuffer>): Promise<string>;

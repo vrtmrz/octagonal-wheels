@@ -10,7 +10,7 @@
 function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<T>;
 ```
 
-Defined in: [src/promises.ts:46](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L46)
+Defined in: [src/promises.ts:49](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L49)
 
 Creates a promise and returns it along with the resolve and reject functions.
 

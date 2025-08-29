@@ -1,4 +1,4 @@
-import { promiseWithResolver } from '../promises.js';
+import { promiseWithResolvers } from '../promises.js';
 import { NamedInstance } from './NamedInstance.js';
 
 /*
@@ -71,7 +71,7 @@ function createRegulator(_name) {
         void pump();
     };
     const schedule = (arg) => {
-        const pw = promiseWithResolver();
+        const pw = promiseWithResolvers();
         scheduled.push([arg, pw]);
         startPumping();
         return pw.promise;

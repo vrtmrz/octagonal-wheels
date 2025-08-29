@@ -14,7 +14,7 @@ const Manifold: {
 
 Defined in: [src/conduit/manifold.ts:171](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/manifold.ts#L171)
 
-## Type declaration
+## Type Declaration
 
 ### of()
 

@@ -4,7 +4,7 @@
 
 [octagonal-wheels](../../modules.md) / [encryption](../README.md) / generateKey
 
-# Function: ~~generateKey()~~
+# ~~Function: generateKey()~~
 
 ```ts
 function generateKey(passphrase: string): Promise<CryptoKey>;

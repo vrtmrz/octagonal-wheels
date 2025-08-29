@@ -52,5 +52,5 @@ type TypedArrays = Uint8Array | Int8Array | Uint16Array | Int16Array | Uint32Arr
  * ```
  */
 export declare function createTypedArrayReader<T extends TypedArrays>(buffer: T): TypedArrayReader<T>;
-export declare function concatUInt8Array(arrays: Uint8Array[]): Uint8Array;
+export declare function concatUInt8Array(arrays: Uint8Array[]): Uint8Array<ArrayBuffer>;
 export {};

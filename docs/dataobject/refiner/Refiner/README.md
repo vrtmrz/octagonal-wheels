@@ -118,7 +118,11 @@ Defined in: [src/dataobject/Refiner.ts:181](https://github.com/vrtmrz/octagonal-
 ### \_refinePromise()
 
 ```ts
-_refinePromise(): PromiseWithResolvers<U>;
+_refinePromise(): {
+  promise: any;
+  reject: any;
+  resolve: any;
+};
 ```
 
 Defined in: [src/dataobject/Refiner.ts:91](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L91)
@@ -128,7 +132,31 @@ It is called when the evaluation is re-read.
 
 #### Returns
 
-[`PromiseWithResolvers`](../../../promises/PromiseWithResolvers/README.md)\<`U`\>
+```ts
+{
+  promise: any;
+  reject: any;
+  resolve: any;
+}
+```
+
+##### promise
+
+```ts
+promise: any;
+```
+
+##### reject
+
+```ts
+reject: any;
+```
+
+##### resolve
+
+```ts
+resolve: any;
+```
 
 ***
 
