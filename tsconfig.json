@@ -3,19 +3,19 @@
         "target": "ES2020",
         "useDefineForClassFields": true,
         "module": "ESNext",
-        "lib": ["ES2020", "DOM", "DOM.Iterable", "ESNext.Promise","ES2021.WeakRef"],
+        "lib": ["ES2020", "DOM", "DOM.Iterable", "ESNext.Promise", "ES2021.WeakRef"],
         "skipLibCheck": true,
         /* Bundler mode */
         "moduleResolution": "bundler",
-        // "allowImportingTsExtensions": true,
+        "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
         /* Linting */
         "strict": true,
         // "noUnusedLocals": true,
         // "noUnusedParameters": true,
-        "allowImportingTsExtensions": true,
         "noFallthroughCasesInSwitch": true,
         "plugins": [
             {
