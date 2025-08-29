@@ -20,4 +20,18 @@ const FallbackWeakRef =
               }
           } as unknown as typeof WeakRef);
 type FallbackWeakRef<T extends WeakKey> = WeakRef<T>;
-export { FallbackWeakRef };
+
+const FallbackFinalizationRegistry =
+    "FinalizationRegistry" in globalThis
+        ? globalThis.FinalizationRegistry
+        : (class PolyfillFinalizationRegistry<T> {
+              constructor(callback: (key: T) => void) {}
+              register(target: WeakKey, heldValue: T, unregisterToken?: WeakKey) {}
+              unregister(unregisterToken: WeakKey) {
+                  return true;
+              }
+          } as unknown as typeof FinalizationRegistry);
+
+type FallbackFinalizationRegistry<T> = typeof FinalizationRegistry<T>;
+
+export { FallbackWeakRef, FallbackFinalizationRegistry };
