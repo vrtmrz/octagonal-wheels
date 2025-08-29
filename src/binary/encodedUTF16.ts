@@ -55,7 +55,7 @@ export async function _encodeBinary(buffer: Uint8Array): Promise<string[]> {
     return Promise.all(out);
 }
 
-async function decodeAsync(buffer: Uint16Array): Promise<string> {
+async function decodeAsync(buffer: Uint16Array<ArrayBuffer>): Promise<string> {
     if (buffer.length == 0) return "";
     if (!decoderStreamAvailable) return await decodeAsyncReader(buffer);
     const decoderStream = new TextDecoderStream("utf-16");
@@ -73,7 +73,7 @@ async function decodeAsync(buffer: Uint16Array): Promise<string> {
     return result.value;
 }
 
-function decodeAsyncReader(buffer: Uint16Array): Promise<string> {
+function decodeAsyncReader(buffer: Uint16Array<ArrayBuffer>): Promise<string> {
     return new Promise<string>((res, rej) => {
         const blob = new Blob([buffer], { type: "application/octet-binary" });
         const reader = new FileReader();

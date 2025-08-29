@@ -44,7 +44,7 @@ export async function getKeyForObfuscatePath(
     passphrase: string,
     dataBuf: Uint8Array,
     autoCalculateIterations: boolean
-): Promise<[CryptoKey, Uint8Array, Uint8Array]> {
+): Promise<[CryptoKey, Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>]> {
     const passphraseLen = 15 - passphrase.length;
     const iteration = autoCalculateIterations
         ? (passphraseLen > 0 ? passphraseLen : 0) * 1000 + 121 - passphraseLen

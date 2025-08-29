@@ -59,7 +59,7 @@ export function createPBKDF2Salt() {
  */
 const deriveMasterKey = memoWithMap(
     10,
-    async (passphrase: string, pbkdf2Salt: Uint8Array) => {
+    async (passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>) => {
         const binaryPassphrase = writeString(passphrase);
         const keyMaterial = await webcrypto.subtle.importKey(
             "raw",
@@ -105,7 +105,7 @@ const deriveMasterKey = memoWithMap(
  * @param hkdfSalt The salt for HKDF.
  * @returns A CryptoKey for AES-GCM.
  */
-async function deriveKey(passphrase: string, pbkdf2Salt: Uint8Array, hkdfSalt: Uint8Array) {
+async function deriveKey(passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>, hkdfSalt: Uint8Array<ArrayBuffer>) {
     const masterKey = await deriveMasterKey(passphrase, pbkdf2Salt);
     const chunkKey = await webcrypto.subtle.deriveKey(
         {
@@ -130,7 +130,7 @@ async function deriveKey(passphrase: string, pbkdf2Salt: Uint8Array, hkdfSalt: U
  * @param data The data to be encrypted.
  * @returns The encrypted data as an ArrayBuffer.
  */
-async function encryptData(key: CryptoKey, iv: Uint8Array, data: Uint8Array) {
+async function encryptData(key: CryptoKey, iv: Uint8Array<ArrayBuffer>, data: Uint8Array<ArrayBuffer>) {
     return await webcrypto.subtle.encrypt(
         {
             name: "AES-GCM",
@@ -149,7 +149,7 @@ async function encryptData(key: CryptoKey, iv: Uint8Array, data: Uint8Array) {
  * @param pbkdf2Salt The salt for PBKDF2.
  * @returns An array containing [IV, HKDF salt, encrypted data].
  */
-async function _encrypt(input: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array) {
+async function _encrypt(input: Uint8Array<ArrayBuffer>, passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>) {
     const hkdfSalt = webcrypto.getRandomValues(new Uint8Array(HKDF_SALT_LENGTH));
     const key = await deriveKey(passphrase, pbkdf2Salt, hkdfSalt);
     const iv = webcrypto.getRandomValues(new Uint8Array(IV_LENGTH));
@@ -167,7 +167,11 @@ async function _encrypt(input: Uint8Array, passphrase: string, pbkdf2Salt: Uint8
  * @param pbkdf2Salt The salt for PBKDF2.
  * @returns The encrypted binary data.
  */
-export async function encryptBinary(input: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array) {
+export async function encryptBinary(
+    input: Uint8Array<ArrayBuffer>,
+    passphrase: string,
+    pbkdf2Salt: Uint8Array<ArrayBuffer>
+) {
     const [iv, hkdfSalt, encryptedData] = await _encrypt(input, passphrase, pbkdf2Salt);
     const totalLength = iv.length + hkdfSalt.length + encryptedData.length;
     const result = new Uint8Array(totalLength);
@@ -185,7 +189,7 @@ export async function encryptBinary(input: Uint8Array, passphrase: string, pbkdf
  * @param pbkdf2Salt The salt for PBKDF2.
  * @returns The encrypted string (Base64, beginning with '%=').
  */
-export async function encrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array) {
+export async function encrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>) {
     const inputBuffer = writeString(input);
     const encrypted = await encryptBinary(inputBuffer, passphrase, pbkdf2Salt);
     const inBase64 = await arrayBufferToBase64Single(encrypted);
@@ -202,10 +206,10 @@ export async function encrypt(input: string, passphrase: string, pbkdf2Salt: Uin
  * @returns The decrypted data as a Uint8Array.
  */
 async function _decrypt(
-    iv: Uint8Array,
-    pbkdf2Salt: Uint8Array,
-    hkdfSalt: Uint8Array,
-    encryptedData: Uint8Array,
+    iv: Uint8Array<ArrayBuffer>,
+    pbkdf2Salt: Uint8Array<ArrayBuffer>,
+    hkdfSalt: Uint8Array<ArrayBuffer>,
+    encryptedData: Uint8Array<ArrayBuffer>,
     passphrase: string
 ) {
     const key = await deriveKey(passphrase, pbkdf2Salt, hkdfSalt);
@@ -229,7 +233,11 @@ async function _decrypt(
  * @returns The decrypted string.
  * @throws An exception is thrown if the input data is invalid or decryption fails.
  */
-export async function decryptBinary(binary: Uint8Array, passphrase: string, pbkdf2Salt: Uint8Array) {
+export async function decryptBinary(
+    binary: Uint8Array<ArrayBuffer>,
+    passphrase: string,
+    pbkdf2Salt: Uint8Array<ArrayBuffer>
+) {
     if (binary.length < IV_LENGTH + HKDF_SALT_LENGTH) {
         throw new Error("Invalid binary data length. Expected at least ivLength + saltLength bytes.");
     }
@@ -248,7 +256,7 @@ export async function decryptBinary(binary: Uint8Array, passphrase: string, pbkd
  * @returns The decrypted string.
  * @throws An exception is thrown if the input format is invalid or decryption fails.
  */
-export async function decrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array) {
+export async function decrypt(input: string, passphrase: string, pbkdf2Salt: Uint8Array<ArrayBuffer>) {
     if (!input.startsWith(HKDF_ENCRYPTED_PREFIX)) {
         throw new Error(`Invalid input format. Expected input to start with '${HKDF_ENCRYPTED_PREFIX}'.`);
     }
@@ -286,9 +294,9 @@ export async function testEncryptionFeature() {
 /**
  * Global variable to store the session salt. This is used to ensure that the same salt is used for the entire session.
  */
-let _sessionPBKDFSalt: Uint8Array | undefined;
+let _sessionPBKDFSalt: Uint8Array<ArrayBuffer> | undefined;
 
-function getSessionPBKDFSalt(refresh = false): Uint8Array {
+function getSessionPBKDFSalt(refresh = false): Uint8Array<ArrayBuffer> {
     if (_sessionPBKDFSalt === undefined || refresh) {
         _sessionPBKDFSalt = createPBKDF2Salt();
     }
@@ -310,10 +318,10 @@ function getSessionPBKDFSalt(refresh = false): Uint8Array {
  *          followed by the ephemeral salt.
  */
 export async function encryptWithEphemeralSaltBinary(
-    input: Uint8Array,
+    input: Uint8Array<ArrayBuffer>,
     passphrase: string,
     refresh = false
-): Promise<Uint8Array> {
+): Promise<Uint8Array<ArrayBuffer>> {
     const pbkdf2Salt = getSessionPBKDFSalt(refresh);
     const result = await _encrypt(input, passphrase, pbkdf2Salt);
     const resultX = [pbkdf2Salt, ...result];
@@ -355,7 +363,10 @@ export async function encryptWithEphemeralSalt(input: string, passphrase: string
  * @returns A promise that resolves to the decrypted binary data.
  * @throws If the input data length is invalid.
  */
-export async function decryptWithEphemeralSaltBinary(input: Uint8Array, passphrase: string): Promise<Uint8Array> {
+export async function decryptWithEphemeralSaltBinary(
+    input: Uint8Array<ArrayBuffer>,
+    passphrase: string
+): Promise<Uint8Array<ArrayBuffer>> {
     if (input.length < IV_LENGTH + HKDF_SALT_LENGTH + PBKDF2_SALT_LENGTH) {
         throw new Error("Invalid binary data length.");
     }

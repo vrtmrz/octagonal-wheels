@@ -59,9 +59,9 @@ import type { ECDH_CURVES } from "./common.ts";
  * @returns The encrypted data as an ArrayBuffer (includes authentication tag)
  */
 export async function encryptUInt8ArrayWithSessionKey(
-    data: ArrayBuffer | Uint8Array,
+    data: ArrayBuffer | Uint8Array<ArrayBuffer>,
     aesKey: CryptoKey,
-    iv: Uint8Array
+    iv: Uint8Array<ArrayBuffer>
 ): Promise<ArrayBuffer> {
     const encryptedDataBuffer = await webCrypto.subtle.encrypt(
         {
@@ -95,7 +95,10 @@ export async function wrapAesKeyWithPublicKey(aesKey: CryptoKey, publicKey: Cryp
  * @param publicKey The RSA public key to use for encryption
  * @returns The encrypted data as a Uint8Array
  */
-export async function encryptUInt8Array(data: Uint8Array, publicKey: CryptoKey): Promise<Uint8Array> {
+export async function encryptUInt8Array(
+    data: Uint8Array<ArrayBuffer>,
+    publicKey: CryptoKey
+): Promise<Uint8Array<ArrayBuffer>> {
     const { key: aesKey, iv } = await generateAESSessionKey(); // Generate AES session key
 
     // 1. Encrypt data using AES-GCM
@@ -119,7 +122,10 @@ export async function encryptUInt8Array(data: Uint8Array, publicKey: CryptoKey):
  * @param privateKey The RSA private key to use for unwrapping
  * @returns The unwrapped AES key as a CryptoKey
  */
-async function unwrapAesKeyWithPrivateKey(wrappedAesKeyBuffer: Uint8Array, privateKey: CryptoKey): Promise<CryptoKey> {
+async function unwrapAesKeyWithPrivateKey(
+    wrappedAesKeyBuffer: Uint8Array<ArrayBuffer>,
+    privateKey: CryptoKey
+): Promise<CryptoKey> {
     return await webCrypto.subtle.unwrapKey(
         "raw",
         wrappedAesKeyBuffer,
@@ -145,9 +151,9 @@ async function unwrapAesKeyWithPrivateKey(wrappedAesKeyBuffer: Uint8Array, priva
  * @returns The decrypted data as an ArrayBuffer
  */
 async function decryptUInt8ArrayWithSessionKey(
-    encryptedDataBuffer: Uint8Array,
+    encryptedDataBuffer: Uint8Array<ArrayBuffer>,
     aesKey: CryptoKey,
-    iv: Uint8Array
+    iv: Uint8Array<ArrayBuffer>
 ): Promise<ArrayBuffer> {
     return await webCrypto.subtle.decrypt(
         {
@@ -165,7 +171,10 @@ async function decryptUInt8ArrayWithSessionKey(
  * @param privateKey The RSA private key to use for decryption
  * @returns The decrypted data (Uint8Array)
  */
-export async function decryptUInt8Array(encryptedInfo: Uint8Array, privateKey: CryptoKey): Promise<Uint8Array> {
+export async function decryptUInt8Array(
+    encryptedInfo: Uint8Array,
+    privateKey: CryptoKey
+): Promise<Uint8Array<ArrayBuffer>> {
     // The minimum data length is validated.
     if (encryptedInfo.length < HEAD_RSA.length + IV_LENGTH + LENGTH_FIELD_SIZE * 2) {
         throw new AsymmetricDecryptionError("The encrypted data is too short.");
@@ -208,10 +217,10 @@ export async function decryptUInt8Array(encryptedInfo: Uint8Array, privateKey: C
  * @throws Error if the recipient public key is not ECDH
  */
 export async function encryptUInt8ArrayWithPublicKey(
-    data: Uint8Array,
+    data: Uint8Array<ArrayBuffer>,
     recipientPublicKey: CryptoKey,
     expectedCurve: ECDH_CURVES = DEFAULT_ECDH_CURVE
-): Promise<Uint8Array> {
+): Promise<Uint8Array<ArrayBuffer>> {
     if (recipientPublicKey.algorithm.name !== "ECDH") {
         throw new AsymmetricEncryptionError("The recipient public key must be an ECDH key.");
     }

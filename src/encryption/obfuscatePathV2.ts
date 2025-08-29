@@ -31,7 +31,7 @@ const webcrypto = globalThis.crypto;
  * @returns The derived key (returned as a Promise)
  * @internal
  */
-async function _deriveKeyFromPassphrase(passphrase: string, hkdfSalt: Uint8Array<ArrayBufferLike>) {
+async function _deriveKeyFromPassphrase(passphrase: string, hkdfSalt: Uint8Array<ArrayBuffer>) {
     const passphraseBin = writeString(passphrase);
     const keyMaterial = await webcrypto.subtle.importKey("raw", passphraseBin, { name: "HKDF" }, false, ["deriveKey"]);
     const derivedKey = await webcrypto.subtle.deriveKey(
@@ -74,7 +74,7 @@ const deriveKeyFromPassphrase = memoWithMap(10, _deriveKeyFromPassphrase, ([pass
 export async function obfuscatePathV2<T extends string>(
     path: T,
     passphrase: string,
-    hkdfSalt: Uint8Array
+    hkdfSalt: Uint8Array<ArrayBuffer>
 ): Promise<string> {
     if (isPathProbablyObfuscatedV2(path)) {
         // If the path appears to be already obfuscated, it is returned as is

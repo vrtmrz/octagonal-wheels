@@ -27,7 +27,7 @@
  * - All random values are generated using cryptographically secure RNG
  */
 
-import { arrayBufferToBase64Single, base64ToArrayBuffer, readString } from "../../binary/base64.ts";
+import { arrayBufferToBase64Single, base64ToArrayBuffer, readString, writeString } from "../../binary/base64.ts";
 import { AsymmetricKeyIOError, AsymmetricKeyGenerationError, AsymmetricEncryptionArgumentError } from "./common.ts";
 import { webCrypto, type CryptographicKeyConfig, type ReadableArray, type SessionKey } from "./common.ts";
 import {
@@ -164,7 +164,7 @@ export async function exportECDHPublicKey(publicKey: CryptoKey): Promise<Uint8Ar
  * @throws Error if import fails.
  */
 export async function importECDHPublicKey(
-    ephemeralPublicKey: Uint8Array,
+    ephemeralPublicKey: Uint8Array<ArrayBuffer>,
     curve: ECDH_CURVES = DEFAULT_ECDH_CURVE
 ): Promise<CryptoKey> {
     try {
@@ -218,7 +218,7 @@ export async function exportPublicKey(publicKey: CryptoKey): Promise<string> {
     try {
         const exported = await webCrypto.subtle.exportKey("jwk", publicKey);
         const exportedString = JSON.stringify(exported);
-        const arrayBuffer = new TextEncoder().encode(exportedString);
+        const arrayBuffer = writeString(exportedString);
         return arrayBufferToBase64Single(arrayBuffer); // Convert the string to a Base64-encoded string
     } catch (error) {
         throw new AsymmetricKeyIOError(`Failed to export public key:`, error);
@@ -235,7 +235,7 @@ export async function exportPrivateKey(privateKey: CryptoKey): Promise<string> {
     try {
         const exported = await webCrypto.subtle.exportKey("jwk", privateKey);
         const exportedString = JSON.stringify(exported);
-        const arrayBuffer = new TextEncoder().encode(exportedString);
+        const arrayBuffer = writeString(exportedString);
         return arrayBufferToBase64Single(arrayBuffer); // Convert the string to a Base64-encoded string
     } catch (error) {
         throw new AsymmetricKeyIOError(`Failed to export private key:`, error);
@@ -323,7 +323,7 @@ export function bigEndianBytesToLength(bytes: Uint8Array): number {
 export function uint8ArrayReader(array: Uint8Array): ReadableArray {
     let cursor = 0;
     return {
-        read: (length: number): Uint8Array => {
+        read: (length: number): Uint8Array<ArrayBuffer> => {
             if (length < 0) {
                 throw new Error("Read length must be non-negative");
             }

@@ -7,7 +7,7 @@ import { _decodeToArrayBuffer, decodeToArrayBuffer } from "./encodedUTF16.ts";
  * @param arrays - An array of Uint8Array arrays to be concatenated.
  * @returns A new Uint8Array containing the concatenated values.
  */
-export function concatUInt8Array(arrays: Uint8Array[]): Uint8Array {
+export function concatUInt8Array(arrays: Uint8Array[]): Uint8Array<ArrayBuffer> {
     const length = arrays.reduce((acc, cur) => acc + cur.length, 0);
     const result = new Uint8Array(length);
     let pos = 0;
@@ -49,7 +49,7 @@ export function decodeBinary(src: string | string[]) {
  * @param src - The binary data to be encoded. It can be either a Uint8Array or an ArrayBuffer.
  * @returns A promise that resolves to a string array representing the encoded binary data.
  */
-export async function encodeBinary(src: Uint8Array | ArrayBuffer): Promise<string[]> {
+export async function encodeBinary(src: Uint8Array<ArrayBuffer> | ArrayBuffer): Promise<string[]> {
     return await arrayBufferToBase64(src);
 }
 

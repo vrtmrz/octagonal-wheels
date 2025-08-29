@@ -4,13 +4,14 @@ import { hexStringToUint8Array, uint8ArrayToHexString } from "../binary/hex.ts";
 import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
 import { decryptV3, encryptV3 } from "./encryptionv3.ts";
 import { testEncryptionFeature } from "./hkdf.ts";
+
 export const ENCRYPT_V1_PREFIX_PROBABLY = "[";
 export const ENCRYPT_V2_PREFIX = "%";
 export const ENCRYPT_V3_PREFIX = "%~";
 export type encodedData = [encryptedData: string, iv: string, salt: string];
 export type KeyBuffer = {
     key: CryptoKey;
-    salt: Uint8Array;
+    salt: Uint8Array<ArrayBuffer>;
     count: number;
 };
 
@@ -84,9 +85,9 @@ let decKeyMin = 0;
  */
 async function getKeyForDecryption(
     passphrase: string,
-    salt: Uint8Array,
+    salt: Uint8Array<ArrayBuffer>,
     autoCalculateIterations: boolean
-): Promise<[CryptoKey, Uint8Array]> {
+): Promise<[CryptoKey, Uint8Array<ArrayBuffer>]> {
     keyGCCount--;
     if (keyGCCount < 0) {
         keyGCCount = KEY_RECYCLE_COUNT;
@@ -180,7 +181,7 @@ export async function encryptV1(input: string, passphrase: string, autoCalculate
     const invocationPart = getNonce();
     const iv = new Uint8Array([...fixedPart, ...new Uint8Array(invocationPart.buffer)]);
     const plainStringified = JSON.stringify(input);
-    const plainStringBuffer: Uint8Array = writeString(plainStringified);
+    const plainStringBuffer = writeString(plainStringified);
     const encryptedDataArrayBuffer = await webcrypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plainStringBuffer);
     const encryptedData2 = await arrayBufferToBase64Single(encryptedDataArrayBuffer);
     const ret = `["${encryptedData2}","${uint8ArrayToHexString(iv)}","${uint8ArrayToHexString(salt)}"]`;
@@ -349,7 +350,7 @@ export async function testCrypt() {
         return false;
     } else {
         Logger("CRYPT LOGIC OK", LOG_LEVEL_VERBOSE);
-        const w = new TextEncoder().encode(src);
+        const w = writeString(src);
         const encodedBinary = await encryptBinary(w, "passwordTest", false);
         const decryptedBinary = await decryptBinary(encodedBinary, "passwordTest", false);
 
@@ -371,7 +372,11 @@ export async function testCrypt() {
  * @param autoCalculateIterations - A boolean indicating whether to automatically calculate the number of iterations for key derivation.
  * @returns The encrypted binary data.
  */
-export async function encryptBinary(input: Uint8Array, passphrase: string, autoCalculateIterations: boolean) {
+export async function encryptBinary(
+    input: Uint8Array<ArrayBuffer>,
+    passphrase: string,
+    autoCalculateIterations: boolean
+) {
     const [key, salt] = await getKeyForEncrypt(passphrase, autoCalculateIterations);
     // Create initial vector with semi-fixed part and incremental part
     // I think it's not good against related-key attacks.

@@ -38,7 +38,7 @@ export async function passphraseToKeyMaterial(passphrase: string): Promise<Crypt
 
 export async function generateIV(
     keyMaterial: CryptoKey,
-    salt: Uint8Array,
+    salt: Uint8Array<ArrayBuffer>,
     iterations: number = 100_000
 ): Promise<ArrayBuffer> {
     // 32 bytes for key + 16 bytes for IV = 384 bits for CBC
@@ -62,7 +62,7 @@ type KeyIvPair = {
 };
 export async function generateOpenSSLCompatIvKey(
     passphrase: string,
-    salt: Uint8Array,
+    salt: Uint8Array<ArrayBuffer>,
     iterations: number = 100_000,
     usage: "encrypt" | "decrypt" = "decrypt"
 ): Promise<KeyIvPair> {
@@ -84,10 +84,10 @@ export async function generateOpenSSLCompatIvKey(
  * @returns The encrypted ciphertext.
  */
 export async function encryptCBC(
-    plaintext: Uint8Array,
+    plaintext: Uint8Array<ArrayBuffer>,
     passphrase: string,
     iterations: number = 100_000
-): Promise<Uint8Array> {
+): Promise<Uint8Array<ArrayBuffer>> {
     // Generate a random salt
     const salt = crypto.getRandomValues(new Uint8Array(SALT_LENGTH));
 
@@ -116,7 +116,7 @@ export async function decryptCBC(
     encryptedData: Uint8Array,
     passphrase: string,
     iterations: number = 100_000
-): Promise<Uint8Array> {
+): Promise<Uint8Array<ArrayBuffer>> {
     // Validate input length
     if (encryptedData.length < SALT_PREFIX.length + SALT_LENGTH) {
         throw new Error("Encrypted data is too short");

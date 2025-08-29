@@ -1,4 +1,9 @@
 import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
+
+// Future implementation
+// function isArrayBufferBased(buf: Uint8Array<ArrayBuffer | SharedArrayBuffer>): buf is Uint8Array<ArrayBuffer> {
+//     return buf.buffer instanceof ArrayBuffer;
+// }
 /**
  * Converts a base64 string or an array of base64 strings to an ArrayBuffer.
  * @param base64 - The base64 string or an array of base64 strings to convert.
@@ -48,7 +53,7 @@ const encodeChunkSize = 3 * 50000000;
  * @param buffer The input buffer to be converted.
  * @returns A Promise that resolves to the base64-encoded string.
  */
-function arrayBufferToBase64internalBrowser(buffer: DataView | Uint8Array): Promise<string> {
+function arrayBufferToBase64internalBrowser(buffer: DataView<ArrayBuffer> | Uint8Array<ArrayBuffer>): Promise<string> {
     return new Promise((res, rej) => {
         const blob = new Blob([buffer], { type: "application/octet-binary" });
         const reader = new FileReader();
@@ -64,23 +69,23 @@ function arrayBufferToBase64internalBrowser(buffer: DataView | Uint8Array): Prom
 }
 
 /**
- * Converts an ArrayBuffer or UInt8Array to a base64 string.
+ * Converts an ArrayBuffer or Uint8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
  */
-export async function arrayBufferToBase64Single(buffer: ArrayBuffer | Uint8Array): Promise<string> {
+export async function arrayBufferToBase64Single(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string> {
     const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     if (buf.byteLength < QUANTUM) return btoa(String.fromCharCode.apply(null, [...buf]));
     return await arrayBufferToBase64internalBrowser(buf);
 }
 /**
- * Converts an ArrayBuffer or UInt8Array to a base64 string.
+ * Converts an ArrayBuffer or Uint8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to an array of base64 strings.
  */
-export async function arrayBufferToBase64(buffer: ArrayBuffer | Uint8Array): Promise<string[]> {
+export async function arrayBufferToBase64(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string[]> {
     const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     if (buf.byteLength < QUANTUM) return [btoa(String.fromCharCode.apply(null, [...buf]))];
     const bufLen = buf.byteLength;
@@ -114,9 +119,16 @@ const QUANTUM = 32768;
 const te = new TextEncoder();
 const td = new TextDecoder();
 
-export function writeString(string: string): Uint8Array {
+export function writeString(string: string): Uint8Array<ArrayBuffer> {
+    if (string.length > 128) {
+        const buf = te.encode(string);
+        // if (isArrayBufferBased(buf)) {
+        //     return buf;
+        // }
+        // return buf.slice();
+        return buf;
+    }
     // Prepare enough buffer.
-    if (string.length > 128) return te.encode(string);
     const buffer = new Uint8Array(string.length * 4);
     const length = string.length;
     let index = 0;

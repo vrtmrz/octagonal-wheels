@@ -12,7 +12,7 @@ for (let i = 0; i < 256; i++) {
  * @param src - The hexadecimal string to convert.
  * @returns The Uint8Array representation of the input string.
  */
-export function hexStringToUint8Array(src: string): Uint8Array {
+export function hexStringToUint8Array(src: string): Uint8Array<ArrayBuffer> {
     const len = src.length / 2;
     const ret = new Uint8Array(len);
     for (let i = 0; i < len; i++) {
