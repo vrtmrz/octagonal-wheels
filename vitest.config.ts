@@ -28,7 +28,9 @@ export default defineConfig({
             instances: [
                 {
                     browser: 'chromium',
-
+                    launch: {
+                        args: ['--js-flags=--expose-gc'],
+                    }
 
                     // options: {
                     //     headless: true,
