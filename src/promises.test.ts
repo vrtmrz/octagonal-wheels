@@ -3,7 +3,7 @@ import {
     fireAndForget,
     isResolved,
     noop,
-    promiseWithResolver,
+    promiseWithResolvers,
     TIMED_OUT_SIGNAL,
     yieldAnimationFrame,
     yieldMicrotask,
@@ -38,7 +38,7 @@ describe("delay function", () => {
 });
 describe("promiseWithResolver function", () => {
     it("should resolve with the provided value", async () => {
-        const { promise, resolve } = promiseWithResolver<number>();
+        const { promise, resolve } = promiseWithResolvers<number>();
         const result = 42;
         resolve(result);
         const actualResult = await promise;
@@ -46,7 +46,7 @@ describe("promiseWithResolver function", () => {
     });
 
     it("should reject with the provided error", async () => {
-        const { promise, reject } = promiseWithResolver<string>();
+        const { promise, reject } = promiseWithResolvers<string>();
         const error = new Error("Test error");
         reject(error);
         try {

@@ -1,7 +1,7 @@
 import { PaceMaker } from "../bureau/PaceMaker.ts";
 import { NOT_AVAILABLE, InboxWithEvent } from "../bureau/Inbox.ts";
 import { Feeder, Porter } from "../bureau/Clerk.ts";
-import { promiseWithResolver } from "../promises.ts";
+import { promiseWithResolvers } from "../promises.ts";
 
 type ChunkProcessOptions = {
     /**
@@ -35,7 +35,7 @@ export async function* asChunk<T>(
 ): AsyncIterable<T[]> {
     const postBox = new InboxWithEvent<T>(unit * 10);
     const outgoingBox = new InboxWithEvent<T[]>(10);
-    const completed = promiseWithResolver<void>();
+    const completed = promiseWithResolvers<void>();
     const pacemaker = interval ? new PaceMaker(interval) : undefined;
     let isCompleted = false;
 

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { EventHub } from "./EventHub.ts";
-import { promiseWithResolver } from "../promises.ts";
+import { promiseWithResolvers } from "../promises.ts";
 
 declare global {
     interface TestEvents {
@@ -82,7 +82,7 @@ describe("EventHub-high-level", () => {
 describe("EventHub-low-level", () => {
     it("should emit and listen to events without data", async () => {
         const hub = createEventHub();
-        const p = promiseWithResolver<string>();
+        const p = promiseWithResolvers<string>();
 
         hub.on("world_test", (e) => {
             p.resolve(e.type);
@@ -94,11 +94,11 @@ describe("EventHub-low-level", () => {
 
     it("should emit and listen to events with data", async () => {
         const hub = createEventHub();
-        const p = promiseWithResolver<{
+        const p = promiseWithResolvers<{
             type: string;
             data: string;
         }>();
-        const p2 = promiseWithResolver<{
+        const p2 = promiseWithResolvers<{
             type: string;
             data: string;
         }>();

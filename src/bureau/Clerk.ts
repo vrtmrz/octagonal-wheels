@@ -1,5 +1,5 @@
 import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
-import { promiseWithResolver, yieldMicrotask } from "../promises.ts";
+import { promiseWithResolvers, yieldMicrotask } from "../promises.ts";
 import { DISPOSE_ERROR, type Inbox, NOT_AVAILABLE, type InboxStateDetail } from "./Inbox.ts";
 
 export enum ClerkState {
@@ -55,7 +55,7 @@ export abstract class ClerkBase<T> {
     _totalFailed = 0;
     _totalFetched = 0;
     _disposed = false;
-    _disposePromise = promiseWithResolver<void>();
+    _disposePromise = promiseWithResolvers<void>();
     get state() {
         return this._state;
     }

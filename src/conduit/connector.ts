@@ -1,4 +1,4 @@
-import { promiseWithResolver } from "../promises.ts";
+import { promiseWithResolvers } from "../promises.ts";
 
 /**
  * ConnectorFunc
@@ -100,7 +100,7 @@ export interface ConnectorInstanceOf<T> {
 
 function getFuncOf<T extends any[], U>(name: string): ConnectorFuncOf<T, U> {
     let connectedFunction: ConnectorFunc<T, U> | undefined;
-    let connectedFunctionTask = promiseWithResolver<ConnectorFunc<T, U>>();
+    let connectedFunctionTask = promiseWithResolvers<ConnectorFunc<T, U>>();
     let onDisconnect: (() => void) | undefined;
     const inst = {
         connect: (func: ConnectorFunc<T, U>, onDisconnectCallback?: () => void) => {
@@ -126,7 +126,7 @@ function getFuncOf<T extends any[], U>(name: string): ConnectorFuncOf<T, U> {
         },
         disconnect: () => {
             connectedFunction = undefined;
-            connectedFunctionTask = promiseWithResolver<ConnectorFunc<T, U>>();
+            connectedFunctionTask = promiseWithResolvers<ConnectorFunc<T, U>>();
             onDisconnect?.();
             onDisconnect = undefined;
         },
@@ -138,7 +138,7 @@ function getFuncOf<T extends any[], U>(name: string): ConnectorFuncOf<T, U> {
 }
 
 function getInstanceOf<T>(name: string): ConnectorInstanceOf<T> {
-    let connectedInstance = promiseWithResolver<ConnectorInstance<T>>();
+    let connectedInstance = promiseWithResolvers<ConnectorInstance<T>>();
     let instance: T | undefined = undefined;
     let onDisconnect: (() => void) | undefined;
     const inst = {
@@ -164,7 +164,7 @@ function getInstanceOf<T>(name: string): ConnectorInstanceOf<T> {
         },
         disconnect: () => {
             instance = undefined;
-            connectedInstance = promiseWithResolver<ConnectorInstance<T>>();
+            connectedInstance = promiseWithResolvers<ConnectorInstance<T>>();
             onDisconnect?.();
             onDisconnect = undefined;
         },

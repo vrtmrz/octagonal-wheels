@@ -1,5 +1,5 @@
 // --- asynchronous execution / locking utilities
-import { fireAndForget, promiseWithResolver } from "../promises.ts";
+import { fireAndForget, promiseWithResolvers } from "../promises.ts";
 
 type Task<T> = () => Promise<T> | T;
 
@@ -37,7 +37,7 @@ const skipDuplicatedMap = new Map<string | symbol, Promise<any>>();
 
 export function serialized<T>(key: string | symbol, proc: Task<T>): Promise<T> {
     const prev = serializedMap.get(key);
-    const p = promiseWithResolver<T>();
+    const p = promiseWithResolvers<T>();
     queueCount.set(key, (queueCount.get(key) ?? 0) + 1);
     const nextTask = async () => {
         try {
@@ -67,7 +67,7 @@ const latestProcessMap = new Map<string | symbol, Promise<any>>();
 export const SYMBOL_SKIPPED = Symbol("SKIPPED");
 
 export function onlyLatest<T>(key: string | symbol, proc: Task<T>): Promise<T | typeof SYMBOL_SKIPPED> {
-    const p = promiseWithResolver<T | typeof SYMBOL_SKIPPED>();
+    const p = promiseWithResolvers<T | typeof SYMBOL_SKIPPED>();
     latestProcessMap.set(key, p.promise);
     fireAndForget(async () => {
         try {
@@ -116,7 +116,7 @@ export function shareRunningResult<T>(key: string | symbol, proc: Task<T>): Prom
     const prev = shareSerializedMap.get(key) as Promise<T> | undefined;
     if (prev) return prev;
 
-    const p = promiseWithResolver<T>();
+    const p = promiseWithResolvers<T>();
     shareSerializedMap.set(key, p.promise);
 
     const task = async () => {
@@ -143,7 +143,7 @@ export function skipIfDuplicated<T>(key: string | symbol, proc: Task<T>): Promis
     const prev = skipDuplicatedMap.get(key) as Promise<T> | undefined;
     if (prev) return Promise.resolve(null);
 
-    const p = promiseWithResolver<T>();
+    const p = promiseWithResolvers<T>();
     skipDuplicatedMap.set(key, p.promise);
 
     const task = async () => {

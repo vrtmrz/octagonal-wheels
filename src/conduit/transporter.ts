@@ -1,5 +1,5 @@
 import { LOG_LEVEL_INFO, LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
-import { promiseWithResolver, type PromiseWithResolvers } from "../promises.ts";
+import { promiseWithResolvers, type PromiseWithResolvers } from "../promises.ts";
 import { NamedInstance } from "./NamedInstance.ts";
 import { PostMessageBackbone, type TransporterBackbone } from "./transporterAdapter.ts";
 
@@ -106,7 +106,7 @@ export function _createTransporter<T extends any[], U>(
 
     const send = (...args: T): Promise<U> => {
         const callbackId = `${_name}.${transporterNo}.${++callbackCount}`;
-        const task = promiseWithResolver<U>();
+        const task = promiseWithResolvers<U>();
         messages.set(callbackId, task);
         const detail = {
             callback: callbackId,

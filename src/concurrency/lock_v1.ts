@@ -4,7 +4,7 @@
  * @deprecated This module is deprecated and will be removed in the future.
  * use lock_v2.ts instead.
  */
-import { fireAndForget, promiseWithResolver, yieldNextMicrotask } from "../promises.ts";
+import { fireAndForget, promiseWithResolvers, yieldNextMicrotask } from "../promises.ts";
 
 type Task<T> = () => Promise<T> | T;
 type Queue<T> = {
@@ -56,7 +56,7 @@ type QueueOptions = {
 };
 
 function _enqueue<T>(key: string | symbol, task: Task<T>, { swapIfExist, shareResult }: QueueOptions = {}): Promise<T> {
-    const t = promiseWithResolver<T>();
+    const t = promiseWithResolvers<T>();
     const resolver = t.resolve;
     const rejector = t.reject;
 
@@ -111,7 +111,7 @@ export function shareRunningResult<T>(key: string | symbol, proc: Task<T>): Prom
     let oldResolver = current.resolver;
     let oldRejector = current.rejector;
 
-    const resultP = promiseWithResolver<T>();
+    const resultP = promiseWithResolvers<T>();
 
     // Inject hooked handler
     current.resolver = (result) => {

@@ -32,6 +32,9 @@ export async function isSomeResolved(promises: Promise<unknown>[]): Promise<bool
     return (await Promise.race([...promises, Promise.resolve(UNRESOLVED)])) !== UNRESOLVED;
 }
 
+/**
+ * A promise with resolver functions.
+ */
 export type PromiseWithResolvers<T> = {
     promise: Promise<T>;
     resolve: (value: T | PromiseLike<T>) => void;
@@ -64,13 +67,22 @@ export function nativePromiseWithResolvers<T>() {
     const { promise, resolve, reject } = p;
     return { promise, resolve, reject };
 }
+
+const polyfilledFunc = "withResolvers" in Promise ? nativePromiseWithResolvers : polyfillPromiseWithResolvers;
+
 /**
  * Creates a promise with custom resolvers.
  * @param {Function} polyfillPromiseWithResolvers - The function that polyfills the promise with resolvers.
  * @returns {Promise} - The promise with custom resolvers.
  */
-export const promiseWithResolver: <T>() => PromiseWithResolvers<T> =
-    "withResolvers" in Promise ? nativePromiseWithResolvers : polyfillPromiseWithResolvers;
+
+export const promiseWithResolvers = polyfilledFunc;
+
+/**
+ * Creates a promise with custom resolvers. This is kept for compatibility with older code.
+ * @deprecated Use `promiseWithResolvers` instead. (Wrong name)
+ */
+export const promiseWithResolver = polyfilledFunc;
 
 /**
  * A no-operation function.
@@ -160,7 +172,7 @@ export type TIMED_OUT_SIGNAL = typeof TIMED_OUT_SIGNAL;
  */
 export function cancelableDelay<T = TIMED_OUT_SIGNAL>(timeout: number, cancel: T = TIMED_OUT_SIGNAL as T) {
     let timer: ReturnType<typeof setTimeout> | undefined = undefined;
-    const promise = promiseWithResolver<T>();
+    const promise = promiseWithResolvers<T>();
     timer = setTimeout(() => {
         timer = undefined;
         promise.resolve(cancel);
@@ -200,7 +212,7 @@ export function extendableDelay<U extends string | symbol | number = TIMED_OUT_S
     cancel: U
 ): ExtendableDelay<TIMED_OUT_SIGNAL, U> {
     let timer: ReturnType<typeof setTimeout> | undefined = undefined;
-    const promise = promiseWithResolver<TIMED_OUT_SIGNAL | U>();
+    const promise = promiseWithResolvers<TIMED_OUT_SIGNAL | U>();
     let resolved = false;
     const setTimer = (newTimeout: number) => {
         if (resolved) throw new Error("Already resolved!");

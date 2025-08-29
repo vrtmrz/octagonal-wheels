@@ -1,5 +1,5 @@
 import { isObjectDifferent } from "../object.ts";
-import { type PromiseWithResolvers, promiseWithResolver, fireAndForget } from "../promises.ts";
+import { type PromiseWithResolvers, promiseWithResolvers, fireAndForget } from "../promises.ts";
 
 /**
  * RefinerOptions interface defines the options for the Refiner class.
@@ -90,7 +90,7 @@ export class Refiner<T, U> {
      */
     _refinePromise() {
         const previous = this._evaluationPromise;
-        const newPromise = promiseWithResolver<U>();
+        const newPromise = promiseWithResolvers<U>();
         this._evaluationPromise = newPromise;
         fireAndForget(async () => {
             await Promise.race([previous.promise, Promise.resolve(NOT_USED)]).then((r) => {

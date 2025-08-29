@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { Inbox, NOT_AVAILABLE } from "./Inbox.ts";
-import { isResolved, promiseWithResolver } from "../promises.ts";
+import { isResolved, promiseWithResolvers } from "../promises.ts";
 
 describe("Inbox", () => {
     let inbox: Inbox<number>;
@@ -169,7 +169,7 @@ describe("Inbox", () => {
         await inbox.post(1);
         //cancelled by other promise, so it will not be posted
         await inbox.post(2, undefined, [Promise.resolve()]);
-        const p = promiseWithResolver<void>();
+        const p = promiseWithResolvers<void>();
         // p.promise has not been resolved, so 3 will be posted
         await inbox.post(3, undefined, [p.promise]);
         await inbox.post(4);

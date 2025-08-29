@@ -5,7 +5,7 @@ import {
     noop,
     delay,
     fireAndForget,
-    promiseWithResolver,
+    promiseWithResolvers,
     type PromiseWithResolvers,
     yieldNextMicrotask,
 } from "../promises.ts";
@@ -14,7 +14,7 @@ import {
  * use processor_v2.ts instead.
  */
 export class Notifier {
-    _p: PromiseWithResolvers<void> = promiseWithResolver<void>();
+    _p: PromiseWithResolvers<void> = promiseWithResolvers<void>();
     isUsed = false;
     notify() {
         if (!this.isUsed) {
@@ -23,7 +23,7 @@ export class Notifier {
         this.isUsed = false;
         void this._p.promise.finally(noop);
         this._p.resolve();
-        this._p = promiseWithResolver();
+        this._p = promiseWithResolvers();
     }
     get nextNotify(): Promise<void> {
         this.isUsed = true;

@@ -1,4 +1,4 @@
-import { cancelableDelay, isSomeResolved, promiseWithResolver, type PromiseWithResolvers } from "../promises.ts";
+import { cancelableDelay, isSomeResolved, promiseWithResolvers, type PromiseWithResolvers } from "../promises.ts";
 export const NOT_AVAILABLE = Symbol("NotAvailable");
 export type NOT_AVAILABLE = typeof NOT_AVAILABLE;
 
@@ -18,7 +18,7 @@ export class SyncInbox<T> {
     _readIdx: number = 0;
     _wrapAroundCount: number = 0;
     _isDisposed: boolean = false;
-    _disposedPromise: PromiseWithResolvers<void> = promiseWithResolver();
+    _disposedPromise: PromiseWithResolvers<void> = promiseWithResolvers();
     constructor(capacity: number) {
         if (capacity <= 0) {
             throw new Error("Capacity must be greater than 0");
@@ -190,7 +190,7 @@ export class Inbox<T> extends SyncInbox<T> {
     async _waitForFree(): Promise<READY_POST_SIGNAL> {
         while (this.free == 0) {
             if (!this._lockFull) {
-                this._lockFull = promiseWithResolver();
+                this._lockFull = promiseWithResolvers();
             }
             return await this._lockFull.promise;
         }
@@ -205,7 +205,7 @@ export class Inbox<T> extends SyncInbox<T> {
     async _waitForReady(): Promise<READY_PICK_SIGNAL> {
         while (this.isRunningOut) {
             if (!this._lockReady) {
-                this._lockReady = promiseWithResolver();
+                this._lockReady = promiseWithResolvers();
             }
             return await this._lockReady.promise;
         }

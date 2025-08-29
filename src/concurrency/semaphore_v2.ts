@@ -2,7 +2,7 @@ import {
     cancelableDelay,
     TIMED_OUT_SIGNAL,
     fireAndForget,
-    promiseWithResolver,
+    promiseWithResolvers,
     yieldMicrotask,
     type PromiseWithResolvers,
 } from "../promises.ts";
@@ -44,7 +44,7 @@ export function Semaphore(limit: number): SemaphoreObject {
                 counter += quantity;
                 return () => this.release();
             }
-            const n = promiseWithResolver<void>();
+            const n = promiseWithResolvers<void>();
             queue.push(n);
             await n.promise;
             return () => {

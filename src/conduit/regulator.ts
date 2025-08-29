@@ -1,7 +1,7 @@
 /*
 Regulator 
 */
-import { promiseWithResolver, type PromiseWithResolvers } from "../promises.ts";
+import { promiseWithResolvers, type PromiseWithResolvers } from "../promises.ts";
 import { NamedInstance } from "./NamedInstance.ts";
 /**
  * Regulator
@@ -114,7 +114,7 @@ function createRegulator<T extends any[], U>(_name: string): RegulatorOf<T, U> {
         void pump();
     };
     const schedule = (arg: T) => {
-        const pw = promiseWithResolver<U>();
+        const pw = promiseWithResolvers<U>();
         scheduled.push([arg, pw]);
         startPumping();
         return pw.promise;

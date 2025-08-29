@@ -1,7 +1,7 @@
 import {
     cancelableDelay,
     fireAndForget,
-    promiseWithResolver,
+    promiseWithResolvers,
     TIMED_OUT_SIGNAL,
     yieldMicrotask,
     type PromiseWithResolvers,
@@ -146,7 +146,7 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
     ): Promise<ResultType<ET, K> | TIMED_OUT_SIGNAL> {
         let taskPromise = this._clip.get(`${String(type)}:${key}`);
         if (!taskPromise) {
-            taskPromise = promiseWithResolver<void | ET[K]>();
+            taskPromise = promiseWithResolvers<void | ET[K]>();
             taskPromise.promise = taskPromise.promise
                 .then((ret: unknown) => {
                     // this.clip.delete(key);

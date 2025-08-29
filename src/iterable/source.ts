@@ -1,8 +1,8 @@
-import { promiseWithResolver } from "../promises.ts";
+import { promiseWithResolvers } from "../promises.ts";
 
 const GENERATOR_CLOSED = Symbol("closed");
 export function generativeBuffer<T>() {
-    let current = promiseWithResolver<T | typeof GENERATOR_CLOSED>();
+    let current = promiseWithResolvers<T | typeof GENERATOR_CLOSED>();
     let next = [current];
     let closed = false;
     let finished = false;
@@ -22,7 +22,7 @@ export function generativeBuffer<T>() {
                 throw new Error("Cannot enqueue to a closed or finished source");
             }
             const promise = current;
-            const newNext = promiseWithResolver<T | typeof GENERATOR_CLOSED>();
+            const newNext = promiseWithResolvers<T | typeof GENERATOR_CLOSED>();
             current = newNext;
             next.push(current);
             updateSize();
@@ -73,8 +73,8 @@ export function generativeBuffer<T>() {
 }
 
 export class GeneratorSource<T> {
-    _next: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>[];
-    _current: ReturnType<typeof promiseWithResolver<T | typeof GENERATOR_CLOSED>>;
+    _next: ReturnType<typeof promiseWithResolvers<T | typeof GENERATOR_CLOSED>>[];
+    _current: ReturnType<typeof promiseWithResolvers<T | typeof GENERATOR_CLOSED>>;
     _onSizeUpdated?: (size: number) => void;
     _updateSize() {
         if (this._onSizeUpdated) {
@@ -93,7 +93,7 @@ export class GeneratorSource<T> {
     constructor(onSizeUpdated?: (size: number) => void) {
         this.closed = false;
         this.finished = false;
-        this._current = promiseWithResolver<T | typeof GENERATOR_CLOSED>();
+        this._current = promiseWithResolvers<T | typeof GENERATOR_CLOSED>();
         this._next = [this._current];
         this._onSizeUpdated = onSizeUpdated;
     }
@@ -102,7 +102,7 @@ export class GeneratorSource<T> {
             throw new Error("Cannot enqueue to a closed or finished source");
         }
         const promise = this._current;
-        const next = promiseWithResolver<T | typeof GENERATOR_CLOSED>();
+        const next = promiseWithResolvers<T | typeof GENERATOR_CLOSED>();
         this._current = next;
         this._next.push(this._current);
         this._updateSize();

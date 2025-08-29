@@ -5,7 +5,7 @@ import {
     noop,
     delay,
     fireAndForget,
-    promiseWithResolver,
+    promiseWithResolvers,
     type PromiseWithResolvers,
     type TIMED_OUT_SIGNAL,
     cancelableDelay,
@@ -19,7 +19,7 @@ import { Inbox } from "../bureau/Inbox.ts";
  * @deprecated Use EventHub and waitFor instead.
  */
 export class Notifier {
-    _p: PromiseWithResolvers<void> = promiseWithResolver<void>();
+    _p: PromiseWithResolvers<void> = promiseWithResolvers<void>();
     isUsed = false;
     notify() {
         if (!this.isUsed) {
@@ -28,7 +28,7 @@ export class Notifier {
         this.isUsed = false;
         void this._p.promise.finally(noop);
         this._p.resolve();
-        this._p = promiseWithResolver();
+        this._p = promiseWithResolvers();
     }
     get nextNotify(): Promise<void> {
         this.isUsed = true;
@@ -198,7 +198,7 @@ export class QueueProcessor<T, U> {
         timeout?: number
     ): Promise<T[number] | TIMED_OUT_SIGNAL> {
         const items = keys.map((key) => {
-            const p = promiseWithResolver<typeof key>();
+            const p = promiseWithResolvers<typeof key>();
             const releaser = this._hub.onEvent(key, () => {
                 p.resolve(key);
             });

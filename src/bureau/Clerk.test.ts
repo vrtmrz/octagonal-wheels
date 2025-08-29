@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { Clerk, ClerkGroup, ClerkState, Feeder, Harvester, Porter } from "./Clerk.ts";
 import { Inbox, InboxWithEvent } from "./Inbox.ts";
-import { delay, promiseWithResolver, yieldMicrotask } from "../promises.ts";
+import { delay, promiseWithResolvers, yieldMicrotask } from "../promises.ts";
 
 describe("Clerk", () => {
     it("should process items using the provided job function", async () => {
         const result: string[] = [];
-        const completed = promiseWithResolver<void>();
+        const completed = promiseWithResolvers<void>();
         const postBox = new Inbox<string>(5);
 
         const job = (item: string) => {
@@ -47,8 +47,8 @@ describe("Clerk", () => {
 
     it("should processable multiple clerks", async () => {
         const result: string[] = [];
-        const completed = promiseWithResolver<void>();
-        const completed2 = promiseWithResolver<void>();
+        const completed = promiseWithResolvers<void>();
+        const completed2 = promiseWithResolvers<void>();
 
         const postBox = new Inbox<string>(5);
 
@@ -104,7 +104,7 @@ describe("Clerk", () => {
 describe("Porter", () => {
     it("should batch items and post them to the outgoing inbox", async () => {
         // const result: string[][] = [];
-        const completed = promiseWithResolver<void>();
+        const completed = promiseWithResolvers<void>();
         const postBox = new InboxWithEvent<string>(5);
         const outgoingBox = new InboxWithEvent<string[]>(5);
 
@@ -151,7 +151,7 @@ describe("Porter", () => {
     });
 
     it("should flush items after timeout if maxSize is not reached", async () => {
-        const completed = promiseWithResolver<void>();
+        const completed = promiseWithResolvers<void>();
         const postBox = new InboxWithEvent<string>(5);
         const outgoingBox = new InboxWithEvent<string[]>(5);
 
@@ -212,7 +212,7 @@ describe("Porter", () => {
         expect(porter.state).toBe(ClerkState.DISPOSED);
     });
     it("should merge batches items if not have not drained", async () => {
-        const completed = promiseWithResolver<void>();
+        const completed = promiseWithResolvers<void>();
         const postBox = new InboxWithEvent<string>(5);
         const outgoingBox = new InboxWithEvent<string[]>(5);
 
@@ -296,7 +296,7 @@ describe("Porter", () => {
 describe("ClerkGroup", () => {
     it("should hire initial members and process items", async () => {
         const result: string[] = [];
-        const completed = promiseWithResolver<void>();
+        const completed = promiseWithResolvers<void>();
         const postBox = new Inbox<string>(5);
 
         const job = async (item: string) => {
@@ -345,7 +345,7 @@ describe("ClerkGroup", () => {
 
     it("should adjust member count correctly", async () => {
         const result: string[] = [];
-        const completed = promiseWithResolver<void>();
+        const completed = promiseWithResolvers<void>();
         const postBox = new Inbox<string>(5);
 
         const job = async (item: string) => {
