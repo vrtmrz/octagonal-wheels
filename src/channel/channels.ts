@@ -1,5 +1,6 @@
 import { LSError } from "../common/error.ts";
 import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
+import { promiseWithResolvers, type PromiseWithResolvers } from "../promises.ts";
 import {
     type RequestMessage,
     type ResponseMessage,
@@ -9,8 +10,9 @@ import {
     DEFAULT_QUERY_TIMEOUT_MS,
     generateId,
     MessageTypes,
+    type RequestAdvertiseMessage,
 } from "./common.ts";
-import { ITransport, queryViaTransport } from "./transport.ts";
+import { type ITransport, queryViaTransport } from "./transport.ts";
 
 /* istanbul ignore next  -- @preserve */
 function noop() {} // No operation function
@@ -39,6 +41,7 @@ export abstract class ChannelBase {
     get prefixedChannelName() {
         return this.prefix + this.channelName;
     }
+    protected channelName: string;
 
     /**
      * Base Class for Channels
@@ -47,11 +50,12 @@ export abstract class ChannelBase {
      * @param prefix prefix for the channel type (e.g., "port:", "broadcaster:", etc). We should set this via subclass constructor.
      */
     constructor(
-        protected channelName: string,
+        channelName: string,
         protected transport: ITransport,
         prefix: string
     ) {
         this.prefix = prefix;
+        this.channelName = channelName;
     }
 
     // To keep track of unsubscribe functions for all subscriptions
@@ -251,7 +255,7 @@ export class Broadcaster<T extends any[]> extends ChannelBase {
 export abstract class MultiCastChannel<T extends any[], U> extends ChannelBase {
     // Keep track of known subscribers
     protected knownSubscribers = new Set<string>();
-
+    protected anyAdvertisementKnown?: PromiseWithResolvers<void>;
     /**
      * Register a function to handle incoming messages on the MultiCastChannel.
      * @param func function to register
@@ -260,20 +264,23 @@ export abstract class MultiCastChannel<T extends any[], U> extends ChannelBase {
      */
     register(func: ChannelFunc<T, U>, options?: RegisterOptions): () => void {
         const subId = generateId();
-        this.advertiseSubId(subId);
-        const listener = async (msg: RequestMessage<T>) => {
-            if (msg?.type === MessageTypes.REQUEST && msg.subId == subId) {
+        this.advertiseSubId(subId, subId); // Advertise ourselves immediately
+        const listener = async (msg: RequestMessage<T> | RequestAdvertiseMessage) => {
+            if (!msg?.type) return;
+            if (msg.type === MessageTypes.REQUEST && msg.subId == subId) {
                 try {
                     const result = await func(...msg.args);
                     this.respond(msg, { result });
                 } catch (e: any) {
                     this.respond(msg, { error: LSError.fromError(e) });
                 }
+            } else if (msg.type === MessageTypes.REQUEST_AD) {
+                this.advertiseSubId(subId, msg.id);
             }
         };
         const tearDown = () => {
             // Send BYE message on unregister
-            this.publish({ type: MessageTypes.BYE, id: generateId(), subId } as ByeMessage);
+            this.publish({ type: MessageTypes.BYE, id: subId, subId } as ByeMessage);
             this.knownSubscribers.delete(subId);
         };
         const unsubscribe = this.subscribe(listener, options?.signal, tearDown);
@@ -286,10 +293,8 @@ export abstract class MultiCastChannel<T extends any[], U> extends ChannelBase {
     }
 
     // Advertise our subId to other instances
-    protected advertiseSubId(subId: string): void {
-        // this.transport.publish(this.prefixedChannelName,
-        //     { type: MessageTypes.ADVERTISE, id: generateId(), subId } as AdvertiseMessage);
-        this.publish({ type: MessageTypes.ADVERTISE, id: generateId(), subId } as AdvertiseMessage);
+    protected advertiseSubId(subId: string, id: string): void {
+        this.publish({ type: MessageTypes.ADVERTISE, id, subId } as AdvertiseMessage);
     }
 
     /**
@@ -302,11 +307,41 @@ export abstract class MultiCastChannel<T extends any[], U> extends ChannelBase {
         super(channelName, transport, prefix);
         this.subscribe((msg: AdvertiseMessage | ByeMessage) => {
             if (msg?.type === MessageTypes.ADVERTISE && msg.subId) {
+                this.anyAdvertisementKnown?.resolve();
+                this.anyAdvertisementKnown = undefined;
                 this.knownSubscribers.add(msg.subId);
             } else if (msg?.type === MessageTypes.BYE && msg.subId) {
                 this.knownSubscribers.delete(msg.subId);
             }
         });
+        void this.requestAdvertisement();
+    }
+
+    /**
+     * Request advertisement from other instances.
+     * @returns A promise that resolves when at least one advertisement is known.
+     */
+    requestAdvertisement() {
+        let promise = this.anyAdvertisementKnown?.promise;
+        if (!promise) {
+            this.anyAdvertisementKnown = promiseWithResolvers<void>();
+            promise = this.anyAdvertisementKnown.promise;
+        }
+        this.publish({ type: MessageTypes.REQUEST_AD, id: generateId() } as RequestAdvertiseMessage);
+        return promise;
+    }
+    /**
+     * Wait until at least one advertisement is known.
+     * @returns A promise that resolves when at least one advertisement is known.
+     */
+    waitForAnyAdvertisement(): Promise<void> {
+        if (this.knownSubscribers.size > 0) {
+            return Promise.resolve();
+        }
+        if (!this.anyAdvertisementKnown?.promise) {
+            return this.requestAdvertisement();
+        }
+        return this.anyAdvertisementKnown.promise;
     }
 }
 

@@ -7,33 +7,33 @@ const TEST_TIMEOUT = 100;
 
 // Override timeout for easier testing
 class TestPipeline<T extends any[]> extends Pipeline<T> {
-    timeoutMs = TEST_TIMEOUT;
-    public override knownSubscribers: Set<string> = new Set();
-    invoke(...args: T): Promise<boolean> {
-        return super.invoke(...args);
+    get _name() {
+        return this.channelName;
     }
+    override timeoutMs = TEST_TIMEOUT;
+    public override knownSubscribers: Set<string> = new Set();
 }
 class TestSwitch<T extends any[], U> extends Switch<T, U> {
-    timeoutMs = TEST_TIMEOUT;
-    public override knownSubscribers: Set<string> = new Set();
-    invoke(...args: T) {
-        return super.invoke(...args);
+    get _name() {
+        return this.channelName;
     }
+    override timeoutMs = TEST_TIMEOUT;
+    public override knownSubscribers: Set<string> = new Set();
 }
 
 class TestSurvey<T extends any[], U> extends Survey<T, U> {
-    timeoutMs = TEST_TIMEOUT;
-    public override knownSubscribers: Set<string> = new Set();
-    invoke(...args: T) {
-        return super.invoke(...args);
+    get _name() {
+        return this.channelName;
     }
+    override timeoutMs = TEST_TIMEOUT;
+    public override knownSubscribers: Set<string> = new Set();
 }
 class VeryBadError extends Error {
     constructor(message: string) {
         super(message);
         this.name = "VeryBadError";
     }
-    get message(): string {
+    override get message(): string {
         throw new Error("Can't get message");
     }
 }
@@ -271,6 +271,15 @@ function runChannelTests(transportFactory: () => ITransport) {
             pipeline.invoke();
             expect(listener).toHaveBeenCalledTimes(1); // Should not be called again
         });
+        it("should accept subsequent registrations", async () => {
+            pipeline.register(async () => true);
+            const result1 = await pipeline.invoke();
+            expect(result1).toBe(true);
+            const secondPipeline = new TestPipeline(pipeline._name, transport);
+            await secondPipeline.waitForAnyAdvertisement();
+            const result2 = await secondPipeline.invoke();
+            expect(result2).toBe(true);
+        });
     });
 
     // --- 4. Switch (many-to-1, first truthy) ---
@@ -350,6 +359,21 @@ function runChannelTests(transportFactory: () => ITransport) {
             switcher.invoke("test");
             expect(listener).toHaveBeenCalledTimes(1); // Should not be called again
         });
+
+        it("should accept subsequent instances", async () => {
+            switcher.register(async (msg: string) => false);
+            const result1 = await switcher.invoke("!");
+            expect(result1).toBe(false);
+            const secondSwitcher = new TestSwitch(switcher._name, transport) as typeof switcher;
+            await secondSwitcher.waitForAnyAdvertisement();
+            const result2 = await secondSwitcher.invoke("!!");
+            expect(result2).toBe(false);
+            secondSwitcher.register(async (msg: string) => msg + "!!");
+            const result3 = await secondSwitcher.invoke("hi");
+            expect(result3).toBe("hi!!");
+            const result4 = await switcher.invoke("hi");
+            expect(result4).toBe("hi!!");
+        });
     });
 
     describe("Survey", () => {
@@ -416,6 +440,33 @@ function runChannelTests(transportFactory: () => ITransport) {
             survey.invoke("test");
             expect(listener).toHaveBeenCalledTimes(1); // Should not be called again
         });
+
+        it("should accept subsequent instances", async () => {
+            survey.register(async (msg: string) => msg + "a");
+            const result1 = (await Promise.all(survey.invoke("1"))).sort();
+            expect(result1).toStrictEqual(["1a"]);
+            const secondSurvey = new TestSurvey(survey._name, transport) as typeof survey;
+            await secondSurvey.waitForAnyAdvertisement();
+            const result2 = (await Promise.all(secondSurvey.invoke("2"))).sort();
+            expect(result2).toStrictEqual(["2a"]);
+            secondSurvey.register(async (msg: string) => msg + "b");
+            const result3 = (await Promise.all(secondSurvey.invoke("3"))).sort();
+            expect(result3).toStrictEqual(["3a", "3b"]);
+            const result4 = (await Promise.all(survey.invoke("4"))).sort();
+            expect(result4).toStrictEqual(["4a", "4b"]);
+            await secondSurvey.waitForAnyAdvertisement();
+            // Ensure not blocked
+        });
+        it("should accept subsequent instances multiple", async () => {
+            const secondSurvey = new TestSurvey(survey._name, transport) as typeof survey;
+            const promises = [secondSurvey.waitForAnyAdvertisement(), secondSurvey.waitForAnyAdvertisement()];
+            survey.register(async (msg: string) => msg + "a");
+            const result1 = (await Promise.all(survey.invoke("1"))).sort();
+            expect(result1).toStrictEqual(["1a"]);
+            await Promise.all(promises);
+            const result2 = (await Promise.all(secondSurvey.invoke("2"))).sort();
+            expect(result2).toStrictEqual(["2a"]);
+        });
     });
     describe("Error Handling", () => {
         it("should accept invalid messages gracefully", async () => {
@@ -466,7 +517,7 @@ function runChannelTests(transportFactory: () => ITransport) {
         });
         it("should handle transport errors gracefully", async () => {
             class FailingTransport extends DirectTransport {
-                publish(channelName: string, data: any): void {
+                override publish(channelName: string, data: any): void {
                     throw new Error("Transport failure");
                 }
             }

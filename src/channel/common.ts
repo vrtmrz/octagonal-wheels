@@ -4,6 +4,7 @@
 
 export const MessageTypes = {
     ADVERTISE: "advertise",
+    REQUEST_AD: "request_ad",
     BYE: "bye",
     REQUEST: "request",
     RESPONSE: "response",
@@ -13,6 +14,7 @@ export const MessageTypes = {
 export type MessageTypes = (typeof MessageTypes)[keyof typeof MessageTypes];
 
 export type AdvertiseMessage = { type: typeof MessageTypes.ADVERTISE; id: string; subId?: string };
+export type RequestAdvertiseMessage = { type: typeof MessageTypes.REQUEST_AD; id: string; subId?: string };
 export type ByeMessage = { type: typeof MessageTypes.BYE; id: string; subId?: string };
 
 export type RequestMessage<T extends any[]> = {
