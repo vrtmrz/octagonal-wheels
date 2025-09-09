@@ -384,8 +384,8 @@ export class Switch<T extends any[], U> extends MultiCastChannel<T, U | false> {
 
 /**
  * Survey: Connect many to many and expect all to respond, collecting all results.
- * The invocation returns an array of all results from the handlers.
- * Handlers that throw an error or do not respond are ignored in the results.
+ * The invocation returns an array of promises, each resolving to the result of a handler.
+ * Be aware that the results may arrive in any order, depending on the response times of the handlers (Designed for parallelism).
  */
 export class Survey<T extends any[], U> extends MultiCastChannel<T, Promise<Awaited<U>>> {
     /**
