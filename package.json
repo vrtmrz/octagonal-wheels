@@ -121,6 +121,42 @@
             "import": "./dist/bureau/SlipBoard.js",
             "types": "./dist/bureau/SlipBoard.d.ts"
         },
+        "./channel": {
+            "import": "./dist/channel/index.js",
+            "types": "./dist/channel/index.d.ts"
+        },
+        "./channel.js": {
+            "import": "./dist/channel/index.js",
+            "types": "./dist/channel/index.d.ts"
+        },
+        "./channel/channels": {
+            "import": "./dist/channel/channels.js",
+            "types": "./dist/channel/channels.d.ts"
+        },
+        "./channel/channels.js": {
+            "import": "./dist/channel/channels.js",
+            "types": "./dist/channel/channels.d.ts"
+        },
+        "./channel/common": {
+            "import": "./dist/channel/common.js",
+            "types": "./dist/channel/common.d.ts"
+        },
+        "./channel/common.js": {
+            "import": "./dist/channel/common.js",
+            "types": "./dist/channel/common.d.ts"
+        },
+        "./channel/index.js": {
+            "import": "./dist/channel/index.js",
+            "types": "./dist/channel/index.d.ts"
+        },
+        "./channel/transport": {
+            "import": "./dist/channel/transport.js",
+            "types": "./dist/channel/transport.d.ts"
+        },
+        "./channel/transport.js": {
+            "import": "./dist/channel/transport.js",
+            "types": "./dist/channel/transport.d.ts"
+        },
         "./collection": {
             "import": "./dist/collection.js",
             "types": "./dist/collection.d.ts"
@@ -144,6 +180,14 @@
         "./common/const.js": {
             "import": "./dist/common/const.js",
             "types": "./dist/common/const.d.ts"
+        },
+        "./common/error": {
+            "import": "./dist/common/error.js",
+            "types": "./dist/common/error.d.ts"
+        },
+        "./common/error.js": {
+            "import": "./dist/common/error.js",
+            "types": "./dist/common/error.d.ts"
         },
         "./common/index.js": {
             "import": "./dist/common/index.js",
