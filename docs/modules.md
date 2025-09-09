@@ -9,6 +9,7 @@
 - [actor](actor/README.md)
 - [binary](binary/README.md)
 - [bureau](bureau/README.md)
+- [channel](channel/README.md)
 - [collection](collection/README.md)
 - [common](common/README.md)
 - [concurrency](concurrency/README.md)

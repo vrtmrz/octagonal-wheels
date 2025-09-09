@@ -40,6 +40,8 @@ import * as bureau_index from './bureau/index.js';
 export { bureau_index as bureau };
 import * as conduit_index from './conduit/index.js';
 export { conduit_index as conduit };
+import * as channel_index from './channel/index.js';
+export { channel_index as channel };
 
 /**
  * Returns the version of the library.
@@ -48,7 +50,7 @@ export { conduit_index as conduit };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.38";
+    return "octagonal-wheels-0.1.39";
 }
 
 export { libVersion };
