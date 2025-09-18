@@ -4,15 +4,17 @@
 
 [octagonal-wheels](../../modules.md) / [binary](../README.md) / uint8ArrayToHexString
 
-# Function: uint8ArrayToHexString()
+# Variable: uint8ArrayToHexString()
 
 ```ts
-function uint8ArrayToHexString(src: Uint8Array): string;
+const uint8ArrayToHexString: (src: Uint8Array) => string;
 ```
 
-Defined in: [src/binary/hex.ts:30](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/hex.ts#L30)
+Defined in: [src/binary/hex.ts:65](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/hex.ts#L65)
 
 Converts a Uint8Array to a hexadecimal string representation.
+
+Converts a Uint8Array to a hexadecimal string representation using native methods.
 
 ## Parameters
 
@@ -23,5 +25,13 @@ Converts a Uint8Array to a hexadecimal string representation.
 ## Returns
 
 `string`
+
+The hexadecimal string representation of the Uint8Array.
+
+## Param
+
+The Uint8Array to convert.
+
+## Returns
 
 The hexadecimal string representation of the Uint8Array.

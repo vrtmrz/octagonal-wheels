@@ -10,7 +10,7 @@
 function writeString(string: string): Uint8Array<ArrayBuffer>;
 ```
 
-Defined in: [src/binary/base64.ts:122](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L122)
+Defined in: [src/binary/base64.ts:207](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L207)
 
 ## Parameters
 

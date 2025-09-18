@@ -4,15 +4,17 @@
 
 [octagonal-wheels](../../modules.md) / [binary](../README.md) / base64ToString
 
-# Function: base64ToString()
+# Variable: base64ToString()
 
 ```ts
-function base64ToString(base64: string | string[]): string;
+const base64ToString: (base64: string | string[]) => string;
 ```
 
-Defined in: [src/binary/base64.ts:215](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L215)
+Defined in: [src/binary/base64.ts:300](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L300)
 
 Converts a base64 string or an array of base64 strings to a regular string.
+
+Converts a base64 string or an array of base64 strings to a regular string using native methods.
 
 ## Parameters
 
@@ -23,6 +25,18 @@ Converts a base64 string or an array of base64 strings to a regular string.
 ## Returns
 
 `string`
+
+The converted regular string.
+
+## Note
+
+This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+
+## Param
+
+The base64 string or an array of base64 strings to convert.
+
+## Returns
 
 The converted regular string.
 

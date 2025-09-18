@@ -50,7 +50,7 @@ export { channel_index as channel };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.39";
+    return "octagonal-wheels-0.1.40";
 }
 
 export { libVersion };

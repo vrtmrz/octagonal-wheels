@@ -4,15 +4,17 @@
 
 [octagonal-wheels](../../modules.md) / [binary](../README.md) / arrayBufferToBase64Single
 
-# Function: arrayBufferToBase64Single()
+# Variable: arrayBufferToBase64Single()
 
 ```ts
-function arrayBufferToBase64Single(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string>;
+const arrayBufferToBase64Single: (buffer: ArrayBuffer | Uint8Array<ArrayBuffer>) => Promise<string>;
 ```
 
-Defined in: [src/binary/base64.ts:77](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L77)
+Defined in: [src/binary/base64.ts:142](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/binary/base64.ts#L142)
 
 Converts an ArrayBuffer or Uint8Array to a base64 string.
+
+Converts an ArrayBuffer or Uint8Array to a base64 string using native methods.
 
 ## Parameters
 
@@ -23,5 +25,13 @@ Converts an ArrayBuffer or Uint8Array to a base64 string.
 ## Returns
 
 `Promise`\<`string`\>
+
+A Promise that resolves to the base64 string representation of the ArrayBuffer.
+
+## Param
+
+The ArrayBuffer to convert.
+
+## Returns
 
 A Promise that resolves to the base64 string representation of the ArrayBuffer.
