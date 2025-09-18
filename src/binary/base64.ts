@@ -1,15 +1,48 @@
 import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger.ts";
 
-// Future implementation
-// function isArrayBufferBased(buf: Uint8Array<ArrayBuffer | SharedArrayBuffer>): buf is Uint8Array<ArrayBuffer> {
-//     return buf.buffer instanceof ArrayBuffer;
-// }
+const isProposalArrayBufferBase64Available =
+    typeof Uint8Array !== "undefined" &&
+    //@ts-ignore: Not typed in project target level
+    typeof Uint8Array.prototype.toBase64 === "function" &&
+    //@ts-ignore: Not typed in project target level
+    typeof Uint8Array.fromBase64 === "function";
+
+interface ExtendedUint8Array {
+    toBase64: () => string;
+    fromBase64: (base64: string) => Uint8Array<ArrayBuffer>;
+}
 /**
- * Converts a base64 string or an array of base64 strings to an ArrayBuffer.
+ * Converts a base64 string or an array of base64 strings to an ArrayBuffer using native methods.
  * @param base64 - The base64 string or an array of base64 strings to convert.
  * @returns The converted ArrayBuffer.
  */
-export function base64ToArrayBuffer(base64: string | string[]): ArrayBuffer {
+export function base64ToArrayBufferNative(base64: string | string[]): ArrayBuffer {
+    // if (base64 === "") return new ArrayBuffer(0);
+    if (base64.length === 0) return new ArrayBuffer(0); // fix for empty array input or empty string input
+    try {
+        if (typeof base64 == "string") return (Uint8Array as unknown as ExtendedUint8Array).fromBase64(base64).buffer;
+        const bufItems = base64.map((e) => (Uint8Array as unknown as ExtendedUint8Array).fromBase64(e).buffer);
+        const len = bufItems.reduce((p, c) => p + c.byteLength, 0);
+        const joinedArray = new Uint8Array(len);
+        let offset = 0;
+        bufItems.forEach((e) => {
+            joinedArray.set(new Uint8Array(e), offset);
+            offset += e.byteLength;
+        });
+        return joinedArray.buffer;
+    } catch (ex) {
+        Logger("Base64 Decode error", LOG_LEVEL_VERBOSE);
+        Logger(ex, LOG_LEVEL_VERBOSE);
+        return new ArrayBuffer(0);
+    }
+}
+
+/**
+ * Converts a base64 string or an array of base64 strings to an ArrayBuffer using browser-compatible methods.
+ * @param base64 - The base64 string or an array of base64 strings to convert.
+ * @returns The converted ArrayBuffer.
+ */
+export function base64ToArrayBufferBrowser(base64: string | string[]): ArrayBuffer {
     if (typeof base64 == "string") return base64ToArrayBufferInternalBrowser(base64);
     const bufItems = base64.map((e) => base64ToArrayBufferInternalBrowser(e));
     const len = bufItems.reduce((p, c) => p + c.byteLength, 0);
@@ -21,6 +54,15 @@ export function base64ToArrayBuffer(base64: string | string[]): ArrayBuffer {
     });
     return joinedArray.buffer;
 }
+
+/**
+ * Converts a base64 string or an array of base64 strings to an ArrayBuffer.
+ * @param base64 - The base64 string or an array of base64 strings to convert.
+ * @returns The converted ArrayBuffer.
+ */
+export const base64ToArrayBuffer = isProposalArrayBufferBase64Available
+    ? base64ToArrayBufferNative
+    : base64ToArrayBufferBrowser;
 
 /**
  * Converts a base64 string to an ArrayBuffer in a browser environment.
@@ -69,23 +111,57 @@ function arrayBufferToBase64internalBrowser(buffer: DataView<ArrayBuffer> | Uint
 }
 
 /**
+ * Converts an ArrayBuffer or Uint8Array to a base64 string in a browser environment.
+ *
+ * @param buffer - The ArrayBuffer to convert.
+ * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
+ */
+export async function arrayBufferToBase64SingleBrowser(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string> {
+    const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+    if (buf.byteLength < QUANTUM) return btoa(String.fromCharCode.apply(null, [...buf]));
+    return await arrayBufferToBase64internalBrowser(buf);
+}
+
+/**
+ * Converts an ArrayBuffer or Uint8Array to a base64 string using native methods.
+ *
+ * @param buffer - The ArrayBuffer to convert.
+ * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
+ */
+export function arrayBufferToBase64SingleNative(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string> {
+    const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+    return Promise.resolve((buf as unknown as ExtendedUint8Array).toBase64());
+}
+
+/**
  * Converts an ArrayBuffer or Uint8Array to a base64 string.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to the base64 string representation of the ArrayBuffer.
  */
-export async function arrayBufferToBase64Single(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string> {
-    const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
-    if (buf.byteLength < QUANTUM) return btoa(String.fromCharCode.apply(null, [...buf]));
-    return await arrayBufferToBase64internalBrowser(buf);
-}
+export const arrayBufferToBase64Single = isProposalArrayBufferBase64Available
+    ? arrayBufferToBase64SingleNative
+    : arrayBufferToBase64SingleBrowser;
+
 /**
- * Converts an ArrayBuffer or Uint8Array to a base64 string.
+ * Converts an ArrayBuffer or Uint8Array to a base64 string using native methods.
  *
  * @param buffer - The ArrayBuffer to convert.
  * @returns A Promise that resolves to an array of base64 strings.
  */
-export async function arrayBufferToBase64(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string[]> {
+export function arrayBufferToBase64Native(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string[]> {
+    const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+    const result = (buf as unknown as ExtendedUint8Array).toBase64();
+    return Promise.resolve([result]);
+}
+
+/**
+ * Converts an ArrayBuffer or Uint8Array to a base64 string using browser-compatible methods.
+ *
+ * @param buffer - The ArrayBuffer to convert.
+ * @returns A Promise that resolves to an array of base64 strings.
+ */
+export async function arrayBufferToBase64Browser(buffer: ArrayBuffer | Uint8Array<ArrayBuffer>): Promise<string[]> {
     const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     if (buf.byteLength < QUANTUM) return [btoa(String.fromCharCode.apply(null, [...buf]))];
     const bufLen = buf.byteLength;
@@ -100,8 +176,17 @@ export async function arrayBufferToBase64(buffer: ArrayBuffer | Uint8Array<Array
     return pieces;
 }
 
+/**
+ * Converts an ArrayBuffer or Uint8Array to a base64 string.
+ *
+ * @param buffer - The ArrayBuffer to convert.
+ * @returns A Promise that resolves to an array of base64 strings.
+ */
+export const arrayBufferToBase64 = isProposalArrayBufferBase64Available
+    ? arrayBufferToBase64Native
+    : arrayBufferToBase64Browser;
 //
-// Safari's JavaScriptCOre hardcoded the argument limit to 65536
+// Safari's JavaScriptCore hardcoded the argument limit to 65536
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
 const QUANTUM = 32768;
 
@@ -212,14 +297,46 @@ export function readString(buffer: Uint8Array): string {
  * @returns The converted regular string.
  * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
  */
-export function base64ToString(base64: string | string[]): string {
+export const base64ToString = isProposalArrayBufferBase64Available ? base64ToStringNative : base64ToStringBrowser;
+
+/**
+ * Converts a base64 string or an array of base64 strings to a regular string in a browser environment.
+ * @param base64 - The base64 string or an array of base64 strings to convert.
+ * @returns The converted regular string.
+ * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ */
+export function base64ToStringBrowser(base64: string | string[]): string {
     try {
-        if (typeof base64 != "string") return base64.map((e) => base64ToString(e)).join("");
+        if (typeof base64 != "string") return base64.map((e) => base64ToStringBrowser(e)).join("");
         const binary_string = atob(base64);
         const len = binary_string.length;
         const bytes = new Uint8Array(len);
         for (let i = 0; i < len; i++) {
             bytes[i] = binary_string.charCodeAt(i);
+        }
+        return readString(bytes);
+    } catch (ex) {
+        Logger("Base64 To String error", LOG_LEVEL_VERBOSE);
+        Logger(ex, LOG_LEVEL_VERBOSE);
+        if (typeof base64 != "string") return base64.join("");
+        return base64;
+    }
+}
+
+/**
+ * Converts a base64 string or an array of base64 strings to a regular string using native methods.
+ * @param base64 - The base64 string or an array of base64 strings to convert.
+ * @returns The converted regular string.
+ * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ */
+export function base64ToStringNative(base64: string | string[]): string {
+    try {
+        if (typeof base64 != "string") return base64.map((e) => base64ToStringNative(e)).join("");
+
+        const buffer = base64ToArrayBufferNative(base64);
+        const bytes = new Uint8Array(buffer);
+        if (bytes.length === 0 && base64.length > 0) {
+            throw new TypeError("Could not parse the encoded string");
         }
         return readString(bytes);
     } catch (ex) {
@@ -238,7 +355,17 @@ const regexpBase64 = /^[A-Za-z0-9+/]+=*$/;
  * @param base64 - The base64 string to convert.
  * @returns The converted ArrayBuffer if successful, otherwise false.
  */
-export function tryConvertBase64ToArrayBuffer(base64: string): ArrayBuffer | false {
+export const tryConvertBase64ToArrayBuffer = isProposalArrayBufferBase64Available
+    ? tryConvertBase64ToArrayBufferNative
+    : tryConvertBase64ToArrayBufferBrowser;
+
+/**
+ * Tries to convert a base64 string to an ArrayBuffer in a browser environment.
+ *
+ * @param base64 - The base64 string to convert.
+ * @returns The converted ArrayBuffer if successful, otherwise false.
+ */
+export function tryConvertBase64ToArrayBufferBrowser(base64: string): ArrayBuffer | false {
     try {
         const b64F = base64.replace(/\r|\n/g, "");
         if (!regexpBase64.test(b64F)) {
@@ -255,6 +382,28 @@ export function tryConvertBase64ToArrayBuffer(base64: string): ArrayBuffer | fal
             bytes[i] = binary_string.charCodeAt(i);
         }
         return bytes.buffer;
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * Tries to convert a base64 string to an ArrayBuffer using native methods.
+ *
+ * @param base64 - The base64 string to convert.
+ * @returns The converted ArrayBuffer if successful, otherwise false.
+ */
+export function tryConvertBase64ToArrayBufferNative(base64: string): ArrayBuffer | false {
+    try {
+        const b64F = base64.replace(/\r|\n/g, "");
+        if (!regexpBase64.test(b64F)) {
+            return false;
+        }
+        const buf = (Uint8Array as unknown as ExtendedUint8Array).fromBase64(b64F);
+        if ((buf as unknown as ExtendedUint8Array).toBase64() !== b64F) {
+            return false;
+        }
+        return buf.byteLength > 0 ? buf.buffer : false;
     } catch {
         return false;
     }
