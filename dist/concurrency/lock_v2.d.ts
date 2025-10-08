@@ -39,4 +39,50 @@ export declare function scheduleOnceIfDuplicated<T>(key: string, proc: () => Pro
  * @returns `true` if the lock is acquired, `false` otherwise.
  */
 export declare function isLockAcquired(key: string | symbol): boolean;
+/**
+ * Concurrency controller to limit the number of concurrent tasks.
+ * Similar to a semaphore but with a simpler `run` method.
+ * Petit semaphore for limiting concurrency.
+ */
+export declare class ConcurrentTaskController {
+    maxConcurrency: number;
+    private onFree;
+    constructor(maxConcurrency: number);
+    private runningTasks;
+    private totalOnProcess;
+    /**
+     * Current number of waiting and running tasks.
+     */
+    get currentPressure(): number;
+    get currentConcurrency(): number;
+    /**
+     * Manually acquire a slot for running a task.
+     * @returns A releaser function to call when the task is done.
+     */
+    __acquire(): Promise<() => void>;
+    /**
+     * Run a task with concurrency control.
+     * @param task task to run
+     * @param reportProgress optional function to report progress (e.g., update UI)
+     * @returns result of the task
+     */
+    run<T>(task: () => Promise<T>, reportProgress?: () => Promise<any>): Promise<T>;
+    /**
+     * Wait until all running tasks are released.
+     * Note: This does not prevent new tasks from being started after this method returns.
+     */
+    waitForAllReleased(): Promise<void>;
+}
+/**
+ * Symbol to indicate that the scheduled task was skipped.
+ */
+export declare const SCHEDULE_SKIPPED: unique symbol;
+/**
+ * Schedule a task to run with concurrency control, ensuring that only the latest task is run.
+ * @param group The group to which the task belongs.
+ * @param key The unique key for the task.
+ * @param proc The function to run the task.
+ * @returns A promise that resolves with the result of the task or a symbol indicating the task was skipped.
+ */
+export declare function scheduleAndRunOnlyLatest<T>(group: string, key: string, proc: (ac?: AbortController) => Promise<T>): Promise<T | typeof SCHEDULE_SKIPPED>;
 export {};

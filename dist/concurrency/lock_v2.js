@@ -187,6 +187,164 @@ function isLockAcquired(key) {
     const count = queueCount.get(key) ?? 0;
     return count > 0;
 }
+/**
+ * Concurrency controller to limit the number of concurrent tasks.
+ * Similar to a semaphore but with a simpler `run` method.
+ * Petit semaphore for limiting concurrency.
+ */
+class ConcurrentTaskController {
+    constructor(maxConcurrency) {
+        Object.defineProperty(this, "maxConcurrency", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "onFree", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        // tasks = new Set<PromiseWithResolvers<void>>();
+        Object.defineProperty(this, "runningTasks", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: new Set()
+        });
+        Object.defineProperty(this, "totalOnProcess", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 0
+        });
+        this.maxConcurrency = maxConcurrency;
+    }
+    /**
+     * Current number of waiting and running tasks.
+     */
+    get currentPressure() {
+        return this.totalOnProcess;
+    }
+    get currentConcurrency() {
+        return this.runningTasks.size;
+    }
+    /**
+     * Manually acquire a slot for running a task.
+     * @returns A releaser function to call when the task is done.
+     */
+    async __acquire() {
+        this.totalOnProcess++;
+        while (this.runningTasks.size >= this.maxConcurrency) {
+            if (!this.onFree) {
+                this.onFree = promiseWithResolvers();
+            }
+            await this.onFree.promise;
+        }
+        const release = () => {
+            if (this.runningTasks.has(release)) {
+                this.runningTasks.delete(release);
+            }
+            if (this.onFree) {
+                this.onFree.resolve();
+                this.onFree = undefined;
+            }
+            this.totalOnProcess--;
+        };
+        this.runningTasks.add(release);
+        return release;
+    }
+    /**
+     * Run a task with concurrency control.
+     * @param task task to run
+     * @param reportProgress optional function to report progress (e.g., update UI)
+     * @returns result of the task
+     */
+    async run(task, reportProgress) {
+        const release = await this.__acquire();
+        try {
+            await reportProgress?.();
+        }
+        catch {
+            // ignore errors in reportProgress
+        }
+        try {
+            return await task();
+        }
+        finally {
+            release();
+            try {
+                await reportProgress?.();
+            }
+            catch {
+                // ignore errors in reportProgress
+            }
+        }
+    }
+    /**
+     * Wait until all running tasks are released.
+     * Note: This does not prevent new tasks from being started after this method returns.
+     */
+    async waitForAllReleased() {
+        while (this.totalOnProcess > 0) {
+            if (!this.onFree) {
+                this.onFree = promiseWithResolvers();
+            }
+            await this.onFree.promise;
+        }
+    }
+}
+const scheduleMap = new Map();
+const semaphores = new Map();
+function getGroupController(group, concurrency = 1) {
+    let semaphore = semaphores.get(group);
+    if (!semaphore) {
+        semaphore = new ConcurrentTaskController(concurrency);
+        semaphores.set(group, semaphore);
+    }
+    return semaphore;
+}
+/**
+ * Symbol to indicate that the scheduled task was skipped.
+ */
+const SCHEDULE_SKIPPED = Symbol("skipped");
+/**
+ * Schedule a task to run with concurrency control, ensuring that only the latest task is run.
+ * @param group The group to which the task belongs.
+ * @param key The unique key for the task.
+ * @param proc The function to run the task.
+ * @returns A promise that resolves with the result of the task or a symbol indicating the task was skipped.
+ */
+function scheduleAndRunOnlyLatest(group, key, proc) {
+    const existing = scheduleMap.get(key);
+    // Abort the existing task if it exists
+    if (existing) {
+        existing.controller.abort();
+        scheduleMap.delete(key);
+    }
+    const semaphore = getGroupController(group);
+    const controller = new AbortController();
+    const task = async () => {
+        return await semaphore.run(async () => {
+            if (controller.signal.aborted) {
+                // Just skip
+                return Promise.resolve(SCHEDULE_SKIPPED);
+            }
+            try {
+                return await proc(controller);
+            }
+            finally {
+                // Clean up only if it's the latest task
+                if (scheduleMap.get(key)?.controller === controller) {
+                    scheduleMap.delete(key);
+                }
+            }
+        });
+    };
+    scheduleMap.set(key, { task, controller });
+    return task();
+}
 
-export { SYMBOL_SKIPPED, isLockAcquired, onlyLatest, scheduleOnceIfDuplicated, serialized, shareRunningResult, skipIfDuplicated };
+export { ConcurrentTaskController, SCHEDULE_SKIPPED, SYMBOL_SKIPPED, isLockAcquired, onlyLatest, scheduleAndRunOnlyLatest, scheduleOnceIfDuplicated, serialized, shareRunningResult, skipIfDuplicated };
 //# sourceMappingURL=lock_v2.js.map
