@@ -8,6 +8,7 @@
 
 ## Namespaces
 
+- [bulk](bulk/README.md)
 - [lock](lock/README.md)
 - [processor](processor/README.md)
 - [semaphore](semaphore/README.md)
