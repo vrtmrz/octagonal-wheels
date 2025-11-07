@@ -20,7 +20,7 @@ ConnectorInstance
 | ------ | ------ |
 | `T` | the type of the instance |
 
-## Description
+## Remarks
 
 ConnectorInstance is a type that represents an instance of a class.
 It is used to connect an instance to a name, and then retrieve that instance later.

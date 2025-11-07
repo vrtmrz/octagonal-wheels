@@ -6,17 +6,9 @@
 
 # Class: Harvester\<T\>
 
-Defined in: [src/bureau/Clerk.ts:433](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L433)
+Defined in: [src/bureau/Clerk.ts:434](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L434)
 
 a clerk that picks items from an inbox and stores them in a buffer.
-
-## Method
-
-clear - Clears the buffer.
-
-## Method
-
-drainAndReset - Drains the buffer and resets it.
 
 ## Extends
 
@@ -36,7 +28,7 @@ drainAndReset - Drains the buffer and resets it.
 new Harvester<T>(params: ClerkOptionBase<T>): Harvester<T>;
 ```
 
-Defined in: [src/bureau/Clerk.ts:454](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L454)
+Defined in: [src/bureau/Clerk.ts:455](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L455)
 
 #### Parameters
 
@@ -56,7 +48,7 @@ Defined in: [src/bureau/Clerk.ts:454](https://github.com/vrtmrz/octagonal-wheels
 
 | Property | Type | Default value | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="_buffer"></a> `_buffer` | `T`[] | `[]` | - | [src/bureau/Clerk.ts:434](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L434) |
+| <a id="_buffer"></a> `_buffer` | `T`[] | `[]` | - | [src/bureau/Clerk.ts:435](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L435) |
 | <a id="_disposed"></a> `_disposed` | `boolean` | `false` | [`ClerkBase`](../ClerkBase/README.md).[`_disposed`](../ClerkBase/README.md#_disposed) | [src/bureau/Clerk.ts:57](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L57) |
 | <a id="_disposepromise"></a> `_disposePromise` | \{ `promise`: `any`; `reject`: `any`; `resolve`: `any`; \} | `undefined` | [`ClerkBase`](../ClerkBase/README.md).[`_disposePromise`](../ClerkBase/README.md#_disposepromise) | [src/bureau/Clerk.ts:58](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L58) |
 | `_disposePromise.promise` | `any` | `undefined` | - | [src/promises.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L68) |
@@ -66,7 +58,7 @@ Defined in: [src/bureau/Clerk.ts:454](https://github.com/vrtmrz/octagonal-wheels
 | <a id="_name"></a> `_name` | `string` | `undefined` | [`ClerkBase`](../ClerkBase/README.md).[`_name`](../ClerkBase/README.md#_name) | [src/bureau/Clerk.ts:48](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L48) |
 | <a id="_onprogress"></a> `_onProgress?` | (`state`: `ClerkStateDetail`) => `void` | `undefined` | [`ClerkBase`](../ClerkBase/README.md).[`_onProgress`](../ClerkBase/README.md#_onprogress) | [src/bureau/Clerk.ts:85](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L85) |
 | <a id="_state"></a> `_state` | [`ClerkState`](../ClerkState/README.md) | `ClerkState.STALLED` | [`ClerkBase`](../ClerkBase/README.md).[`_state`](../ClerkBase/README.md#_state) | [src/bureau/Clerk.ts:52](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L52) |
-| <a id="_timeouttimer"></a> `_timeoutTimer` | `undefined` \| `Timeout` | `undefined` | - | [src/bureau/Clerk.ts:435](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L435) |
+| <a id="_timeouttimer"></a> `_timeoutTimer` | `undefined` \| `Timeout` | `undefined` | - | [src/bureau/Clerk.ts:436](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L436) |
 | <a id="_totalfailed"></a> `_totalFailed` | `number` | `0` | [`ClerkBase`](../ClerkBase/README.md).[`_totalFailed`](../ClerkBase/README.md#_totalfailed) | [src/bureau/Clerk.ts:55](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L55) |
 | <a id="_totalfetched"></a> `_totalFetched` | `number` | `0` | [`ClerkBase`](../ClerkBase/README.md).[`_totalFetched`](../ClerkBase/README.md#_totalfetched) | [src/bureau/Clerk.ts:56](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L56) |
 | <a id="_totalprocessed"></a> `_totalProcessed` | `number` | `0` | [`ClerkBase`](../ClerkBase/README.md).[`_totalProcessed`](../ClerkBase/README.md#_totalprocessed) | [src/bureau/Clerk.ts:53](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L53) |
@@ -102,7 +94,7 @@ Defined in: [src/bureau/Clerk.ts:152](https://github.com/vrtmrz/octagonal-wheels
 get result(): T[];
 ```
 
-Defined in: [src/bureau/Clerk.ts:437](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L437)
+Defined in: [src/bureau/Clerk.ts:438](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L438)
 
 ##### Returns
 
@@ -176,7 +168,7 @@ Defined in: [src/bureau/Clerk.ts:97](https://github.com/vrtmrz/octagonal-wheels/
 _onPick(item: T): Promise<void>;
 ```
 
-Defined in: [src/bureau/Clerk.ts:449](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L449)
+Defined in: [src/bureau/Clerk.ts:450](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L450)
 
 #### Parameters
 
@@ -224,7 +216,9 @@ Defined in: [src/bureau/Clerk.ts:50](https://github.com/vrtmrz/octagonal-wheels/
 clear(): void;
 ```
 
-Defined in: [src/bureau/Clerk.ts:440](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L440)
+Defined in: [src/bureau/Clerk.ts:441](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L441)
+
+Clears the buffer.
 
 #### Returns
 
@@ -238,7 +232,7 @@ Defined in: [src/bureau/Clerk.ts:440](https://github.com/vrtmrz/octagonal-wheels
 dispose(): void;
 ```
 
-Defined in: [src/bureau/Clerk.ts:458](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L458)
+Defined in: [src/bureau/Clerk.ts:459](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L459)
 
 #### Returns
 
@@ -256,7 +250,9 @@ Defined in: [src/bureau/Clerk.ts:458](https://github.com/vrtmrz/octagonal-wheels
 drainAndReset(): T[];
 ```
 
-Defined in: [src/bureau/Clerk.ts:443](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L443)
+Defined in: [src/bureau/Clerk.ts:444](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/Clerk.ts#L444)
+
+Drains the buffer and resets it.
 
 #### Returns
 

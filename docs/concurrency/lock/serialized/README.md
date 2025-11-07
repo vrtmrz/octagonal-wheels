@@ -25,7 +25,7 @@ Run tasks one by one in their group.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `key` | `string` \| `symbol` | key of the group |
-| `proc` | `Task`\<`T`\> | process to run |
+| `proc` | [`Task`](../Task/README.md)\<`T`\> | process to run |
 
 ## Returns
 

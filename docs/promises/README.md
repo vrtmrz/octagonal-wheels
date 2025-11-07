@@ -8,6 +8,7 @@
 
 ## Type Aliases
 
+- [ExtendableDelay](ExtendableDelay/README.md)
 - [PromiseWithResolvers](PromiseWithResolvers/README.md)
 - [TIMED\_OUT\_SIGNAL](TIMED_OUT_SIGNAL/README.md)
 
@@ -21,7 +22,7 @@
 
 - [cancelableDelay](cancelableDelay/README.md)
 - [delay](delay/README.md)
-- [extendableDelay](extendableDelay/README.md)
+- [extendableDelay](extendableDelay-1/README.md)
 - [fireAndForget](fireAndForget/README.md)
 - [isResolved](isResolved/README.md)
 - [isSomeResolved](isSomeResolved/README.md)

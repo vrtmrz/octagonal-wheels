@@ -30,6 +30,6 @@ until a specified timeout has passed since the last invocation.
 
 ## Returns
 
-`ThrottledFunction`\<`T`\>
+[`ThrottledFunction`](../ThrottledFunction/README.md)\<`T`\>
 
 A throttled function that delays subsequent invocations.

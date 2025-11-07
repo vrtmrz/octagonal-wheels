@@ -9,6 +9,7 @@
 ## Classes
 
 - [Actor](Actor/README.md)
+- [ActorHub](ActorHub/README.md)
 - [LogActorBase](LogActorBase/README.md)
 
 ## Type Aliases

@@ -10,7 +10,7 @@
 function extendableDelay<U>(timeout: number, cancel: U): ExtendableDelay<typeof TIMED_OUT_SIGNAL, U>;
 ```
 
-Defined in: [src/promises.ts:210](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L210)
+Defined in: [src/promises.ts:214](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L214)
 
 Creates an extendable delay that can be cancelled or extended.
 
@@ -29,7 +29,7 @@ Creates an extendable delay that can be cancelled or extended.
 
 ## Returns
 
-`ExtendableDelay`\<*typeof* [`TIMED_OUT_SIGNAL`](../TIMED_OUT_SIGNAL-1/README.md), `U`\>
+[`ExtendableDelay`](../ExtendableDelay/README.md)\<*typeof* [`TIMED_OUT_SIGNAL`](../TIMED_OUT_SIGNAL-1/README.md), `U`\>
 
 An object containing the promise, cancel function, and extend function.
 

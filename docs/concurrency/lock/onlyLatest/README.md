@@ -23,7 +23,7 @@ Defined in: [src/concurrency/lock\_v2.ts:69](https://github.com/vrtmrz/octagonal
 | Parameter | Type |
 | ------ | ------ |
 | `key` | `string` \| `symbol` |
-| `proc` | `Task`\<`T`\> |
+| `proc` | [`Task`](../Task/README.md)\<`T`\> |
 
 ## Returns
 

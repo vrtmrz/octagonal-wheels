@@ -22,6 +22,7 @@ If the event is not cancelable, it will always return true.
 ## Extended by
 
 - [`LinkedEventTarget`](../LinkedEventTarget/README.md)
+- [`GlobalChannelTarget`](../GlobalChannelTarget/README.md)
 
 ## Constructors
 

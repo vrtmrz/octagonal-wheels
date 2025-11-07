@@ -8,6 +8,7 @@
 
 ## Namespaces
 
+- [computed](computed/README.md)
 - [persistentmap](persistentmap/README.md)
 - [reactive](reactive/README.md)
 - [refiner](refiner/README.md)

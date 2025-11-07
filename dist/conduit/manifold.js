@@ -5,7 +5,7 @@ import { NamedInstance } from './NamedInstance.js';
  * Create a manifold (Internal)
  * @param name The name of the manifold
  * @returns A manifold
- * @description A manifold is a collection of functions that can be added, removed to invoke them with a set of arguments
+ * @remarks A manifold is a collection of functions that can be added, removed to invoke them with a set of arguments
  */
 function createManifold(name) {
     const functions = new Set();

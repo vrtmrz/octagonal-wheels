@@ -10,6 +10,10 @@
 
 - [ConcurrentTaskController](ConcurrentTaskController/README.md)
 
+## Type Aliases
+
+- [Task](Task/README.md)
+
 ## Variables
 
 - [SCHEDULE\_SKIPPED](SCHEDULE_SKIPPED/README.md)

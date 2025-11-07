@@ -6,6 +6,10 @@
 
 # function
 
+## Type Aliases
+
+- [ThrottledFunction](ThrottledFunction/README.md)
+
 ## Functions
 
 - [throttle](throttle/README.md)

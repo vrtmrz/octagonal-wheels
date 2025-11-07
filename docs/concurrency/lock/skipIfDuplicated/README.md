@@ -25,7 +25,7 @@ Skips the execution of a task if it is already duplicated.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `key` | `string` \| `symbol` | The key to identify the task. |
-| `proc` | `Task`\<`T`\> | The task to be executed. |
+| `proc` | [`Task`](../Task/README.md)\<`T`\> | The task to be executed. |
 
 ## Returns
 

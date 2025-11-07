@@ -27,7 +27,7 @@ Mostly same as `SlipBoard.issueAndProceed` but this is for general purpose.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `key` | `string` \| `symbol` | key of the group |
-| `proc` | `Task`\<`T`\> | process to run |
+| `proc` | [`Task`](../Task/README.md)\<`T`\> | process to run |
 
 ## Returns
 

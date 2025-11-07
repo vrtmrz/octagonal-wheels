@@ -16,16 +16,12 @@ Creates a promise and returns it along with the resolve and reject functions.
 
 ## Type Parameters
 
-| Type Parameter |
-| ------ |
-| `T` |
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` | The type of the promise value. |
 
 ## Returns
 
 [`PromiseWithResolvers`](../PromiseWithResolvers/README.md)\<`T`\>
 
 An object containing the promise, resolve, and reject functions.
-
-## Typeparam
-
-T The type of the promise value.

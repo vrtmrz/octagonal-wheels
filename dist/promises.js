@@ -33,7 +33,7 @@ async function isSomeResolved(promises) {
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
  * @returns An object containing the promise, resolve, and reject functions.
- * @typeparam T The type of the promise value.
+ * @template T The type of the promise value.
  */
 function polyfillPromiseWithResolvers() {
     let resolve;

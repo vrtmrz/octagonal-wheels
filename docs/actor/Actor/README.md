@@ -25,23 +25,23 @@ Represents an abstract class for an actor.
 ### Constructor
 
 ```ts
-new Actor<T>(__namedParameters: {
+new Actor<T>(params: {
   multiInstance?: boolean;
   name?: string;
 }): Actor<T>;
 ```
 
-Defined in: [src/actor.ts:114](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L114)
+Defined in: [src/actor.ts:115](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L115)
 
 Initializes a new instance of the Actor class.
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `__namedParameters` | \{ `multiInstance?`: `boolean`; `name?`: `string`; \} |
-| `__namedParameters.multiInstance?` | `boolean` |
-| `__namedParameters.name?` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `params` | \{ `multiInstance?`: `boolean`; `name?`: `string`; \} | The parameters for the actor. |
+| `params.multiInstance?` | `boolean` | Indicates whether the actor is a multi-instance. The default value is false. If true, the actor can have multiple instances to process each message concurrently. |
+| `params.name?` | `string` | The name of the actor. It will be the class name if not provided. |
 
 #### Returns
 
@@ -51,11 +51,11 @@ Initializes a new instance of the Actor class.
 
 | Property | Modifier | Type | Default value | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ |
-| <a id="__process"></a> `__process` | `public` | `undefined` \| `Promise`\<`void`\> | `undefined` | - | [src/actor.ts:135](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L135) |
-| <a id="_busy"></a> `_busy` | `public` | `boolean` | `false` | - | [src/actor.ts:120](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L120) |
+| <a id="__process"></a> `__process` | `public` | `undefined` \| `Promise`\<`void`\> | `undefined` | - | [src/actor.ts:136](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L136) |
+| <a id="_busy"></a> `_busy` | `public` | `boolean` | `false` | - | [src/actor.ts:121](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L121) |
 | <a id="multiinstance"></a> `multiInstance` | `readonly` | `boolean` | `undefined` | Indicates whether the actor is a multi-instance. | [src/actor.ts:102](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L102) |
 | <a id="name"></a> `name` | `readonly` | `string` | `undefined` | The name of the actor. | [src/actor.ts:98](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L98) |
-| <a id="hub"></a> `hub` | `static` | `ActorHub`\<`any`\> | `undefined` | Represents the hub for actors. | [src/actor.ts:107](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L107) |
+| <a id="hub"></a> `hub` | `static` | [`ActorHub`](../ActorHub/README.md)\<`any`\> | `undefined` | Represents the hub for actors. | [src/actor.ts:107](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L107) |
 
 ## Methods
 
@@ -65,7 +65,7 @@ Initializes a new instance of the Actor class.
 _enqueue(message: T): void;
 ```
 
-Defined in: [src/actor.ts:138](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L138)
+Defined in: [src/actor.ts:139](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L139)
 
 #### Parameters
 
@@ -85,7 +85,7 @@ Defined in: [src/actor.ts:138](https://github.com/vrtmrz/octagonal-wheels/blob/m
 _process(message: T): Promise<void>;
 ```
 
-Defined in: [src/actor.ts:121](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L121)
+Defined in: [src/actor.ts:122](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L122)
 
 #### Parameters
 
@@ -105,7 +105,7 @@ Defined in: [src/actor.ts:121](https://github.com/vrtmrz/octagonal-wheels/blob/m
 destroy(): void;
 ```
 
-Defined in: [src/actor.ts:189](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L189)
+Defined in: [src/actor.ts:190](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L190)
 
 Destroys the actor instance.
 
@@ -119,7 +119,7 @@ Destroys the actor instance.
 
 ```ts
 dispatch<U, V>(actor: {
-(__namedParameters: {
+(params: {
   multiInstance?: boolean;
   name?: string;
 }): Actor<V>;
@@ -128,7 +128,7 @@ dispatch<U, V>(actor: {
 }, message: U): void;
 ```
 
-Defined in: [src/actor.ts:182](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L182)
+Defined in: [src/actor.ts:183](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L183)
 
 Dispatches a message to the specified actor.
 Utility method to dispatch a message to the actor, which is the subsequent actor of the current actor.
@@ -145,8 +145,8 @@ Just for hiding the hub from the derived class.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `actor` | \{ (`__namedParameters`: \{ `multiInstance?`: `boolean`; `name?`: `string`; \}): `Actor`\<`V`\>; `hub`: `ActorHub`\<`any`\>; `prototype`: `Actor`\<`any`\>; \} | The actor to dispatch the message to. |
-| `actor.hub` | `ActorHub`\<`any`\> | Represents the hub for actors. |
+| `actor` | \{ (`params`: \{ `multiInstance?`: `boolean`; `name?`: `string`; \}): `Actor`\<`V`\>; `hub`: [`ActorHub`](../ActorHub/README.md)\<`any`\>; `prototype`: `Actor`\<`any`\>; \} | The actor to dispatch the message to. |
+| `actor.hub` | [`ActorHub`](../ActorHub/README.md)\<`any`\> | Represents the hub for actors. |
 | `actor.prototype` | `Actor`\<`any`\> | - |
 | `message` | `U` | The message to be dispatched. |
 
@@ -162,7 +162,7 @@ Just for hiding the hub from the derived class.
 post(message: T): void;
 ```
 
-Defined in: [src/actor.ts:160](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L160)
+Defined in: [src/actor.ts:161](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L161)
 
 Dispatches a message to the actor.
 Note: Even if we posted messages to the specific actor, the message will be processed by some actor instances if the actor is a multi-instance.
@@ -185,7 +185,7 @@ Note: Even if we posted messages to the specific actor, the message will be proc
 postToThisInstance(message: T): void;
 ```
 
-Defined in: [src/actor.ts:169](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L169)
+Defined in: [src/actor.ts:170](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L170)
 
 Posts a message to this actor instance.
 
@@ -207,7 +207,7 @@ Posts a message to this actor instance.
 abstract process(message: T): void | Promise<void>;
 ```
 
-Defined in: [src/actor.ts:153](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L153)
+Defined in: [src/actor.ts:154](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/actor.ts#L154)
 
 Processes a message. This method should be overridden in the derived class. Automatically called when a message is dispatched to the actor.
 

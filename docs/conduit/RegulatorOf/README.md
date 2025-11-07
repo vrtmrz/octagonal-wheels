@@ -10,7 +10,7 @@ Defined in: [src/conduit/regulator.ts:19](https://github.com/vrtmrz/octagonal-wh
 
 Regulator
 
-## Description
+## Remarks
 
 Regulator allows you to regulate the number of concurrent processes.
 
@@ -54,7 +54,7 @@ Defined in: [src/conduit/regulator.ts:41](https://github.com/vrtmrz/octagonal-wh
 
 <Promise<U>>
 
-#### Description
+#### Remarks
 
 Invoke the regulator with the given arguments.
 
@@ -78,7 +78,7 @@ Defined in: [src/conduit/regulator.ts:49](https://github.com/vrtmrz/octagonal-wh
 
 `Promise`\<`U`\>[]
 
-#### Description
+#### Remarks
 
 Invoke the regulator with the given arguments.
 This will call the function with the given arguments and return a promise that resolves when all functions are done.
@@ -106,7 +106,7 @@ Defined in: [src/conduit/regulator.ts:27](https://github.com/vrtmrz/octagonal-wh
 
 <RegulatorOf<T, U>>
 
-#### Description
+#### Remarks
 
 Set the maximum number of concurrent processes.
 Default is 1.
@@ -133,6 +133,6 @@ Defined in: [src/conduit/regulator.ts:34](https://github.com/vrtmrz/octagonal-wh
 
 <RegulatorOf<T, U>>
 
-#### Description
+#### Remarks
 
 Set the function to be called when the regulator is invoked.

@@ -17,9 +17,9 @@ Note: Very slow, use only when necessary. Prefer fallbackMixedHashEach for faste
 
 ## Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `str` | `string` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `str` | `string` | The string to calculate the hash for. |
 
 ## Returns
 

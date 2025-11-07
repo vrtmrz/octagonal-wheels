@@ -10,7 +10,7 @@
 function concatUInt8Array(arrays: Uint8Array<ArrayBufferLike>[]): Uint8Array<ArrayBuffer>;
 ```
 
-Defined in: [src/collection.ts:96](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L96)
+Defined in: [src/collection.ts:95](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L95)
 
 ## Parameters
 
