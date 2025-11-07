@@ -33,7 +33,7 @@ ConnectorFunc
 
 a promise that resolves to the return value of the function
 
-## Description
+## Remarks
 
 ConnectorFunc is a function that takes a set of arguments and returns a promise.
 It is used to connect a function to a name, and then invoke that function later.

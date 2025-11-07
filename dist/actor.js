@@ -96,8 +96,9 @@ class ActorHub {
 class Actor {
     /**
      * Initializes a new instance of the Actor class.
-     * @param name - The name of the actor. It will be the class name if not provided.
-     * @param multiInstance - Indicates whether the actor is a multi-instance. The default value is false. If true, the actor can have multiple instances to process each message concurrently.
+     * @param params - The parameters for the actor.
+     * @param params.name - The name of the actor. It will be the class name if not provided.
+     * @param params.multiInstance - Indicates whether the actor is a multi-instance. The default value is false. If true, the actor can have multiple instances to process each message concurrently.
      */
     constructor({ name, multiInstance } = {}) {
         /**
@@ -214,5 +215,5 @@ class LogActorBase extends Actor {
     }
 }
 
-export { Actor, LogActorBase };
+export { Actor, ActorHub, LogActorBase };
 //# sourceMappingURL=actor.js.map

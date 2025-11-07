@@ -43,7 +43,7 @@ Get a regulator
 
 <RegulatorOf<T, U>>
 
-## Description
+## Remarks
 
 Get a regulator that allows you to regulate the number of concurrent processes.
 

@@ -28,7 +28,7 @@ Converts a base64 string or an array of base64 strings to a regular string using
 
 The converted regular string.
 
-## Note
+## Remarks
 
 This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
 
@@ -40,6 +40,6 @@ The base64 string or an array of base64 strings to convert.
 
 The converted regular string.
 
-## Note
+## Remarks
 
 This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.

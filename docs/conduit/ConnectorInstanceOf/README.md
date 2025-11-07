@@ -10,7 +10,7 @@ Defined in: [src/conduit/connector.ts:70](https://github.com/vrtmrz/octagonal-wh
 
 ConnectorInstanceOf
 
-## Description
+## Remarks
 
 Connect and get an instance via connector.
 It is used to connect an instance to a name, and then retrieve that instance later.
@@ -50,7 +50,7 @@ Connect an instance to the connector
 
 `void`
 
-#### Description
+#### Remarks
 
 ***
 
@@ -70,7 +70,7 @@ Get the connected instance
 
 a promise that resolves to the connected instance
 
-#### Description
+#### Remarks
 
 ***
 
@@ -90,7 +90,7 @@ Get the connected instance synchronously
 
 the connected instance
 
-#### Description
+#### Remarks
 
 #### Throws
 
@@ -114,6 +114,6 @@ Disconnect the connected instance
 
 void
 
-#### Description
+#### Remarks
 
 This will remove the instance from the connector and clear the connection.

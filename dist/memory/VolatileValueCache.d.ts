@@ -1,5 +1,4 @@
-import { FallbackWeakRef } from "../common/polyfill.ts";
-interface ValueWrapper<T> {
+export interface ValueWrapper<T> {
     value: T;
 }
 export interface Pin<T> {
@@ -19,9 +18,9 @@ export interface Pin<T> {
  * to allow garbage collection to occur.
  */
 export declare class VolatileValueCache<K extends string | number, V> {
-    _cache: WeakMap<object, FallbackWeakRef<ValueWrapper<V>>>;
-    _keyRegistry: Map<K, object>;
-    _finalizationRegistry: FinalizationRegistry<K>;
+    private _cache;
+    private _keyRegistry;
+    private _finalizationRegistry;
     _getPin(valueObject: ValueWrapper<V>): Pin<V>;
     constructor();
     set(key: K, value: V): Pin<V>;
@@ -31,4 +30,3 @@ export declare class VolatileValueCache<K extends string | number, V> {
     delete(key: K): boolean;
     _delete(keyObject: object): void;
 }
-export {};

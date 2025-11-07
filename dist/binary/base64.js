@@ -286,14 +286,14 @@ function readString(buffer) {
  * Converts a base64 string or an array of base64 strings to a regular string.
  * @param base64 - The base64 string or an array of base64 strings to convert.
  * @returns The converted regular string.
- * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ * @remarks This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
  */
 const base64ToString = isProposalArrayBufferBase64Available ? base64ToStringNative : base64ToStringBrowser;
 /**
  * Converts a base64 string or an array of base64 strings to a regular string in a browser environment.
  * @param base64 - The base64 string or an array of base64 strings to convert.
  * @returns The converted regular string.
- * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ * @remarks This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
  */
 function base64ToStringBrowser(base64) {
     try {
@@ -319,7 +319,7 @@ function base64ToStringBrowser(base64) {
  * Converts a base64 string or an array of base64 strings to a regular string using native methods.
  * @param base64 - The base64 string or an array of base64 strings to convert.
  * @returns The converted regular string.
- * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ * @remarks This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
  */
 function base64ToStringNative(base64) {
     try {

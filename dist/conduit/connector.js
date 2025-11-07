@@ -81,9 +81,9 @@ const weakFuncMap = new WeakMap();
 const weakInstanceMap = new WeakMap();
 /**
  * Get a function connector
- * @description
+ * @remarks
  * This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
- * @param func A function to connect
+ * @param param A function to connect
  * @returns <ConnectorFuncOf<T, U>>
  */
 function funcOf(param) {
@@ -111,7 +111,7 @@ function funcOf(param) {
 /**
  * Get a connector to instance by the name (internal function)
  * @param name The name of the instance (decided by each type of instance)
- * @description This function retrieves the connector instance associated with the given name.
+ * @remarks This function retrieves the connector instance associated with the given name.
  * @returns The connector instance associated with the name.
  */
 function _instanceOf(name) {
@@ -160,7 +160,7 @@ function instanceOf(param) {
 }
 /**
  * Connector
- * @description
+ * @remarks
  * Connector is a utility class that allows you to connect functions and instances.
  * It provides a way to connect a function or an instance to a name, and then invoke that function or instance later.
  */

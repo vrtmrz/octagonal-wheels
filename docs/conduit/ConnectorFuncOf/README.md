@@ -10,7 +10,7 @@ Defined in: [src/conduit/connector.ts:30](https://github.com/vrtmrz/octagonal-wh
 
 ConnectorFuncOf
 
-## Description
+## Remarks
 
 Connect and invoke a function via connector.
 It is used to connect a function to a name, and then invoke that function later.
@@ -51,7 +51,7 @@ Connect a function to the connector
 
 `void`
 
-#### Description
+#### Remarks
 
 ***
 
@@ -71,7 +71,7 @@ Disconnect the connected function
 
 void
 
-#### Description
+#### Remarks
 
 This will remove the function from the connector and clear the connection.
 
@@ -99,7 +99,7 @@ Invoke the connected function
 
 result of the function
 
-#### Description
+#### Remarks
 
 If no function is connected yet, this will wait for the function to be connected and then invoke it.
 
@@ -127,6 +127,6 @@ Invoke the connected function synchronously
 
 result of the function
 
-#### Description
+#### Remarks
 
 If no function is connected yet, this will throw an error.

@@ -15,8 +15,7 @@ export declare class InterceptiveEventTarget extends EventTarget {
 export declare class LinkedEventTarget extends InterceptiveEventTarget {
     constructor(upstream?: EventTarget, downstream?: EventTarget);
 }
-declare class GlobalChannelTarget extends InterceptiveEventTarget {
+export declare class GlobalChannelTarget extends InterceptiveEventTarget {
     constructor();
 }
 export declare const GlobalChannel: GlobalChannelTarget;
-export {};

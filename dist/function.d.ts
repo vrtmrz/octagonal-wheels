@@ -1,4 +1,4 @@
-type ThrottledFunction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => void;
+export type ThrottledFunction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => void;
 /**
  * Thinning out the execution of a function by delaying subsequent invocations
  * until a specified timeout has passed since the last invocation.
@@ -9,4 +9,3 @@ type ThrottledFunction<T extends (...args: any[]) => any> = (...args: Parameters
  * @returns A throttled function that delays subsequent invocations.
  */
 export declare const throttle: <T extends (...args: any[]) => any>(func: T, timeout: number) => ThrottledFunction<T>;
-export {};

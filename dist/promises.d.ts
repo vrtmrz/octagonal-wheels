@@ -28,7 +28,7 @@ export type PromiseWithResolvers<T> = {
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
  * @returns An object containing the promise, resolve, and reject functions.
- * @typeparam T The type of the promise value.
+ * @template T The type of the promise value.
  */
 export declare function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<T>;
 /**
@@ -99,7 +99,10 @@ export declare function cancelableDelay<T = TIMED_OUT_SIGNAL>(timeout: number, c
     promise: any;
     cancel(): void;
 };
-type ExtendableDelay<T, U extends string | symbol | number> = {
+/**
+ * An extendable delay that can be cancelled or extended.
+ */
+export type ExtendableDelay<T, U extends string | symbol | number> = {
     promise: Promise<T | U>;
     cancel: (reason: T | U) => void;
     extend(newTimeout: number): void;
@@ -119,4 +122,3 @@ type ExtendableDelay<T, U extends string | symbol | number> = {
  * @throws {Error} If the delay has already been resolved.
  */
 export declare function extendableDelay<U extends string | symbol | number = TIMED_OUT_SIGNAL>(timeout: number, cancel: U): ExtendableDelay<TIMED_OUT_SIGNAL, U>;
-export {};

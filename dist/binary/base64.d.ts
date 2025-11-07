@@ -77,21 +77,21 @@ export declare function readString(buffer: Uint8Array): string;
  * Converts a base64 string or an array of base64 strings to a regular string.
  * @param base64 - The base64 string or an array of base64 strings to convert.
  * @returns The converted regular string.
- * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ * @remarks This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
  */
 export declare const base64ToString: typeof base64ToStringNative;
 /**
  * Converts a base64 string or an array of base64 strings to a regular string in a browser environment.
  * @param base64 - The base64 string or an array of base64 strings to convert.
  * @returns The converted regular string.
- * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ * @remarks This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
  */
 export declare function base64ToStringBrowser(base64: string | string[]): string;
 /**
  * Converts a base64 string or an array of base64 strings to a regular string using native methods.
  * @param base64 - The base64 string or an array of base64 strings to convert.
  * @returns The converted regular string.
- * @note This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
+ * @remarks This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.
  */
 export declare function base64ToStringNative(base64: string | string[]): string;
 /**

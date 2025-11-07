@@ -1,6 +1,6 @@
 {
     "name": "octagonal-wheels",
-    "version": "0.1.42",
+    "version": "0.1.43",
     "description": "This module is a compilation of wheels that have been reinvented for a specific purpose",
     "type": "module",
     "types": "./dist/index.d.ts",
@@ -428,6 +428,14 @@
         "./dataobject.js": {
             "import": "./dist/dataobject/index.js",
             "types": "./dist/dataobject/index.d.ts"
+        },
+        "./dataobject/Computed": {
+            "import": "./dist/dataobject/Computed.js",
+            "types": "./dist/dataobject/Computed.d.ts"
+        },
+        "./dataobject/Computed.js": {
+            "import": "./dist/dataobject/Computed.js",
+            "types": "./dist/dataobject/Computed.d.ts"
         },
         "./dataobject/index.js": {
             "import": "./dist/dataobject/index.js",

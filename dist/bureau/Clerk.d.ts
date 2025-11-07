@@ -118,17 +118,11 @@ export declare class Porter<T> extends ClerkBase<T> {
  * @template T - The type of items being processed.
  *
  * @property {FeederStateDetail} stateDetail - Returns the current state details of the feeder.
- * @method onProgress - Calls the progress callback with the current state details.
- * @method setOnProgress - Sets the progress callback function.
+ * @property onProgress - Calls the progress callback with the current state details.
+ * @property setOnProgress - Sets the progress callback function.
  *
- * @constructor
- * @param {Object} params - The parameters for the feeder.
- * @param {Iterable<T> | AsyncIterable<T>} params.source - The source of items to be processed.
- * @param {Inbox<T>} params.target - The target inbox where items are posted.
- * @param {(state: FeederStateDetail) => void} [params.onProgress] - Optional callback function to report progress.
- *
- * @method _mainLoop - The main loop that fetches items from the source and posts them to the target.
- * @method stateDetail - Returns the current state details of the feeder.
+ * @property _mainLoop - The main loop that fetches items from the source and posts them to the target.
+ * @property stateDetail - Returns the current state details of the feeder.
  */
 export declare class Feeder<T> {
     _hasFinished: boolean;
@@ -140,6 +134,13 @@ export declare class Feeder<T> {
     _onProgress?: (state: FeederStateDetail) => void;
     onProgress(): void;
     setOnProgress(callback: (state: FeederStateDetail) => void): void;
+    /**
+     *
+     * @param {Object} params - The parameters for the feeder.
+     * @param {Iterable<T> | AsyncIterable<T>} params.source - The source of items to be processed.
+     * @param {Inbox<T>} params.target - The target inbox where items are posted.
+     * @param {(state: FeederStateDetail) => void} [params.onProgress] - Optional callback function to report progress.
+     */
     constructor(params: {
         source: Iterable<T> | AsyncIterable<T>;
         target: Inbox<T>;
@@ -152,8 +153,8 @@ export declare class Feeder<T> {
  * a clerk that picks items from an inbox and stores them in a buffer.
  * @template T - The type of items being processed.
  * @property {T[]} result - Returns the buffer of items.
- * @method clear - Clears the buffer.
- * @method drainAndReset - Drains the buffer and resets it.
+ * @property clear - Clears the buffer.
+ * @property drainAndReset - Drains the buffer and resets it.
  */
 export declare class Harvester<T> extends ClerkBase<T> {
     _buffer: T[];

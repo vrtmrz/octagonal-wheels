@@ -37,6 +37,10 @@ export interface RefinerOptions<T, U> {
  * Refiner class is a utility for evaluating and caching results based on a source value.
  * It can handle both synchronous and asynchronous evaluations.
  * To address the issue of performance, it uses no `#` properties. Do not call `_` prefixed methods directly.
+ * This class is designed for:
+ * - Reactive updates or subscriptions.
+ * Not designed for:
+ * - Caching computed values based on arguments. (Use Computed for that).
  * @template T - The type of the source value.
  * @template U - The type of the result value.
  * @see RefinerOptions

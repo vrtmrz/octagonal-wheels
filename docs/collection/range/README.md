@@ -10,7 +10,7 @@
 function range(from: number, to: number): Generator<number, void, unknown>;
 ```
 
-Defined in: [src/collection.ts:34](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L34)
+Defined in: [src/collection.ts:33](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L33)
 
 Generates a sequence of numbers from `from` to `to` (inclusive).
 
@@ -24,8 +24,6 @@ Generates a sequence of numbers from `from` to `to` (inclusive).
 ## Returns
 
 `Generator`\<`number`, `void`, `unknown`\>
-
-## Generator
 
 ## Yields
 

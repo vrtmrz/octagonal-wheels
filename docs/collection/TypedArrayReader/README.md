@@ -13,7 +13,7 @@ type TypedArrayReader<T> = {
 };
 ```
 
-Defined in: [src/collection.ts:50](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L50)
+Defined in: [src/collection.ts:49](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L49)
 
 Represents a reader interface for typed arrays, providing methods to read a specified number of elements or all elements.
 
@@ -31,5 +31,5 @@ The number of elements to read.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="read"></a> `read` | (`length`: `number`) => `T` | Reads a specified number of elements from the array. | [src/collection.ts:51](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L51) |
-| <a id="readall"></a> `readAll` | () => `T` | Reads all elements from the array. | [src/collection.ts:52](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L52) |
+| <a id="read"></a> `read` | (`length`: `number`) => `T` | Reads a specified number of elements from the array. | [src/collection.ts:50](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L50) |
+| <a id="readall"></a> `readAll` | () => `T` | Reads all elements from the array. | [src/collection.ts:51](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L51) |

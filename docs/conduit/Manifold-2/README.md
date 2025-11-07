@@ -7,12 +7,12 @@
 # Variable: Manifold
 
 ```ts
-const Manifold: {
+Manifold: {
   of: <T>(name: string) => Manifold<T>;
 };
 ```
 
-Defined in: [src/conduit/manifold.ts:171](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/manifold.ts#L171)
+Defined in: [src/conduit/manifold.ts:13](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/manifold.ts#L13)
 
 ## Type Declaration
 
@@ -36,4 +36,4 @@ of: <T>(name: string) => Manifold<T>;
 
 #### Returns
 
-`Manifold`\<`T`\>
+[`Manifold`](../Manifold/README.md)\<`T`\>

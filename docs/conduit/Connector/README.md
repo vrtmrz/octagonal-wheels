@@ -87,7 +87,7 @@ Get a class instance connector by name
 
 The connector instance associated with the class type.
 
-##### Description
+##### Remarks
 
 This function retrieves the connector instance associated with the given name.
 
@@ -108,9 +108,9 @@ Get a function connector
 
 #### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `param` | `string` \| [`ConnectorFunc`](../ConnectorFunc/README.md)\<`T`, `U`\> |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `param` | `string` \| [`ConnectorFunc`](../ConnectorFunc/README.md)\<`T`, `U`\> | A function to connect |
 
 #### Returns
 
@@ -118,7 +118,7 @@ Get a function connector
 
 <ConnectorFuncOf<T, U>>
 
-#### Description
+#### Remarks
 
 This method returns a function connector that allows you to connect a function to a name and then invoke that function later.
 
@@ -157,7 +157,7 @@ Get a connector to instance by the name
 
 <ConnectorInstanceOf<T>>
 
-##### Description
+##### Remarks
 
 This method returns a instance connector that allows you to connect a instance to a name and then retrieve that instance later.
 
@@ -185,11 +185,11 @@ Get a connector to instance by the instance object
 
 [`ConnectorInstanceOf`](../ConnectorInstanceOf/README.md)\<`T`\>
 
-##### Description
+##### Remarks
 
 This method returns a instance connector that allows you to connect a instance to a name and then retrieve that instance later.
 
-## Description
+## Remarks
 
 Connector is a utility class that allows you to connect functions and instances.
 It provides a way to connect a function or an instance to a name, and then invoke that function or instance later.

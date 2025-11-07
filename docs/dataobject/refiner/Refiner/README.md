@@ -6,11 +6,15 @@
 
 # Class: Refiner\<T, U\>
 
-Defined in: [src/dataobject/Refiner.ts:51](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L51)
+Defined in: [src/dataobject/Refiner.ts:55](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L55)
 
 Refiner class is a utility for evaluating and caching results based on a source value.
 It can handle both synchronous and asynchronous evaluations.
 To address the issue of performance, it uses no `#` properties. Do not call `_` prefixed methods directly.
+This class is designed for:
+- Reactive updates or subscriptions.
+Not designed for:
+- Caching computed values based on arguments. (Use Computed for that).
 
 ## See
 
@@ -31,7 +35,7 @@ RefinerOptions
 new Refiner<T, U>(options: RefinerOptions<T, U>): Refiner<T, U>;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:110](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L110)
+Defined in: [src/dataobject/Refiner.ts:114](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L114)
 
 Constructor for the Refiner class.
 
@@ -49,13 +53,13 @@ Constructor for the Refiner class.
 
 | Property | Type | Default value | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="__evaluation"></a> `__evaluation` | (`source`: `T`, `previous?`: `U`) => `U` \| `Promise`\<`U`\> | `undefined` | An internal and swappable method used to evaluate the source and return a result. | [src/dataobject/Refiner.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L68) |
-| <a id="__shouldupdate"></a> `__shouldUpdate` | (`isDifferent`: `boolean`, `source`: `T`, `previous?`: `U`) => `boolean` | `undefined` | a function to determine if the result should be updated based on the source and previous result. | [src/dataobject/Refiner.ts:76](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L76) |
-| <a id="_cachedby"></a> `_cachedBy?` | `T` | `undefined` | The cached source value used for comparison. | [src/dataobject/Refiner.ts:55](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L55) |
-| <a id="_cachedresult"></a> `_cachedResult?` | `U` | `undefined` | The cached result of the evaluation. It can be undefined if the evaluation has not been performed yet. | [src/dataobject/Refiner.ts:60](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L60) |
-| <a id="_evaluationpromise"></a> `_evaluationPromise` | [`PromiseWithResolvers`](../../../promises/PromiseWithResolvers/README.md)\<`U`\> | `undefined` | The promise with resolvers used to handle the evaluation result. | [src/dataobject/Refiner.ts:64](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L64) |
-| <a id="_evaluations"></a> `_evaluations` | `Promise`\<`void`\> | `undefined` | An internal variable to track the latest evaluation. It is used to prevent outdated evaluations from being processed. | [src/dataobject/Refiner.ts:125](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L125) |
-| <a id="_latest"></a> `_latest` | `number` | `0` | An internal variable to track the latest evaluation index. It is used to prevent outdated evaluations from being processed. | [src/dataobject/Refiner.ts:130](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L130) |
+| <a id="__evaluation"></a> `__evaluation` | (`source`: `T`, `previous?`: `U`) => `U` \| `Promise`\<`U`\> | `undefined` | An internal and swappable method used to evaluate the source and return a result. | [src/dataobject/Refiner.ts:72](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L72) |
+| <a id="__shouldupdate"></a> `__shouldUpdate` | (`isDifferent`: `boolean`, `source`: `T`, `previous?`: `U`) => `boolean` | `undefined` | a function to determine if the result should be updated based on the source and previous result. | [src/dataobject/Refiner.ts:80](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L80) |
+| <a id="_cachedby"></a> `_cachedBy?` | `T` | `undefined` | The cached source value used for comparison. | [src/dataobject/Refiner.ts:59](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L59) |
+| <a id="_cachedresult"></a> `_cachedResult?` | `U` | `undefined` | The cached result of the evaluation. It can be undefined if the evaluation has not been performed yet. | [src/dataobject/Refiner.ts:64](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L64) |
+| <a id="_evaluationpromise"></a> `_evaluationPromise` | [`PromiseWithResolvers`](../../../promises/PromiseWithResolvers/README.md)\<`U`\> | `undefined` | The promise with resolvers used to handle the evaluation result. | [src/dataobject/Refiner.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L68) |
+| <a id="_evaluations"></a> `_evaluations` | `Promise`\<`void`\> | `undefined` | An internal variable to track the latest evaluation. It is used to prevent outdated evaluations from being processed. | [src/dataobject/Refiner.ts:129](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L129) |
+| <a id="_latest"></a> `_latest` | `number` | `0` | An internal variable to track the latest evaluation index. It is used to prevent outdated evaluations from being processed. | [src/dataobject/Refiner.ts:134](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L134) |
 
 ## Accessors
 
@@ -67,7 +71,7 @@ Constructor for the Refiner class.
 get value(): Promise<U>;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:197](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L197)
+Defined in: [src/dataobject/Refiner.ts:201](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L201)
 
 ##### Returns
 
@@ -81,7 +85,7 @@ Defined in: [src/dataobject/Refiner.ts:197](https://github.com/vrtmrz/octagonal-
 __isDifferent(a: T, b: T): boolean;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:85](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L85)
+Defined in: [src/dataobject/Refiner.ts:89](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L89)
 
 An internal and swappable method function to determine if two sources are different.
 
@@ -107,7 +111,7 @@ It defaults to isObjectDifferent function.
 _getValue(): Promise<U>;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:181](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L181)
+Defined in: [src/dataobject/Refiner.ts:185](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L185)
 
 #### Returns
 
@@ -125,7 +129,7 @@ _refinePromise(): {
 };
 ```
 
-Defined in: [src/dataobject/Refiner.ts:91](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L91)
+Defined in: [src/dataobject/Refiner.ts:95](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L95)
 
 An internal method to renew the promise with resolvers.
 It is called when the evaluation is re-read.
@@ -166,7 +170,7 @@ resolve: any;
 _startEvaluation(source: T): void;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:138](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L138)
+Defined in: [src/dataobject/Refiner.ts:142](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L142)
 
 An internal method to start the evaluation process.
 It creates a new promise with resolvers and starts the evaluation.
@@ -189,7 +193,7 @@ It creates a new promise with resolvers and starts the evaluation.
 update(source: T): Refiner<T, U>;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:170](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L170)
+Defined in: [src/dataobject/Refiner.ts:174](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L174)
 
 #### Parameters
 

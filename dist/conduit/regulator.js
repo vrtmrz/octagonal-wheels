@@ -5,7 +5,7 @@ import { NamedInstance } from './NamedInstance.js';
 Regulator
 */
 /**
- * @description
+ * @remarks
  * Create a regulator
  * @param _name
  * @returns return a regulator
@@ -99,7 +99,7 @@ function createRegulator(_name) {
 }
 const regulators = new NamedInstance("Regulator", (name) => createRegulator(name));
 /**
- * @description
+ * @remarks
  * Get a regulator that allows you to regulate the number of concurrent processes.
  * @param name
  * @returns <RegulatorOf<T, U>>

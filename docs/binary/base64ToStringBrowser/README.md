@@ -26,6 +26,6 @@ Converts a base64 string or an array of base64 strings to a regular string in a 
 
 The converted regular string.
 
-## Note
+## Remarks
 
 This function is used to convert base64 strings to binary strings. And if failed, it returns the original string.

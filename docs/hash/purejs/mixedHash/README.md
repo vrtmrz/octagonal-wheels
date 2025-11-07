@@ -25,7 +25,7 @@ This function is fallback for the xxhash.
 | ------ | ------ | ------ | ------ |
 | `str` | `string` | `undefined` | The input string to hash. |
 | `seed` | `number` | `undefined` | The seed value for the MurmurHash3 algorithm. |
-| `fnv1aHash_` | `number` | `epochFNV1a` | - |
+| `fnv1aHash_` | `number` | `epochFNV1a` | The initial value for the FNV-1a hash algorithm. Defaults to `epochFNV1a`. |
 
 ## Returns
 

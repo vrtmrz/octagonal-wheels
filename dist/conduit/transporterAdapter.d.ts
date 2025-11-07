@@ -1,4 +1,4 @@
-interface ListenerOptions {
+export interface ListenerOptions {
     once?: boolean;
     signal?: AbortSignal;
 }
@@ -8,14 +8,18 @@ export interface TransporterBackbone<T> {
     dispatchMessage: (type: string, message: T) => void;
     close: () => void;
 }
-type GlobalThis = typeof globalThis;
-type TransporterTarget = Window | Worker | MessagePort | ServiceWorker | GlobalThis;
+export type TransporterTarget = Window | Worker | MessagePort | ServiceWorker | typeof globalThis;
 declare const enum TransportResult {
     SUCCESS = 0,
     FAILURE = 1,
     NO_OP = 99
 }
 export declare const transporterKey = "transporterAdapter.v1";
+export type TransporterPostMessageEventData<T> = {
+    type: string;
+    key: typeof transporterKey;
+    payload: T;
+};
 /**
  * PostMessageBackbone is a TransporterBackbone implementation that uses the postMessage API to send and receive messages.
  * It can be used with MessageChannel, Window, Worker, or any other target that supports postMessage.

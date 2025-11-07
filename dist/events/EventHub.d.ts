@@ -1,7 +1,7 @@
-import { FallbackWeakRef } from "../common/polyfill.ts";
-type EventTypeWithData<ET, K> = K extends keyof ET ? ET[K] extends undefined ? never : K extends string ? K : never : never;
-type EventTypeWithoutData<ET, K> = K extends keyof ET ? ET[K] extends undefined ? K extends string ? K : never : never : never;
-type EventType<K> = K extends string ? K : never;
+export type EventTypeWithData<ET, K> = K extends keyof ET ? ET[K] extends undefined ? never : K extends string ? K : never : never;
+export type EventTypeWithoutData<ET, K> = K extends keyof ET ? ET[K] extends undefined ? K extends string ? K : never : never : never;
+export type EventType<K> = K extends string ? K : never;
+export type EventDataType<ET extends Record<string, any>, K extends keyof ET> = ET[K] extends undefined ? undefined : ET[K];
 /**
  * A class that provides an event hub for managing custom events.
  *
@@ -13,15 +13,15 @@ export declare class EventHub<Events extends AnyHubEvents = LSEvents> {
      *
      * @private
      */
-    _emitter: EventTarget;
+    private _emitter;
     /**
      * Creates an instance of the EventHub.
      * @param emitter - An optional EventTarget to use as the event emitter. If not provided, a dedicated new EventTarget will be created. i.e., it can share the same emitter with other EventHubs (e.g., for a global event bus, or separately built apps via window object).
      */
     constructor(emitter?: EventTarget);
-    _assigned: Map<string, WeakMap<CallableFunction, FallbackWeakRef<AbortController>>>;
-    _allAssigned: Map<string, Set<FallbackWeakRef<AbortController>>>;
-    _issueSignal(key: string, callback: CallableFunction): AbortController;
+    private _assigned;
+    private _allAssigned;
+    private _issueSignal;
     /**
      * Emits an event without data.
      *
@@ -144,4 +144,3 @@ export declare class EventHub<Events extends AnyHubEvents = LSEvents> {
      */
     waitFor<ET extends Events, K extends keyof ET>(event: EventTypeWithData<ET, K>): Promise<ET[K]>;
 }
-export {};

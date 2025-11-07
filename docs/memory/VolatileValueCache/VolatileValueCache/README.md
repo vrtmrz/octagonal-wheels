@@ -40,14 +40,6 @@ Defined in: [src/memory/VolatileValueCache.ts:47](https://github.com/vrtmrz/octa
 
 `VolatileValueCache`\<`K`, `V`\>
 
-## Properties
-
-| Property | Type | Defined in |
-| ------ | ------ | ------ |
-| <a id="_cache"></a> `_cache` | `WeakMap`\<`object`, `FallbackWeakRef`\<`ValueWrapper`\<`V`\>\>\> | [src/memory/VolatileValueCache.ts:27](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/memory/VolatileValueCache.ts#L27) |
-| <a id="_finalizationregistry"></a> `_finalizationRegistry` | `FinalizationRegistry`\<`K`\> | [src/memory/VolatileValueCache.ts:29](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/memory/VolatileValueCache.ts#L29) |
-| <a id="_keyregistry"></a> `_keyRegistry` | `Map`\<`K`, `object`\> | [src/memory/VolatileValueCache.ts:28](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/memory/VolatileValueCache.ts#L28) |
-
 ## Methods
 
 ### \_delete()
@@ -82,7 +74,7 @@ Defined in: [src/memory/VolatileValueCache.ts:31](https://github.com/vrtmrz/octa
 
 | Parameter | Type |
 | ------ | ------ |
-| `valueObject` | `ValueWrapper`\<`V`\> |
+| `valueObject` | [`ValueWrapper`](../ValueWrapper/README.md)\<`V`\> |
 
 #### Returns
 

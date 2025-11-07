@@ -1,4 +1,4 @@
-type Task<T> = () => Promise<T> | T;
+export type Task<T> = () => Promise<T> | T;
 /**
  * Run tasks one by one in their group.
  * @param key key of the group
@@ -85,4 +85,3 @@ export declare const SCHEDULE_SKIPPED: unique symbol;
  * @returns A promise that resolves with the result of the task or a symbol indicating the task was skipped.
  */
 export declare function scheduleAndRunOnlyLatest<T>(group: string, key: string, proc: (ac?: AbortController) => Promise<T>): Promise<T | typeof SCHEDULE_SKIPPED>;
-export {};

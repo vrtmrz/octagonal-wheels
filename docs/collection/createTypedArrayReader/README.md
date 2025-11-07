@@ -10,7 +10,7 @@
 function createTypedArrayReader<T>(buffer: T): TypedArrayReader<T>;
 ```
 
-Defined in: [src/collection.ts:79](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L79)
+Defined in: [src/collection.ts:78](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/collection.ts#L78)
 
 Creates a reader for a given typed array buffer, allowing sequential reading of slices.
 

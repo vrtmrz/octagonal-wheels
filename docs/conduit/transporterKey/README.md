@@ -10,4 +10,4 @@
 const transporterKey: "transporterAdapter.v1";
 ```
 
-Defined in: [src/conduit/transporterAdapter.ts:22](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/transporterAdapter.ts#L22)
+Defined in: [src/conduit/transporterAdapter.ts:21](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/conduit/transporterAdapter.ts#L21)

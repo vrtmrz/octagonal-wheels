@@ -6,7 +6,7 @@
 
 # Class: RefinerSync\<T, U\>
 
-Defined in: [src/dataobject/Refiner.ts:209](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L209)
+Defined in: [src/dataobject/Refiner.ts:213](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L213)
 
 ## Type Parameters
 
@@ -23,7 +23,7 @@ Defined in: [src/dataobject/Refiner.ts:209](https://github.com/vrtmrz/octagonal-
 new RefinerSync<T, U>(__namedParameters: RefinerSyncOptions<T, U>): RefinerSync<T, U>;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:216](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L216)
+Defined in: [src/dataobject/Refiner.ts:220](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L220)
 
 #### Parameters
 
@@ -39,10 +39,10 @@ Defined in: [src/dataobject/Refiner.ts:216](https://github.com/vrtmrz/octagonal-
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="_buffedresult"></a> `_buffedResult?` | `Error` \| `U` | [src/dataobject/Refiner.ts:211](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L211) |
-| <a id="_cachedby"></a> `_cachedBy?` | `T` | [src/dataobject/Refiner.ts:210](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L210) |
-| <a id="_evaluation"></a> `_evaluation` | (`source`: `T`, `previous?`: `U`) => `U` | [src/dataobject/Refiner.ts:212](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L212) |
-| <a id="_shouldupdate"></a> `_shouldUpdate` | (`isDifferent`: `boolean`, `source`: `T`, `previous?`: `U`) => `boolean` | [src/dataobject/Refiner.ts:213](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L213) |
+| <a id="_buffedresult"></a> `_buffedResult?` | `Error` \| `U` | [src/dataobject/Refiner.ts:215](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L215) |
+| <a id="_cachedby"></a> `_cachedBy?` | `T` | [src/dataobject/Refiner.ts:214](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L214) |
+| <a id="_evaluation"></a> `_evaluation` | (`source`: `T`, `previous?`: `U`) => `U` | [src/dataobject/Refiner.ts:216](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L216) |
+| <a id="_shouldupdate"></a> `_shouldUpdate` | (`isDifferent`: `boolean`, `source`: `T`, `previous?`: `U`) => `boolean` | [src/dataobject/Refiner.ts:217](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L217) |
 
 ## Accessors
 
@@ -54,7 +54,7 @@ Defined in: [src/dataobject/Refiner.ts:216](https://github.com/vrtmrz/octagonal-
 get value(): undefined | U;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:245](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L245)
+Defined in: [src/dataobject/Refiner.ts:249](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L249)
 
 ##### Returns
 
@@ -68,7 +68,7 @@ Defined in: [src/dataobject/Refiner.ts:245](https://github.com/vrtmrz/octagonal-
 _isDifferent(a: T, b: T): boolean;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:214](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L214)
+Defined in: [src/dataobject/Refiner.ts:218](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L218)
 
 #### Parameters
 
@@ -89,7 +89,7 @@ Defined in: [src/dataobject/Refiner.ts:214](https://github.com/vrtmrz/octagonal-
 _startEvaluation(source: T): void;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:224](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L224)
+Defined in: [src/dataobject/Refiner.ts:228](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L228)
 
 #### Parameters
 
@@ -109,7 +109,7 @@ Defined in: [src/dataobject/Refiner.ts:224](https://github.com/vrtmrz/octagonal-
 update(source: T): RefinerSync<T, U>;
 ```
 
-Defined in: [src/dataobject/Refiner.ts:236](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L236)
+Defined in: [src/dataobject/Refiner.ts:240](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/dataobject/Refiner.ts#L240)
 
 #### Parameters
 
