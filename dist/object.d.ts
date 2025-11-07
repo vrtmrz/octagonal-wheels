@@ -17,3 +17,4 @@ export declare function extractObject<T>(template: Partial<T>, obj: T): Partial<
  * @returns True if the objects are different, false otherwise.
  */
 export declare function isObjectDifferent(a: any, b: any, ignoreUndefined?: boolean): boolean;
+export { encodeAnyArray, decodeAnyArray } from "./encoding/encodeobject.ts";

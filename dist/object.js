@@ -1,3 +1,5 @@
+export { decodeAnyArray, encodeAnyArray } from './encoding/encodeobject.js';
+
 /**
  * Extracts properties from an object based on a template object.
  * Only properties present in the template object will be included in the result.
