@@ -5,7 +5,7 @@ import { promiseWithResolvers, type PromiseWithResolvers } from "../promises.ts"
 import { NamedInstance } from "./NamedInstance.ts";
 /**
  * Regulator
- * @description
+ * @remarks
  * Regulator allows you to regulate the number of concurrent processes.
  *
  * @example
@@ -18,7 +18,7 @@ import { NamedInstance } from "./NamedInstance.ts";
  */
 export interface RegulatorOf<T extends any[], U> {
     /**
-     * @description
+     * @remarks
      * Set the maximum number of concurrent processes.
      * Default is 1.
      * @param n
@@ -26,21 +26,21 @@ export interface RegulatorOf<T extends any[], U> {
      */
     maxConcurrency(n: number): RegulatorOf<T, U>;
     /**
-     * @description
+     * @remarks
      * Set the function to be called when the regulator is invoked.
      * @param func
      * @returns <RegulatorOf<T, U>>
      */
     onProcess(func: (...args: T) => Promise<U>): RegulatorOf<T, U>;
     /**
-     * @description
+     * @remarks
      * Invoke the regulator with the given arguments.
      * @param args
      * @returns <Promise<U>>
      */
     invoke(...args: T): Promise<U>;
     /**
-     * @description
+     * @remarks
      * Invoke the regulator with the given arguments.
      * This will call the function with the given arguments and return a promise that resolves when all functions are done.
      * Note that order of the results is not same as the order of the arguments.
@@ -50,7 +50,7 @@ export interface RegulatorOf<T extends any[], U> {
 }
 
 /**
- * @description
+ * @remarks
  * Create a regulator
  * @param _name
  * @returns return a regulator
@@ -142,7 +142,7 @@ function createRegulator<T extends any[], U>(_name: string): RegulatorOf<T, U> {
 }
 const regulators = new NamedInstance<RegulatorOf<any, any>>("Regulator", (name) => createRegulator(name));
 /**
- * @description
+ * @remarks
  * Get a regulator that allows you to regulate the number of concurrent processes.
  * @param name
  * @returns <RegulatorOf<T, U>>

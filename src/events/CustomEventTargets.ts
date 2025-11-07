@@ -56,7 +56,7 @@ class WrappedEvent extends CustomEvent<WrappedEventDetail> {
         super(WrappedEventName, { detail: { originalEvent: event } });
     }
 }
-class GlobalChannelTarget extends InterceptiveEventTarget {
+export class GlobalChannelTarget extends InterceptiveEventTarget {
     constructor() {
         super();
         globalThis.addEventListener(

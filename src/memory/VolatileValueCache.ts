@@ -1,5 +1,5 @@
 import { FallbackWeakRef, FallbackFinalizationRegistry } from "../common/polyfill.ts";
-interface ValueWrapper<T> {
+export interface ValueWrapper<T> {
     value: T;
 }
 interface InternalPin<T> extends Pin<T> {
@@ -24,9 +24,9 @@ export interface Pin<T> {
  * to allow garbage collection to occur.
  */
 export class VolatileValueCache<K extends string | number, V> {
-    _cache = new WeakMap<object, FallbackWeakRef<ValueWrapper<V>>>();
-    _keyRegistry = new Map<K, object>();
-    _finalizationRegistry: FinalizationRegistry<K>;
+    private _cache = new WeakMap<object, FallbackWeakRef<ValueWrapper<V>>>();
+    private _keyRegistry = new Map<K, object>();
+    private _finalizationRegistry: FinalizationRegistry<K>;
 
     _getPin(valueObject: ValueWrapper<V>): Pin<V> {
         return {

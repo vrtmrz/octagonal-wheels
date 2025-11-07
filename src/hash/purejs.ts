@@ -18,7 +18,7 @@ const n = 0xe6546b64;
  *
  * @param str - The input string to hash.
  * @param seed - The seed value for the MurmurHash3 algorithm.
- * @param fnv1aHash - The initial value for the FNV-1a hash algorithm. Defaults to `epochFNV1a`.
+ * @param fnv1aHash_ - The initial value for the FNV-1a hash algorithm. Defaults to `epochFNV1a`.
  * @returns A tuple containing the resulting MurmurHash3 hash and FNV-1a hash. fnv-1a hash should be used as a supplementary hash.
  */
 export function mixedHash(str: string, seed: number, fnv1aHash_ = epochFNV1a): [number, number] {
@@ -102,7 +102,7 @@ const te = new TextEncoder();
  * Calculates the hex encoded SHA-1 hash of the given string.
  * Note: Very slow, use only when necessary. Prefer fallbackMixedHashEach for faster hashing.
  *
- * @param src - The string to calculate the hash for.
+ * @param str - The string to calculate the hash for.
  * @returns A promise that resolves to the SHA-1 hash as a hex-encoded string.
  */
 export async function sha1Hash(str: string): Promise<string> {

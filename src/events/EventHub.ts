@@ -1,21 +1,23 @@
 import { FallbackWeakRef } from "../common/polyfill.ts";
-type EventTypeWithData<ET, K> = K extends keyof ET
+export type EventTypeWithData<ET, K> = K extends keyof ET
     ? ET[K] extends undefined
         ? never
         : K extends string
           ? K
           : never
     : never;
-type EventTypeWithoutData<ET, K> = K extends keyof ET
+export type EventTypeWithoutData<ET, K> = K extends keyof ET
     ? ET[K] extends undefined
         ? K extends string
             ? K
             : never
         : never
     : never;
-type EventType<K> = K extends string ? K : never;
+export type EventType<K> = K extends string ? K : never;
 
-type EventDataType<ET extends Record<string, any>, K extends keyof ET> = ET[K] extends undefined ? undefined : ET[K];
+export type EventDataType<ET extends Record<string, any>, K extends keyof ET> = ET[K] extends undefined
+    ? undefined
+    : ET[K];
 
 /**
  * A class that provides an event hub for managing custom events.
@@ -28,7 +30,7 @@ export class EventHub<Events extends AnyHubEvents = LSEvents> {
      *
      * @private
      */
-    _emitter: EventTarget;
+    private _emitter: EventTarget;
     /**
      * Creates an instance of the EventHub.
      * @param emitter - An optional EventTarget to use as the event emitter. If not provided, a dedicated new EventTarget will be created. i.e., it can share the same emitter with other EventHubs (e.g., for a global event bus, or separately built apps via window object).
@@ -37,10 +39,10 @@ export class EventHub<Events extends AnyHubEvents = LSEvents> {
         this._emitter = emitter ?? new EventTarget();
     }
 
-    _assigned = new Map<string, WeakMap<CallableFunction, FallbackWeakRef<AbortController>>>();
-    _allAssigned = new Map<string, Set<FallbackWeakRef<AbortController>>>();
+    private _assigned = new Map<string, WeakMap<CallableFunction, FallbackWeakRef<AbortController>>>();
+    private _allAssigned = new Map<string, Set<FallbackWeakRef<AbortController>>>();
 
-    _issueSignal(key: string, callback: CallableFunction) {
+    private _issueSignal(key: string, callback: CallableFunction) {
         let assigned = this._assigned.get(key);
         if (assigned === undefined) {
             assigned = new WeakMap();

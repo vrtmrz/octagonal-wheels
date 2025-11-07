@@ -1,7 +1,7 @@
 // --- asynchronous execution / locking utilities
 import { fireAndForget, promiseWithResolvers, type PromiseWithResolvers } from "../promises.ts";
 
-type Task<T> = () => Promise<T> | T;
+export type Task<T> = () => Promise<T> | T;
 
 /**
  * Run tasks one by one in their group.

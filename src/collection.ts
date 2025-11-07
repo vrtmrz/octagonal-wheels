@@ -26,7 +26,6 @@ export function unique<T>(arr: T[]): T[] {
 /**
  * Generates a sequence of numbers from `from` to `to` (inclusive).
  *
- * @generator
  * @param {number} from - The starting number of the sequence.
  * @param {number} to - The ending number of the sequence.
  * @yields {number} The next number in the sequence.

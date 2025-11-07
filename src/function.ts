@@ -1,4 +1,4 @@
-type ThrottledFunction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => void;
+export type ThrottledFunction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => void;
 
 /**
  * Thinning out the execution of a function by delaying subsequent invocations

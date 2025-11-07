@@ -31,7 +31,7 @@ export type TransporterTuple<T extends any[], U> = [Proxied<T, U>, Caller<T, U>,
  * @param emitter An EventTarget that is used to dispatch and listen for events.
  * @param name The name of the transporter, used for event naming and logging.
  * @returns A tuple containing a function to send messages and a function to set a callee that will handle incoming messages.
- * @description This utility enables straightforward communication between different parts of an application by adopting an event-driven approach.
+ * @remarks This utility enables straightforward communication between different parts of an application by adopting an event-driven approach.
  * It generates a unique callback ID for each message sent, allowing the sender to receive a response or handle errors.
  * It also allows setting a callee function that is invoked when a message is received, enabling the receiver to process the message and send a response in return.
  * Note: Arguments and results must be serialisable; non-serialisable values cannot be used.

@@ -44,7 +44,7 @@ export type PromiseWithResolvers<T> = {
 /**
  * Creates a promise and returns it along with the resolve and reject functions.
  * @returns An object containing the promise, resolve, and reject functions.
- * @typeparam T The type of the promise value.
+ * @template T The type of the promise value.
  */
 export function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<T> {
     let resolve!: Parameters<ConstructorParameters<typeof Promise<T>>[0]>[0];
@@ -187,7 +187,11 @@ export function cancelableDelay<T = TIMED_OUT_SIGNAL>(timeout: number, cancel: T
         },
     };
 }
-type ExtendableDelay<T, U extends string | symbol | number> = {
+
+/**
+ * An extendable delay that can be cancelled or extended.
+ */
+export type ExtendableDelay<T, U extends string | symbol | number> = {
     promise: Promise<T | U>;
     cancel: (reason: T | U) => void;
     extend(newTimeout: number): void;

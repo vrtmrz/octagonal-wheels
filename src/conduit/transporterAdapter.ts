@@ -1,6 +1,6 @@
 import { LOG_LEVEL_VERBOSE, Logger } from "../common/logger.ts";
 
-interface ListenerOptions {
+export interface ListenerOptions {
     once?: boolean;
     signal?: AbortSignal;
 }
@@ -11,8 +11,7 @@ export interface TransporterBackbone<T> {
     close: () => void;
 }
 
-type GlobalThis = typeof globalThis;
-type TransporterTarget = Window | Worker | MessagePort | ServiceWorker | GlobalThis;
+export type TransporterTarget = Window | Worker | MessagePort | ServiceWorker | typeof globalThis;
 const enum TransportResult {
     SUCCESS,
     FAILURE,
@@ -20,7 +19,7 @@ const enum TransportResult {
 }
 const protocolVersion = 1;
 export const transporterKey = `transporterAdapter.v${protocolVersion}`;
-type TransporterPostMessageEventData<T> = {
+export type TransporterPostMessageEventData<T> = {
     type: string;
     key: typeof transporterKey;
     payload: T;
