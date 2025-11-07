@@ -47,3 +47,5 @@ export function isObjectDifferent(a: any, b: any, ignoreUndefined: boolean = fal
         return a !== b;
     }
 }
+
+export { encodeAnyArray, decodeAnyArray } from "./encoding/encodeobject.ts";
