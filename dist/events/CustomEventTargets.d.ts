@@ -18,4 +18,3 @@ export declare class LinkedEventTarget extends InterceptiveEventTarget {
 export declare class GlobalChannelTarget extends InterceptiveEventTarget {
     constructor();
 }
-export declare const GlobalChannel: GlobalChannelTarget;

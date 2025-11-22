@@ -2,7 +2,6 @@ import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { RESULT_TIMED_OUT } from '../common/const.js';
 import { promiseWithResolvers, noop, cancelableDelay, delay, fireAndForget } from '../promises.js';
 import { EventHub } from '../events/EventHub.js';
-import '../events/CustomEventTargets.js';
 import { PaceMaker } from '../bureau/PaceMaker.js';
 import { ClerkGroup, Clerk } from '../bureau/Clerk.js';
 import { Inbox } from '../bureau/Inbox.js';

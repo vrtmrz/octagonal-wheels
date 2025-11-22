@@ -19,7 +19,3 @@
 - [EventType](EventType/README.md)
 - [EventTypeWithData](EventTypeWithData/README.md)
 - [EventTypeWithoutData](EventTypeWithoutData/README.md)
-
-## Variables
-
-- [GlobalChannel](GlobalChannel/README.md)

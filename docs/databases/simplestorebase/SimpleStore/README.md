@@ -4,17 +4,38 @@
 
 [octagonal-wheels](../../../modules.md) / [databases](../../README.md) / [simplestorebase](../README.md) / SimpleStore
 
-# Interface: SimpleStore\<T\>
+# Interface: SimpleStore\<T, TBackend\>
 
-Defined in: [src/databases/SimpleStoreBase.ts:20](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L20)
+Defined in: [src/databases/SimpleStoreBase.ts:55](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L55)
 
 Represents a simple key-value store.
 
+## Extends
+
+- [`SimpleStoreCRUD`](../SimpleStoreCRUD/README.md)\<`T`\>
+
 ## Type Parameters
 
-| Type Parameter | Description |
-| ------ | ------ |
-| `T` | The type of values stored in the store. |
+| Type Parameter | Default type | Description |
+| ------ | ------ | ------ |
+| `T` | - | The type of values stored in the store. |
+| `TBackend` | `any` | - |
+
+## Accessors
+
+### db
+
+#### Get Signature
+
+```ts
+get db(): undefined | Promise<TBackend>;
+```
+
+Defined in: [src/databases/SimpleStoreBase.ts:56](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L56)
+
+##### Returns
+
+`undefined` \| `Promise`\<`TBackend`\>
 
 ## Methods
 
@@ -24,7 +45,7 @@ Represents a simple key-value store.
 delete(key: string): Promise<void>;
 ```
 
-Defined in: [src/databases/SimpleStoreBase.ts:41](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L41)
+Defined in: [src/databases/SimpleStoreBase.ts:77](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L77)
 
 Deletes the value associated with the specified key.
 
@@ -40,6 +61,10 @@ Deletes the value associated with the specified key.
 
 A Promise that resolves when the value is successfully deleted.
 
+#### Overrides
+
+[`SimpleStoreCRUD`](../SimpleStoreCRUD/README.md).[`delete`](../SimpleStoreCRUD/README.md#delete)
+
 ***
 
 ### get()
@@ -48,7 +73,7 @@ A Promise that resolves when the value is successfully deleted.
 get(key: string): Promise<undefined | T>;
 ```
 
-Defined in: [src/databases/SimpleStoreBase.ts:26](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L26)
+Defined in: [src/databases/SimpleStoreBase.ts:62](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L62)
 
 Retrieves the value associated with the specified key.
 
@@ -64,6 +89,10 @@ Retrieves the value associated with the specified key.
 
 A Promise that resolves to the value associated with the key, or undefined if the key does not exist.
 
+#### Overrides
+
+[`SimpleStoreCRUD`](../SimpleStoreCRUD/README.md).[`get`](../SimpleStoreCRUD/README.md#get)
+
 ***
 
 ### keys()
@@ -75,7 +104,7 @@ keys(
 count?: number): Promise<string[]>;
 ```
 
-Defined in: [src/databases/SimpleStoreBase.ts:50](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L50)
+Defined in: [src/databases/SimpleStoreBase.ts:86](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L86)
 
 Retrieves an array of keys within the specified range.
 
@@ -93,6 +122,10 @@ Retrieves an array of keys within the specified range.
 
 A Promise that resolves to an array of keys within the specified range.
 
+#### Overrides
+
+[`SimpleStoreCRUD`](../SimpleStoreCRUD/README.md).[`keys`](../SimpleStoreCRUD/README.md#keys)
+
 ***
 
 ### set()
@@ -101,7 +134,7 @@ A Promise that resolves to an array of keys within the specified range.
 set(key: string, value: T): Promise<void>;
 ```
 
-Defined in: [src/databases/SimpleStoreBase.ts:34](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L34)
+Defined in: [src/databases/SimpleStoreBase.ts:70](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/SimpleStoreBase.ts#L70)
 
 Sets the value associated with the specified key.
 
@@ -117,3 +150,7 @@ Sets the value associated with the specified key.
 `Promise`\<`void`\>
 
 A Promise that resolves when the value is successfully set.
+
+#### Overrides
+
+[`SimpleStoreCRUD`](../SimpleStoreCRUD/README.md).[`set`](../SimpleStoreCRUD/README.md#set)

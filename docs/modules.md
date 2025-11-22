@@ -7,6 +7,7 @@
 ## Namespaces
 
 - [actor](actor/README.md)
+- [BackedQueue](BackedQueue/README.md)
 - [binary](binary/README.md)
 - [bureau](bureau/README.md)
 - [channel](channel/README.md)

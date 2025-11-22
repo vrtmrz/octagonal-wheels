@@ -42,6 +42,8 @@ import * as conduit_index from './conduit/index.js';
 export { conduit_index as conduit };
 import * as channel_index from './channel/index.js';
 export { channel_index as channel };
+import * as BackedQueue_index from './BackedQueue/index.js';
+export { BackedQueue_index as BackedQueue };
 
 /**
  * Returns the version of the library.
@@ -50,7 +52,7 @@ export { channel_index as channel };
  * @returns The version of the library.
  */
 function libVersion() {
-    return "octagonal-wheels-0.1.44";
+    return "octagonal-wheels-0.1.45";
 }
 
 export { libVersion };

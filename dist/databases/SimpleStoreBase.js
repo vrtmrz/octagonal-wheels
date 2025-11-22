@@ -4,6 +4,8 @@
  */
 class SimpleStoreBase {
 }
+class ExtendedSimpleStore extends SimpleStoreBase {
+}
 
-export { SimpleStoreBase };
+export { ExtendedSimpleStore, SimpleStoreBase };
 //# sourceMappingURL=SimpleStoreBase.js.map

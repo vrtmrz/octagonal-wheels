@@ -1,6 +1,6 @@
 {
     "name": "octagonal-wheels",
-    "version": "0.1.44",
+    "version": "0.1.45",
     "description": "This module is a compilation of wheels that have been reinvented for a specific purpose",
     "type": "module",
     "types": "./dist/index.d.ts",
@@ -40,6 +40,82 @@
         "./actor.js": {
             "import": "./dist/actor.js",
             "types": "./dist/actor.d.ts"
+        },
+        "./BackedQueue": {
+            "import": "./dist/BackedQueue/index.js",
+            "types": "./dist/BackedQueue/index.d.ts"
+        },
+        "./BackedQueue.js": {
+            "import": "./dist/BackedQueue/index.js",
+            "types": "./dist/BackedQueue/index.d.ts"
+        },
+        "./BackedQueue/BackedQueue": {
+            "import": "./dist/BackedQueue/BackedQueue.js",
+            "types": "./dist/BackedQueue/BackedQueue.d.ts"
+        },
+        "./BackedQueue/BackedQueue.js": {
+            "import": "./dist/BackedQueue/BackedQueue.js",
+            "types": "./dist/BackedQueue/BackedQueue.d.ts"
+        },
+        "./BackedQueue/BackedQueueTypes": {
+            "import": "./dist/BackedQueue/BackedQueueTypes.js",
+            "types": "./dist/BackedQueue/BackedQueueTypes.d.ts"
+        },
+        "./BackedQueue/BackedQueueTypes.js": {
+            "import": "./dist/BackedQueue/BackedQueueTypes.js",
+            "types": "./dist/BackedQueue/BackedQueueTypes.d.ts"
+        },
+        "./BackedQueue/HalfPersistentIDBBackedQueue": {
+            "import": "./dist/BackedQueue/HalfPersistentIDBBackedQueue.js",
+            "types": "./dist/BackedQueue/HalfPersistentIDBBackedQueue.d.ts"
+        },
+        "./BackedQueue/HalfPersistentIDBBackedQueue.js": {
+            "import": "./dist/BackedQueue/HalfPersistentIDBBackedQueue.js",
+            "types": "./dist/BackedQueue/HalfPersistentIDBBackedQueue.d.ts"
+        },
+        "./BackedQueue/index.js": {
+            "import": "./dist/BackedQueue/index.js",
+            "types": "./dist/BackedQueue/index.d.ts"
+        },
+        "./BackedQueue/MemoryBackedQueue": {
+            "import": "./dist/BackedQueue/MemoryBackedQueue.js",
+            "types": "./dist/BackedQueue/MemoryBackedQueue.d.ts"
+        },
+        "./BackedQueue/MemoryBackedQueue.js": {
+            "import": "./dist/BackedQueue/MemoryBackedQueue.js",
+            "types": "./dist/BackedQueue/MemoryBackedQueue.d.ts"
+        },
+        "./BackedQueue/PersistentIDBBackedQueue": {
+            "import": "./dist/BackedQueue/PersistentIDBBackedQueue.js",
+            "types": "./dist/BackedQueue/PersistentIDBBackedQueue.d.ts"
+        },
+        "./BackedQueue/PersistentIDBBackedQueue.js": {
+            "import": "./dist/BackedQueue/PersistentIDBBackedQueue.js",
+            "types": "./dist/BackedQueue/PersistentIDBBackedQueue.d.ts"
+        },
+        "./BackedQueue/QueueBackend": {
+            "import": "./dist/BackedQueue/QueueBackend.js",
+            "types": "./dist/BackedQueue/QueueBackend.d.ts"
+        },
+        "./BackedQueue/QueueBackend.js": {
+            "import": "./dist/BackedQueue/QueueBackend.js",
+            "types": "./dist/BackedQueue/QueueBackend.d.ts"
+        },
+        "./BackedQueue/QueueBackendMemory": {
+            "import": "./dist/BackedQueue/QueueBackendMemory.js",
+            "types": "./dist/BackedQueue/QueueBackendMemory.d.ts"
+        },
+        "./BackedQueue/QueueBackendMemory.js": {
+            "import": "./dist/BackedQueue/QueueBackendMemory.js",
+            "types": "./dist/BackedQueue/QueueBackendMemory.d.ts"
+        },
+        "./BackedQueue/QueueBackendTypes": {
+            "import": "./dist/BackedQueue/QueueBackendTypes.js",
+            "types": "./dist/BackedQueue/QueueBackendTypes.d.ts"
+        },
+        "./BackedQueue/QueueBackendTypes.js": {
+            "import": "./dist/BackedQueue/QueueBackendTypes.js",
+            "types": "./dist/BackedQueue/QueueBackendTypes.d.ts"
         },
         "./binary": {
             "import": "./dist/binary/index.js",
@@ -393,6 +469,14 @@
             "import": "./dist/databases/index.js",
             "types": "./dist/databases/index.d.ts"
         },
+        "./databases/dbcommon": {
+            "import": "./dist/databases/dbcommon.js",
+            "types": "./dist/databases/dbcommon.d.ts"
+        },
+        "./databases/dbcommon.js": {
+            "import": "./dist/databases/dbcommon.js",
+            "types": "./dist/databases/dbcommon.d.ts"
+        },
         "./databases/index.js": {
             "import": "./dist/databases/index.js",
             "types": "./dist/databases/index.d.ts"
@@ -420,6 +504,22 @@
         "./databases/SimpleStoreIDB.js": {
             "import": "./dist/databases/SimpleStoreIDB.js",
             "types": "./dist/databases/SimpleStoreIDB.d.ts"
+        },
+        "./databases/SimpleStoreIDBv1": {
+            "import": "./dist/databases/SimpleStoreIDBv1.js",
+            "types": "./dist/databases/SimpleStoreIDBv1.d.ts"
+        },
+        "./databases/SimpleStoreIDBv1.js": {
+            "import": "./dist/databases/SimpleStoreIDBv1.js",
+            "types": "./dist/databases/SimpleStoreIDBv1.d.ts"
+        },
+        "./databases/SimpleStoreIDBv2": {
+            "import": "./dist/databases/SimpleStoreIDBv2.js",
+            "types": "./dist/databases/SimpleStoreIDBv2.d.ts"
+        },
+        "./databases/SimpleStoreIDBv2.js": {
+            "import": "./dist/databases/SimpleStoreIDBv2.js",
+            "types": "./dist/databases/SimpleStoreIDBv2.d.ts"
         },
         "./dataobject": {
             "import": "./dist/dataobject/index.js",
@@ -480,6 +580,14 @@
         "./dataobject/Refiner.js": {
             "import": "./dist/dataobject/Refiner.js",
             "types": "./dist/dataobject/Refiner.d.ts"
+        },
+        "./encoding/encodeobject": {
+            "import": "./dist/encoding/encodeobject.js",
+            "types": "./dist/encoding/encodeobject.d.ts"
+        },
+        "./encoding/encodeobject.js": {
+            "import": "./dist/encoding/encodeobject.js",
+            "types": "./dist/encoding/encodeobject.d.ts"
         },
         "./encryption": {
             "import": "./dist/encryption/index.js",

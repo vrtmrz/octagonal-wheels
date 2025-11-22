@@ -1,20 +1,13 @@
-import { type IDBPDatabase } from "idb";
-import { SimpleStoreBase } from "./SimpleStoreBase.ts";
-/**
- * Represents a simple store using IndexedDB.
- * @template T - The type of the values stored in the store.
- */
-export declare class SimpleStoreIDB<T> extends SimpleStoreBase<T> {
-    name: string;
-    constructor(name: string);
-    db?: Promise<IDBPDatabase<any>>;
-    initDB(name: string): void;
-    get(key: string): Promise<T | undefined>;
-    set(key: string, value: T): Promise<void>;
-    delete(key: string): Promise<void>;
-    keys(from?: string | undefined, to?: string | undefined, count?: number | undefined): Promise<string[]>;
-    keysIDB(query?: IDBValidKey | IDBKeyRange, count?: number): Promise<IDBValidKey[]>;
-    clear(): Promise<void>;
-    close(): void;
-    destroy(): Promise<void>;
+import { SimpleStoreIDBv2 } from "./SimpleStoreIDBv2.ts";
+export declare class SimpleStoreIDB<T> extends SimpleStoreIDBv2<T> {
+    private static _instanceCount;
+    /**
+     * @deprecated Use SimpleStoreIDB.open instead.
+     * @param name a name for the database
+     * @param instanceName an optional instance name for the database (if not provided, an automatic instance name will be generated)
+     * @description
+     * Note: Opening multiple instances with the same instance name by the constructor may throw errors.
+     * Use SimpleStoreIDB.open to get a singleton instance instead.
+     */
+    constructor(name: string, instanceName?: string);
 }

@@ -27,3 +27,4 @@ export * as iterable from "./iterable/index.ts";
 export * as bureau from "./bureau/index.ts";
 export * as conduit from "./conduit/index.ts";
 export * as channel from "./channel/index.ts";
+export * as BackedQueue from "./BackedQueue/index.ts";

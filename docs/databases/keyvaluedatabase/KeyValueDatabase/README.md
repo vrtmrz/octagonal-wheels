@@ -6,7 +6,7 @@
 
 # Interface: KeyValueDatabase
 
-Defined in: [src/databases/KeyValueDB.ts:5](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L5)
+Defined in: [src/databases/KeyValueDB.ts:6](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L6)
 
 Represents a key-value database.
 
@@ -18,7 +18,7 @@ Represents a key-value database.
 clear(): Promise<void>;
 ```
 
-Defined in: [src/databases/KeyValueDB.ts:32](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L32)
+Defined in: [src/databases/KeyValueDB.ts:33](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L33)
 
 Clears all key-value pairs in the database.
 
@@ -36,7 +36,7 @@ A promise that resolves when the database is cleared.
 close(): void;
 ```
 
-Defined in: [src/databases/KeyValueDB.ts:45](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L45)
+Defined in: [src/databases/KeyValueDB.ts:46](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L46)
 
 Closes the database connection.
 
@@ -52,7 +52,7 @@ Closes the database connection.
 del(key: IDBValidKey): Promise<void>;
 ```
 
-Defined in: [src/databases/KeyValueDB.ts:26](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L26)
+Defined in: [src/databases/KeyValueDB.ts:27](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L27)
 
 Deletes the value associated with the specified key.
 
@@ -76,7 +76,7 @@ A promise that resolves when the value is deleted.
 destroy(): Promise<void>;
 ```
 
-Defined in: [src/databases/KeyValueDB.ts:51](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L51)
+Defined in: [src/databases/KeyValueDB.ts:52](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L52)
 
 Destroys the database and removes all data.
 
@@ -94,7 +94,7 @@ A promise that resolves when the database is destroyed.
 get<T>(key: IDBValidKey): Promise<T>;
 ```
 
-Defined in: [src/databases/KeyValueDB.ts:11](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L11)
+Defined in: [src/databases/KeyValueDB.ts:12](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L12)
 
 Retrieves the value associated with the specified key.
 
@@ -124,7 +124,7 @@ A promise that resolves with the retrieved value.
 keys(query?: IDBValidKey | IDBKeyRange, count?: number): Promise<IDBValidKey[]>;
 ```
 
-Defined in: [src/databases/KeyValueDB.ts:40](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L40)
+Defined in: [src/databases/KeyValueDB.ts:41](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L41)
 
 Retrieves an array of keys that match the specified query.
 
@@ -149,7 +149,7 @@ A promise that resolves with an array of keys.
 set<T>(key: IDBValidKey, value: T): Promise<IDBValidKey>;
 ```
 
-Defined in: [src/databases/KeyValueDB.ts:19](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L19)
+Defined in: [src/databases/KeyValueDB.ts:20](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/databases/KeyValueDB.ts#L20)
 
 Sets the value associated with the specified key.
 

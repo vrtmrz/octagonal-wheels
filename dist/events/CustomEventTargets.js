@@ -73,7 +73,6 @@ class GlobalChannelTarget extends InterceptiveEventTarget {
         };
     }
 }
-const GlobalChannel = new GlobalChannelTarget();
 
-export { GlobalChannel, GlobalChannelTarget, InterceptiveEventTarget, LinkedEventTarget };
+export { GlobalChannelTarget, InterceptiveEventTarget, LinkedEventTarget };
 //# sourceMappingURL=CustomEventTargets.js.map
