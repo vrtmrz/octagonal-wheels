@@ -1,4 +1,5 @@
 import { deleteDB, type IDBPDatabase, openDB } from "idb";
+import { Logger, LOG_LEVEL_VERBOSE } from "../common/logger";
 /**
  * Represents a key-value database.
  */
@@ -67,6 +68,15 @@ export async function OpenKeyValueDatabase(dbKey: string): Promise<KeyValueDatab
         upgrade(db) {
             db.createObjectStore(storeKey);
         },
+        blocking() {
+            Logger("Database blocking upgrade: " + dbKey, LOG_LEVEL_VERBOSE);
+            try {
+                db.close();
+                Logger("Database closed for upgrade: " + dbKey, LOG_LEVEL_VERBOSE);
+            } catch (e) {
+                Logger(e, LOG_LEVEL_VERBOSE);
+            }
+        },
     });
     const db = await dbPromise;
     databaseCache[dbKey] = db;
@@ -93,7 +103,11 @@ export async function OpenKeyValueDatabase(dbKey: string): Promise<KeyValueDatab
         async destroy() {
             delete databaseCache[dbKey];
             db.close();
-            await deleteDB(dbKey);
+            await deleteDB(dbKey, {
+                blocked: (a, b) => {
+                    Logger("Delete blocked for database: " + dbKey, LOG_LEVEL_VERBOSE);
+                },
+            });
         },
     };
 }
