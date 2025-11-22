@@ -76,4 +76,3 @@ export class GlobalChannelTarget extends InterceptiveEventTarget {
         };
     }
 }
-export const GlobalChannel = new GlobalChannelTarget();
