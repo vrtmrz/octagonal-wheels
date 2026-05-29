@@ -62,7 +62,6 @@ export function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<T> {
  * @returns An object containing the promise, resolve function, and reject function.
  */
 export function nativePromiseWithResolvers<T>() {
-    // @ts-ignore  TypeScript does not know about the withResolvers method on Promise yet.
     const p = Promise.withResolvers<T>();
     const { promise, resolve, reject } = p;
     return { promise, resolve, reject };

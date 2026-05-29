@@ -3,7 +3,14 @@
         "target": "ES2020",
         "useDefineForClassFields": true,
         "module": "ESNext",
-        "lib": ["ES2020", "DOM", "DOM.Iterable", "ESNext.Promise", "ES2021.WeakRef"],
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable",
+            "ESNext.Promise",
+            "ES2021.WeakRef",
+            "ES2024.Promise"
+        ],
         "skipLibCheck": true,
         /* Bundler mode */
         "moduleResolution": "bundler",
@@ -24,6 +31,12 @@
             }
         ]
     },
-    "include": ["src"],
-    "exclude": ["node_modules", "**/*.test.ts", "**/*.bench.ts"]
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.test.ts",
+        "**/*.bench.ts"
+    ]
 }
