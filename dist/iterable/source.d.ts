@@ -21,8 +21,8 @@ export declare class GeneratorSource<T> {
     enqueue(item: T): void;
     dispose(): void;
     finish(): void;
-    [Symbol.asyncIterator](): AsyncGenerator<any, void, unknown>;
+    [Symbol.asyncIterator](): AsyncGenerator<Awaited<T>, void, unknown>;
     [Symbol.dispose](): void;
-    values(): AsyncGenerator<any, void, unknown>;
+    values(): AsyncGenerator<Awaited<T>, void, unknown>;
 }
 export {};

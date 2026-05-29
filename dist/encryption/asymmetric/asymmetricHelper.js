@@ -1,5 +1,5 @@
 import { writeString, arrayBufferToBase64Single } from '../../binary/base64.js';
-import { encryptUInt8Array, encryptUInt8ArrayWithPublicKey, decryptUInt8Array, decryptUInt8ArrayWithPrivateKey } from './asymmetric.js';
+import { decryptUInt8Array, decryptUInt8ArrayWithPrivateKey, encryptUInt8Array, encryptUInt8ArrayWithPublicKey } from './asymmetric.js';
 import { AsymmetricEncryptionArgumentError, AsymmetricDecryptionError } from './common.js';
 
 /**

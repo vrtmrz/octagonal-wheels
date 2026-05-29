@@ -37,9 +37,9 @@ export declare function polyfillPromiseWithResolvers<T>(): PromiseWithResolvers<
  * @returns An object containing the promise, resolve function, and reject function.
  */
 export declare function nativePromiseWithResolvers<T>(): {
-    promise: any;
-    resolve: any;
-    reject: any;
+    promise: Promise<T>;
+    resolve: (value: T | PromiseLike<T>) => void;
+    reject: (reason?: any) => void;
 };
 /**
  * Creates a promise with custom resolvers.
@@ -96,7 +96,7 @@ export type TIMED_OUT_SIGNAL = typeof TIMED_OUT_SIGNAL;
  * @returns {() => void} cancel - A function to cancel the delay.
  */
 export declare function cancelableDelay<T = TIMED_OUT_SIGNAL>(timeout: number, cancel?: T): {
-    promise: any;
+    promise: Promise<T>;
     cancel(): void;
 };
 /**

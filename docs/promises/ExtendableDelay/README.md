@@ -14,7 +14,7 @@ type ExtendableDelay<T, U> = {
 };
 ```
 
-Defined in: [src/promises.ts:194](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L194)
+Defined in: [src/promises.ts:193](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L193)
 
 An extendable delay that can be cancelled or extended.
 
@@ -29,8 +29,8 @@ An extendable delay that can be cancelled or extended.
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="cancel"></a> `cancel` | (`reason`: `T` \| `U`) => `void` | [src/promises.ts:196](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L196) |
-| <a id="promise"></a> `promise` | `Promise`\<`T` \| `U`\> | [src/promises.ts:195](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L195) |
+| <a id="cancel"></a> `cancel` | (`reason`: `T` \| `U`) => `void` | [src/promises.ts:195](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L195) |
+| <a id="promise"></a> `promise` | `Promise`\<`T` \| `U`\> | [src/promises.ts:194](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L194) |
 
 ## Methods
 
@@ -40,7 +40,7 @@ An extendable delay that can be cancelled or extended.
 extend(newTimeout: number): void;
 ```
 
-Defined in: [src/promises.ts:197](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L197)
+Defined in: [src/promises.ts:196](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L196)
 
 #### Parameters
 

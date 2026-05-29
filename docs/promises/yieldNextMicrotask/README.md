@@ -10,7 +10,7 @@
 function yieldNextMicrotask(): Promise<void>;
 ```
 
-Defined in: [src/promises.ts:152](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L152)
+Defined in: [src/promises.ts:151](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L151)
 
 ## Returns
 

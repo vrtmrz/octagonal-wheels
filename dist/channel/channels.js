@@ -1,7 +1,7 @@
 import { LSError } from '../common/error.js';
 import { Logger, LOG_LEVEL_VERBOSE } from '../common/logger.js';
 import { promiseWithResolvers } from '../promises.js';
-import { DEFAULT_QUERY_TIMEOUT_MS, MessageTypes, generateId } from './common.js';
+import { MessageTypes, DEFAULT_QUERY_TIMEOUT_MS, generateId } from './common.js';
 import { queryViaTransport } from './transport.js';
 
 /* istanbul ignore next  -- @preserve */

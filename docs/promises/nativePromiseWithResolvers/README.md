@@ -8,9 +8,9 @@
 
 ```ts
 function nativePromiseWithResolvers<T>(): {
-  promise: any;
-  reject: any;
-  resolve: any;
+  promise: Promise<T>;
+  reject: (reason?: any) => void;
+  resolve: (value: T | PromiseLike<T>) => void;
 };
 ```
 
@@ -28,9 +28,9 @@ Creates a native promise with resolvers. This function is used when the `Promise
 
 ```ts
 {
-  promise: any;
-  reject: any;
-  resolve: any;
+  promise: Promise<T>;
+  reject: (reason?: any) => void;
+  resolve: (value: T | PromiseLike<T>) => void;
 }
 ```
 
@@ -39,17 +39,37 @@ An object containing the promise, resolve function, and reject function.
 ### promise
 
 ```ts
-promise: any;
+promise: Promise<T>;
 ```
 
-### reject
+### reject()
 
 ```ts
-reject: any;
+reject: (reason?: any) => void;
 ```
 
-### resolve
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason?` | `any` |
+
+#### Returns
+
+`void`
+
+### resolve()
 
 ```ts
-resolve: any;
+resolve: (value: T | PromiseLike<T>) => void;
 ```
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `T` \| `PromiseLike`\<`T`\> |
+
+#### Returns
+
+`void`

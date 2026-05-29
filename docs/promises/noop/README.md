@@ -10,7 +10,7 @@
 function noop(): void;
 ```
 
-Defined in: [src/promises.ts:90](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L90)
+Defined in: [src/promises.ts:89](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L89)
 
 A no-operation function.
 

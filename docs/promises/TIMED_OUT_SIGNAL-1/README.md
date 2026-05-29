@@ -10,4 +10,4 @@
 const TIMED_OUT_SIGNAL: typeof TIMED_OUT_SIGNAL;
 ```
 
-Defined in: [src/promises.ts:161](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L161)
+Defined in: [src/promises.ts:160](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L160)

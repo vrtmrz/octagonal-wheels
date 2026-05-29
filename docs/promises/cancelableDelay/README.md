@@ -8,12 +8,12 @@
 
 ```ts
 function cancelableDelay<T>(timeout: number, cancel?: T): {
-  promise: any;
+  promise: Promise<T>;
   cancel: void;
 };
 ```
 
-Defined in: [src/promises.ts:173](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L173)
+Defined in: [src/promises.ts:172](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L172)
 
 Creates a delay that can be canceled.
 
@@ -34,7 +34,7 @@ Creates a delay that can be canceled.
 
 ```ts
 {
-  promise: any;
+  promise: Promise<T>;
   cancel: void;
 }
 ```
@@ -44,7 +44,7 @@ An object containing the promise and a cancel function.
 ### promise
 
 ```ts
-promise: any = promise.promise;
+promise: Promise<T> = promise.promise;
 ```
 
 ### cancel()

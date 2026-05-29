@@ -46,9 +46,9 @@ export declare abstract class ClerkBase<T> {
     _totalFetched: number;
     _disposed: boolean;
     _disposePromise: {
-        promise: any;
-        resolve: any;
-        reject: any;
+        promise: Promise<void>;
+        resolve: (value: void | PromiseLike<void>) => void;
+        reject: (reason?: any) => void;
     };
     get state(): ClerkState;
     constructor(params: ClerkOptionBase<T>);
@@ -58,7 +58,7 @@ export declare abstract class ClerkBase<T> {
     setOnProgress(callback: (state: ClerkStateDetail) => void): void;
     _mainLoop(): Promise<void>;
     dispose(): void;
-    get onDisposed(): any;
+    get onDisposed(): Promise<void>;
 }
 export declare class Clerk<T> extends ClerkBase<T> {
     _onPick(item: T): Promise<void>;

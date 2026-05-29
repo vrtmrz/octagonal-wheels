@@ -123,9 +123,9 @@ Defined in: [src/dataobject/Refiner.ts:185](https://github.com/vrtmrz/octagonal-
 
 ```ts
 _refinePromise(): {
-  promise: any;
-  reject: any;
-  resolve: any;
+  promise: Promise<U>;
+  reject: (reason?: any) => void;
+  resolve: (value: U | PromiseLike<U>) => void;
 };
 ```
 
@@ -138,29 +138,49 @@ It is called when the evaluation is re-read.
 
 ```ts
 {
-  promise: any;
-  reject: any;
-  resolve: any;
+  promise: Promise<U>;
+  reject: (reason?: any) => void;
+  resolve: (value: U | PromiseLike<U>) => void;
 }
 ```
 
 ##### promise
 
 ```ts
-promise: any;
+promise: Promise<U>;
 ```
 
-##### reject
+##### reject()
 
 ```ts
-reject: any;
+reject: (reason?: any) => void;
 ```
 
-##### resolve
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason?` | `any` |
+
+###### Returns
+
+`void`
+
+##### resolve()
 
 ```ts
-resolve: any;
+resolve: (value: U | PromiseLike<U>) => void;
 ```
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `U` \| `PromiseLike`\<`U`\> |
+
+###### Returns
+
+`void`
 
 ***
 

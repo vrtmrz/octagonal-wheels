@@ -84,9 +84,9 @@ export declare class Refiner<T, U> {
      * It is called when the evaluation is re-read.
      */
     _refinePromise(): {
-        promise: any;
-        resolve: any;
-        reject: any;
+        promise: Promise<U>;
+        resolve: (value: U | PromiseLike<U>) => void;
+        reject: (reason?: any) => void;
     };
     /**
      * Constructor for the Refiner class.

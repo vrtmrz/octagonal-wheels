@@ -8,13 +8,13 @@
 
 ```ts
 const promiseWithResolvers: <T>() => {
-  promise: any;
-  reject: any;
-  resolve: any;
+  promise: Promise<T>;
+  reject: (reason?: any) => void;
+  resolve: (value: T | PromiseLike<T>) => void;
 } = polyfilledFunc;
 ```
 
-Defined in: [src/promises.ts:79](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L79)
+Defined in: [src/promises.ts:78](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/promises.ts#L78)
 
 Creates a promise with custom resolvers.
 
@@ -30,9 +30,9 @@ Creates a native promise with resolvers. This function is used when the `Promise
 
 ```ts
 {
-  promise: any;
-  reject: any;
-  resolve: any;
+  promise: Promise<T>;
+  reject: (reason?: any) => void;
+  resolve: (value: T | PromiseLike<T>) => void;
 }
 ```
 
@@ -41,20 +41,40 @@ An object containing the promise, resolve function, and reject function.
 ### promise
 
 ```ts
-promise: any;
+promise: Promise<T>;
 ```
 
-### reject
+### reject()
 
 ```ts
-reject: any;
+reject: (reason?: any) => void;
 ```
 
-### resolve
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `reason?` | `any` |
+
+#### Returns
+
+`void`
+
+### resolve()
 
 ```ts
-resolve: any;
+resolve: (value: T | PromiseLike<T>) => void;
 ```
+
+#### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `value` | `T` \| `PromiseLike`\<`T`\> |
+
+#### Returns
+
+`void`
 
 ## Param
 
