@@ -10,7 +10,7 @@
 function createSink<T>(processor: (items: T[]) => void | Promise<void>, batchSize: number): WritableStream<T>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:156
+Defined in: [src/concurrency/processorPipeline.ts:156](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L156)
 
 ## Type Parameters
 

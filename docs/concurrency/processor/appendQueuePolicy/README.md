@@ -10,7 +10,7 @@
 function appendQueuePolicy<T>(queue: T[], newItem: T): T[];
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:30
+Defined in: [src/concurrency/processorPipeline.ts:30](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L30)
 
 ## Type Parameters
 

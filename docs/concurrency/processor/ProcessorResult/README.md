@@ -10,7 +10,7 @@
 type ProcessorResult<T> = Promise<T[] | undefined | void> | T[] | undefined | void;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:1
+Defined in: [src/concurrency/processorPipeline.ts:1](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L1)
 
 ## Type Parameters
 

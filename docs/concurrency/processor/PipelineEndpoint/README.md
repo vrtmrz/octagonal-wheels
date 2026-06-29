@@ -12,7 +12,7 @@ type PipelineEndpoint<T> = {
 };
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:26
+Defined in: [src/concurrency/processorPipeline.ts:26](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L26)
 
 ## Type Parameters
 
@@ -24,4 +24,4 @@ Defined in: src/concurrency/processorPipeline.ts:26
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="writable"></a> `writable` | `WritableStream`\<`T`\> | src/concurrency/processorPipeline.ts:27 |
+| <a id="writable"></a> `writable` | `WritableStream`\<`T`\> | [src/concurrency/processorPipeline.ts:27](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L27) |

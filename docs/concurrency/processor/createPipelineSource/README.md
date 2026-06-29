@@ -10,7 +10,7 @@
 function createPipelineSource<T>(options?: PipelineSourceOptions): PipelineSource<T>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:145
+Defined in: [src/concurrency/processorPipeline.ts:145](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L145)
 
 ## Type Parameters
 

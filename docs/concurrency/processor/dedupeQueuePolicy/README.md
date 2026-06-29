@@ -10,7 +10,7 @@
 function dedupeQueuePolicy<T>(getKey: (item: T) => string, options: DedupeQueuePolicyOptions<T>): QueuePolicy<T>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:35
+Defined in: [src/concurrency/processorPipeline.ts:35](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L35)
 
 ## Type Parameters
 

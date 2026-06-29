@@ -10,7 +10,7 @@
 function createProcessorStage<T, U>(processor: BatchProcessor<T, U>, options?: ProcessorStageOptions<T>): ProcessorStage<T, U>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:149
+Defined in: [src/concurrency/processorPipeline.ts:149](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L149)
 
 ## Type Parameters
 

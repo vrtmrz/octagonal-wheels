@@ -10,7 +10,7 @@
 function connectPipeline<T, U>(source: ReadableStream<T>, stage: ProcessorStage<T, U>): ReadableStream<U>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:175
+Defined in: [src/concurrency/processorPipeline.ts:175](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L175)
 
 ## Type Parameters
 

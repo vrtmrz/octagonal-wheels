@@ -10,7 +10,7 @@
 type BatchProcessor<T, U> = (items: T[]) => ProcessorResult<U>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:2
+Defined in: [src/concurrency/processorPipeline.ts:2](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L2)
 
 ## Type Parameters
 

@@ -14,7 +14,7 @@ type ProcessorStageOptions<T> = {
 };
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:13
+Defined in: [src/concurrency/processorPipeline.ts:13](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L13)
 
 ## Type Parameters
 
@@ -26,6 +26,6 @@ Defined in: src/concurrency/processorPipeline.ts:13
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="batchsize"></a> `batchSize?` | `number` | src/concurrency/processorPipeline.ts:14 |
-| <a id="flushdelay"></a> `flushDelay?` | `number` | src/concurrency/processorPipeline.ts:16 |
-| <a id="queuepolicy"></a> `queuePolicy?` | [`QueuePolicy`](../QueuePolicy/README.md)\<`T`\> | src/concurrency/processorPipeline.ts:15 |
+| <a id="batchsize"></a> `batchSize?` | `number` | [src/concurrency/processorPipeline.ts:14](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L14) |
+| <a id="flushdelay"></a> `flushDelay?` | `number` | [src/concurrency/processorPipeline.ts:16](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L16) |
+| <a id="queuepolicy"></a> `queuePolicy?` | [`QueuePolicy`](../QueuePolicy/README.md)\<`T`\> | [src/concurrency/processorPipeline.ts:15](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L15) |

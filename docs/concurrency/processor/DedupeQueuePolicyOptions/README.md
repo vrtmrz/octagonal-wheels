@@ -13,7 +13,7 @@ type DedupeQueuePolicyOptions<T> = {
 };
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:4
+Defined in: [src/concurrency/processorPipeline.ts:4](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L4)
 
 ## Type Parameters
 
@@ -25,5 +25,5 @@ Defined in: src/concurrency/processorPipeline.ts:4
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="onenqueue"></a> `onEnqueue?` | (`newItem`: `T`) => `void` | src/concurrency/processorPipeline.ts:6 |
-| <a id="onreplace"></a> `onReplace?` | (`queuedItem`: `T`, `newItem`: `T`) => `void` | src/concurrency/processorPipeline.ts:5 |
+| <a id="onenqueue"></a> `onEnqueue?` | (`newItem`: `T`) => `void` | [src/concurrency/processorPipeline.ts:6](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L6) |
+| <a id="onreplace"></a> `onReplace?` | (`queuedItem`: `T`, `newItem`: `T`) => `void` | [src/concurrency/processorPipeline.ts:5](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L5) |

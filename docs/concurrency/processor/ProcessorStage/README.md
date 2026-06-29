@@ -6,7 +6,7 @@
 
 # Class: ProcessorStage\<T, U\>
 
-Defined in: src/concurrency/processorPipeline.ts:91
+Defined in: [src/concurrency/processorPipeline.ts:91](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L91)
 
 ## Extends
 
@@ -27,7 +27,7 @@ Defined in: src/concurrency/processorPipeline.ts:91
 new ProcessorStage<T, U>(processor: BatchProcessor<T, U>, options: ProcessorStageOptions<T>): ProcessorStage<T, U>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:92
+Defined in: [src/concurrency/processorPipeline.ts:92](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L92)
 
 #### Parameters
 

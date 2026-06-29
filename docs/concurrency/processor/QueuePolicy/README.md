@@ -10,7 +10,7 @@
 type QueuePolicy<T> = (queue: T[], newItem: T) => T[];
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:3
+Defined in: [src/concurrency/processorPipeline.ts:3](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L3)
 
 ## Type Parameters
 

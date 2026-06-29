@@ -6,7 +6,7 @@
 
 # Class: QueueProcessorShim\<T, U\>
 
-Defined in: src/concurrency/processorPipeline.ts:179
+Defined in: [src/concurrency/processorPipeline.ts:179](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L179)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ new QueueProcessorShim<T, U>(
 queuePolicy?: QueuePolicy<T>): QueueProcessorShim<T, U>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:193
+Defined in: [src/concurrency/processorPipeline.ts:193](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L193)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: src/concurrency/processorPipeline.ts:193
 get isSuspended(): boolean;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:225
+Defined in: [src/concurrency/processorPipeline.ts:225](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L225)
 
 ##### Returns
 
@@ -68,7 +68,7 @@ Defined in: src/concurrency/processorPipeline.ts:225
 get root(): QueueProcessorShim<any, any>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:213
+Defined in: [src/concurrency/processorPipeline.ts:213](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L213)
 
 ##### Returns
 
@@ -84,7 +84,7 @@ Defined in: src/concurrency/processorPipeline.ts:213
 get writable(): WritableStream<T>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:217
+Defined in: [src/concurrency/processorPipeline.ts:217](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L217)
 
 ##### Returns
 
@@ -98,7 +98,7 @@ Defined in: src/concurrency/processorPipeline.ts:217
 enqueue(item: T): this;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:229
+Defined in: [src/concurrency/processorPipeline.ts:229](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L229)
 
 #### Parameters
 
@@ -118,7 +118,7 @@ Defined in: src/concurrency/processorPipeline.ts:229
 enqueueAll(items: Iterable<T>): this;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:235
+Defined in: [src/concurrency/processorPipeline.ts:235](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L235)
 
 #### Parameters
 
@@ -138,7 +138,7 @@ Defined in: src/concurrency/processorPipeline.ts:235
 pipeTo<V>(downstream: QueueProcessorShim<U, V>): QueueProcessorShim<U, V>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:247
+Defined in: [src/concurrency/processorPipeline.ts:247](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L247)
 
 #### Type Parameters
 
@@ -164,7 +164,7 @@ Defined in: src/concurrency/processorPipeline.ts:247
 replaceEnqueueProcessor(queuePolicy: QueuePolicy<T>): this;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:242
+Defined in: [src/concurrency/processorPipeline.ts:242](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L242)
 
 #### Parameters
 
@@ -184,7 +184,7 @@ Defined in: src/concurrency/processorPipeline.ts:242
 resume(): this;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:253
+Defined in: [src/concurrency/processorPipeline.ts:253](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L253)
 
 #### Returns
 
@@ -198,7 +198,7 @@ Defined in: src/concurrency/processorPipeline.ts:253
 resumePipeLine(): this;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:259
+Defined in: [src/concurrency/processorPipeline.ts:259](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L259)
 
 #### Returns
 
@@ -212,7 +212,7 @@ Defined in: src/concurrency/processorPipeline.ts:259
 startPipeline(): this;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:264
+Defined in: [src/concurrency/processorPipeline.ts:264](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L264)
 
 #### Returns
 
@@ -226,7 +226,7 @@ Defined in: src/concurrency/processorPipeline.ts:264
 terminate(): void;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:291
+Defined in: [src/concurrency/processorPipeline.ts:291](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L291)
 
 #### Returns
 
@@ -240,7 +240,7 @@ Defined in: src/concurrency/processorPipeline.ts:291
 waitForAllDoneAndTerminate(timeout?: number): Promise<boolean>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:285
+Defined in: [src/concurrency/processorPipeline.ts:285](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L285)
 
 #### Parameters
 
@@ -260,7 +260,7 @@ Defined in: src/concurrency/processorPipeline.ts:285
 waitForAllProcessed(timeout?: number): Promise<boolean>;
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:269
+Defined in: [src/concurrency/processorPipeline.ts:269](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L269)
 
 #### Parameters
 

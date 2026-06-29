@@ -15,7 +15,7 @@ type QueueProcessorShimOptions<T, U> = ProcessorStageOptions<T> & {
 };
 ```
 
-Defined in: src/concurrency/processorPipeline.ts:19
+Defined in: [src/concurrency/processorPipeline.ts:19](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processorPipeline.ts#L19)
 
 ## Type Declaration
 
