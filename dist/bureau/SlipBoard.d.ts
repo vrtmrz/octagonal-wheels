@@ -40,6 +40,7 @@ export type AwaitOptionWithTimeout = AwaitOptionBase & {
 };
 export declare class SlipBoard<Events extends LSSlips = LSSlips> {
     _clip: Map<string | number | symbol, PromiseWithResolvers<any>>;
+    private _makeKey;
     /**
      * Checks if a specific key is awaiting.
      *
@@ -86,6 +87,15 @@ export declare class SlipBoard<Events extends LSSlips = LSSlips> {
      */
     reject<ET extends Events, K extends keyof ET>(type: SlipType<ET, K>, key: string | undefined, reason: any): void;
 }
+export declare function createSlipBoard<Events extends LSSlips = LSSlips>(): SlipBoard<Events>;
+export type SignalHub = ReturnType<typeof createSignalHub>;
+export declare function createSignalHub(board?: SlipBoard): {
+    board: SlipBoard<LSSlips>;
+    waitForSignal(id: string, timeout?: number): Promise<boolean>;
+    waitForValue<T>(id: string, timeout?: number): Promise<WithTimeout<T>>;
+    sendSignal(id: string): void;
+    sendValue<T>(id: string, result: T): void;
+};
 export declare const globalSlipBoard: SlipBoard<LSSlips>;
 export declare function waitForSignal(id: string, timeout?: number): Promise<boolean>;
 export declare function waitForValue<T>(id: string, timeout?: number): Promise<WithTimeout<T>>;

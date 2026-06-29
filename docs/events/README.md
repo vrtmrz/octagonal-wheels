@@ -19,3 +19,8 @@
 - [EventType](EventType/README.md)
 - [EventTypeWithData](EventTypeWithData/README.md)
 - [EventTypeWithoutData](EventTypeWithoutData/README.md)
+
+## Functions
+
+- [createEventHub](createEventHub/README.md)
+- [getGlobalEventHub](getGlobalEventHub/README.md)

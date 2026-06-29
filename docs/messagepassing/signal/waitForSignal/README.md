@@ -10,7 +10,7 @@
 function waitForSignal(id: string, timeout?: number): Promise<boolean>;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:238](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L238)
+Defined in: [src/bureau/SlipBoard.ts:272](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L272)
 
 ## Parameters
 

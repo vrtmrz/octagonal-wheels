@@ -85,6 +85,22 @@
             "import": "./dist/concurrency/index.js",
             "types": "./dist/concurrency/index.d.ts"
         },
+        "./concurrency/processor": {
+            "import": "./dist/concurrency/processor.js",
+            "types": "./dist/concurrency/processor.d.ts"
+        },
+        "./concurrency/processor.js": {
+            "import": "./dist/concurrency/processor.js",
+            "types": "./dist/concurrency/processor.d.ts"
+        },
+        "./concurrency/processorPipeline": {
+            "import": "./dist/concurrency/processorPipeline.js",
+            "types": "./dist/concurrency/processorPipeline.d.ts"
+        },
+        "./concurrency/processorPipeline.js": {
+            "import": "./dist/concurrency/processorPipeline.js",
+            "types": "./dist/concurrency/processorPipeline.d.ts"
+        },
         "./conduit": {
             "import": "./dist/conduit/index.js",
             "types": "./dist/conduit/index.d.ts"
@@ -164,6 +180,142 @@
         "./messagepassing.js": {
             "import": "./dist/messagepassing/index.js",
             "types": "./dist/messagepassing/index.d.ts"
+        },
+        "./BackedQueue/*": {
+            "import": "./dist/BackedQueue/*.js",
+            "types": "./dist/BackedQueue/*.d.ts"
+        },
+        "./BackedQueue/*.js": {
+            "import": "./dist/BackedQueue/*.js",
+            "types": "./dist/BackedQueue/*.d.ts"
+        },
+        "./binary/*": {
+            "import": "./dist/binary/*.js",
+            "types": "./dist/binary/*.d.ts"
+        },
+        "./binary/*.js": {
+            "import": "./dist/binary/*.js",
+            "types": "./dist/binary/*.d.ts"
+        },
+        "./bureau/*": {
+            "import": "./dist/bureau/*.js",
+            "types": "./dist/bureau/*.d.ts"
+        },
+        "./bureau/*.js": {
+            "import": "./dist/bureau/*.js",
+            "types": "./dist/bureau/*.d.ts"
+        },
+        "./channel/*": {
+            "import": "./dist/channel/*.js",
+            "types": "./dist/channel/*.d.ts"
+        },
+        "./channel/*.js": {
+            "import": "./dist/channel/*.js",
+            "types": "./dist/channel/*.d.ts"
+        },
+        "./common/*": {
+            "import": "./dist/common/*.js",
+            "types": "./dist/common/*.d.ts"
+        },
+        "./common/*.js": {
+            "import": "./dist/common/*.js",
+            "types": "./dist/common/*.d.ts"
+        },
+        "./concurrency/*": {
+            "import": "./dist/concurrency/*.js",
+            "types": "./dist/concurrency/*.d.ts"
+        },
+        "./concurrency/*.js": {
+            "import": "./dist/concurrency/*.js",
+            "types": "./dist/concurrency/*.d.ts"
+        },
+        "./conduit/*": {
+            "import": "./dist/conduit/*.js",
+            "types": "./dist/conduit/*.d.ts"
+        },
+        "./conduit/*.js": {
+            "import": "./dist/conduit/*.js",
+            "types": "./dist/conduit/*.d.ts"
+        },
+        "./databases/*": {
+            "import": "./dist/databases/*.js",
+            "types": "./dist/databases/*.d.ts"
+        },
+        "./databases/*.js": {
+            "import": "./dist/databases/*.js",
+            "types": "./dist/databases/*.d.ts"
+        },
+        "./dataobject/*": {
+            "import": "./dist/dataobject/*.js",
+            "types": "./dist/dataobject/*.d.ts"
+        },
+        "./dataobject/*.js": {
+            "import": "./dist/dataobject/*.js",
+            "types": "./dist/dataobject/*.d.ts"
+        },
+        "./encryption/*": {
+            "import": "./dist/encryption/*.js",
+            "types": "./dist/encryption/*.d.ts"
+        },
+        "./encryption/*.js": {
+            "import": "./dist/encryption/*.js",
+            "types": "./dist/encryption/*.d.ts"
+        },
+        "./encryption/asymmetric/*": {
+            "import": "./dist/encryption/asymmetric/*.js",
+            "types": "./dist/encryption/asymmetric/*.d.ts"
+        },
+        "./encryption/asymmetric/*.js": {
+            "import": "./dist/encryption/asymmetric/*.js",
+            "types": "./dist/encryption/asymmetric/*.d.ts"
+        },
+        "./encryption/openSSLCompat/*": {
+            "import": "./dist/encryption/openSSLCompat/*.js",
+            "types": "./dist/encryption/openSSLCompat/*.d.ts"
+        },
+        "./encryption/openSSLCompat/*.js": {
+            "import": "./dist/encryption/openSSLCompat/*.js",
+            "types": "./dist/encryption/openSSLCompat/*.d.ts"
+        },
+        "./events/*": {
+            "import": "./dist/events/*.js",
+            "types": "./dist/events/*.d.ts"
+        },
+        "./events/*.js": {
+            "import": "./dist/events/*.js",
+            "types": "./dist/events/*.d.ts"
+        },
+        "./hash/*": {
+            "import": "./dist/hash/*.js",
+            "types": "./dist/hash/*.d.ts"
+        },
+        "./hash/*.js": {
+            "import": "./dist/hash/*.js",
+            "types": "./dist/hash/*.d.ts"
+        },
+        "./iterable/*": {
+            "import": "./dist/iterable/*.js",
+            "types": "./dist/iterable/*.d.ts"
+        },
+        "./iterable/*.js": {
+            "import": "./dist/iterable/*.js",
+            "types": "./dist/iterable/*.d.ts"
+        },
+        "./memory/*": {
+            "import": "./dist/memory/*.js",
+            "types": "./dist/memory/*.d.ts"
+        },
+        "./memory/*.js": {
+            "import": "./dist/memory/*.js",
+            "types": "./dist/memory/*.d.ts"
+        },
+        "./messagepassing/*": {
+            "import": "./dist/messagepassing/*.js",
+            "types": "./dist/messagepassing/*.d.ts"
+        },
+        "./messagepassing/*.js": {
+            "import": "./dist/messagepassing/*.js",
+            "types": "./dist/messagepassing/*.d.ts"
         },
         "./*": {
             "import": "./dist/*.js",

@@ -161,7 +161,7 @@ describe("BackedQueue", () => {
                 try {
                     const dequeueTask = store.dequeue({ timeoutMs: 100 });
                     // vi.advanceTimersByTime(150);
-                    expect(dequeueTask).rejects.toThrowError(QueueTimeoutError);
+                    await expect(dequeueTask).rejects.toThrowError(QueueTimeoutError);
                     await delay(150);
                 } catch (ex) {
                     console.error("Error in timeout test:", ex);

@@ -15,6 +15,7 @@
 - [AwaitOptionBase](AwaitOptionBase/README.md)
 - [AwaitOptionWithoutTimeout](AwaitOptionWithoutTimeout/README.md)
 - [AwaitOptionWithTimeout](AwaitOptionWithTimeout/README.md)
+- [SignalHub](SignalHub/README.md)
 - [SlipProcessOptions](SlipProcessOptions/README.md)
 - [WithTimeout](WithTimeout/README.md)
 
@@ -24,6 +25,8 @@
 
 ## Functions
 
+- [createSignalHub](createSignalHub/README.md)
+- [createSlipBoard](createSlipBoard/README.md)
 - [sendSignal](sendSignal/README.md)
 - [sendValue](sendValue/README.md)
 - [waitForSignal](waitForSignal/README.md)

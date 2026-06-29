@@ -10,7 +10,7 @@
 function sendSignal(id: string): void;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:250](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L250)
+Defined in: [src/bureau/SlipBoard.ts:280](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L280)
 
 ## Parameters
 

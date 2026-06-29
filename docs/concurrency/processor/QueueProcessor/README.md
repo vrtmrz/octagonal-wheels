@@ -4,9 +4,13 @@
 
 [octagonal-wheels](../../../modules.md) / [concurrency](../../README.md) / [processor](../README.md) / QueueProcessor
 
-# Class: QueueProcessor\<T, U\>
+# ~~Class: QueueProcessor\<T, U\>~~
 
-Defined in: [src/concurrency/processor\_v2.ts:102](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L102)
+Defined in: [src/concurrency/processor\_v2.ts:118](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L118)
+
+## Deprecated
+
+Use QueueProcessorShim for low-friction migration, or PipelineSource and ProcessorStage for new code.
 
 ## Type Parameters
 
@@ -27,7 +31,7 @@ new QueueProcessor<T, U>(
 enqueueProcessor?: (queue: T[], newEntity: T) => T[]): QueueProcessor<T, U>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:277](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L277)
+Defined in: [src/concurrency/processor\_v2.ts:293](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L293)
 
 #### Parameters
 
@@ -46,41 +50,41 @@ Defined in: [src/concurrency/processor\_v2.ts:277](https://github.com/vrtmrz/oct
 
 | Property | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="_clerks"></a> `_clerks` | [`ClerkGroup`](../../../bureau/clerk/ClerkGroup/README.md)\<`T`[], [`Clerk`](../../../bureau/clerk/Clerk/README.md)\<`T`[]\>\> | `undefined` | [src/concurrency/processor\_v2.ts:524](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L524) |
-| <a id="_collected"></a> `_collected` | [`Inbox`](../../../bureau/inbox/Inbox/README.md)\<`T`[]\> | `undefined` | [src/concurrency/processor\_v2.ts:523](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L523) |
-| <a id="_delaytimer"></a> `_delayTimer?` | `Timeout` | `undefined` | [src/concurrency/processor\_v2.ts:273](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L273) |
-| <a id="_enqueueprocessor"></a> `_enqueueProcessor` | (`queue`: `T`[], `newEntity`: `T`) => `T`[] | `undefined` | [src/concurrency/processor\_v2.ts:105](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L105) |
-| <a id="_hub"></a> `_hub` | [`EventHub`](../../../events/EventHub/README.md)\<`ProcessorEvents`\> | `undefined` | [src/concurrency/processor\_v2.ts:144](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L144) |
-| <a id="_intervalpacemaker"></a> `_intervalPaceMaker` | [`PaceMaker`](../../../bureau/pacemaker/PaceMaker/README.md) | `undefined` | [src/concurrency/processor\_v2.ts:275](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L275) |
-| <a id="_issuspended"></a> `_isSuspended` | `boolean` | `true` | [src/concurrency/processor\_v2.ts:106](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L106) |
-| <a id="_keepresultuntildownstreamconnected"></a> `_keepResultUntilDownstreamConnected` | `boolean` | `false` | [src/concurrency/processor\_v2.ts:115](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L115) |
-| <a id="_keptresult"></a> `_keptResult` | `U`[] | `undefined` | [src/concurrency/processor\_v2.ts:116](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L116) |
-| <a id="_nextprocessneedsimmediate"></a> `_nextProcessNeedsImmediate` | `boolean` | `false` | [src/concurrency/processor\_v2.ts:107](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L107) |
-| <a id="_pipeto"></a> `_pipeTo?` | `QueueProcessor`\<`U`, `any`\> | `undefined` | [src/concurrency/processor\_v2.ts:109](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L109) |
-| <a id="_processcount"></a> `_processCount` | `number` | `0` | [src/concurrency/processor\_v2.ts:525](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L525) |
-| <a id="_processing"></a> `_processing` | `boolean` | `false` | [src/concurrency/processor\_v2.ts:521](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L521) |
-| <a id="_processingbatches"></a> `_processingBatches` | `Set`\<`number`\> | `undefined` | [src/concurrency/processor\_v2.ts:510](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L510) |
-| <a id="_processingentitiesreactivesource"></a> `_processingEntitiesReactiveSource?` | [`ReactiveSource`](../../../dataobject/reactive/ReactiveSource/README.md)\<`number`\> | `undefined` | [src/concurrency/processor\_v2.ts:114](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L114) |
-| <a id="_processor"></a> `_processor` | `Processor`\<`T`, `U`\> | `undefined` | [src/concurrency/processor\_v2.ts:104](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L104) |
-| <a id="_queue"></a> `_queue` | `T`[] | `[]` | [src/concurrency/processor\_v2.ts:103](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L103) |
-| <a id="_remainingreactivesource"></a> `_remainingReactiveSource?` | [`ReactiveSource`](../../../dataobject/reactive/ReactiveSource/README.md)\<`number`\> | `undefined` | [src/concurrency/processor\_v2.ts:112](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L112) |
-| <a id="_root"></a> `_root?` | `QueueProcessor`\<`any`, `any`\> | `undefined` | [src/concurrency/processor\_v2.ts:111](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L111) |
-| <a id="_runonupdatebatch"></a> `_runOnUpdateBatch` | () => `void` | `undefined` | [src/concurrency/processor\_v2.ts:118](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L118) |
-| <a id="_totalremainingreactivesource"></a> `_totalRemainingReactiveSource?` | [`ReactiveSource`](../../../dataobject/reactive/ReactiveSource/README.md)\<`number`\> | `undefined` | [src/concurrency/processor\_v2.ts:113](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L113) |
-| <a id="addprocessingbatch"></a> `addProcessingBatch` | (`value`: `number`) => `this` | `undefined` | [src/concurrency/processor\_v2.ts:511](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L511) |
-| <a id="batchsize"></a> `batchSize` | `number` | `1` | [src/concurrency/processor\_v2.ts:126](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L126) |
-| <a id="concurrentlimit"></a> `concurrentLimit` | `number` | `1` | [src/concurrency/processor\_v2.ts:123](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L123) |
-| <a id="delay"></a> `delay` | `number` | `0` | [src/concurrency/processor\_v2.ts:133](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L133) |
-| <a id="deleteprocessingbatch"></a> `deleteProcessingBatch` | (`value`: `number`) => `boolean` | `undefined` | [src/concurrency/processor\_v2.ts:516](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L516) |
-| <a id="interval"></a> `interval` | `number` | `0` | [src/concurrency/processor\_v2.ts:135](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L135) |
-| <a id="maintaindelay"></a> `maintainDelay` | `boolean` | `undefined` | [src/concurrency/processor\_v2.ts:134](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L134) |
-| <a id="processingentities"></a> `processingEntities` | `number` | `0` | [src/concurrency/processor\_v2.ts:138](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L138) |
-| <a id="waitingentries"></a> `waitingEntries` | `number` | `0` | [src/concurrency/processor\_v2.ts:141](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L141) |
-| <a id="yieldthreshold"></a> `yieldThreshold` | `number` | `1` | [src/concurrency/processor\_v2.ts:129](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L129) |
+| <a id="_clerks"></a> ~~`_clerks`~~ | [`ClerkGroup`](../../../bureau/clerk/ClerkGroup/README.md)\<`T`[], [`Clerk`](../../../bureau/clerk/Clerk/README.md)\<`T`[]\>\> | `undefined` | [src/concurrency/processor\_v2.ts:540](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L540) |
+| <a id="_collected"></a> ~~`_collected`~~ | [`Inbox`](../../../bureau/inbox/Inbox/README.md)\<`T`[]\> | `undefined` | [src/concurrency/processor\_v2.ts:539](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L539) |
+| <a id="_delaytimer"></a> ~~`_delayTimer?`~~ | `Timeout` | `undefined` | [src/concurrency/processor\_v2.ts:289](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L289) |
+| <a id="_enqueueprocessor"></a> ~~`_enqueueProcessor`~~ | (`queue`: `T`[], `newEntity`: `T`) => `T`[] | `undefined` | [src/concurrency/processor\_v2.ts:121](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L121) |
+| <a id="_hub"></a> ~~`_hub`~~ | [`EventHub`](../../../events/EventHub/README.md)\<`ProcessorEvents`\> | `undefined` | [src/concurrency/processor\_v2.ts:160](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L160) |
+| <a id="_intervalpacemaker"></a> ~~`_intervalPaceMaker`~~ | [`PaceMaker`](../../../bureau/pacemaker/PaceMaker/README.md) | `undefined` | [src/concurrency/processor\_v2.ts:291](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L291) |
+| <a id="_issuspended"></a> ~~`_isSuspended`~~ | `boolean` | `true` | [src/concurrency/processor\_v2.ts:122](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L122) |
+| <a id="_keepresultuntildownstreamconnected"></a> ~~`_keepResultUntilDownstreamConnected`~~ | `boolean` | `false` | [src/concurrency/processor\_v2.ts:131](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L131) |
+| <a id="_keptresult"></a> ~~`_keptResult`~~ | `U`[] | `undefined` | [src/concurrency/processor\_v2.ts:132](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L132) |
+| <a id="_nextprocessneedsimmediate"></a> ~~`_nextProcessNeedsImmediate`~~ | `boolean` | `false` | [src/concurrency/processor\_v2.ts:123](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L123) |
+| <a id="_pipeto"></a> ~~`_pipeTo?`~~ | `QueueProcessor`\<`U`, `any`\> | `undefined` | [src/concurrency/processor\_v2.ts:125](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L125) |
+| <a id="_processcount"></a> ~~`_processCount`~~ | `number` | `0` | [src/concurrency/processor\_v2.ts:541](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L541) |
+| <a id="_processing"></a> ~~`_processing`~~ | `boolean` | `false` | [src/concurrency/processor\_v2.ts:537](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L537) |
+| <a id="_processingbatches"></a> ~~`_processingBatches`~~ | `Set`\<`number`\> | `undefined` | [src/concurrency/processor\_v2.ts:526](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L526) |
+| <a id="_processingentitiesreactivesource"></a> ~~`_processingEntitiesReactiveSource?`~~ | [`ReactiveSource`](../../../dataobject/reactive/ReactiveSource/README.md)\<`number`\> | `undefined` | [src/concurrency/processor\_v2.ts:130](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L130) |
+| <a id="_processor"></a> ~~`_processor`~~ | `Processor`\<`T`, `U`\> | `undefined` | [src/concurrency/processor\_v2.ts:120](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L120) |
+| <a id="_queue"></a> ~~`_queue`~~ | `T`[] | `[]` | [src/concurrency/processor\_v2.ts:119](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L119) |
+| <a id="_remainingreactivesource"></a> ~~`_remainingReactiveSource?`~~ | [`ReactiveSource`](../../../dataobject/reactive/ReactiveSource/README.md)\<`number`\> | `undefined` | [src/concurrency/processor\_v2.ts:128](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L128) |
+| <a id="_root"></a> ~~`_root?`~~ | `QueueProcessor`\<`any`, `any`\> | `undefined` | [src/concurrency/processor\_v2.ts:127](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L127) |
+| <a id="_runonupdatebatch"></a> ~~`_runOnUpdateBatch`~~ | () => `void` | `undefined` | [src/concurrency/processor\_v2.ts:134](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L134) |
+| <a id="_totalremainingreactivesource"></a> ~~`_totalRemainingReactiveSource?`~~ | [`ReactiveSource`](../../../dataobject/reactive/ReactiveSource/README.md)\<`number`\> | `undefined` | [src/concurrency/processor\_v2.ts:129](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L129) |
+| <a id="addprocessingbatch"></a> ~~`addProcessingBatch`~~ | (`value`: `number`) => `this` | `undefined` | [src/concurrency/processor\_v2.ts:527](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L527) |
+| <a id="batchsize"></a> ~~`batchSize`~~ | `number` | `1` | [src/concurrency/processor\_v2.ts:142](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L142) |
+| <a id="concurrentlimit"></a> ~~`concurrentLimit`~~ | `number` | `1` | [src/concurrency/processor\_v2.ts:139](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L139) |
+| <a id="delay"></a> ~~`delay`~~ | `number` | `0` | [src/concurrency/processor\_v2.ts:149](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L149) |
+| <a id="deleteprocessingbatch"></a> ~~`deleteProcessingBatch`~~ | (`value`: `number`) => `boolean` | `undefined` | [src/concurrency/processor\_v2.ts:532](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L532) |
+| <a id="interval"></a> ~~`interval`~~ | `number` | `0` | [src/concurrency/processor\_v2.ts:151](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L151) |
+| <a id="maintaindelay"></a> ~~`maintainDelay`~~ | `boolean` | `undefined` | [src/concurrency/processor\_v2.ts:150](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L150) |
+| <a id="processingentities"></a> ~~`processingEntities`~~ | `number` | `0` | [src/concurrency/processor\_v2.ts:154](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L154) |
+| <a id="waitingentries"></a> ~~`waitingEntries`~~ | `number` | `0` | [src/concurrency/processor\_v2.ts:157](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L157) |
+| <a id="yieldthreshold"></a> ~~`yieldThreshold`~~ | `number` | `1` | [src/concurrency/processor\_v2.ts:145](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L145) |
 
 ## Accessors
 
-### isSuspended
+### ~~isSuspended~~
 
 #### Get Signature
 
@@ -88,7 +92,7 @@ Defined in: [src/concurrency/processor\_v2.ts:277](https://github.com/vrtmrz/oct
 get isSuspended(): boolean;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:394](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L394)
+Defined in: [src/concurrency/processor\_v2.ts:410](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L410)
 
 ##### Returns
 
@@ -96,7 +100,7 @@ Defined in: [src/concurrency/processor\_v2.ts:394](https://github.com/vrtmrz/oct
 
 ***
 
-### nowProcessing
+### ~~nowProcessing~~
 
 #### Get Signature
 
@@ -104,7 +108,7 @@ Defined in: [src/concurrency/processor\_v2.ts:394](https://github.com/vrtmrz/oct
 get nowProcessing(): number;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:146](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L146)
+Defined in: [src/concurrency/processor\_v2.ts:162](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L162)
 
 ##### Returns
 
@@ -112,7 +116,7 @@ Defined in: [src/concurrency/processor\_v2.ts:146](https://github.com/vrtmrz/oct
 
 ***
 
-### remaining
+### ~~remaining~~
 
 #### Get Signature
 
@@ -120,7 +124,7 @@ Defined in: [src/concurrency/processor\_v2.ts:146](https://github.com/vrtmrz/oct
 get remaining(): number;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:153](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L153)
+Defined in: [src/concurrency/processor\_v2.ts:169](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L169)
 
 ##### Returns
 
@@ -128,7 +132,7 @@ Defined in: [src/concurrency/processor\_v2.ts:153](https://github.com/vrtmrz/oct
 
 ***
 
-### root
+### ~~root~~
 
 #### Get Signature
 
@@ -136,7 +140,7 @@ Defined in: [src/concurrency/processor\_v2.ts:153](https://github.com/vrtmrz/oct
 get root(): QueueProcessor<any, any>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:185](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L185)
+Defined in: [src/concurrency/processor\_v2.ts:201](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L201)
 
 ##### Returns
 
@@ -144,7 +148,7 @@ Defined in: [src/concurrency/processor\_v2.ts:185](https://github.com/vrtmrz/oct
 
 ***
 
-### totalNowProcessing
+### ~~totalNowProcessing~~
 
 #### Get Signature
 
@@ -152,7 +156,7 @@ Defined in: [src/concurrency/processor\_v2.ts:185](https://github.com/vrtmrz/oct
 get totalNowProcessing(): number;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:149](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L149)
+Defined in: [src/concurrency/processor\_v2.ts:165](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L165)
 
 ##### Returns
 
@@ -160,7 +164,7 @@ Defined in: [src/concurrency/processor\_v2.ts:149](https://github.com/vrtmrz/oct
 
 ***
 
-### totalRemaining
+### ~~totalRemaining~~
 
 #### Get Signature
 
@@ -168,7 +172,7 @@ Defined in: [src/concurrency/processor\_v2.ts:149](https://github.com/vrtmrz/oct
 get totalRemaining(): number;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:156](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L156)
+Defined in: [src/concurrency/processor\_v2.ts:172](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L172)
 
 ##### Returns
 
@@ -176,13 +180,13 @@ Defined in: [src/concurrency/processor\_v2.ts:156](https://github.com/vrtmrz/oct
 
 ## Methods
 
-### \_\_notifyIfIdle()
+### ~~\_\_notifyIfIdle()~~
 
 ```ts
 __notifyIfIdle(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:234](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L234)
+Defined in: [src/concurrency/processor\_v2.ts:250](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L250)
 
 #### Returns
 
@@ -190,13 +194,13 @@ Defined in: [src/concurrency/processor\_v2.ts:234](https://github.com/vrtmrz/oct
 
 ***
 
-### \_canCollectBatch()
+### ~~\_canCollectBatch()~~
 
 ```ts
 _canCollectBatch(): boolean;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:417](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L417)
+Defined in: [src/concurrency/processor\_v2.ts:433](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L433)
 
 #### Returns
 
@@ -204,13 +208,13 @@ Defined in: [src/concurrency/processor\_v2.ts:417](https://github.com/vrtmrz/oct
 
 ***
 
-### \_clearTickDelay()
+### ~~\_clearTickDelay()~~
 
 ```ts
 _clearTickDelay(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:225](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L225)
+Defined in: [src/concurrency/processor\_v2.ts:241](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L241)
 
 #### Returns
 
@@ -218,13 +222,13 @@ Defined in: [src/concurrency/processor\_v2.ts:225](https://github.com/vrtmrz/oct
 
 ***
 
-### \_collectBatch()
+### ~~\_collectBatch()~~
 
 ```ts
 _collectBatch(): T[];
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:414](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L414)
+Defined in: [src/concurrency/processor\_v2.ts:430](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L430)
 
 #### Returns
 
@@ -232,13 +236,13 @@ Defined in: [src/concurrency/processor\_v2.ts:414](https://github.com/vrtmrz/oct
 
 ***
 
-### \_initClerks()
+### ~~\_initClerks()~~
 
 ```ts
 _initClerks(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:526](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L526)
+Defined in: [src/concurrency/processor\_v2.ts:542](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L542)
 
 #### Returns
 
@@ -246,13 +250,13 @@ Defined in: [src/concurrency/processor\_v2.ts:526](https://github.com/vrtmrz/oct
 
 ***
 
-### \_initEventHub()
+### ~~\_initEventHub()~~
 
 ```ts
 _initEventHub(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:192](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L192)
+Defined in: [src/concurrency/processor\_v2.ts:208](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L208)
 
 #### Returns
 
@@ -260,13 +264,13 @@ Defined in: [src/concurrency/processor\_v2.ts:192](https://github.com/vrtmrz/oct
 
 ***
 
-### \_isIdle()
+### ~~\_isIdle()~~
 
 ```ts
 _isIdle(): boolean;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:370](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L370)
+Defined in: [src/concurrency/processor\_v2.ts:386](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L386)
 
 #### Returns
 
@@ -274,13 +278,13 @@ Defined in: [src/concurrency/processor\_v2.ts:370](https://github.com/vrtmrz/oct
 
 ***
 
-### \_notifyIfIdle()
+### ~~\_notifyIfIdle()~~
 
 ```ts
 _notifyIfIdle(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:231](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L231)
+Defined in: [src/concurrency/processor\_v2.ts:247](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L247)
 
 #### Returns
 
@@ -288,13 +292,13 @@ Defined in: [src/concurrency/processor\_v2.ts:231](https://github.com/vrtmrz/oct
 
 ***
 
-### \_onTick()
+### ~~\_onTick()~~
 
 ```ts
 _onTick(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:243](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L243)
+Defined in: [src/concurrency/processor\_v2.ts:259](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L259)
 
 #### Returns
 
@@ -302,13 +306,13 @@ Defined in: [src/concurrency/processor\_v2.ts:243](https://github.com/vrtmrz/oct
 
 ***
 
-### \_process()
+### ~~\_process()~~
 
 ```ts
 _process(): Promise<void>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:561](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L561)
+Defined in: [src/concurrency/processor\_v2.ts:577](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L577)
 
 #### Returns
 
@@ -316,13 +320,13 @@ Defined in: [src/concurrency/processor\_v2.ts:561](https://github.com/vrtmrz/oct
 
 ***
 
-### \_run()
+### ~~\_run()~~
 
 ```ts
 _run(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:588](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L588)
+Defined in: [src/concurrency/processor\_v2.ts:604](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L604)
 
 #### Returns
 
@@ -330,13 +334,13 @@ Defined in: [src/concurrency/processor\_v2.ts:588](https://github.com/vrtmrz/oct
 
 ***
 
-### \_runProcessor()
+### ~~\_runProcessor()~~
 
 ```ts
 _runProcessor(items: T[]): Promise<void>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:479](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L479)
+Defined in: [src/concurrency/processor\_v2.ts:495](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L495)
 
 #### Parameters
 
@@ -350,13 +354,13 @@ Defined in: [src/concurrency/processor\_v2.ts:479](https://github.com/vrtmrz/oct
 
 ***
 
-### \_triggerTickDelay()
+### ~~\_triggerTickDelay()~~
 
 ```ts
 _triggerTickDelay(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:217](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L217)
+Defined in: [src/concurrency/processor\_v2.ts:233](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L233)
 
 #### Returns
 
@@ -364,13 +368,13 @@ Defined in: [src/concurrency/processor\_v2.ts:217](https://github.com/vrtmrz/oct
 
 ***
 
-### \_updateBatchProcessStatus()
+### ~~\_updateBatchProcessStatus()~~
 
 ```ts
 _updateBatchProcessStatus(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:409](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L409)
+Defined in: [src/concurrency/processor\_v2.ts:425](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L425)
 
 #### Returns
 
@@ -378,13 +382,13 @@ Defined in: [src/concurrency/processor\_v2.ts:409](https://github.com/vrtmrz/oct
 
 ***
 
-### \_updateReactiveSource()
+### ~~\_updateReactiveSource()~~
 
 ```ts
 _updateReactiveSource(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:398](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L398)
+Defined in: [src/concurrency/processor\_v2.ts:414](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L414)
 
 #### Returns
 
@@ -392,7 +396,7 @@ Defined in: [src/concurrency/processor\_v2.ts:398](https://github.com/vrtmrz/oct
 
 ***
 
-### \_waitFor()
+### ~~\_waitFor()~~
 
 ```ts
 _waitFor<T>(keys: T, timeout?: number): Promise<
@@ -400,7 +404,7 @@ _waitFor<T>(keys: T, timeout?: number): Promise<
 | T[number]>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:196](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L196)
+Defined in: [src/concurrency/processor\_v2.ts:212](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L212)
 
 #### Type Parameters
 
@@ -423,13 +427,13 @@ Defined in: [src/concurrency/processor\_v2.ts:196](https://github.com/vrtmrz/oct
 
 ***
 
-### \_waitForIdle()
+### ~~\_waitForIdle()~~
 
 ```ts
 _waitForIdle(): Promise<void>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:373](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L373)
+Defined in: [src/concurrency/processor\_v2.ts:389](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L389)
 
 #### Returns
 
@@ -437,13 +441,13 @@ Defined in: [src/concurrency/processor\_v2.ts:373](https://github.com/vrtmrz/oct
 
 ***
 
-### \_waitForSuspended()
+### ~~\_waitForSuspended()~~
 
 ```ts
 _waitForSuspended(): Promise<void>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:445](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L445)
+Defined in: [src/concurrency/processor\_v2.ts:461](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L461)
 
 #### Returns
 
@@ -451,13 +455,13 @@ Defined in: [src/concurrency/processor\_v2.ts:445](https://github.com/vrtmrz/oct
 
 ***
 
-### clearQueue()
+### ~~clearQueue()~~
 
 ```ts
 clearQueue(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:335](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L335)
+Defined in: [src/concurrency/processor\_v2.ts:351](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L351)
 
 Clear the queue
 
@@ -471,13 +475,13 @@ I know that you have known this is very dangerous.
 
 ***
 
-### enqueue()
+### ~~enqueue()~~
 
 ```ts
 enqueue(entity: T): this;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:421](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L421)
+Defined in: [src/concurrency/processor\_v2.ts:437](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L437)
 
 #### Parameters
 
@@ -491,13 +495,13 @@ Defined in: [src/concurrency/processor\_v2.ts:421](https://github.com/vrtmrz/oct
 
 ***
 
-### enqueueAll()
+### ~~enqueueAll()~~
 
 ```ts
 enqueueAll(entities: T[]): this;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:427](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L427)
+Defined in: [src/concurrency/processor\_v2.ts:443](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L443)
 
 #### Parameters
 
@@ -511,13 +515,13 @@ Defined in: [src/concurrency/processor\_v2.ts:427](https://github.com/vrtmrz/oct
 
 ***
 
-### flush()
+### ~~flush()~~
 
 ```ts
 flush(): Promise<boolean>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:447](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L447)
+Defined in: [src/concurrency/processor\_v2.ts:463](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L463)
 
 #### Returns
 
@@ -525,13 +529,13 @@ Defined in: [src/concurrency/processor\_v2.ts:447](https://github.com/vrtmrz/oct
 
 ***
 
-### idleDetectors()
+### ~~idleDetectors()~~
 
 ```ts
 idleDetectors(): Promise<void>[];
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:386](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L386)
+Defined in: [src/concurrency/processor\_v2.ts:402](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L402)
 
 #### Returns
 
@@ -539,13 +543,13 @@ Defined in: [src/concurrency/processor\_v2.ts:386](https://github.com/vrtmrz/oct
 
 ***
 
-### isIdle()
+### ~~isIdle()~~
 
 ```ts
 isIdle(): boolean;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:367](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L367)
+Defined in: [src/concurrency/processor\_v2.ts:383](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L383)
 
 #### Returns
 
@@ -553,13 +557,13 @@ Defined in: [src/concurrency/processor\_v2.ts:367](https://github.com/vrtmrz/oct
 
 ***
 
-### modifyQueue()
+### ~~modifyQueue()~~
 
 ```ts
 modifyQueue(processor: (queue: T[]) => T[]): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:326](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L326)
+Defined in: [src/concurrency/processor\_v2.ts:342](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L342)
 
 Modify the queue by force.
 
@@ -579,13 +583,13 @@ I know that you have known this is very dangerous.
 
 ***
 
-### onUpdateProgress()
+### ~~onUpdateProgress()~~
 
 ```ts
 onUpdateProgress(proc: () => void): this;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:345](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L345)
+Defined in: [src/concurrency/processor\_v2.ts:361](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L361)
 
 Set the handler for when the queue has been modified
 
@@ -601,13 +605,13 @@ Set the handler for when the queue has been modified
 
 ***
 
-### pipeTo()
+### ~~pipeTo()~~
 
 ```ts
 pipeTo<V>(pipeTo: QueueProcessor<U, V>): QueueProcessor<U, V>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:355](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L355)
+Defined in: [src/concurrency/processor\_v2.ts:371](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L371)
 
 Join another processor
 
@@ -629,13 +633,13 @@ Join another processor
 
 ***
 
-### pump()
+### ~~pump()~~
 
 ```ts
 pump(): AsyncGenerator<T[], void, unknown>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:491](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L491)
+Defined in: [src/concurrency/processor\_v2.ts:507](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L507)
 
 #### Returns
 
@@ -643,13 +647,13 @@ Defined in: [src/concurrency/processor\_v2.ts:491](https://github.com/vrtmrz/oct
 
 ***
 
-### replaceEnqueueProcessor()
+### ~~replaceEnqueueProcessor()~~
 
 ```ts
 replaceEnqueueProcessor(processor: (queue: T[], newItem: T) => T[]): this;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:316](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L316)
+Defined in: [src/concurrency/processor\_v2.ts:332](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L332)
 
 replace enqueue logic.
 
@@ -665,13 +669,13 @@ replace enqueue logic.
 
 ***
 
-### requestNextFlush()
+### ~~requestNextFlush()~~
 
 ```ts
 requestNextFlush(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:438](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L438)
+Defined in: [src/concurrency/processor\_v2.ts:454](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L454)
 
 #### Returns
 
@@ -679,13 +683,13 @@ Defined in: [src/concurrency/processor\_v2.ts:438](https://github.com/vrtmrz/oct
 
 ***
 
-### resume()
+### ~~resume()~~
 
 ```ts
 resume(): this;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:170](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L170)
+Defined in: [src/concurrency/processor\_v2.ts:186](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L186)
 
 #### Returns
 
@@ -693,13 +697,13 @@ Defined in: [src/concurrency/processor\_v2.ts:170](https://github.com/vrtmrz/oct
 
 ***
 
-### resumePipeLine()
+### ~~resumePipeLine()~~
 
 ```ts
 resumePipeLine(): this;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:175](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L175)
+Defined in: [src/concurrency/processor\_v2.ts:191](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L191)
 
 #### Returns
 
@@ -707,13 +711,13 @@ Defined in: [src/concurrency/processor\_v2.ts:175](https://github.com/vrtmrz/oct
 
 ***
 
-### startPipeline()
+### ~~startPipeline()~~
 
 ```ts
 startPipeline(): this;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:180](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L180)
+Defined in: [src/concurrency/processor\_v2.ts:196](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L196)
 
 #### Returns
 
@@ -721,13 +725,13 @@ Defined in: [src/concurrency/processor\_v2.ts:180](https://github.com/vrtmrz/oct
 
 ***
 
-### suspend()
+### ~~suspend()~~
 
 ```ts
 suspend(): QueueProcessor<T, U>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:164](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L164)
+Defined in: [src/concurrency/processor\_v2.ts:180](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L180)
 
 #### Returns
 
@@ -735,13 +739,13 @@ Defined in: [src/concurrency/processor\_v2.ts:164](https://github.com/vrtmrz/oct
 
 ***
 
-### terminate()
+### ~~terminate()~~
 
 ```ts
 terminate(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:596](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L596)
+Defined in: [src/concurrency/processor\_v2.ts:612](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L612)
 
 #### Returns
 
@@ -749,13 +753,13 @@ Defined in: [src/concurrency/processor\_v2.ts:596](https://github.com/vrtmrz/oct
 
 ***
 
-### terminateAll()
+### ~~terminateAll()~~
 
 ```ts
 terminateAll(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:593](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L593)
+Defined in: [src/concurrency/processor\_v2.ts:609](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L609)
 
 #### Returns
 
@@ -763,13 +767,13 @@ Defined in: [src/concurrency/processor\_v2.ts:593](https://github.com/vrtmrz/oct
 
 ***
 
-### updateReactiveSource()
+### ~~updateReactiveSource()~~
 
 ```ts
 updateReactiveSource(): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:401](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L401)
+Defined in: [src/concurrency/processor\_v2.ts:417](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L417)
 
 #### Returns
 
@@ -777,13 +781,13 @@ Defined in: [src/concurrency/processor\_v2.ts:401](https://github.com/vrtmrz/oct
 
 ***
 
-### updateStatus()
+### ~~updateStatus()~~
 
 ```ts
 updateStatus(setFunc: () => void): void;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:159](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L159)
+Defined in: [src/concurrency/processor\_v2.ts:175](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L175)
 
 #### Parameters
 
@@ -797,13 +801,13 @@ Defined in: [src/concurrency/processor\_v2.ts:159](https://github.com/vrtmrz/oct
 
 ***
 
-### waitForAllDoneAndTerminate()
+### ~~waitForAllDoneAndTerminate()~~
 
 ```ts
 waitForAllDoneAndTerminate(timeout?: number): Promise<boolean>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:472](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L472)
+Defined in: [src/concurrency/processor\_v2.ts:488](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L488)
 
 #### Parameters
 
@@ -817,13 +821,13 @@ Defined in: [src/concurrency/processor\_v2.ts:472](https://github.com/vrtmrz/oct
 
 ***
 
-### waitForAllDownstream()
+### ~~waitForAllDownstream()~~
 
 ```ts
 waitForAllDownstream(timeout?: number): Promise<boolean>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:453](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L453)
+Defined in: [src/concurrency/processor\_v2.ts:469](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L469)
 
 #### Parameters
 
@@ -837,13 +841,13 @@ Defined in: [src/concurrency/processor\_v2.ts:453](https://github.com/vrtmrz/oct
 
 ***
 
-### waitForAllProcessed()
+### ~~waitForAllProcessed()~~
 
 ```ts
 waitForAllProcessed(timeout?: number): Promise<boolean>;
 ```
 
-Defined in: [src/concurrency/processor\_v2.ts:468](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L468)
+Defined in: [src/concurrency/processor\_v2.ts:484](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/concurrency/processor_v2.ts#L484)
 
 #### Parameters
 

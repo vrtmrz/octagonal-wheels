@@ -2,6 +2,8 @@ import * as concurrency_lock from './lock.js';
 export { concurrency_lock as lock };
 import * as concurrency_processor from './processor.js';
 export { concurrency_processor as processor };
+import * as concurrency_processorPipeline from './processorPipeline.js';
+export { concurrency_processorPipeline as processorPipeline };
 import * as concurrency_semaphore from './semaphore.js';
 export { concurrency_semaphore as semaphore };
 import * as concurrency_task from './task.js';

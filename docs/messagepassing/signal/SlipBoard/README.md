@@ -67,7 +67,7 @@ awaitNext<ET, K>(
 opt?: AwaitOptionWithoutTimeout): Promise<ResultType<ET, K>>;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:121](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L121)
+Defined in: [src/bureau/SlipBoard.ts:125](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L125)
 
 ##### Type Parameters
 
@@ -99,7 +99,7 @@ awaitNext<ET, K>(
 | ResultType<ET, K>>;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:126](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L126)
+Defined in: [src/bureau/SlipBoard.ts:130](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L130)
 
 ##### Type Parameters
 
@@ -130,7 +130,7 @@ Defined in: [src/bureau/SlipBoard.ts:126](https://github.com/vrtmrz/octagonal-wh
 isAwaiting<ET, K>(type: SlipType<ET, K>, key: string): boolean;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:75](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L75)
+Defined in: [src/bureau/SlipBoard.ts:79](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L79)
 
 Checks if a specific key is awaiting.
 
@@ -165,7 +165,7 @@ issueAndProceed<T>(
 opt?: SlipProcessOptions<T>): Promise<T>;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:97](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L97)
+Defined in: [src/bureau/SlipBoard.ts:101](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L101)
 
 Issues a slip of process and proceeds with the provided options.
 
@@ -210,7 +210,7 @@ reject<ET, K>(
    reason?: any): void;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:228](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L228)
+Defined in: [src/bureau/SlipBoard.ts:233](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L233)
 
 Rejects a task promise associated with a specific event type and key.
 
@@ -265,7 +265,7 @@ Optional data to be passed with the event.
 submit<ET, K>(type: SlipWithoutData<ET, K>, key: string): void;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:173](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L173)
+Defined in: [src/bureau/SlipBoard.ts:178](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L178)
 
 ##### Type Parameters
 
@@ -294,7 +294,7 @@ submit<ET, K>(
    data: ET[K]): void;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:174](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L174)
+Defined in: [src/bureau/SlipBoard.ts:179](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L179)
 
 ##### Type Parameters
 
@@ -347,7 +347,7 @@ Optional data to be passed with the event.
 submitToAll<ET, K>(type: SlipWithoutData<ET, K>, prefix: string): void;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:196](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L196)
+Defined in: [src/bureau/SlipBoard.ts:201](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L201)
 
 ##### Type Parameters
 
@@ -376,7 +376,7 @@ submitToAll<ET, K>(
    data: ET[K]): void;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:197](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L197)
+Defined in: [src/bureau/SlipBoard.ts:202](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L202)
 
 ##### Type Parameters
 

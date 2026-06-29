@@ -26,6 +26,18 @@ Re-exports [AwaitOptionWithTimeout](../../messagepassing/signal/AwaitOptionWithT
 
 ***
 
+### createSignalHub
+
+Re-exports [createSignalHub](../../messagepassing/signal/createSignalHub/README.md)
+
+***
+
+### createSlipBoard
+
+Re-exports [createSlipBoard](../../messagepassing/signal/createSlipBoard/README.md)
+
+***
+
 ### globalSlipBoard
 
 Re-exports [globalSlipBoard](../../messagepassing/signal/globalSlipBoard/README.md)
@@ -41,6 +53,12 @@ Re-exports [sendSignal](../../messagepassing/signal/sendSignal/README.md)
 ### sendValue
 
 Re-exports [sendValue](../../messagepassing/signal/sendValue/README.md)
+
+***
+
+### SignalHub
+
+Re-exports [SignalHub](../../messagepassing/signal/SignalHub/README.md)
 
 ***
 

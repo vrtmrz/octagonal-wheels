@@ -10,7 +10,7 @@
 function sendValue<T>(id: string, result: T): void;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:258](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L258)
+Defined in: [src/bureau/SlipBoard.ts:288](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L288)
 
 Sends a value to the specified ID.
 

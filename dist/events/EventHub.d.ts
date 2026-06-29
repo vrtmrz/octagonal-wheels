@@ -144,3 +144,5 @@ export declare class EventHub<Events extends AnyHubEvents = LSEvents> {
      */
     waitFor<ET extends Events, K extends keyof ET>(event: EventTypeWithData<ET, K>): Promise<ET[K]>;
 }
+export declare function createEventHub<Events extends AnyHubEvents = LSEvents>(emitter?: EventTarget): EventHub<Events>;
+export declare function getGlobalEventHub<Events extends AnyHubEvents = LSEvents>(emitter?: EventTarget): EventHub<Events>;

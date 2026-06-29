@@ -63,6 +63,10 @@ type AwaitOption = AwaitOptionWithoutTimeout | AwaitOptionWithTimeout;
 export class SlipBoard<Events extends LSSlips = LSSlips> {
     _clip = new Map<string | symbol | number, PromiseWithResolvers<any>>();
 
+    private _makeKey(type: string | symbol | number, key: string): string {
+        return `${String(type)}:${key}`;
+    }
+
     /**
      * Checks if a specific key is awaiting.
      *
@@ -73,7 +77,7 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
      * @returns {boolean} - Returns `true` if the event and sub-event combination is awaiting, otherwise `false`.
      */
     isAwaiting<ET extends Events, K extends keyof ET>(type: SlipType<ET, K>, key: string): boolean {
-        return this._clip.has(`${String(type)}:${key}`);
+        return this._clip.has(this._makeKey(type, key));
     }
 
     /**
@@ -106,7 +110,7 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
                         this.submit(type as any, key, opt.transformError ? opt.transformError(ex) : ex);
                     } else {
                         if (opt.dropSlipWithRisks) {
-                            this._clip.delete(type);
+                            this._clip.delete(this._makeKey(type, key));
                             // If the caller waits for the result and it would waiting without timeout, it will be waiting forever.
                         } else {
                             this.reject(type as any, key, ex);
@@ -144,7 +148,8 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
         key: string = "",
         { timeout, onNotAwaited }: AwaitOption = { timeout: undefined, onNotAwaited: undefined }
     ): Promise<ResultType<ET, K> | TIMED_OUT_SIGNAL> {
-        let taskPromise = this._clip.get(`${String(type)}:${key}`);
+        const slipKey = this._makeKey(type as string, key);
+        let taskPromise = this._clip.get(slipKey);
         if (!taskPromise) {
             taskPromise = promiseWithResolvers<void | ET[K]>();
             taskPromise.promise = taskPromise.promise
@@ -153,9 +158,9 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
                     return ret;
                 })
                 .finally(() => {
-                    this._clip.delete(`${String(type)}:${key}`);
+                    this._clip.delete(slipKey);
                 });
-            this._clip.set(`${String(type)}:${key}`, taskPromise);
+            this._clip.set(slipKey, taskPromise);
             if (onNotAwaited) {
                 fireAndForget(async () => (await yieldMicrotask(), onNotAwaited()));
             }
@@ -187,7 +192,7 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
         key: string,
         data?: SlipDataType<ET, K>
     ): void {
-        const taskPromise = this._clip.get(`${String(type)}:${key}`);
+        const taskPromise = this._clip.get(this._makeKey(type, key));
         if (taskPromise) {
             taskPromise.resolve(data);
         }
@@ -211,7 +216,7 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
         data?: SlipDataType<ET, K>
     ): void {
         for (const [key, taskPromise] of this._clip.entries()) {
-            if (`${String(key)}`.startsWith(`${String(type)}:${prefix}`)) {
+            if (`${String(key)}`.startsWith(this._makeKey(type, prefix))) {
                 taskPromise.resolve(data);
             }
         }
@@ -226,29 +231,54 @@ export class SlipBoard<Events extends LSSlips = LSSlips> {
      * @param {any} reason - The reason for rejecting the promise.
      */
     reject<ET extends Events, K extends keyof ET>(type: SlipType<ET, K>, key: string = "", reason: any) {
-        const taskPromise = this._clip.get(`${String(type)}:${key}`);
+        const taskPromise = this._clip.get(this._makeKey(type, key));
         if (taskPromise) {
             taskPromise.reject(reason);
         }
     }
 }
 
-export const globalSlipBoard = new SlipBoard();
+export function createSlipBoard<Events extends LSSlips = LSSlips>(): SlipBoard<Events> {
+    return new SlipBoard<Events>();
+}
+
+export type SignalHub = ReturnType<typeof createSignalHub>;
+
+export function createSignalHub(board: SlipBoard = createSlipBoard()) {
+    return {
+        board,
+        async waitForSignal(id: string, timeout?: number): Promise<boolean> {
+            return (await board.awaitNext(GENERIC_COMPATIBILITY_SIGNAL, id, { timeout })) !== TIMED_OUT_SIGNAL;
+        },
+        async waitForValue<T>(id: string, timeout?: number): Promise<WithTimeout<T>> {
+            const ret = await board.awaitNext(GENERIC_COMPATIBILITY_VALUE, id, { timeout });
+            if (ret === TIMED_OUT_SIGNAL) {
+                return RESULT_TIMED_OUT;
+            }
+            return ret as T;
+        },
+        sendSignal(id: string): void {
+            board.submit(GENERIC_COMPATIBILITY_SIGNAL, id);
+        },
+        sendValue<T>(id: string, result: T): void {
+            board.submit(GENERIC_COMPATIBILITY_VALUE, id, result as any);
+        },
+    };
+}
+
+export const globalSlipBoard = createSlipBoard();
+const globalSignalHub = createSignalHub(globalSlipBoard);
 
 export async function waitForSignal(id: string, timeout?: number): Promise<boolean> {
-    return (await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_SIGNAL, id, { timeout })) !== TIMED_OUT_SIGNAL;
+    return await globalSignalHub.waitForSignal(id, timeout);
 }
 
 export async function waitForValue<T>(id: string, timeout?: number): Promise<WithTimeout<T>> {
-    const ret = await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_VALUE, id, { timeout });
-    if (ret === TIMED_OUT_SIGNAL) {
-        return RESULT_TIMED_OUT;
-    }
-    return ret as T;
+    return await globalSignalHub.waitForValue<T>(id, timeout);
 }
 
 export function sendSignal(id: string) {
-    globalSlipBoard.submit(GENERIC_COMPATIBILITY_SIGNAL, id);
+    globalSignalHub.sendSignal(id);
 }
 /**
  * Sends a value to the specified ID.
@@ -256,5 +286,5 @@ export function sendSignal(id: string) {
  * @param result - The value to send.
  */
 export function sendValue<T>(id: string, result: T) {
-    globalSlipBoard.submit(GENERIC_COMPATIBILITY_VALUE, id, result as any);
+    globalSignalHub.sendValue(id, result);
 }

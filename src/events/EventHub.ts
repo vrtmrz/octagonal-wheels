@@ -289,3 +289,22 @@ export class EventHub<Events extends AnyHubEvents = LSEvents> {
         });
     }
 }
+
+export function createEventHub<Events extends AnyHubEvents = LSEvents>(emitter?: EventTarget): EventHub<Events> {
+    return new EventHub<Events>(emitter);
+}
+
+const globalEventHubs = new WeakMap<EventTarget, EventHub<any>>();
+let defaultGlobalEventHub: EventHub<any> | undefined;
+
+export function getGlobalEventHub<Events extends AnyHubEvents = LSEvents>(emitter?: EventTarget): EventHub<Events> {
+    if (!emitter) {
+        defaultGlobalEventHub ??= createEventHub();
+        return defaultGlobalEventHub as EventHub<Events>;
+    }
+    const existing = globalEventHubs.get(emitter);
+    if (existing) return existing as EventHub<Events>;
+    const created = createEventHub<Events>(emitter);
+    globalEventHubs.set(emitter, created);
+    return created;
+}

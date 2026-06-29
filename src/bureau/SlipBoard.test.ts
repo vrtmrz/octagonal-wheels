@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { SlipBoard, globalSlipBoard } from "./SlipBoard.ts";
+import { SlipBoard, createSignalHub, createSlipBoard, globalSlipBoard } from "./SlipBoard.ts";
 import { delay, TIMED_OUT_SIGNAL } from "../promises.ts";
 declare global {
     interface LSSlips {
@@ -79,6 +79,15 @@ describe("TrackingBoard", () => {
         globalSlipBoard.submit(event, "", data);
 
         await expect(promise).resolves.toBe(data);
+    });
+
+    it("should create an isolated signal hub", async () => {
+        const signalHub = createSignalHub(createSlipBoard());
+        const promise = signalHub.waitForValue<string>("local-value", 100);
+
+        signalHub.sendValue("local-value", "hello");
+
+        await expect(promise).resolves.toBe("hello");
     });
 
     it("should use globalTrackingBoard with and issueAndProceed", async () => {

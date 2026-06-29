@@ -11,5 +11,6 @@
 - [bulk](bulk/README.md)
 - [lock](lock/README.md)
 - [processor](processor/README.md)
+- [processorPipeline](processorPipeline/README.md)
 - [semaphore](semaphore/README.md)
 - [task](task/README.md)

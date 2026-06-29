@@ -40,6 +40,8 @@ const allRunningProcessors = new Set<QueueProcessor<any, any>>([]);
 
 /**
  * QueueProcessor Parameters
+ *
+ * @deprecated Use QueueProcessorShimOptions for migration, or PipelineSource and ProcessorStage for new code.
  */
 type ProcessorParams<T> = {
     /**
@@ -85,9 +87,19 @@ type ProcessorParams<T> = {
     pipeTo?: QueueProcessor<T, any>;
 };
 
+/**
+ * @deprecated Use ProcessorResult from processorPipeline for new stream-based pipelines.
+ */
 type ProcessorResult<T> = Promise<T[]> | T[] | undefined | void | Promise<void> | Promise<undefined>;
+
+/**
+ * @deprecated Use ProcessorStage or QueueProcessorShim for migration.
+ */
 type Processor<T, U> = (entity: T[]) => ProcessorResult<U>;
 
+/**
+ * @deprecated QueueProcessor events are implementation details of the deprecated QueueProcessor.
+ */
 interface ProcessorEvents {
     yielded: undefined;
     tickEmpty: undefined;
@@ -99,6 +111,10 @@ interface ProcessorEvents {
     suspended: undefined;
     idle: undefined;
 }
+
+/**
+ * @deprecated Use QueueProcessorShim for low-friction migration, or PipelineSource and ProcessorStage for new code.
+ */
 export class QueueProcessor<T, U> {
     _queue: T[] = [];
     _processor: Processor<T, U>;

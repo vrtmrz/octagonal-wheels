@@ -39,6 +39,9 @@ class Notifier {
     }
 }
 const allRunningProcessors = new Set([]);
+/**
+ * @deprecated Use QueueProcessorShim for low-friction migration, or PipelineSource and ProcessorStage for new code.
+ */
 class QueueProcessor {
     get nowProcessing() {
         return this.processingEntities;

@@ -117,6 +117,23 @@ class EventHub {
         });
     }
 }
+function createEventHub(emitter) {
+    return new EventHub(emitter);
+}
+const globalEventHubs = new WeakMap();
+let defaultGlobalEventHub;
+function getGlobalEventHub(emitter) {
+    if (!emitter) {
+        defaultGlobalEventHub ?? (defaultGlobalEventHub = createEventHub());
+        return defaultGlobalEventHub;
+    }
+    const existing = globalEventHubs.get(emitter);
+    if (existing)
+        return existing;
+    const created = createEventHub(emitter);
+    globalEventHubs.set(emitter, created);
+    return created;
+}
 
-export { EventHub };
+export { EventHub, createEventHub, getGlobalEventHub };
 //# sourceMappingURL=EventHub.js.map

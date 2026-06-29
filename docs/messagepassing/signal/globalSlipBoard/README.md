@@ -10,4 +10,4 @@
 const globalSlipBoard: SlipBoard<LSSlips>;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:236](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L236)
+Defined in: [src/bureau/SlipBoard.ts:269](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L269)

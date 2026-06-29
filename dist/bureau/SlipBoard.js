@@ -12,6 +12,9 @@ class SlipBoard {
             value: new Map()
         });
     }
+    _makeKey(type, key) {
+        return `${String(type)}:${key}`;
+    }
     /**
      * Checks if a specific key is awaiting.
      *
@@ -22,7 +25,7 @@ class SlipBoard {
      * @returns {boolean} - Returns `true` if the event and sub-event combination is awaiting, otherwise `false`.
      */
     isAwaiting(type, key) {
-        return this._clip.has(`${String(type)}:${key}`);
+        return this._clip.has(this._makeKey(type, key));
     }
     /**
      * Issues a slip of process and proceeds with the provided options.
@@ -56,7 +59,7 @@ class SlipBoard {
                     }
                     else {
                         if (opt.dropSlipWithRisks) {
-                            this._clip.delete(type);
+                            this._clip.delete(this._makeKey(type, key));
                             // If the caller waits for the result and it would waiting without timeout, it will be waiting forever.
                         }
                         else {
@@ -80,7 +83,8 @@ class SlipBoard {
      * resolves with `TIMED_OUT_SIGNAL` if the timeout is reached, or resolves to void if no event is found.
      */
     async awaitNext(type, key = "", { timeout, onNotAwaited } = { timeout: undefined, onNotAwaited: undefined }) {
-        let taskPromise = this._clip.get(`${String(type)}:${key}`);
+        const slipKey = this._makeKey(type, key);
+        let taskPromise = this._clip.get(slipKey);
         if (!taskPromise) {
             taskPromise = promiseWithResolvers();
             taskPromise.promise = taskPromise.promise
@@ -89,9 +93,9 @@ class SlipBoard {
                 return ret;
             })
                 .finally(() => {
-                this._clip.delete(`${String(type)}:${key}`);
+                this._clip.delete(slipKey);
             });
-            this._clip.set(`${String(type)}:${key}`, taskPromise);
+            this._clip.set(slipKey, taskPromise);
             if (onNotAwaited) {
                 fireAndForget(async () => (await yieldMicrotask(), onNotAwaited()));
             }
@@ -116,7 +120,7 @@ class SlipBoard {
      * @returns {void}
      */
     submit(type, key, data) {
-        const taskPromise = this._clip.get(`${String(type)}:${key}`);
+        const taskPromise = this._clip.get(this._makeKey(type, key));
         if (taskPromise) {
             taskPromise.resolve(data);
         }
@@ -133,7 +137,7 @@ class SlipBoard {
      */
     submitToAll(type, prefix, data) {
         for (const [key, taskPromise] of this._clip.entries()) {
-            if (`${String(key)}`.startsWith(`${String(type)}:${prefix}`)) {
+            if (`${String(key)}`.startsWith(this._makeKey(type, prefix))) {
                 taskPromise.resolve(data);
             }
         }
@@ -148,25 +152,46 @@ class SlipBoard {
      * @param {any} reason - The reason for rejecting the promise.
      */
     reject(type, key = "", reason) {
-        const taskPromise = this._clip.get(`${String(type)}:${key}`);
+        const taskPromise = this._clip.get(this._makeKey(type, key));
         if (taskPromise) {
             taskPromise.reject(reason);
         }
     }
 }
-const globalSlipBoard = new SlipBoard();
+function createSlipBoard() {
+    return new SlipBoard();
+}
+function createSignalHub(board = createSlipBoard()) {
+    return {
+        board,
+        async waitForSignal(id, timeout) {
+            return (await board.awaitNext(GENERIC_COMPATIBILITY_SIGNAL, id, { timeout })) !== TIMED_OUT_SIGNAL;
+        },
+        async waitForValue(id, timeout) {
+            const ret = await board.awaitNext(GENERIC_COMPATIBILITY_VALUE, id, { timeout });
+            if (ret === TIMED_OUT_SIGNAL) {
+                return RESULT_TIMED_OUT;
+            }
+            return ret;
+        },
+        sendSignal(id) {
+            board.submit(GENERIC_COMPATIBILITY_SIGNAL, id);
+        },
+        sendValue(id, result) {
+            board.submit(GENERIC_COMPATIBILITY_VALUE, id, result);
+        },
+    };
+}
+const globalSlipBoard = createSlipBoard();
+const globalSignalHub = createSignalHub(globalSlipBoard);
 async function waitForSignal(id, timeout) {
-    return (await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_SIGNAL, id, { timeout })) !== TIMED_OUT_SIGNAL;
+    return await globalSignalHub.waitForSignal(id, timeout);
 }
 async function waitForValue(id, timeout) {
-    const ret = await globalSlipBoard.awaitNext(GENERIC_COMPATIBILITY_VALUE, id, { timeout });
-    if (ret === TIMED_OUT_SIGNAL) {
-        return RESULT_TIMED_OUT;
-    }
-    return ret;
+    return await globalSignalHub.waitForValue(id, timeout);
 }
 function sendSignal(id) {
-    globalSlipBoard.submit(GENERIC_COMPATIBILITY_SIGNAL, id);
+    globalSignalHub.sendSignal(id);
 }
 /**
  * Sends a value to the specified ID.
@@ -174,8 +199,8 @@ function sendSignal(id) {
  * @param result - The value to send.
  */
 function sendValue(id, result) {
-    globalSlipBoard.submit(GENERIC_COMPATIBILITY_VALUE, id, result);
+    globalSignalHub.sendValue(id, result);
 }
 
-export { SlipBoard, globalSlipBoard, sendSignal, sendValue, waitForSignal, waitForValue };
+export { SlipBoard, createSignalHub, createSlipBoard, globalSlipBoard, sendSignal, sendValue, waitForSignal, waitForValue };
 //# sourceMappingURL=SlipBoard.js.map

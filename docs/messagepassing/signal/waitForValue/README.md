@@ -10,7 +10,7 @@
 function waitForValue<T>(id: string, timeout?: number): Promise<WithTimeout<T>>;
 ```
 
-Defined in: [src/bureau/SlipBoard.ts:242](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L242)
+Defined in: [src/bureau/SlipBoard.ts:276](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/SlipBoard.ts#L276)
 
 ## Type Parameters
 

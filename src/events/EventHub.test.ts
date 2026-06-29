@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { EventHub } from "./EventHub.ts";
+import { EventHub, createEventHub as createIsolatedEventHub, getGlobalEventHub } from "./EventHub.ts";
 import { promiseWithResolvers } from "../promises.ts";
 
 declare global {
@@ -76,6 +76,22 @@ describe("EventHub-high-level", () => {
         }, 100);
 
         await expect(hub.waitFor("hello_test")).resolves.toBe("world_test");
+    });
+
+    it("should create an isolated event hub from factory", async () => {
+        const hub = createIsolatedEventHub<TestEvents>();
+        const promise = hub.waitFor("hello_test");
+
+        hub.emitEvent("hello_test", "world_test");
+
+        await expect(promise).resolves.toBe("world_test");
+    });
+
+    it("should return the same global hub for the same emitter", () => {
+        const emitter = new EventTarget();
+
+        expect(getGlobalEventHub<TestEvents>(emitter)).toBe(getGlobalEventHub<TestEvents>(emitter));
+        expect(getGlobalEventHub<TestEvents>()).toBe(getGlobalEventHub<TestEvents>());
     });
 });
 
