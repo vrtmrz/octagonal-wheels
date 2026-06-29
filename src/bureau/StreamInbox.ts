@@ -1,10 +1,22 @@
 export type StreamInboxOverflowPolicy = "reject" | "drop-newest";
 
 export type StreamInboxOptions = {
+    /**
+     * Maximum number of items retained by this bridge, including items already
+     * handed to the ReadableStream internal queue.
+     */
     capacity?: number;
     overflowPolicy?: StreamInboxOverflowPolicy;
 };
 
+/**
+ * A small bridge from callback/event-emitter style producers to ReadableStream consumers.
+ *
+ * Unlike a WritableStream writer, post() is intentionally synchronous. Some producers
+ * such as EventEmitter and PouchDB replication callbacks cannot observe backpressure,
+ * so this class reports overflow immediately instead of building an unbounded chain of
+ * pending write promises.
+ */
 export class StreamInbox<T> {
     readonly readable: ReadableStream<T>;
     private readonly _capacity: number;
@@ -19,6 +31,7 @@ export class StreamInbox<T> {
         if (capacity <= 0) throw new TypeError("capacity must be greater than 0");
         this._capacity = capacity;
         this._overflowPolicy = options.overflowPolicy ?? "reject";
+        // The stream may buffer internally, so size/free account for desiredSize below.
         this.readable = new ReadableStream<T>(
             {
                 start: (controller) => {
@@ -38,6 +51,7 @@ export class StreamInbox<T> {
     }
 
     get size(): number {
+        // Count both our pre-stream queue and the ReadableStream internal queue.
         const desiredSize = this._controller?.desiredSize ?? this._capacity;
         const streamQueued = Math.max(0, this._capacity - desiredSize);
         return this._queue.length + streamQueued;
@@ -62,6 +76,8 @@ export class StreamInbox<T> {
             this._drain();
             return true;
         }
+        // "drop-oldest" is deliberately absent: once an item is in the
+        // ReadableStream internal queue, the stream API cannot remove it.
         if (this._overflowPolicy === "drop-newest") return false;
         return false;
     }

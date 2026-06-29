@@ -6,7 +6,14 @@
 
 # Class: StreamInbox\<T\>
 
-Defined in: src/bureau/StreamInbox.ts:8
+Defined in: [src/bureau/StreamInbox.ts:20](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L20)
+
+A small bridge from callback/event-emitter style producers to ReadableStream consumers.
+
+Unlike a WritableStream writer, post() is intentionally synchronous. Some producers
+such as EventEmitter and PouchDB replication callbacks cannot observe backpressure,
+so this class reports overflow immediately instead of building an unbounded chain of
+pending write promises.
 
 ## Type Parameters
 
@@ -22,7 +29,7 @@ Defined in: src/bureau/StreamInbox.ts:8
 new StreamInbox<T>(options: StreamInboxOptions): StreamInbox<T>;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:17
+Defined in: [src/bureau/StreamInbox.ts:29](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L29)
 
 #### Parameters
 
@@ -38,7 +45,7 @@ Defined in: src/bureau/StreamInbox.ts:17
 
 | Property | Modifier | Type | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="readable"></a> `readable` | `readonly` | `ReadableStream`\<`T`\> | src/bureau/StreamInbox.ts:9 |
+| <a id="readable"></a> `readable` | `readonly` | `ReadableStream`\<`T`\> | [src/bureau/StreamInbox.ts:21](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L21) |
 
 ## Accessors
 
@@ -50,7 +57,7 @@ Defined in: src/bureau/StreamInbox.ts:17
 get free(): number;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:46
+Defined in: [src/bureau/StreamInbox.ts:60](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L60)
 
 ##### Returns
 
@@ -66,7 +73,7 @@ Defined in: src/bureau/StreamInbox.ts:46
 get isClosed(): boolean;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:54
+Defined in: [src/bureau/StreamInbox.ts:68](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L68)
 
 ##### Returns
 
@@ -82,7 +89,7 @@ Defined in: src/bureau/StreamInbox.ts:54
 get isFull(): boolean;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:50
+Defined in: [src/bureau/StreamInbox.ts:64](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L64)
 
 ##### Returns
 
@@ -98,7 +105,7 @@ Defined in: src/bureau/StreamInbox.ts:50
 get size(): number;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:40
+Defined in: [src/bureau/StreamInbox.ts:53](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L53)
 
 ##### Returns
 
@@ -112,7 +119,7 @@ Defined in: src/bureau/StreamInbox.ts:40
 close(): void;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:69
+Defined in: [src/bureau/StreamInbox.ts:85](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L85)
 
 #### Returns
 
@@ -126,7 +133,7 @@ Defined in: src/bureau/StreamInbox.ts:69
 error(reason?: unknown): void;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:78
+Defined in: [src/bureau/StreamInbox.ts:94](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L94)
 
 #### Parameters
 
@@ -146,7 +153,7 @@ Defined in: src/bureau/StreamInbox.ts:78
 post(item: T): boolean;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:58
+Defined in: [src/bureau/StreamInbox.ts:72](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L72)
 
 #### Parameters
 

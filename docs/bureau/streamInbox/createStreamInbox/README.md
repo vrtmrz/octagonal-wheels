@@ -10,7 +10,7 @@
 function createStreamInbox<T>(options?: StreamInboxOptions): StreamInbox<T>;
 ```
 
-Defined in: src/bureau/StreamInbox.ts:104
+Defined in: [src/bureau/StreamInbox.ts:120](https://github.com/vrtmrz/octagonal-wheels/blob/main/src/bureau/StreamInbox.ts#L120)
 
 ## Type Parameters
 
